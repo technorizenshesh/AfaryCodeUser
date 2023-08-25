@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.my.afarycode">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="com.myapp.mobile.permission.MAPS_RECEIVE" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:icon">
+        <activity android:name=".OnlineShopping.ChangePasswordActivity"></activity>
+
+
+
+        <activity
+            android:name=".OnlineShopping.ShopDetailsAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".OnlineShopping.chat.ChatAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.ForgotPassword"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"
+            />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".OnlineShopping.TrackingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.SuccessScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.AllShopOnlineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            tools:ignore="Instantiatable"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.CheckOutPayment"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.TermsCondition"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.PrivacyPolicy"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.OrderHistoryScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+         <activity
+            android:name=".OnlineShopping.myorder.MyOrderScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+             android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.NotificationScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.WalletActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.MyBookingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.MyprofileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.CheckOutScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.WrightActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".Splash"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <service android:name=".OnlineShopping.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".OnlineShopping.helper.GooglePlacesAutocompleteActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.SignUpActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.WellcomeScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.VerificationScreen"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".OnlineShopping.SearchAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".OnlineShopping.ProductListAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".OnlineShopping.ProductDetailAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.activity.CardAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.activity.CheckOutDeliveryAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".OnlineShopping.AskAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".OnlineShopping.WebViewAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.orderdetails.OrderDetailsAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.my.afarycode.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/picker_provider_paths" />
+        </provider>
+
+
+
+        <receiver
+        android:name=".readotp.SMSReceiver"
+        android:exported="true">
+        <intent-filter>
+            <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+        </intent-filter>
+    </receiver>
+
+
+
+</application>
+
+</manifest>

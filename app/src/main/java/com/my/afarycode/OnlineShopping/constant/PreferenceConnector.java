@@ -1,0 +1,56 @@
+package com.my.afarycode.OnlineShopping.constant;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+
+public class PreferenceConnector {
+
+    public static final String PREF_NAME = "DOCTOR";
+    public static final int MODE = Context.MODE_PRIVATE;
+    public static final String LoginStatus = "statuss";
+    public static final String User_id = "user_idd";
+    public static final String Cat_id = "cat_id";
+
+    public static final String User_Mobile = "User_Mobile";
+    public static final String OTP = "Otp";
+    public static String User_First_name ="User_First_name";
+    public static final String add = "sdfg";
+    public static String User_email="User_email";
+    public static final String Password = "Password";
+    public static final String Firebash_Token ="Firebash_Token";
+    public static final String LAT ="lat";
+    public static final String LON ="lon";
+
+    public static String User_name ="user_name";
+    public static String User_img ="user_img";
+
+    public static String access_token ="access_token";
+
+    public static String countryId ="country_id";
+
+    public static String countryName ="country_name";
+
+
+
+
+    public static String writeString(Context context, String key, String value) {
+        getEditor(context).putString(key, value).commit();
+
+        return key;
+    }
+
+    public static String readString(Context context, String key, String defValue) {
+        return getPreferences(context).getString(key, defValue);
+    }
+
+
+    public static SharedPreferences getPreferences(Context context) {
+        return context.getSharedPreferences(PREF_NAME, MODE);
+    }
+
+    public static Editor getEditor(Context context) {
+        return getPreferences(context).edit();
+    }
+
+}

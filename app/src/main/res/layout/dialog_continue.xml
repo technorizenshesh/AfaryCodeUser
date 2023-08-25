@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_100sdp"
+    android:padding="@dimen/_10sdp"
+ >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:weightSum="1">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnContinue"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_below="@+id/recycler"
+            android:layout_gravity="center"
+            android:layout_weight=".45"
+            android:background="@drawable/border_btn"
+            android:gravity="center"
+            android:text="@string/continue_shopping"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold"
+
+            android:visibility="visible" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".1"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCheckout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_below="@+id/recycler"
+            android:layout_gravity="center"
+            android:layout_weight=".45"
+
+            android:background="@drawable/border_btn"
+            android:gravity="center"
+            android:padding="@dimen/_10sdp"
+            android:text="@string/checkout"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_10sdp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

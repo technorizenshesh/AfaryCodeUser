@@ -1,0 +1,69 @@
+package com.my.afarycode.OnlineShopping.bottomsheet;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.text.Html;
+import android.view.LayoutInflater;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.my.afarycode.OnlineShopping.listener.AskListener;
+import com.my.afarycode.R;
+import com.my.afarycode.databinding.FragmentAskBinding;
+
+
+public class AskBottomSheet extends BottomSheetDialogFragment {
+    public String TAG = "AskBottomSheet";
+    BottomSheetDialog dialog;
+    FragmentAskBinding binding;
+    private BottomSheetBehavior<View> mBehavior;
+    public AskListener listener;
+
+
+
+
+    public AskBottomSheet() {
+    }
+
+
+    public AskBottomSheet callBack(AskListener listener) {
+        this.listener = listener;
+        return this;
+    }
+
+
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()), R.layout.fragment_ask, null, false);
+        dialog.setContentView(binding.getRoot());
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        mBehavior = BottomSheetBehavior.from((View) binding.getRoot().getParent());
+        mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        initBinding();
+        return  dialog;
+    }
+
+    private void initBinding() {
+        String sourceString = "Do you have a "+"<b>" + "Seller" + "</b> " + " account?";
+        binding.tvText.setText(Html.fromHtml(sourceString));
+
+        binding.btnYes.setOnClickListener(view -> {
+            listener.ask("Yes");
+        });
+
+        binding.btnNo.setOnClickListener(view -> {
+            listener.ask("No");
+        });
+    }
+}

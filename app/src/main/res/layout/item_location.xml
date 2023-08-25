@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/layoutMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:orientation="vertical">
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_gravity="center_vertical"
+
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rdHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center"
+                    android:checked="true"
+                    android:clickable="false"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="start|center"
+                    android:paddingStart="@dimen/_5sdp"
+                    android:text="@string/deliver_to_my_home"
+                    android:textAlignment="viewStart"
+                    android:textColor="@color/black"
+                    android:textDirection="locale"
+                    android:textSize="@dimen/_12sdp" />
+
+
+                <ImageView
+                    android:id="@+id/ivDelete"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/delete"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    app:tint="@color/blue_circle"/>
+
+
+
+                <ImageView
+                    android:id="@+id/ivEdit"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_toStartOf="@id/ivDelete"
+                    android:src="@drawable/pen"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    app:tint="@color/blue_circle" />
+
+            </RelativeLayout>
+
+
+
+
+
+
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1612 Liberia St &amp;, S Africa Dr, Cosmo City,Roodepoort, 2188, South Africa"
+                android:textColor="@color/color_grey_two"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="@dimen/_9sdp"
+                android:layout_marginStart="@dimen/_32sdp"
+                android:layout_gravity="start"
+                android:gravity="start"
+                android:textDirection="locale"
+                android:textAlignment="viewStart"
+                android:layout_marginTop="-5dp"
+                />
+
+
+            <!-- <RadioButton
+                 android:id="@+id/rdWork"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/work"
+                 android:paddingLeft="@dimen/_5sdp"
+                 android:layout_marginTop="@dimen/_5sdp"
+                 android:fontFamily="@font/poppins_regular"
+                 android:textSize="@dimen/_12sdp"
+                 android:textColor="@color/black"/>
+
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="1612 Liberia St &amp;, S Africa Dr, Cosmo City,Roodepoort, 2188, South Africa"
+                 android:textColor="@color/color_grey_two"
+                 android:fontFamily="@font/poppins_regular"
+                 android:textSize="@dimen/_9sdp"
+                 android:layout_marginLeft="@dimen/_32sdp"
+                 android:layout_marginTop="-10dp"
+                 />-->
+
+        </RadioGroup>
+
+    </LinearLayout>
+</layout>
