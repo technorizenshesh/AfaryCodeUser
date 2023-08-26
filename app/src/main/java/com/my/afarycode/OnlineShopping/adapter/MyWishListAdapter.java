@@ -69,12 +69,12 @@ public class MyWishListAdapter extends
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        holder.progressAdapterBinding.productName.setText(all_category_subcategory.get(position).productName);
-        Picasso.get().load(all_category_subcategory.get(position).productImage).into(holder.progressAdapterBinding.imgeProduct);
-        holder.progressAdapterBinding.txtPrice.setText("Rs. " + all_category_subcategory.get(position).productPrice);
+        holder.progressAdapterBinding.productName.setText(all_category_subcategory.get(position).getProductDetails().getProductName());
+        Picasso.get().load(all_category_subcategory.get(position).getProductDetails().getProductImages()).into(holder.progressAdapterBinding.imgeProduct);
+        holder.progressAdapterBinding.txtPrice.setText("Rs. " + all_category_subcategory.get(position).getProductDetails().getProductPrice());
 
         holder.progressAdapterBinding.addToCart.setOnClickListener(v -> {
-            AddCartToWishListAPI(all_category_subcategory.get(position).wis_id);
+            AddCartToWishListAPI(all_category_subcategory.get(position).getId());
         });
     }
 

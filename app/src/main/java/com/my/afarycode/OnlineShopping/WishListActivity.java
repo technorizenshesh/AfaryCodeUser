@@ -112,7 +112,7 @@ public class WishListActivity extends Fragment {
                     if(jsonObject.getString("status").equals("1")) {
                         GetWishListModal model = new Gson().fromJson(stringResponse,GetWishListModal.class);
                         get_result.clear();
-                        get_result.addAll(model.result);
+                        get_result.addAll(model.getResult());
                         adapter.notifyDataSetChanged();
 
 
