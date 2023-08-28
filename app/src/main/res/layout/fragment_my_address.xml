@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,16 +45,17 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler"
+            android:id="@+id/rvLocation"
+            android:layout_below="@+id/RRtoolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/RRtoolbar"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:scrollbars="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_location"
             android:layout_margin="@dimen/_10sdp"
-            android:visibility="visible" />
+            />
 
 
+<!--
         <RelativeLayout
             android:id="@+id/RRSigUp"
             android:layout_width="match_parent"
@@ -84,6 +87,7 @@
             </ImageView>
 
         </RelativeLayout>
+-->
 
     </RelativeLayout>
 

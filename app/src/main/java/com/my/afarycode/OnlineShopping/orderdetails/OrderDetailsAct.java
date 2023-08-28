@@ -110,7 +110,10 @@ public class OrderDetailsAct extends AppCompatActivity {
                             binding.llTwo.setVisibility(View.GONE);
                             binding.llThree.setVisibility(View.GONE);
                             binding.llFour.setVisibility(View.GONE);
+                           // Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImage);
+
                             Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImage);
+
 
                         } else if (model.getResult().getShopImage().size() == 2) {
                             binding.llOne.setVisibility(View.GONE);

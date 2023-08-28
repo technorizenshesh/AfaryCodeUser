@@ -52,8 +52,8 @@ public class HomeActivity extends AppCompatActivity {
 
         binding.RRMyBooking.setOnClickListener(v -> {
 
-            fragment = new MyBookingFragment();
-            loadFragment(fragment);
+          //  fragment = new MyBookingFragment();
+           // loadFragment(fragment);
 
         });
 

@@ -272,6 +272,20 @@ public class OrderDetailsModel {
             @Expose
             private String newQut;
 
+
+            @SerializedName("quantity")
+            @Expose
+            private String quantity;
+
+
+            public String getQuantity() {
+                return quantity;
+            }
+
+            public void setQuantity(String quantity) {
+                this.quantity = quantity;
+            }
+
             public String getNewQut() {
                 return newQut;
             }

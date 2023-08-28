@@ -34,8 +34,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.tvProductName.setText(arrayList.get(position).getProductName());
-        holder.binding.tvProductPrice.setText(arrayList.get(position).getNewQut() + " X " + arrayList.get(position).getProductPrice() );
-        holder.binding.tvProductTotal.setText(Integer.parseInt(arrayList.get(position).getNewQut()) * Integer.parseInt(arrayList.get(position).getProductPrice())+"");
+        holder.binding.tvProductPrice.setText(arrayList.get(position).getQuantity() + " X " + arrayList.get(position).getProductPrice() );
+        holder.binding.tvProductTotal.setText(Integer.parseInt(arrayList.get(position).getQuantity()) * Integer.parseInt(arrayList.get(position).getProductPrice())+"");
     }
 
     @Override
