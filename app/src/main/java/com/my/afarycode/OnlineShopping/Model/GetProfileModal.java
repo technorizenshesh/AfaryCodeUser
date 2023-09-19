@@ -89,6 +89,19 @@ public class GetProfileModal {
         @Expose
         public String countryName;
 
+        @SerializedName("wallet")
+        @Expose
+        public String wallet;
+
+
+        public String getWallet() {
+            return wallet;
+        }
+
+        public void setWallet(String wallet) {
+            this.wallet = wallet;
+        }
+
         public String getCountryName() {
             return countryName;
         }

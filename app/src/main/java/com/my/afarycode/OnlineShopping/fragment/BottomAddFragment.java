@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -15,8 +16,10 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.AddWalletModal;
 import com.my.afarycode.OnlineShopping.Model.Add_Address_Modal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
+import com.my.afarycode.OnlineShopping.bottomsheet.PaymentBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -29,21 +32,30 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class BottomAddFragment extends BottomSheetDialogFragment {
+public class BottomAddFragment extends BottomSheetDialogFragment implements AskListener {
 
     Context context;
     private RelativeLayout done_text;
     private AfaryCode apiInterface;
     private EditText money_et;
 
+    AskListener listener;
+
     public BottomAddFragment(Context context) {
         this.context = context;
+    }
+
+
+    public BottomAddFragment callBack(AskListener listener) {
+        this.listener = listener;
+        return this;
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("RestrictedApi")
     public void setupDialog(Dialog dialog, int style) {
         View contentView = View.inflate(getContext(), R.layout.fragmen_add_money, (ViewGroup) null);
 
@@ -53,7 +65,13 @@ public class BottomAddFragment extends BottomSheetDialogFragment {
         money_et = contentView.findViewById(R.id.money_et);
 
         done_text.setOnClickListener(v -> {
-            AddWalletAPI(money_et.getText().toString());
+           // AddWalletAPI(money_et.getText().toString());
+            if(money_et.getText().toString().equalsIgnoreCase(""))
+                Toast.makeText(context, "Please enter amount", Toast.LENGTH_SHORT).show();
+            else {
+                new PaymentBottomSheet(money_et.getText().toString()).callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+
+            }
         });
 
 
@@ -107,5 +125,12 @@ public class BottomAddFragment extends BottomSheetDialogFragment {
                 DataManager.getInstance().hideProgressMessage();
             }
         });
+    }
+
+    @Override
+    public void ask(String value) {
+        Toast.makeText(getContext(), value, Toast.LENGTH_SHORT).show();
+        listener.ask("");
+        dismiss();
     }
 }

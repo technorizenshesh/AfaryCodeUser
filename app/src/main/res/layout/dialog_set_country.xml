@@ -35,27 +35,27 @@
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_10sdp"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/colorGreen"
             android:textSize="@dimen/_13sdp"
-            android:background="@drawable/rounded_blue_bg"
             android:text="@string/yes"
             android:textStyle="bold"/>
 
 
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/grey"/>
 
         <TextView
             android:id="@+id/tvBack"
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/_10sdp"
             android:gravity="center"
-            android:textColor="@color/colorGray"
+            android:textColor="@color/colorGreen"
             android:textSize="@dimen/_13sdp"
-            android:text="@string/back"
+            android:text="@string/no"
             android:textStyle="bold"/>
 
 

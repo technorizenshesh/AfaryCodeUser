@@ -298,7 +298,7 @@ public class CardActivity extends Fragment implements OnPositionListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
-        map.put("cart_id", cart_id);
+      //  map.put("cart_id", cart_id);
         map.put("pro_id", proId);
         map.put("id", id);
         map.put("quantity", String.valueOf(count));
@@ -323,11 +323,11 @@ public class CardActivity extends Fragment implements OnPositionListener {
                     if (data.status.equals("1")) {
 
                         itemAmount = data.getResult().itemAmount;
-                        subTotal.setText("Rs. " + itemAmount);
+                      //  subTotal.setText("Rs. " + itemAmount);
 
-                        double final_amount = totalPriceToToPay1 + Integer.valueOf(itemAmount);
+                      //  double final_amount = totalPriceToToPay1 + Integer.valueOf(itemAmount);
 
-                        total_price_to_to_pay.setText("Rs. " + final_amount);
+                     //   total_price_to_to_pay.setText("Rs. " + final_amount);
 
 
                         Toast.makeText(getActivity(), "update quantity", Toast.LENGTH_SHORT).show();
@@ -353,7 +353,7 @@ public class CardActivity extends Fragment implements OnPositionListener {
 
     @Override
     public void onPos(int position, String type, String value) {
-        if(type.equals("Update")) UpdateQuanityAPI(get_result.get(position).cartId,get_result.get(position).getProId(),get_result.get(position).getId(), Integer.parseInt(value));
+        if(type.equals("Update")) UpdateQuanityAPI(get_result.get(position).cartId,get_result.get(position).getItemId(),get_result.get(position).getId(), Integer.parseInt(value));
         else if(type.equals("Delete")) DeleteAPI(get_result.get(position).cartId,get_result.get(position).getId());
         else if(type.equals("Wishlist")) AddToWIshListAPI(get_result.get(position).proId);
 

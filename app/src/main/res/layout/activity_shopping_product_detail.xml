@@ -132,22 +132,38 @@
                     android:visibility="gone"
                     />
 
-
-                <com.smarteist.autoimageslider.SliderView
-                    android:id="@+id/productImgSlider"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_180sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    app:sliderAnimationDuration="15"
-                    app:sliderAutoCycleDirection="back_and_forth"
-                    app:sliderAutoCycleEnabled="true"
-                    app:sliderIndicatorAnimationDuration="6"
-                    app:sliderIndicatorGravity="center_horizontal|bottom"
-                    app:sliderIndicatorOrientation="horizontal"
-                    app:sliderIndicatorSelectedColor="@color/colorPrimary"
-                    app:sliderIndicatorUnselectedColor="#5A5A5A"
-                    app:sliderScrollTimeInSec="1"
-                    app:sliderStartAutoCycle="true" />
+                    android:layout_height="wrap_content">
+
+                    <com.smarteist.autoimageslider.SliderView
+                        android:id="@+id/productImgSlider"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_180sdp"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        app:sliderAnimationDuration="15"
+                        app:sliderAutoCycleDirection="back_and_forth"
+                        app:sliderAutoCycleEnabled="true"
+                        app:sliderIndicatorAnimationDuration="6"
+                        app:sliderIndicatorGravity="center_horizontal|bottom"
+                        app:sliderIndicatorOrientation="horizontal"
+                        app:sliderIndicatorSelectedColor="@color/colorPrimary"
+                        app:sliderIndicatorUnselectedColor="#5A5A5A"
+                        app:sliderScrollTimeInSec="1"
+                        app:sliderStartAutoCycle="true" />
+
+                    <ImageView
+                        android:id="@+id/ivDeliveryType"
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/ic_free_delivery"
+                        android:scaleType="fitXY"
+                        android:visibility="gone"/>
+
+                </RelativeLayout>
+
 
 
 

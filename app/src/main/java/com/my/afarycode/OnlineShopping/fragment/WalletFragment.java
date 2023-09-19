@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.AddAvailable;
 import com.my.afarycode.OnlineShopping.Model.Add_Wish_To_Cart_Modal;
 import com.my.afarycode.OnlineShopping.Model.CategoryModal;
+import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.Model.GetTransferDetails;
 import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
 import com.my.afarycode.OnlineShopping.WishListActivity;
@@ -25,10 +26,12 @@ import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.adapter.WalletAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.FragmentWalletBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +42,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class WalletFragment extends Fragment {
+public class WalletFragment extends Fragment implements AskListener {
 
     FragmentWalletBinding binding;
 
@@ -47,15 +50,16 @@ public class WalletFragment extends Fragment {
     private ArrayList<HomeShopeProductModel> modelList = new ArrayList<>();
     private AfaryCode apiInterface;
     private ArrayList<GetTransferDetails.Result> get_result = new ArrayList<>();
-
+    GetProfileModal data;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wallet, container, false);
 
 
         apiInterface = ApiClient.getClient(getContext()).create(AfaryCode.class);
 
+        GetProfile();
+       // GetAvailableBal();
         GetTransactionAPI();
-        GetAvailableBal();
 
         binding.RRback.setOnClickListener(v -> {
             getFragmentManager().popBackStack();
@@ -65,13 +69,13 @@ public class WalletFragment extends Fragment {
         //binding.recyclerWallet
 
         binding.txtAddMoney.setOnClickListener(v -> {
-            BottomAddFragment bottomSheetFragment = new BottomAddFragment(getActivity());
-            bottomSheetFragment.show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+           // BottomAddFragment bottomSheetFragment = new BottomAddFragment(getActivity());
+            new BottomAddFragment(getActivity()).callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
         });
 
         binding.txtWithdrawMoney.setOnClickListener(v -> {
-            WithDrawFragment bottomSheetFragment = new WithDrawFragment(getActivity());
-            bottomSheetFragment.show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+           // WithDrawFragment bottomSheetFragment = new WithDrawFragment(getActivity());
+           new WithDrawFragment(getActivity(),data.getResult().getWallet()).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
         });
 
         binding.txtTransactMoney.setOnClickListener(v -> {
@@ -81,6 +85,50 @@ public class WalletFragment extends Fragment {
 
         return binding.getRoot();
     }
+
+
+    private void GetProfile() {
+
+        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
+
+        loginCall.enqueue(new Callback<GetProfileModal>() {
+            @Override
+            public void onResponse(Call<GetProfileModal> call,
+                                   Response<GetProfileModal> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+
+                    data = response.body();
+                    String dataResponse = new Gson().toJson(response.body());
+                    Log.e("MapMap", "GET RESPONSE" + dataResponse);
+
+                    if (data.status.equals("1")) {
+                        binding.textAmount.setText("$ " + data.result.getWallet());
+                    } else if (data.status.equals("0")) {
+                        Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetProfileModal> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+
 
     private void GetAvailableBal() {
 
@@ -181,5 +229,11 @@ public class WalletFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         binding.recyclerWallet.setLayoutManager(linearLayoutManager);
         binding.recyclerWallet.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void ask(String value) {
+        GetTransactionAPI();
+        GetProfile();
     }
 }

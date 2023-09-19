@@ -22,6 +22,11 @@ public class PreferenceConnector {
     public static final String LAT ="lat";
     public static final String LON ="lon";
 
+    public static final String COUNTRY_ID ="country_id";
+
+    public static final String FROM ="from";
+
+
     public static String User_name ="user_name";
     public static String User_img ="user_img";
 

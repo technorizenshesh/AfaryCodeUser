@@ -73,7 +73,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     ArrayList<LocationModel.Result> arrayList;
     LocationAdapter adapter;
     String deliveryType="",lat="";
-    String deliveryAgencyType="";
+    String deliveryAgencyType="",agencyId="";
     String deliveryCharge="0.0";
 
     ArrayList<DeliveryTypeModel.Result> deliverArrayList;
@@ -149,7 +149,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             }
             else  startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
                         .putExtra("agency",deliveryAgencyType)
-                        .putExtra("charge",deliveryCharge));
+                        .putExtra("charge",deliveryCharge)
+                        .putExtra("agencyId",agencyId));
 
             //else startActivity(new Intent(getActivity(), CheckOutScreen.class));
 
@@ -378,7 +379,10 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             deliveryType = arrayList.get(position).getLat();
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LAT, arrayList.get(position).getLat());
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LON, arrayList.get(position).getLon());
-          //  arrayList.get(position).getCountry();
+            PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.COUNTRY_ID, arrayList.get(position).getCountry());
+
+
+            //  arrayList.get(position).getCountry();
             getDeliveryAgency(arrayList.get(position).getId(),shopId);
         }
 
@@ -416,6 +420,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
         else if(Type.equals("deliveryAgency")) {
             deliveryCharge = deliveryAgencyList.get(position).getPrice()+"";
+            agencyId = deliveryAgencyList.get(position).getId();
         }
 
 

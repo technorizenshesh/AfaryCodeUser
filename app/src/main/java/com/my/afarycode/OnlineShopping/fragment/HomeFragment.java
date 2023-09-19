@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping.fragment;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,10 +12,14 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -62,6 +67,7 @@ import com.my.afarycode.OnlineShopping.listener.SearchListener;
 import com.my.afarycode.OnlineShopping.listener.onItemClickListener;
 import com.my.afarycode.OnlineShopping.servercommunication.GPSTracker;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.HomeFragmentBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -128,7 +134,7 @@ public class HomeFragment extends Fragment implements SearchListener {
 
     List<Address> addresses;
     ProductAdapter2 adapterSearch;
-    private String countryNames="",countryId="";
+    private String countryNames="",lastCountryName="",lastCountryId="",countryId="",countryLastId ="";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false);
@@ -207,36 +213,82 @@ public class HomeFragment extends Fragment implements SearchListener {
 
                     if (data.status.equals("1")) {
                         binding.tvNames.setText("Hello, "+data.getResult().getUserName());
-                       if(!data.getResult().getCountryName().equals("")) {
-                           countryNames = data.getResult().getCountryName();
-                           binding.address.setText(data.getResult().getCountryName());
-                           binding.tvProduct.setText("Latest Products in " + countryNames );
-                           Log.e("countryListSize===",countryArrayList.size()+"");
-                           if(countryArrayList.size()>0) {
-                               for (int i = 0; i < countryArrayList.size(); i++) {
-                                   if (countryNames.equals(countryArrayList.get(i).getName())) {
-                                       countryId = countryArrayList.get(i).getId();
-                                       PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
-                                       PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
-                                       getProduct(countryId);
-                                   }
-                               }
-                           }
+                        if(PreferenceConnector.readString(getActivity(),PreferenceConnector.FROM,"").equalsIgnoreCase("splash")){
+                            if(!data.getResult().getCountryName().equals("")) {
+                                lastCountryName = data.getResult().getCountryName();
+                                lastCountryId =  data.getResult().getCountry();
+                                if (countryArrayList.size() > 0) {
+                                    for (int i = 0; i < countryArrayList.size(); i++) {
+                                        if (countryNames.equals(countryArrayList.get(i).getName())) {
+                                              countryId = countryArrayList.get(i).getId();
+                                             //lastCountryId = countryArrayList.get(i).getId();
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId, lastCountryId);
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName, lastCountryName);
 
-                       }
-                       else {
-                           if(countryArrayList.size()>0) {
-                               for (int i = 0; i < countryArrayList.size(); i++) {
-                                   if (countryNames.equals(countryArrayList.get(i).getName())) {
-                                       countryId = countryArrayList.get(i).getId();
-                                       PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
-                                       PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
-                                       getProduct(countryId);
-                                   }
-                               }
-                           }
-                       }
-                        Log.e("image>>>", data.getResult().image);
+                                        }
+                                    }
+                                }
+                            }
+                            if(!lastCountryName.equalsIgnoreCase(countryNames))
+                            dialogAddLocation(lastCountryName,countryNames,countryId);
+                            else {
+                                countryNames = data.getResult().getCountryName();
+                              //  lastCountryName =  data.getResult().getCountryName();
+                                binding.address.setText(data.getResult().getCountryName());
+                                binding.tvProduct.setText("Latest Products in " + countryNames );
+                                Log.e("countryListSize===",countryArrayList.size()+"");
+                                if(countryArrayList.size()>0) {
+                                    for (int i = 0; i < countryArrayList.size(); i++) {
+                                        if (countryNames.equals(countryArrayList.get(i).getName())) {
+                                            countryId = countryArrayList.get(i).getId();
+                                           // lastCountryId = countryArrayList.get(i).getId();
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
+                                            getProduct(countryId);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            if(!data.getResult().getCountryName().equals("")) {
+                                countryNames = data.getResult().getCountryName();
+                                lastCountryName =  data.getResult().getCountryName();
+                                binding.address.setText(data.getResult().getCountryName());
+                                binding.tvProduct.setText("Latest Products in " + countryNames );
+                                Log.e("countryListSize===",countryArrayList.size()+"");
+                                if(countryArrayList.size()>0) {
+                                    for (int i = 0; i < countryArrayList.size(); i++) {
+                                        if (countryNames.equals(countryArrayList.get(i).getName())) {
+                                            countryId = countryArrayList.get(i).getId();
+                                            lastCountryId = countryArrayList.get(i).getId();
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
+                                            getProduct(countryId);
+                                        }
+                                    }
+                                }
+
+                            }
+                            else {
+                                binding.address.setText("" + addresses.get(0).getCountryName());
+                                binding.tvProduct.setText("Latest Products in " + addresses.get(0).getCountryName() );
+
+                                if(countryArrayList.size()>0) {
+                                    for (int i = 0; i < countryArrayList.size(); i++) {
+                                        if (countryNames.equals(countryArrayList.get(i).getName())) {
+                                            countryId = countryArrayList.get(i).getId();
+                                            lastCountryId = countryArrayList.get(i).getId();
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
+                                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
+                                            getProduct(countryId);
+                                        }
+                                    }
+                                }
+                            }
+                            Log.e("image>>>", data.getResult().image);
+                        }
+
                         getTitle();
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
@@ -454,12 +506,19 @@ public class HomeFragment extends Fragment implements SearchListener {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == PERMISSION_ID) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setCurrentLoc();
             }
         }
     }
+
+
+
+
+
+
 
     private void setCurrentLoc() {
         gpsTracker = new GPSTracker(getActivity());
@@ -471,8 +530,7 @@ public class HomeFragment extends Fragment implements SearchListener {
             addresses = geocoder.getFromLocation(lat, lon, 1);
             Log.e("addresses>>>", "" + addresses.get(0).getAddressLine(0));
 
-            binding.address.setText("" + addresses.get(0).getCountryName());
-            binding.tvProduct.setText("Latest Products in " + addresses.get(0).getCountryName() );
+
             countryNames = addresses.get(0).getCountryName();
             GetProfile();
 
@@ -491,8 +549,8 @@ public class HomeFragment extends Fragment implements SearchListener {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-      if(!countryNames.equalsIgnoreCase(""))
-          map.put("country_id", countryNames);
+      if(!lastCountryName.equalsIgnoreCase(""))
+          map.put("country_id", lastCountryName);
        else map.put("country_id", addresses.get(0).getCountryName()+"");
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<BannerModal1> loginCall = apiInterface.get_slider(headerMap,map);
@@ -764,8 +822,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                         CountryModel data = new Gson().fromJson(responseData, CountryModel.class);
                         countryArrayList.clear();
                         countryArrayList.addAll(data.getResult());
-
-                        if (checkPermissions()) {
+                        setCurrentLoc();
+                       /* if (checkPermissions()) {
                             if (isLocationEnabled()) { setCurrentLoc();}
                             else {
                                 Toast.makeText(getActivity(), "Turn on location", Toast.LENGTH_LONG).show();
@@ -775,7 +833,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                             }
                         } else {
                             requestPermissions();
-                        }
+                        }*/
                     } else if (object.optString("status").equals("0")) {
                         countryArrayList.clear();
 
@@ -851,6 +909,105 @@ public class HomeFragment extends Fragment implements SearchListener {
             }
         });
     }
+
+
+
+
+
+    private void dialogAddLocation(String countryName, String countryNameNew,String countryId) {
+        Dialog mDialog = new Dialog(getActivity());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_set_country);
+        // mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        TextView textView = mDialog.findViewById(R.id.tvTitle);
+        TextView tvYes = mDialog.findViewById(R.id.tvYes);
+        TextView tvBack = mDialog.findViewById(R.id.tvBack);
+
+
+
+        if(countryName.equalsIgnoreCase(""))
+            textView.setText("Your current location is set to " + "<font color='#EE0000'>" + countryNameNew+ "</font>" + "<br>" + "<br>Do you want to maintain your location on  "+ "<font color='#EE0000'>"  + countryNameNew + "</font>" + "?");
+
+         else  textView.setText(Html.fromHtml( "Your real location " +  "<font color='#EE0000'>"  + countryNameNew + "</font>"  +" has been changed." +"<br>"+ "<br>Your current location is set to "+  "<font color='#EE0000'>" + countryName + "</font>" + "<br>"+"<br>Do you want to maintain your location on "
+              + "<font color='#EE0000'>"  + countryName+ "</font>" +"?"));
+
+
+        WindowManager.LayoutParams lp = mDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.8f;
+        mDialog.getWindow().setAttributes(lp);
+        mDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+
+
+
+        tvBack.setOnClickListener(v -> {
+            mDialog.dismiss();
+            updateCountry(countryId,countryNameNew);
+        });
+
+        tvYes.setOnClickListener(v -> {
+            mDialog.dismiss();
+            updateCountry(lastCountryId,countryName);
+
+        });
+
+
+        mDialog.show();
+
+    }
+
+
+    private void updateCountry(String countryId,String country) {
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("country", countryId);
+
+
+        Call<ResponseBody> loginCall = apiInterface.updateCountryApi(headerMap,map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call,
+                                   Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseString = response.body().string();
+                    JSONObject jsonObject = new JSONObject(responseString);
+                    Log.e(TAG,"update country  Response = " + responseString);
+                    if(jsonObject.getString("status").equals("1")) {
+                        JSONObject jsonObject11 = jsonObject.getJSONObject("result");
+                      //  listener.search(country);
+                       // dialog.dismiss();
+                        binding.address.setText(country);
+                        binding.tvProduct.setText("Latest Products in " + country );
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.FROM, "");
+                        getProduct(countryId);
+                    } else {
+                        // binding.tvNotFound.setVisibility(View.VISIBLE);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
 
 
 

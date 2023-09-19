@@ -64,7 +64,7 @@ public class TermsCondition extends AppCompatActivity {
         TermsWV.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         TermsWV.setWebViewClient(new HelloWebViewClient());
         TermsWV.getSettings().setDomStorageEnabled(true);
-        TermsWV.getSettings().setAppCacheEnabled(true);
+       // TermsWV.getSettings().setAppCacheEnabled(true);
         TermsWV.getSettings().setLoadsImagesAutomatically(true);
         TermsWV.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         TermsWV.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);

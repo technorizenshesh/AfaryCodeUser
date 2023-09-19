@@ -34,6 +34,17 @@
                     android:src="@drawable/unplus"
                     />
 
+
+                <ImageView
+                    android:id="@+id/ivDeliveryType"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_free_delivery"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"/>
+
             </RelativeLayout>
 
 

@@ -64,6 +64,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     String deliveryAgencyType="";
     String deliveryCharge="0.0";
 
+    String deliveryAgencyId="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +97,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         if(getIntent()!=null){
             deliveryAgencyType = getIntent().getStringExtra("agency");
             deliveryCharge = getIntent().getStringExtra("charge");
+            deliveryAgencyId = getIntent().getStringExtra("agencyId");
         }
 
         get_result = new ArrayList<>();
@@ -168,10 +171,9 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                                 Log.e(" Position==", +i + " " + "Value " + get_result.get(i).getShopId());
                             }
                         }
-                        binding.subTotal.setText("Rs. " + String.format("%.2f", mainTotalPay));
                         Log.e("check log====", Chkkkk);
-                        AllTax(get_result.get(0).cartId, mainTotalPay + "", Chkkkk);
-
+                      //  AllTax(get_result.get(0).cartId, mainTotalPay + "", Chkkkk);
+                        getAllTax();
 
                     } else if (data.status.equals("0")) {
 
@@ -302,9 +304,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
-        map.put("cart_id", cart_id);
+      //  map.put("cart_id", cart_id);
         map.put("pro_id", proId);
-        map.put("id", id);
+        map.put("id", cart_id);
+        map.put("quantity", count+"");
 
         map.put("quantity", String.valueOf(count));
 
@@ -359,7 +362,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     @Override
     public void onPos(int position, String type, String value) {
         if (type.equals("Update"))
-            UpdateQuanityAPI(get_result.get(position).cartId, get_result.get(position).getItemId(), get_result.get(position).getId(), Integer.parseInt(value));
+            UpdateQuanityAPI(get_result.get(position).id, get_result.get(position).getItemId(), get_result.get(position).getId(), Integer.parseInt(value));
         else if (type.equals("Delete"))
             DeleteAPI(get_result.get(position).cartId, get_result.get(position).getId());
         else if (type.equals("Wishlist")) {
@@ -380,6 +383,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("pickuplat", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LAT, ""));
         map.put("pickuplon", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LON, ""));
         map.put("yes_no", ShopComp);
+        map.put("country_id",PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.COUNTRY_ID,""));
+
         Log.e(TAG, "Get All Taxs Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTax(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -406,7 +411,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                             for (int i = 0; i < arrayList.size(); i++) {
                                 platFormsFees = platFormsFees + Double.parseDouble(arrayList.get(i).getPlatformFees());
                                 taxN1 = taxN1 + Double.parseDouble(arrayList.get(i).getTaxesFirst());
-                                taxN2 = taxN2 + Double.parseDouble(arrayList.get(i).getTaxesSecond());
+                                taxN2 = taxN2;   //+ Double.parseDouble(arrayList.get(i).getTaxesSecond());
                                if(deliveryAgencyType.equalsIgnoreCase("Afary Code")) deliveryFees = deliveryFees + Double.parseDouble(arrayList.get(i).getDeliveryFees());
                                  else  deliveryFees = Double.parseDouble(deliveryCharge);
                             }
@@ -486,6 +491,79 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         }
         Log.e("array====",arrayList.size()+"");
 
+    }
+
+
+    public void  getAllTax(){
+        DataManager.getInstance().showProgressMessage(CheckOutScreen.this, getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
+        map.put("pickuplat", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LAT, ""));
+        map.put("pickuplon", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LON, ""));
+        map.put("country_id",PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.COUNTRY_ID,""));
+        map.put("delivery_partner",deliveryAgencyId);
+        Log.e(TAG, "Get AllTax Request :" + map);
+        Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All Taxs RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                         // JSONObject jsonObject = object.getJSONObject("result");
+
+                        mainTotalPay = Double.parseDouble(object.getString("sub_total"));
+                        taxN1 = Double.parseDouble(object.getString("taxes_first"));
+                        taxN2 = Double.parseDouble(object.getString("taxes_second"));
+                        deliveryFees = Double.parseDouble(object.getString("total_delivery_fees"));
+                        totalPriceToToPay = Double.parseDouble(object.getString("total_payable_amount"));
+
+                      /*  totalPriceToToPay1 = platFormsFees + taxN1 + taxN2
+                        + deliveryFees;
+
+                        totalPriceToToPay = Double.parseDouble(totalAmount)
+
+                                + platFormsFees
+                                + taxN1
+                                + taxN2
+                                + deliveryFees;*/
+
+                        binding.plateformFees.setText("Rs. " + String.format("%.2f", platFormsFees));
+                        binding.tvTax1.setText("Rs. " + String.format("%.2f", taxN1));
+                        binding.tvtax2.setText("Rs. " + String.format("%.2f", taxN2));
+                        binding.tvDelivery.setText("Rs. " + String.format("%.2f", deliveryFees));
+                        binding.totalPriceToToPay.setText("Rs. " + String.format("%.2f", totalPriceToToPay));
+                        binding.subTotal.setText("Rs. " + String.format("%.2f", mainTotalPay));
+
+
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        Toast.makeText(CheckOutScreen.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
     }
 
 }

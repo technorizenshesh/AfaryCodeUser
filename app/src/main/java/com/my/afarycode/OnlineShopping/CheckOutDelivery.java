@@ -79,7 +79,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
     ArrayList<DeliveryTypeModel.Result> deliverArrayList;
     DeliveryTypeAdapter deliveryTypeAdapter;
 
-    String deliveryAgencyType="";
+    String deliveryAgencyType="",agencyId="";
     String deliveryCharge="0.0";
     String deliveryType="",lat="";
 
@@ -160,7 +160,10 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             else*/ if(deliveryType.equalsIgnoreCase("")) {
                 Toast.makeText(getActivity(), getString(R.string.please_select_address_type), Toast.LENGTH_SHORT).show();
             }
-              else  startActivity(new Intent(getActivity(), CheckOutScreen.class));
+              else  startActivity(new Intent(getActivity(), CheckOutScreen.class)
+                        .putExtra("agency",deliveryAgencyType)
+                        .putExtra("charge",deliveryCharge)
+                        .putExtra("agencyId",agencyId));
 
             //else startActivity(new Intent(getActivity(), CheckOutScreen.class));
 
@@ -587,6 +590,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
         else if(Type.equals("deliveryAgency")) {
             deliveryCharge = deliveryAgencyList.get(position).getPrice()+"";
+            agencyId = deliveryAgencyList.get(position).getId();
         }
 
     }

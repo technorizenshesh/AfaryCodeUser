@@ -42,19 +42,32 @@ public class GetTransferDetails {
     }
 
     public class Result {
-        @SerializedName("user_name")
+        @SerializedName("id")
         @Expose
-        public String userName;
+        public String id;
+        @SerializedName("transection_id")
+        @Expose
+        public String transectionId;
+
         @SerializedName("amount")
         @Expose
         public String amount;
 
-        public String getUserName() {
-            return userName;
+
+        public String getId() {
+            return id;
         }
 
-        public void setUserName(String userName) {
-            this.userName = userName;
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getTransectionId() {
+            return transectionId;
+        }
+
+        public void setTransectionId(String transectionId) {
+            this.transectionId = transectionId;
         }
 
         public String getAmount() {
@@ -64,6 +77,5 @@ public class GetTransferDetails {
         public void setAmount(String amount) {
             this.amount = amount;
         }
-
     }
 }

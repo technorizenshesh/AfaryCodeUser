@@ -54,8 +54,8 @@ public class WalletAdapter extends
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        holder.progressAdapterBinding.userName.setText(all_category_subcategory.get(position).userName);
-        holder.progressAdapterBinding.amount.setText(all_category_subcategory.get(position).amount);
+        holder.progressAdapterBinding.userName.setText(all_category_subcategory.get(position).getTransectionId());
+        holder.progressAdapterBinding.amount.setText("$"+all_category_subcategory.get(position).amount);
 
     }
 

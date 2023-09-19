@@ -61,12 +61,12 @@ public interface AfaryCode {
     Call<AddWalletModal> add_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("transfer_money")
-    Call<TransferMoneyModal> transfer_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @POST("transfer_money_wllet_to_wallet")
+    Call<ResponseBody> transfer_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("withdraw_money")
-    Call<WithDrawalMoney> withdraw_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @POST("submit_withdrawal_request")
+    Call<ResponseBody> withdraw_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
   //  login
   @FormUrlEncoded
@@ -172,7 +172,7 @@ public interface AfaryCode {
 
 
     @FormUrlEncoded
-    @POST("get_transfer_money")
+    @POST("get_wallet_history")
     Call<GetTransferDetails> get_transfer_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
@@ -186,7 +186,7 @@ public interface AfaryCode {
 
     @FormUrlEncoded
     @POST("add_to_cart")
-    Call<Add_To_Cart_Modal> add_to_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> add_to_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_product_detail")
@@ -266,6 +266,12 @@ public interface AfaryCode {
     @FormUrlEncoded
     @POST("get_tax_km")
     Call<ResponseBody> getAllTax( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("get_tax_delivery_chareges")
+  Call<ResponseBody> getAllTaxNew( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 
     @FormUrlEncoded
     @POST("insert_chat")

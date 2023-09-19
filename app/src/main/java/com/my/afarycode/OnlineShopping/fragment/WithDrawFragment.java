@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
+import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.TransferMoneyModal;
 import com.my.afarycode.OnlineShopping.Model.WithDrawalMoney;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
@@ -21,9 +23,12 @@ import com.my.afarycode.R;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,15 +40,18 @@ public class WithDrawFragment extends BottomSheetDialogFragment {
     private AfaryCode apiInterface;
     private EditText edtEmail;
     private EditText withdrawal_money;
+    String walletBal="0";
 
-    public WithDrawFragment(Context context) {
+    public WithDrawFragment(Context context,String walletBal) {
         this.context = context;
+        this.walletBal = walletBal;
     }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    @SuppressLint("RestrictedApi")
     public void setupDialog(Dialog dialog, int style) {
 
         View contentView = View.inflate(getContext(), R.layout.fragmen_withdraw_money, (ViewGroup) null);
@@ -56,7 +64,8 @@ public class WithDrawFragment extends BottomSheetDialogFragment {
         withdrawal_money = contentView.findViewById(R.id.withdrawal_money);
 
         done_withdraw.setOnClickListener(v -> {
-            WithDrawalAPI();
+           if(Double.parseDouble(walletBal) > Double.parseDouble(withdrawal_money.getText().toString())) WithDrawalAPI();
+            else Toast.makeText(context, "Must be less then or equal wallet balance", Toast.LENGTH_SHORT).show();
         });
 
         dialog.setContentView(contentView);
@@ -74,28 +83,25 @@ public class WithDrawFragment extends BottomSheetDialogFragment {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-        map.put("money", withdrawal_money.getText().toString());
+        map.put("amount", withdrawal_money.getText().toString());
+        Log.e("MapMap", "Send Withdraw Request" + map);
+        Call<ResponseBody> SignupCall = apiInterface.withdraw_money(headerMap,map);
 
-        Log.e("MapMap", "LOGIN REQUEST" + map);
-
-        Call<WithDrawalMoney> SignupCall = apiInterface.withdraw_money(headerMap,map);
-
-        SignupCall.enqueue(new Callback<WithDrawalMoney>() {
+        SignupCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<WithDrawalMoney> call, Response<WithDrawalMoney> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
-                    WithDrawalMoney data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "LOGIN RESPONSE" + dataResponse);
-
-                    if (data.status.equals("1")) {
-                        Toast.makeText(getContext(), "Send Request Successfull", Toast.LENGTH_SHORT).show();
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e("MapMap", "Send Withdraw Request RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        Toast.makeText(getContext(), "Send Withdraw Request Successful", Toast.LENGTH_SHORT).show();
                         dismiss();
+                    } else if (object.optString("status").equals("0")) {
+                        Toast.makeText(getContext(), object.optString("message"), Toast.LENGTH_SHORT).show();
 
-                    } else if (data.status.equals("0")) {
-                        Toast.makeText(getActivity(), data.message, Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -104,7 +110,7 @@ public class WithDrawFragment extends BottomSheetDialogFragment {
             }
 
             @Override
-            public void onFailure(Call<WithDrawalMoney> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
             }

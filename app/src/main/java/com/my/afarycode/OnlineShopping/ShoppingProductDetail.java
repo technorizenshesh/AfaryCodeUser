@@ -46,16 +46,19 @@ import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ShoppingProductDetail extends Fragment {
-
+    public String TAG ="ShoppingProductDetail";
     ActivityShoppingProductDetail2Binding binding;
 
     ReviewProductAdapter mAdapter;
@@ -136,19 +139,22 @@ public class ShoppingProductDetail extends Fragment {
         map.put("cat_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.Cat_id, ""));
 
         Log.e("MapMap", "cart_params" + map);
-        Call<Add_To_Cart_Modal> reviewModalCall = apiInterface.add_to_cart(headerMap,map);
+        Call<ResponseBody> reviewModalCall = apiInterface.add_to_cart(headerMap,map);
 
-        reviewModalCall.enqueue(new Callback<Add_To_Cart_Modal>() {
+        reviewModalCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Add_To_Cart_Modal> call, Response<Add_To_Cart_Modal> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
-                    Add_To_Cart_Modal data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "LOGIN RESPONSE" + dataResponse);
+                  //  Add_To_Cart_Modal data = response.body();
+                  //  String dataResponse = new Gson().toJson(response.body());
+                 //   Log.e("", "LOGIN RESPONSE" + dataResponse);
 
-                    if (data.status.equals("1")) {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "AddToCart RESPONSE" + object);
+                    if (object.getString("status").equals("1")) {
 
                         Toast.makeText(getActivity(), "Add Cart SuccessFully ",
                                 Toast.LENGTH_SHORT).show();
@@ -159,9 +165,8 @@ public class ShoppingProductDetail extends Fragment {
 
                         // finish();
 
-                    } else if (data.status.equals("0")) {
-
-                        Toast.makeText(getActivity(), data.message, Toast.LENGTH_SHORT).show();
+                    } else if (object.getString("status").equals("0")) {
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -170,7 +175,7 @@ public class ShoppingProductDetail extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<Add_To_Cart_Modal> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
             }

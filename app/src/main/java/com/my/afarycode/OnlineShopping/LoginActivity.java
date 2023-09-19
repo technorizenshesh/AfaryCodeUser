@@ -141,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.User_img, img);
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.access_token, token);
 
+                        PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.FROM, "splash");
 
 
 

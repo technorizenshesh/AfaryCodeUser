@@ -54,6 +54,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ProductDetailAct extends AppCompatActivity {
+    public String TAG ="ProductDetailAct";
     ReviewProductAdapter mAdapter;
     private ArrayList<HomeOfferModel> modelList = new ArrayList<>();
     private ArrayList<ShoppingProductModal.Result> get_result1 = new ArrayList<>();
@@ -196,6 +197,9 @@ public class ProductDetailAct extends AppCompatActivity {
                         productImgList.add(get_result1.get(0).getImage());
                         productImgList.add(get_result1.get(0).getImage1());
                         validateNameArrayList.addAll(get_result1.get(0).getValidateName());
+                        if(get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("0"))
+                            binding.ivDeliveryType.setVisibility(View.VISIBLE);
+                        else binding.ivDeliveryType.setVisibility(View.GONE);
                         if(validateNameArrayList.size()==1){
                             binding.tvSize.setVisibility(View.VISIBLE);
                             binding.tvColor.setVisibility(View.GONE);
@@ -329,43 +333,32 @@ public class ProductDetailAct extends AppCompatActivity {
 
         Log.e("MapMap", "cart_params" + map);
 
-        Call<Add_To_Cart_Modal> reviewModalCall = apiInterface.add_to_cart(headerMap,map);
+        Call<ResponseBody> reviewModalCall = apiInterface.add_to_cart(headerMap,map);
 
-        reviewModalCall.enqueue(new Callback<Add_To_Cart_Modal>() {
+        reviewModalCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Add_To_Cart_Modal> call, Response<Add_To_Cart_Modal> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
-                    Add_To_Cart_Modal data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "LOGIN RESPONSE" + dataResponse);
-
-                    if (data.status.equals("1")) {
-
-                        Toast.makeText(ProductDetailAct.this, "Add Cart SuccessFully ",
-                                Toast.LENGTH_SHORT).show();
-
-                      //  fragment = new CardActivity();
-                     //   loadFragment(fragment);
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "AddToCart RESPONSE" + object);
+                    if (object.getString("status").equals("1")) {
+                        Toast.makeText(ProductDetailAct.this, "Add Cart SuccessFully ",Toast.LENGTH_SHORT).show();
                         if(chk.equalsIgnoreCase("checkOut")) startActivity(new Intent(ProductDetailAct.this, CheckOutDeliveryAct.class));
-                       else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
-
-
-                        // finish();
-
-                    } else if (data.status.equals("0")) {
-
-                        Toast.makeText(ProductDetailAct.this, data.message, Toast.LENGTH_SHORT).show();
+                        else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
                     }
-
+                    else if (object.getString("status").equals("0")) {
+                        Toast.makeText(ProductDetailAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<Add_To_Cart_Modal> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
             }
