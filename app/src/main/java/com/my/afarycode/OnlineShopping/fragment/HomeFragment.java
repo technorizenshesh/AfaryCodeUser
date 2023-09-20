@@ -926,7 +926,7 @@ public class HomeFragment extends Fragment implements SearchListener {
 
 
         if(countryName.equalsIgnoreCase(""))
-            textView.setText("Your current location is set to " + "<font color='#EE0000'>" + countryNameNew+ "</font>" + "<br>" + "<br>Do you want to maintain your location on  "+ "<font color='#EE0000'>"  + countryNameNew + "</font>" + "?");
+            textView.setText(Html.fromHtml("Your current location is set to " + "<font color='#EE0000'>" + countryNameNew+ "</font>" + "<br>" + "<br>Do you want to maintain your location on  "+ "<font color='#EE0000'>"  + countryNameNew + "</font>" + "?"));
 
          else  textView.setText(Html.fromHtml( "Your real location " +  "<font color='#EE0000'>"  + countryNameNew + "</font>"  +" has been changed." +"<br>"+ "<br>Your current location is set to "+  "<font color='#EE0000'>" + countryName + "</font>" + "<br>"+"<br>Do you want to maintain your location on "
               + "<font color='#EE0000'>"  + countryName+ "</font>" +"?"));
