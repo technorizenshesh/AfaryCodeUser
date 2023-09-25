@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.my.afarycode.OnlineShopping.Model.CartModal;
 import com.my.afarycode.OnlineShopping.Model.DeleteCartModal;
 import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
 import com.my.afarycode.OnlineShopping.Model.UpdateCartModal;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.adapter.CardAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
@@ -73,6 +75,9 @@ public class CardActivity extends Fragment implements OnPositionListener {
         binding.CheckOutScreen.setOnClickListener(v -> {
           //  fragment = new CheckOutDelivery();
          //   loadFragment(fragment);
+
+            startActivity(new Intent(getActivity(),CheckOutDeliveryAct.class)
+                    .putExtra("sellerId",get_result.get(0).getShopId()));
 
         });
 

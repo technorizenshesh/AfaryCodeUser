@@ -20,7 +20,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/ivImg"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginEnd="@dimen/_7sdp"
+                    android:scaleType="fitXY"
+                    android:visibility="visible"/>
+
+
                 <RadioButton
+                    android:layout_toEndOf="@+id/ivImg"
                     android:id="@+id/rdHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -51,17 +62,7 @@
 
 
 
-                <ImageView
-                    android:id="@+id/ivEdit"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_toStartOf="@id/ivDelete"
-                    android:src="@drawable/pen"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:padding="@dimen/_2sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    app:tint="@color/blue_circle"
-                    android:visibility="gone"/>
+
 
 
                 <TextView

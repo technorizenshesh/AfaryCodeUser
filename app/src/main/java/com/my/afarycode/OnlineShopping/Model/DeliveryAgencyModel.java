@@ -60,9 +60,22 @@ public class DeliveryAgencyModel {
         @Expose
         private String price;
 
+        @SerializedName("image")
+        @Expose
+        private String image;
+
         @SerializedName("chk")
         @Expose
         private boolean chk = false;
+
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
 
         public boolean isChk() {
             return chk;

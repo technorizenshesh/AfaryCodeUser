@@ -346,7 +346,7 @@ public class ProductDetailAct extends AppCompatActivity {
                     Log.e(TAG, "AddToCart RESPONSE" + object);
                     if (object.getString("status").equals("1")) {
                         Toast.makeText(ProductDetailAct.this, "Add Cart SuccessFully ",Toast.LENGTH_SHORT).show();
-                        if(chk.equalsIgnoreCase("checkOut")) startActivity(new Intent(ProductDetailAct.this, CheckOutDeliveryAct.class));
+                        if(chk.equalsIgnoreCase("checkOut")) startActivity(new Intent(ProductDetailAct.this, CheckOutDeliveryAct.class).putExtra("sellerId",restaurant_id));
                         else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
                     }
                     else if (object.getString("status").equals("0")) {

@@ -61,7 +61,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     String Chkkkk;
 
 
-    String deliveryAgencyType="";
+    String deliveryAgencyType="",deliveryYesNo="";
     String deliveryCharge="0.0";
 
     String deliveryAgencyId="";
@@ -98,6 +98,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             deliveryAgencyType = getIntent().getStringExtra("agency");
             deliveryCharge = getIntent().getStringExtra("charge");
             deliveryAgencyId = getIntent().getStringExtra("agencyId");
+            deliveryYesNo =  getIntent().getStringExtra("deliveryYesNo");
         }
 
         get_result = new ArrayList<>();
@@ -147,8 +148,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         get_result.clear();
                         get_result.addAll(data.getResult());
 
-                        adapter.notifyDataSetChanged();
 
+                        adapter.notifyDataSetChanged();
+                        binding.llTotals.setVisibility(View.VISIBLE);
+                        binding.RRbtm.setVisibility(View.VISIBLE);
                         int currentValue = 0;
                         int lastValue = 0;
 
@@ -176,7 +179,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         getAllTax();
 
                     } else if (data.status.equals("0")) {
-
+                        get_result.clear();
+                        adapter.notifyDataSetChanged();
+                        binding.llTotals.setVisibility(View.GONE);
+                        binding.RRbtm.setVisibility(View.GONE);
                         Toast.makeText(CheckOutScreen.this, "No Data Found !!!!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -502,10 +508,11 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
-        map.put("pickuplat", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LAT, ""));
-        map.put("pickuplon", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LON, ""));
+        map.put("drop_lat", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LAT, ""));
+        map.put("drop_lon", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LON, ""));
         map.put("country_id",PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.COUNTRY_ID,""));
         map.put("delivery_partner",deliveryAgencyId);
+        map.put("self_collect",deliveryYesNo);
         Log.e(TAG, "Get AllTax Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -524,6 +531,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         mainTotalPay = Double.parseDouble(object.getString("sub_total"));
                         taxN1 = Double.parseDouble(object.getString("taxes_first"));
                         taxN2 = Double.parseDouble(object.getString("taxes_second"));
+                        platFormsFees = Double.parseDouble(object.getString("platform_fees"));
                         deliveryFees = Double.parseDouble(object.getString("total_delivery_fees"));
                         totalPriceToToPay = Double.parseDouble(object.getString("total_payable_amount"));
 

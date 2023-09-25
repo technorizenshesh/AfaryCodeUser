@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.adapter;
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -77,6 +78,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
 
               holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).productPrice)
                       * Integer.valueOf(all_category_subcategory.get(position).quantity));
+
+              if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("0"))
+                  holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.VISIBLE);
+              else holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.GONE);
 
           }
         holder.progressAdapterBinding.plus.setOnClickListener(v -> {

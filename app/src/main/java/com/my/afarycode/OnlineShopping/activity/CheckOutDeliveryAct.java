@@ -73,7 +73,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     ArrayList<LocationModel.Result> arrayList;
     LocationAdapter adapter;
     String deliveryType="",lat="";
-    String deliveryAgencyType="",agencyId="";
+    String deliveryAgencyType="",agencyId="",deliveryYesNo="No";
     String deliveryCharge="0.0";
 
     ArrayList<DeliveryTypeModel.Result> deliverArrayList;
@@ -150,11 +150,17 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             else  startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)
-                        .putExtra("agencyId",agencyId));
+                        .putExtra("agencyId",agencyId)
+                        .putExtra("deliveryYesNo",deliveryYesNo));
 
             //else startActivity(new Intent(getActivity(), CheckOutScreen.class));
 
         });
+
+
+
+
+
 
 
         arrayList = new ArrayList<>();
@@ -171,6 +177,28 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
         deliveryAgencyAdapter = new DeliveryAgencyAdapter(CheckOutDeliveryAct.this,deliveryAgencyList,CheckOutDeliveryAct.this);
         binding.rvDeliveryAgency.setAdapter(deliveryAgencyAdapter);
+
+
+
+        binding.rdDontDelivery.setOnClickListener(view -> {
+            deliveryType = "I don't want to be delivered, I will come and collect package myself";
+            deliveryYesNo = "Yes";
+            binding.rdDontDelivery.setChecked(true);
+
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliveryTypeAdapter.notifyDataSetChanged();
+
+            for (int i=0;i<arrayList.size();i++){
+                arrayList.get(i).setChk(false);
+            }
+            adapter.notifyDataSetChanged();
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+
+            dialogDontDelivery();
+        });
 
     }
 
@@ -380,6 +408,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LAT, arrayList.get(position).getLat());
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LON, arrayList.get(position).getLon());
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.COUNTRY_ID, arrayList.get(position).getCountry());
+            deliveryYesNo = "No";
+            binding.rdDontDelivery.setChecked(false);
 
 
             //  arrayList.get(position).getCountry();
@@ -390,32 +420,79 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             new EditAddressFragment(arrayList.get(position)).callBack(this::onAddress).show(getSupportFragmentManager(),"");
 
         else if(Type.equals("Deliver to my home")) {
+            deliveryType = deliverArrayList.get(position).getTitle();
+            //deliveryYesNo = "No";
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
             callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
-           // deliveryType = deliverArrayList.get(position).getTitle();
+
         }
 
         else if(Type.equals("Deliver to my office")) {
-            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
           //  deliveryType = deliverArrayList.get(position).getTitle();
+
+            deliveryType = deliverArrayList.get(position).getTitle();
+            //deliveryYesNo = "No";
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
+
 
         }
 
         else if(Type.equals("Deliver to another person")) {
-            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
            // deliveryType = deliverArrayList.get(position).getTitle();
+           // callBottomSheet("",deliverArrayList.get(position).getId());
+            deliveryType = deliverArrayList.get(position).getTitle();
+          //  deliveryYesNo = "No";
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
+
 
         }
 
         else if(Type.equals("Deliver where i am now")) {
-            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
            // deliveryType = deliverArrayList.get(position).getTitle();
+           //  callBottomSheet("",deliverArrayList.get(position).getId());
+            deliveryType = deliverArrayList.get(position).getTitle();
+           // deliveryYesNo = "No";
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+
+            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
+
 
         }
 
-        else if(Type.equals("I don’t want to be delivered, I will come and collect package myself")) {
+      /*  else if(Type.equals("I don’t want to be delivered, I will come and collect package myself")) {
             // deliveryType = deliverArrayList.get(position).getTitle();
             dialogDontDelivery();
-        }
+        }*/
 
 
         else if(Type.equals("deliveryAgency")) {
@@ -440,12 +517,15 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
         alertDialogBuilder = new AlertDialog.Builder(CheckOutDeliveryAct.this);
         alertDialogBuilder.setView(promptsView1);
+        alertDialogBuilder.setCancelable(false);
 
 
 
         txtSKip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                binding.rdDontDelivery.setChecked(false);
+                deliveryYesNo = "No";
                 alertDialog1.dismiss();
             }
         });
@@ -454,7 +534,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             @Override
             public void onClick(View view) {
                 alertDialog1.dismiss();
-                startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class));
+                PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LAT, "");
+                PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LON, "");
+                startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                        .putExtra("agency",deliveryAgencyType)
+                        .putExtra("charge",deliveryCharge)
+                        .putExtra("agencyId",agencyId)
+                        .putExtra("deliveryYesNo",deliveryYesNo));
             }
 
         });

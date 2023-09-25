@@ -81,7 +81,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
     String deliveryAgencyType="",agencyId="";
     String deliveryCharge="0.0";
-    String deliveryType="",lat="";
+    String deliveryType="",lat="",deliveryYesNo="No";
+    String bottomSheetStatus="";
 
     DeliveryAgencyAdapter deliveryAgencyAdapter;
 
@@ -149,6 +150,17 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
 
 
+
+
+
+
+
+
+
+
+
+
+
         binding.llDelivry.setOnClickListener(v -> {
          /*   if(deliveryType.equalsIgnoreCase("Don't want delivery")){
                 startActivity(new Intent(getActivity(), CheckOutScreen.class));
@@ -163,7 +175,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
               else  startActivity(new Intent(getActivity(), CheckOutScreen.class)
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)
-                        .putExtra("agencyId",agencyId));
+                        .putExtra("agencyId",agencyId)
+                        .putExtra("deliveryYesNo",deliveryYesNo));
 
             //else startActivity(new Intent(getActivity(), CheckOutScreen.class));
 
@@ -188,6 +201,27 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         binding.llAddress.setOnClickListener(view -> callBottomSheet("",""));
 
 
+        binding.rdDontDelivery.setOnClickListener(view -> {
+            deliveryType = "I don't want to be delivered, I will come and collect package myself";
+            deliveryYesNo = "Yes";
+            binding.rdDontDelivery.setChecked(true);
+
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliveryTypeAdapter.notifyDataSetChanged();
+
+
+            for (int i=0;i<arrayList.size();i++){
+                arrayList.get(i).setChk(false);
+            }
+            adapter.notifyDataSetChanged();
+
+            dialogDontDelivery();
+        });
+
+
+
         return binding.getRoot();
     }
 
@@ -200,6 +234,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         super.onResume();
         if(NetworkAvailablity.checkNetworkStatus(getActivity())) getLocation();
         else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
     }
 
     public void callBottomSheet(String title,String id){
@@ -440,8 +476,17 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
     @Override
     public void onAddress(String note) {
+        bottomSheetStatus = note;
         if(NetworkAvailablity.checkNetworkStatus(getActivity())) getLocation();
-        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();    }
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
+
+    }
+
+
+
 
     public void getLocation(){
         DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
@@ -550,6 +595,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
            // binding.rdDontWant.setChecked(false);
            // binding.rdAddAddress.setChecked(true);
             lat = arrayList.get(position).getLat();
+            deliveryYesNo = "No";
+            binding.rdDontDelivery.setChecked(false);
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LAT, arrayList.get(position).getLat());
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LON, arrayList.get(position).getLon());
             getDeliveryAgency(arrayList.get(position).getId(),shopId);
@@ -561,25 +608,69 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
 
         else if(Type.equals("Deliver to my home")) {
-            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
             deliveryType = deliverArrayList.get(position).getTitle();
+           // deliveryYesNo = "No";
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
+
+
         }
 
         else if(Type.equals("Deliver to my office")) {
-            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
             deliveryType = deliverArrayList.get(position).getTitle();
+           // deliveryYesNo = "No";
+
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
+
+
 
         }
 
         else if(Type.equals("Deliver to another person")) {
-            callBottomSheet("",deliverArrayList.get(position).getId());
+           // callBottomSheet("",deliverArrayList.get(position).getId());
             deliveryType = deliverArrayList.get(position).getTitle();
+           // deliveryYesNo = "No";
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
+
 
         }
 
         else if(Type.equals("Deliver where i am now")) {
-            callBottomSheet("",deliverArrayList.get(position).getId());
+            //callBottomSheet("",deliverArrayList.get(position).getId());
             deliveryType = deliverArrayList.get(position).getTitle();
+          //  deliveryYesNo = "No";
+            for (int i=0;i<deliverArrayList.size();i++){
+                deliverArrayList.get(i).setChk(false);
+            }
+            deliverArrayList.get(position).setChk(true);
+            deliveryTypeAdapter.notifyItemChanged(position);
+            binding.rdDontDelivery.setChecked(false);
+            deliveryAgencyList.clear();
+            deliveryAgencyAdapter.notifyDataSetChanged();
+            callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
 
         }
 
@@ -596,7 +687,51 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
     }
 
     private void dialogDontDelivery() {
+        LayoutInflater li;
+        TextView txtSKip;
+        TextView txtok;
+        AlertDialog.Builder alertDialogBuilder;
+        li = LayoutInflater.from(getActivity());
+
+        promptsView1 = li.inflate(R.layout.dialog_dont_delivery, null);
+        txtSKip = (TextView) promptsView1.findViewById(R.id.txtSKip);
+        txtok = (TextView) promptsView1.findViewById(R.id.txtok);
+
+        alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setView(promptsView1);
+        alertDialogBuilder.setCancelable(false);
+
+
+
+        txtSKip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.rdDontDelivery.setChecked(false);
+                deliveryYesNo = "No";
+                alertDialog1.dismiss();
+            }
+        });
+
+        txtok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog1.dismiss();
+                PreferenceConnector.writeString(getActivity(), PreferenceConnector.LAT, "");
+                PreferenceConnector.writeString(getActivity(), PreferenceConnector.LON, "");
+                startActivity(new Intent(getActivity(), CheckOutScreen.class)
+                        .putExtra("agency",deliveryAgencyType)
+                        .putExtra("charge",deliveryCharge)
+                        .putExtra("agencyId",agencyId)
+                        .putExtra("deliveryYesNo",deliveryYesNo));
+            }
+
+        });
+
+        alertDialog1 = alertDialogBuilder.create();
+        alertDialog1.show();
+        alertDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
+
 
 
     public void DeleteAlert(String id1){

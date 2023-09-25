@@ -2,6 +2,7 @@ package com.my.afarycode.OnlineShopping.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -64,7 +65,17 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
             } else holder.progressAdapterBinding.wishAdd.setImageResource(R.drawable.star_icon);
 
 
+            if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("0"))
+                holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.VISIBLE);
+            else holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.GONE);
+
+
         }
+
+
+
+
+
         holder.progressAdapterBinding.plus.setOnClickListener(v -> {
             int count = Integer.parseInt(String.valueOf(holder.progressAdapterBinding.itemQuantity.getText()));
             count++;

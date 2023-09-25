@@ -324,6 +324,67 @@
                 </RadioGroup>
 -->
 
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/click_and_collect"
+                    android:textColor="@color/colorGreen"
+                    android:textSize="@dimen/_15sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    />
+
+
+                <LinearLayout
+                    android:id="@+id/layoutMain"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:orientation="vertical">
+                    <RadioGroup
+                        android:id="@+id/rdGrp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <RadioButton
+                            android:id="@+id/rdDontDelivery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/i_dont_want_to_be_delivered"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:gravity="center_vertical"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textSize="@dimen/_12sdp"
+                            android:textColor="@color/black"
+                            />
+
+
+
+
+                    </RadioGroup>
+
+                </LinearLayout>
+
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quick_delivery"
+                    android:textColor="@color/colorGreen"
+                    android:textSize="@dimen/_15sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvDeliveryType"
                     android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
 import com.my.afarycode.OnlineShopping.listener.onPosListener;
@@ -40,6 +41,8 @@ public class DeliveryAgencyAdapter extends RecyclerView.Adapter<DeliveryAgencyAd
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.tvPrice.setText("Rs."+arrayList.get(position).getPrice());
         holder.binding.rdHome.setText(arrayList.get(position).getName());
+       // ivImg;
+        Glide.with(context).load(arrayList.get(position).getImage()).into(holder.binding.ivImg);
         if(arrayList.get(position).isChk()) holder.binding.rdHome.setChecked(arrayList.get(position).isChk());
         else holder.binding.rdHome.setChecked(arrayList.get(position).isChk());
 

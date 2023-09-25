@@ -1,10 +1,12 @@
 package com.my.afarycode.OnlineShopping;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.databinding.DataBindingUtil;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -110,13 +112,40 @@ public class CheckOutPayment extends AppCompatActivity {
         });
 
         binding.llCod.setOnClickListener(v -> {
-           // PaymentAPI("AM", strList);
+           dialogAlert();
 
 
         });
     }
 
-    private void PaymentAPI(String operateur, String strList,String number) {
+
+
+
+    private void dialogAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CheckOutPayment.this);
+        builder.setMessage("Would you like to pay cash on delivery? This will be subject to approval from Afarycode sales team. Expect a confirmation call from our representative.")
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        PaymentAPI("", strList,"","Cash");
+
+                    }
+                })/*.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })*/;
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+
+
+    private void PaymentAPI(String operateur, String strList,String number,String paymentType) {
         binding.loader.setVisibility(View.VISIBLE);
         //DataManager.getInstance().showProgressMessage(CheckOutPayment.this, "Please wait...");
         Map<String,String> headerMap = new HashMap<>();
@@ -135,11 +164,12 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("operateur", operateur);
         map.put("cart_id", strList);
         if(operateur.equals("MC"))  map.put("num_marchand", "060110217");
-        else map.put("num_marchand", "074272732");
+        else if(operateur.equals("AM")) map.put("num_marchand", "074272732");
+        else if(operateur.equals(""))map.put("num_marchand", "");
         map.put("type", "USER");
         map.put("user_number",number);
-        map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this,
-                PreferenceConnector.Firebash_Token, ""));
+        map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Firebash_Token, ""));
+        map.put("payment_type",paymentType);
 
         Log.e("MapMap", "payment_params" + map);
 
@@ -210,7 +240,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
          else {
                mDialog.dismiss();
-               PaymentAPI(operator, cart_id_string,edNumber.getText().toString());
+               PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
            }
 
         });
@@ -240,7 +270,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string,edNumber.getText().toString());
+                PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
             }
 
         });

@@ -114,9 +114,9 @@
 
 
 <!--
-      AIzaSyC4Eg_qGdkZrcW-td6QsmJAk2g4nzPaat0
+       AIzaSyD5KJs-4W2v_SJM5oJrwrC92KCcu34m9do
 -->
-    <string name="place_api_key">AIzaSyD5KJs-4W2v_SJM5oJrwrC92KCcu34m9do</string>
+    <string name="place_api_key">AIzaSyCsAl96Phonf22z69GSDlYQOjlDO6NsiWk</string>
     <string name="please_select_address_type">Please select address type</string>
     <string name="please_enter_mobile_number">Please select phone number</string>
     <string name="please_enter_last_name">Please enter last name</string>
@@ -172,5 +172,8 @@
 
     <string name="pending_approval">Pending approval</string>
     <string name="payment">Payment</string>
+    <string name="i_dont_want_to_be_delivered">I don\'t want to be delivered, I will come and collect package myself</string>
+    <string name="click_and_collect">CLICK AND COLLECT</string>
+    <string name="quick_delivery">QUICK DELIVERY</string>
 
 </resources>

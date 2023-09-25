@@ -40,23 +40,20 @@ public class DeliveryTypeAdapter extends RecyclerView.Adapter<DeliveryTypeAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.rdMyHome.setText(arrayList.get(position).getName());
-       // holder.binding.rdHome.setText(arrayList.get(position).getType());
-        if(arrayList.get(position).isChk()==true) holder.binding.rdMyHome.setChecked(true);
+        if(arrayList.get(position).isChk()== true) holder.binding.rdMyHome.setChecked(true);
         else holder.binding.rdMyHome.setChecked(false);
 
 
-      //  if(arrayList.get(position).isVisible()==true) holder.binding.rdMyHome.setVisibility(View.VISIBLE);
-      //  else holder.binding.rdMyHome.setVisibility(View.GONE);
 
 
         holder.binding.rdMyHome.setOnClickListener(v -> {
-         /*   for (int i=0;i<arrayList.size();i++){
+          /* for (int i=0;i<arrayList.size();i++){
                 arrayList.get(i).setChk(false);
-            }*/
-            arrayList.get(position).setChk(true);
+            }
+            arrayList.get(position).setChk(true);*/
               listener.onPos(position,arrayList.get(position).getName());
             //     lastSelectedPosition = getAdapterPosition();
-            notifyDataSetChanged();
+           // notifyDataSetChanged();
         });
 
     }

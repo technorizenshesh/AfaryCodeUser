@@ -165,6 +165,18 @@ public class CartModal {
             return wishList;
         }
 
+        @SerializedName("delivery_charges")
+        @Expose
+        private String deliveryCharges;
+
+        public String getDeliveryCharges() {
+            return deliveryCharges;
+        }
+
+        public void setDeliveryCharges(String deliveryCharges) {
+            this.deliveryCharges = deliveryCharges;
+        }
+
         public void setWishList(String wishList) {
             this.wishList = wishList;
         }

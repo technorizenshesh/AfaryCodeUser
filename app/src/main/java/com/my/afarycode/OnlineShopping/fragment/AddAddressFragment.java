@@ -148,6 +148,49 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         });
 
 
+
+        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:{
+                       // Toast.makeText(getActivity(), "STATE_HIDDEN Sheet", Toast.LENGTH_SHORT).show();
+                        listener.onAddress("Hidden");
+                        dismiss();
+                    }
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                       // btn_bottom_sheet.setText("Close Sheet");
+                      //  Toast.makeText(getActivity(), "Close Sheet", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                     //   btn_bottom_sheet.setText("Expand Sheet");
+                       // Toast.makeText(getActivity(), "Expand Sheet", Toast.LENGTH_SHORT).show();
+
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:{
+                      //  Toast.makeText(getActivity(), "STATE_DRAGGING Sheet", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:{
+                      //  Toast.makeText(getActivity(), "STATE_SETTLING Sheet", Toast.LENGTH_SHORT).show();
+
+                    }
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
+
+
     }
 
     private void validation() {
