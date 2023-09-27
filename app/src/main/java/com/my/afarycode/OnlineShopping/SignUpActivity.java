@@ -84,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
         map.put("password", binding.password.getText().toString());
         map.put("mobile",binding.phone.getText().toString());
         map.put("country_code",code);
-        map.put("country ","");
+        map.put("country","");
 
         map.put("register_id", PreferenceConnector.readString(SignUpActivity.this,
                 PreferenceConnector.Firebash_Token, ""));

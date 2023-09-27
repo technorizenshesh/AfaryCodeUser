@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.fragment;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -83,6 +84,7 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         binding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()), R.layout.fragment_add_address, null, false);
         dialog.setContentView(binding.getRoot());
+        dialog.setCanceledOnTouchOutside(false);
         apiInterface = ApiClient.getClient(getActivity()).create(AfaryCode.class);
         mBehavior = BottomSheetBehavior.from((View) binding.getRoot().getParent());
         mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -90,6 +92,10 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         initBinding();
         return dialog;
     }
+
+
+
+
 
     private void initBinding() {
         countryArrayList = new ArrayList<>();
@@ -171,13 +177,13 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:{
-                      //  Toast.makeText(getActivity(), "STATE_DRAGGING Sheet", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(getActivity(), "STATE_DRAGGING Sheet", Toast.LENGTH_SHORT).show();
 
                     }
 
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:{
-                      //  Toast.makeText(getActivity(), "STATE_SETTLING Sheet", Toast.LENGTH_SHORT).show();
+                     //  Toast.makeText(getActivity(), "STATE_SETTLING Sheet", Toast.LENGTH_SHORT).show();
 
                     }
                         break;
@@ -191,7 +197,36 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         });
 
 
+
+
+
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(android.content.DialogInterface dialog, int keyCode,android.view.KeyEvent event) {
+
+                if ((keyCode ==  android.view.KeyEvent.KEYCODE_BACK))
+                {
+                    listener.onAddress("Hidden");
+                    dismiss();
+                  //  Toast.makeText(getActivity(), "Android Back press", Toast.LENGTH_SHORT).show();
+
+                    //Hide your keyboard here!!!
+                    return true; // pretend we've processed it
+
+                }
+                else
+                    return false; // pass on to be processed as normal
+            }
+        });
+
+
+
+
     }
+
+
+
 
     private void validation() {
 

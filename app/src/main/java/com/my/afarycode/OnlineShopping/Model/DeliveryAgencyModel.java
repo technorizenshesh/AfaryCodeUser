@@ -69,6 +69,18 @@ public class DeliveryAgencyModel {
         private boolean chk = false;
 
 
+        @SerializedName("type")
+        @Expose
+        private String deliveryMethod;
+
+        public String getDeliveryMethod() {
+            return deliveryMethod;
+        }
+
+        public void setDeliveryMethod(String deliveryMethod) {
+            this.deliveryMethod = deliveryMethod;
+        }
+
         public String getImage() {
             return image;
         }

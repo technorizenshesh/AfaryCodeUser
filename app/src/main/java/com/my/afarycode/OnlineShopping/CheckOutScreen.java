@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -54,7 +55,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     public static TextView tax2, total_price_to_to_pay, tax1, plateform_fees;
     public static double totalPriceToToPay1;
     private double totalPriceToToPay = 0, platFormsFees = 0.0, taxN1 = 0.0, taxN2 = 0.0, deliveryFees, mainTotalPay = 0.0;
-    private String get_cart_id = "";
+    private String get_cart_id = "",deliveryMethod="";
     private ArrayList<String> get_cart_id_list = new ArrayList<>();
     private String itemAmount = "0";
     private ArrayList<DeliveryModel.Result> arrayList;
@@ -99,6 +100,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             deliveryCharge = getIntent().getStringExtra("charge");
             deliveryAgencyId = getIntent().getStringExtra("agencyId");
             deliveryYesNo =  getIntent().getStringExtra("deliveryYesNo");
+            deliveryMethod = getIntent().getStringExtra("deliveryMethod");
         }
 
         get_result = new ArrayList<>();
@@ -513,6 +515,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("country_id",PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.COUNTRY_ID,""));
         map.put("delivery_partner",deliveryAgencyId);
         map.put("self_collect",deliveryYesNo);
+        map.put("type",deliveryMethod);
         Log.e(TAG, "Get AllTax Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -535,13 +538,33 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         deliveryFees = Double.parseDouble(object.getString("total_delivery_fees"));
                         totalPriceToToPay = Double.parseDouble(object.getString("total_payable_amount"));
 
+                        binding.tvTaxOne.setText(Html.fromHtml("Tax 1 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_first_percentage") + "%" + "</font>"));
+                        binding.tvTaxTwo.setText(Html.fromHtml("Tax 2 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_second_percentage") + "%" + "</font>"));
+
+                    //    binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge  " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+
+
+
+                        if(deliveryMethod.equalsIgnoreCase("Vehicle"))
+                          binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                      else if(deliveryMethod.equalsIgnoreCase("Partner"))
+                          binding.tvDeliveryCharge.setText(Html.fromHtml("Shipping agency fees " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                      else binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+
+
+
+
+
+
+
+
                       /*  totalPriceToToPay1 = platFormsFees + taxN1 + taxN2
                         + deliveryFees;
 
                         totalPriceToToPay = Double.parseDouble(totalAmount)
 
-                                + platFormsFees
                                 + taxN1
+                                + platFormsFees
                                 + taxN2
                                 + deliveryFees;*/
 

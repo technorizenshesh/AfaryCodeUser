@@ -73,7 +73,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     ArrayList<LocationModel.Result> arrayList;
     LocationAdapter adapter;
     String deliveryType="",lat="";
-    String deliveryAgencyType="",agencyId="",deliveryYesNo="No";
+    String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="";
     String deliveryCharge="0.0";
 
     ArrayList<DeliveryTypeModel.Result> deliverArrayList;
@@ -147,11 +147,15 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             else */if(deliveryType.equalsIgnoreCase("")) {
                 Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.please_select_address_type), Toast.LENGTH_SHORT).show();
             }
-            else  startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+            else  {
+                startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
-                        .putExtra("deliveryYesNo",deliveryYesNo));
+                        .putExtra("deliveryYesNo",deliveryYesNo)
+                        .putExtra("deliveryMethod",deliveryMethod));
+                deliveryMethod = "";
+            }
 
             //else startActivity(new Intent(getActivity(), CheckOutScreen.class));
 
@@ -498,6 +502,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         else if(Type.equals("deliveryAgency")) {
             deliveryCharge = deliveryAgencyList.get(position).getPrice()+"";
             agencyId = deliveryAgencyList.get(position).getId();
+            deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
         }
 
 
