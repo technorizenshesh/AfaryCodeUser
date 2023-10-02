@@ -545,7 +545,9 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
-                        .putExtra("deliveryYesNo",deliveryYesNo));
+                        .putExtra("deliveryYesNo",deliveryYesNo)
+                        .putExtra("deliveryMethod",deliveryMethod));
+
             }
 
         });

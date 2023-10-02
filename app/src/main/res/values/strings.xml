@@ -175,5 +175,7 @@
     <string name="i_dont_want_to_be_delivered">I don\'t want to be delivered, I will come and collect package myself</string>
     <string name="click_and_collect">CLICK AND COLLECT</string>
     <string name="quick_delivery">QUICK DELIVERY</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="submit">Submit</string>
 
 </resources>

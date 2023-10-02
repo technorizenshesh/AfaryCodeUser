@@ -44,9 +44,17 @@ public class MyFirebaseMessagingService extends
                     , remoteMessage.getData().get("result"),remoteMessage.getData().get("message"),remoteMessage.getData().get("type"),remoteMessage);
         }
 
-        if (remoteMessage.getData() != null) {
 
+        if(remoteMessage.getData().get("key").equalsIgnoreCase("Order Accepted") || remoteMessage.getData().get("key").equalsIgnoreCase("Order Rejected")) {
+            Intent intent1 = new Intent("check_status");
+            Log.e("SendData=====", remoteMessage.getData().get("type"));
+            intent1.putExtra("status", remoteMessage.getData().get("key"));
+            intent1.putExtra("msg",remoteMessage.getData().get("message"));
+            sendBroadcast(intent1);
         }
+
+
+
     }
 
     private void sendNotification(String title, String messageBody,String msg,String type,RemoteMessage remoteMessage) {
@@ -62,6 +70,12 @@ public class MyFirebaseMessagingService extends
                       .putExtra("UserName", remoteMessage.getData().get("user_name") )
                       .putExtra("UserImage", remoteMessage.getData().get("userimage") );
           }
+          else if(type.equals("Accepted") || type.equals("reject")){
+              intent = new Intent(getApplicationContext(), HomeActivity.class)
+                      .putExtra("status", type);
+          }
+
+
           else {
               intent = new Intent(getApplicationContext(), HomeActivity.class)
                       .putExtra("status", "accept");
@@ -76,13 +90,13 @@ public class MyFirebaseMessagingService extends
               }
           }
             final int not_nu = generateRandom();
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), not_nu, intent, PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), not_nu, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
             Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this, getString(R.string.channelId))
                     .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo))
                     .setSmallIcon(R.drawable.logo)
                     .setContentTitle(title)
-                    .setContentText(messageBody)
+                    .setContentText(msg)
                     .setAutoCancel(true)
                     .setSound(sound)
                     .setContentIntent(contentIntent)

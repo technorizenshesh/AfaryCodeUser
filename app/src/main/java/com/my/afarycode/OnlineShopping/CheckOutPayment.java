@@ -16,10 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.my.afarycode.OnlineShopping.Model.DeliveryModel;
-import com.my.afarycode.OnlineShopping.Model.LoginModel;
-import com.my.afarycode.OnlineShopping.Model.PaymentModal;
-import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
+import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
@@ -29,7 +26,6 @@ import com.my.afarycode.ratrofit.ApiClient;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +41,7 @@ public class CheckOutPayment extends AppCompatActivity {
     private String strList = "",cart_id_string="";
     private String totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="";
     private AfaryCode apiInterface;
+    GetProfileModal data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +97,11 @@ public class CheckOutPayment extends AppCompatActivity {
 
         binding.llTransfer.setOnClickListener(v -> {
            // PaymentAPI("VM", strList);
+         String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&montant=105&ref=Ref13082020ab&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
+            + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
+
+           startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
+                   .putExtra("url",ll));
         });
 
         binding.llMoov.setOnClickListener(v -> {
@@ -116,28 +118,75 @@ public class CheckOutPayment extends AppCompatActivity {
 
 
         });
+
+        GetProfile();
     }
+
+
+    private void GetProfile() {
+        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, "Please wait...");
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
+        Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
+
+        loginCall.enqueue(new Callback<GetProfileModal>() {
+            @Override
+            public void onResponse(Call<GetProfileModal> call,
+                                   Response<GetProfileModal> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+
+                     data = response.body();
+                    String dataResponse = new Gson().toJson(response.body());
+
+                    Log.e("MapMap", "GET RESPONSE" + dataResponse);
+
+                    if (data.status.equals("1")) {
+
+                    } else if (data.status.equals("0")) {
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetProfileModal> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
 
 
 
 
     private void dialogAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(CheckOutPayment.this);
-        builder.setMessage("Would you like to pay cash on delivery? This will be subject to approval from Afarycode sales team. Expect a confirmation call from our representative.")
+        builder.setMessage("Dear Customer,\n" +
+                        "You have requested delivery with cash on delivery. One of our \n" +
+                        "salespeople may call you.\n" +
+                        "Do you confirm this number…" + data.getResult().mobile )
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        PaymentAPI("", strList,"","Cash");
+                        PaymentAPI("VM", strList,data.getResult().mobile,"Cash");
 
                     }
-                })/*.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        dialogNumber("VM","");
                     }
-                })*/;
+                });
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
@@ -165,6 +214,7 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("cart_id", strList);
         if(operateur.equals("MC"))  map.put("num_marchand", "060110217");
         else if(operateur.equals("AM")) map.put("num_marchand", "074272732");
+        else if(operateur.equals("VM")) map.put("num_marchand", "074272732");
         else if(operateur.equals(""))map.put("num_marchand", "");
         map.put("type", "USER");
         map.put("user_number",number);
@@ -217,6 +267,41 @@ public class CheckOutPayment extends AppCompatActivity {
             }
         });
     }
+
+
+
+    public void dialogNumber(String operator,String strList){
+        Dialog mDialog = new Dialog(CheckOutPayment.this);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_number);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+
+        EditText edNumber = mDialog.findViewById(R.id.edNumber);
+        AppCompatButton btnBack = mDialog.findViewById(R.id.btnBack);
+        AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
+
+        btnBack.setOnClickListener(v -> {
+            mDialog.dismiss();
+
+        });
+
+        btnPayNow.setOnClickListener(v -> {
+            if(edNumber.getText().toString().equals(""))
+                Toast.makeText(CheckOutPayment.this, "Please enter number", Toast.LENGTH_SHORT).show();
+
+            else {
+                mDialog.dismiss();
+                PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Cash");
+            }
+
+        });
+        mDialog.show();
+
+    }
+
+
+
 
     public void dialogAirtel(String operator,String strList){
         Dialog mDialog = new Dialog(CheckOutPayment.this);
