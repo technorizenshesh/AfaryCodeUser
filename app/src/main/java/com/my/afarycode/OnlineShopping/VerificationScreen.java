@@ -78,10 +78,10 @@ public class VerificationScreen extends AppCompatActivity implements SMSReceiver
             if (extras == null) {
                 user_id = null;
             } else {
-                user_id = extras.getString("user_id");
-              //  user_email = extras.getString("user_email");
-                finalOtp = extras.getString("otp");
-                mobile = extras.getString("mobile");
+              //  user_id = extras.getString("user_id");
+                user_email = extras.getString("user_email");
+              //  finalOtp = extras.getString("otp");
+               // mobile = extras.getString("mobile");
             }
         } /*else {
             user_email = (String) savedInstanceState.getSerializable("user_email");
@@ -202,7 +202,7 @@ public class VerificationScreen extends AppCompatActivity implements SMSReceiver
         });
 
         binding.resendOtp.setOnClickListener(v -> {
-            ForgotPasswordAPI(mobile);
+            ForgotPasswordAPI(user_email);
         });
     }
 

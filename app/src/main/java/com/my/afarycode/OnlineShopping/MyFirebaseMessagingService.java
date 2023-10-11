@@ -93,10 +93,11 @@ public class MyFirebaseMessagingService extends
             PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), not_nu, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
             Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             NotificationCompat.Builder noBuilder = new NotificationCompat.Builder(this, getString(R.string.channelId))
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo))
-                    .setSmallIcon(R.drawable.logo)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.logo_well1))
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                    .setSmallIcon(R.drawable.logo_well1)
                     .setContentTitle(title)
-                    .setContentText(msg)
+                    //.setContentText(msg)
                     .setAutoCancel(true)
                     .setSound(sound)
                     .setContentIntent(contentIntent)

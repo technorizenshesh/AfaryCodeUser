@@ -24,6 +24,11 @@ public class PreferenceConnector {
 
     public static final String COUNTRY_ID ="country_id";
 
+    public static final String ADDRESS_ID ="address_id";
+
+
+
+
     public static final String FROM ="from";
 
 

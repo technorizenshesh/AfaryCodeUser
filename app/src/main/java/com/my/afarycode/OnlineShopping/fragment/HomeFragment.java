@@ -213,6 +213,7 @@ public class HomeFragment extends Fragment implements SearchListener {
 
                     if (data.status.equals("1")) {
                         binding.tvNames.setText("Hello, "+data.getResult().getUserName());
+                       // lastCountryName
                         if(PreferenceConnector.readString(getActivity(),PreferenceConnector.FROM,"").equalsIgnoreCase("splash")){
                             if(!data.getResult().getCountryName().equals("")) {
                                 lastCountryName = data.getResult().getCountryName();
@@ -926,7 +927,20 @@ public class HomeFragment extends Fragment implements SearchListener {
 
 
         if(countryName.equalsIgnoreCase(""))
+        {
+
+            for (int i = 0; i < countryArrayList.size(); i++) {
+                if (countryNameNew.equals(countryArrayList.get(i).getName())) {
+                    lastCountryId = countryArrayList.get(i).getId();
+
+                    PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,lastCountryId);
+                    PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryName);
+                    getProduct(countryId);
+                }
+            }
+
             textView.setText(Html.fromHtml("Your current location is set to " + "<font color='#EE0000'>" + countryNameNew+ "</font>" + "<br>" + "<br>Do you want to maintain your location on  "+ "<font color='#EE0000'>"  + countryNameNew + "</font>" + "?"));
+        }
 
          else  textView.setText(Html.fromHtml( "Your real location " +  "<font color='#EE0000'>"  + countryNameNew + "</font>"  +" has been changed." +"<br>"+ "<br>Your current location is set to "+  "<font color='#EE0000'>" + countryName + "</font>" + "<br>"+"<br>Do you want to maintain your location on "
               + "<font color='#EE0000'>"  + countryName+ "</font>" +"?"));
@@ -948,7 +962,8 @@ public class HomeFragment extends Fragment implements SearchListener {
 
         tvYes.setOnClickListener(v -> {
             mDialog.dismiss();
-            updateCountry(lastCountryId,countryName);
+           if(!countryName.equalsIgnoreCase("")) updateCountry(lastCountryId,countryName);
+           else updateCountry(lastCountryId,countryNameNew);
 
         });
 

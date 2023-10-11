@@ -20,9 +20,12 @@ import com.my.afarycode.databinding.ActivityForgotPasswordBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,62 +59,62 @@ public class ForgotPassword extends AppCompatActivity {
             if (binding.edtmobile.getText().toString().trim().isEmpty()) {
                 binding.edtmobile.setError("Field cannot be empty");
 
-                Toast.makeText(ForgotPassword.this, "Please Enter Valid Mobile", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ForgotPassword.this, "Please Enter Valid Email", Toast.LENGTH_SHORT).show();
 
             } else {
-                ForgotPasswordAPI();
+                ForgotPasswordAPI(binding.edtmobile.getText().toString());
+              //  startActivity(new Intent(ForgotPassword.this, VerificationScreen.class)
+                  //      .putExtra("user_email", binding.edtmobile.getText().toString()));
+
+
             }
         });
     }
 
-    private void ForgotPasswordAPI() {
+
+
+
+    private void ForgotPasswordAPI(String user_email) {
 
         DataManager.getInstance().showProgressMessage(ForgotPassword.this, "Please wait...");
         Map<String, String> map = new HashMap<>();
-        map.put("number", "+" + code + binding.edtmobile.getText().toString());
+        map.put("email", user_email);
+        Log.e("MapMap", "FORGOT PASSWORD REQUEST" + map);
+        Call<ResponseBody> loginCall = apiInterface.forgot_passwordNew(map);
 
-        Log.e("MapMap", "LOGIN REQUEST" + map);
-        Call<ForgotPasswordModal> loginCall = apiInterface.forgot_password(map);
-
-        loginCall.enqueue(new Callback<ForgotPasswordModal>() {
+        loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ForgotPasswordModal> call, Response<ForgotPasswordModal> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
 
-                    ForgotPasswordModal data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "LOGIN RESPONSE" + dataResponse);
-
-                    if (data.status.equals("1")) {
-
-                        Toast.makeText(ForgotPassword.this, "" + data.status, Toast.LENGTH_SHORT).show();
-                        PreferenceConnector.writeString(ForgotPassword.this, PreferenceConnector.User_id, data.result.id);
-                        startActivity(new Intent(ForgotPassword.this, VerificationScreen.class)
-                                .putExtra("user_id", data.result.id)
-                                .putExtra("user_email", data.result.email)
-                                .putExtra("otp", data.result.otp)
-                                .putExtra("mobile", "+" + code + binding.edtmobile.getText().toString()));
+                    Log.e("response===",response.body().toString());
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
 
 
-                    } else if (data.status.equals("0")) {
-                        Toast.makeText(ForgotPassword.this, "Mobile Number Already Exist ", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(ForgotPassword.this, data.message, Toast.LENGTH_SHORT).show();
+
+                    if (jsonObject.getString("status").equals("1")) {
+
+                        Toast.makeText(ForgotPassword.this, "Please check your email we have sent a link to your email address", Toast.LENGTH_SHORT).show();
+                        finish();
+
+                    } else if (jsonObject.getString("status").equals("0")) {
+                        Toast.makeText(ForgotPassword.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
-                    Toast.makeText(ForgotPassword.this, "Mobile Number Already Exist ", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
 
             @Override
-            public void onFailure(Call<ForgotPasswordModal> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
-                Toast.makeText(ForgotPassword.this, "Mobile Number Already Exist ", Toast.LENGTH_SHORT).show();
                 DataManager.getInstance().hideProgressMessage();
             }
         });
     }
+
 }

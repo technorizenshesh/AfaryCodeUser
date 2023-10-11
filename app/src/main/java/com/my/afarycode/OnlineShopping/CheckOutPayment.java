@@ -115,9 +115,16 @@ public class CheckOutPayment extends AppCompatActivity {
 
         binding.llCod.setOnClickListener(v -> {
            dialogAlert();
-
-
         });
+
+        binding.llWallet.setOnClickListener(v -> {
+           if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
+            PaymentAPI("","",data.getResult().getMobile(),"Wallet");
+           else Toast.makeText(this, "Low wallet balance please recharge your wallet.", Toast.LENGTH_SHORT).show();
+        });
+
+
+
 
         GetProfile();
     }
@@ -204,7 +211,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
-        map.put("amount", "105"/*totalPriceToToPay*/);
+        map.put("amount", /*"105"*/totalPriceToToPay);
 
         map.put("delivery_charge", deliveryCharge);
         map.put("platFormsFees", platFormsFees);
@@ -212,13 +219,15 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("taxN2", taxN2);
         map.put("operateur", operateur);
         map.put("cart_id", strList);
-        if(operateur.equals("MC"))  map.put("num_marchand", "060110217");
+        if(operateur.equals("MC"))  map.put("num_marchand", "074272732");
         else if(operateur.equals("AM")) map.put("num_marchand", "074272732");
         else if(operateur.equals("VM")) map.put("num_marchand", "074272732");
         else if(operateur.equals(""))map.put("num_marchand", "");
         map.put("type", "USER");
         map.put("user_number",number);
         map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Firebash_Token, ""));
+        map.put("address_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.ADDRESS_ID, ""));
+
         map.put("payment_type",paymentType);
 
         Log.e("MapMap", "payment_params" + map);
@@ -236,7 +245,7 @@ public class CheckOutPayment extends AppCompatActivity {
                     if (object.optString("status").equals("1")) {
                       //  PaymentModal data = new Gson().fromJson(responseData, PaymentModal.class);
                         binding.loader.setVisibility(View.GONE);
-                        Toast.makeText(CheckOutPayment.this, "Payment SuccessFully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(CheckOutPayment.this,HomeActivity.class)
                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                          finish();

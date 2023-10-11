@@ -92,6 +92,10 @@ public interface AfaryCode {
     @POST("forgot_password")
     Call<ForgotPasswordModal> forgot_password(@FieldMap Map<String, String> params);
 
+  @FormUrlEncoded
+  @POST("forgot_password")
+  Call<ResponseBody> forgot_passwordNew(@FieldMap Map<String, String> params);
+
     @FormUrlEncoded
     @POST("get_profile")
     Call<GetProfileModal> get_profile(@FieldMap Map<String, String> params);

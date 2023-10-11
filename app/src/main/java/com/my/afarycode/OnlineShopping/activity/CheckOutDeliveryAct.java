@@ -412,6 +412,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LAT, arrayList.get(position).getLat());
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LON, arrayList.get(position).getLon());
             PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.COUNTRY_ID, arrayList.get(position).getCountry());
+            PreferenceConnector.writeString(CheckOutDeliveryAct.this,PreferenceConnector.ADDRESS_ID,arrayList.get(position).getId());
             deliveryYesNo = "No";
             binding.rdDontDelivery.setChecked(false);
 
