@@ -42,6 +42,14 @@
 
 
         <activity
+            android:name=".OnlineShopping.CheckPaymentStatusAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+
+        <activity
             android:name=".OnlineShopping.ShopDetailsAct"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
@@ -280,6 +288,10 @@
         </intent-filter>
     </receiver>
 
+        <service
+            android:name=".OnlineShopping.helper.MyService"
+            android:enabled="true"
+            android:exported="true" />
 
 
 </application>

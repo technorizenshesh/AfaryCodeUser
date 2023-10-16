@@ -79,6 +79,7 @@ public class BottomAddFragment extends BottomSheetDialogFragment implements AskL
         ((View) contentView.getParent()).setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
+/*
     private void AddWalletAPI(String addmoney) {
 
         DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
@@ -126,6 +127,7 @@ public class BottomAddFragment extends BottomSheetDialogFragment implements AskL
             }
         });
     }
+*/
 
     @Override
     public void ask(String value) {

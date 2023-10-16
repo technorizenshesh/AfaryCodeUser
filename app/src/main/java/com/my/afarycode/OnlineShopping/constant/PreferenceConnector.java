@@ -41,6 +41,13 @@ public class PreferenceConnector {
 
     public static String countryName ="country_name";
 
+    public static String transId ="transaction_id";
+
+    public static String serviceType ="service_type";
+
+    public static String Booking ="Booking";
+
+    public static String Wallet ="Wallet";
 
 
 

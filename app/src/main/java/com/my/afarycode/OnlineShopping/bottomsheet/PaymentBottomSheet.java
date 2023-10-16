@@ -1,6 +1,10 @@
 package com.my.afarycode.OnlineShopping.bottomsheet;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -20,19 +24,25 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.CheckOutPayment;
+import com.my.afarycode.OnlineShopping.CheckPaymentStatusAct;
+import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.AddWalletModal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.MyService;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.FragmentPaymentBootmsheetBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +55,54 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
     public AskListener listener;
     String money="";
     private AfaryCode apiInterface;
+
+
+
+    BroadcastReceiver PaymentStatusReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e("PaymentStatusReceiver ====","=====");
+            try {
+                JSONObject object = new JSONObject(intent.getStringExtra("object"));
+                if(intent.getStringExtra("object")!= null) {
+                    JSONObject result = object.getJSONObject("result");
+                    Log.e("PaymentStatusReceiver ====",intent.getStringExtra("object")+"");
+
+                    if(object.getString("status").equals("1")){
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
+                      //  startActivity(new Intent(getActivity(), HomeActivity.class)
+                         //       .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                      //  finish();
+                        listener.ask("Your Money Is Add SuccessFully ");
+                        dismiss();
+
+                    }
+
+
+                    else if (object.getString("status").equals("3")) {
+                        Log.e("Payment under processing ====",intent.getStringExtra("object")+"");
+
+
+                    } else {
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
+                       // startActivity(new Intent(getActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                       // finish();
+                        listener.ask("Failed ");
+                        dismiss();
+                    }
+
+
+                }
+
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+    };
+
 
 
 
@@ -157,10 +215,9 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
 
 
     private void PaymentAPI(String operator,String number,String  operatorNumber) {
-        binding.loader.setVisibility(View.VISIBLE);
+       // binding.loader.setVisibility(View.VISIBLE);
 
-      //  DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
-
+        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -175,26 +232,31 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
 
         Log.e("MapMap", "WALLET RECHARGE REQUEST" + map);
 
-        Call<AddWalletModal> SignupCall = apiInterface.add_money(headerMap,map);
+        Call<ResponseBody> SignupCall = apiInterface.add_money(headerMap,map);
 
-        SignupCall.enqueue(new Callback<AddWalletModal>() {
+        SignupCall.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<AddWalletModal> call, Response<AddWalletModal> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
-                binding.loader.setVisibility(View.GONE);
+             //   binding.loader.setVisibility(View.GONE);
 
                 try {
-                    AddWalletModal data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "WALLET RECHARGE RESPONSE" + dataResponse);
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "WALLET RECHARGE RESPONSE" + object);
+                    if (object.getString("status").equals("1")) {
+                        binding.rlPayment.setVisibility(View.GONE);
+                        binding.rlPaymentStatus.setVisibility(View.VISIBLE);
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.serviceType,PreferenceConnector.Wallet);
+                        getActivity().startService(new Intent(getActivity(), MyService.class));
 
-                    if (data.status.equals("1")) {
-                        listener.ask("Your Money Is Add SuccessFully ");
-                        dismiss();
 
-                    } else if (data.status.equals("0")) {
+                    } else if (object.getString("status").equals("0")) {
+                        binding.rlPayment.setVisibility(View.VISIBLE);
+                        binding.rlPaymentStatus.setVisibility(View.GONE);
                         dismiss();
-                        Toast.makeText(getActivity(), data.message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -203,14 +265,27 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
             }
 
             @Override
-            public void onFailure(Call<AddWalletModal> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
-                binding.loader.setVisibility(View.GONE);
+               // binding.loader.setVisibility(View.GONE);
 
             }
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"));
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().stopService(new Intent(getActivity(), MyService.class));
+        getActivity().unregisterReceiver(PaymentStatusReceiver);
+
+    }
 }

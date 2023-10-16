@@ -41,9 +41,11 @@ import retrofit2.Response;
 public class OrderDetailsAct extends AppCompatActivity {
     public String TAG = "OrderDetailsAct";
     ActivityOrderDetailsBinding binding;
-    String orderId ="",orderStatus="",userName="",userId="",userImg="";
+    String orderId ="",orderStatus="",userName="",userId="",userImg="",sellerId="",sellerName,sellerImg="";
     OrderDetailsModel model;
     private AfaryCode apiInterface;
+    double totalPriceToToPay=0.0,taxN1=0.0,taxN2=0.0,platFormsFees=0.0,deliveryFees=0.0,subTotal=0.0;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,8 +71,8 @@ public class OrderDetailsAct extends AppCompatActivity {
         binding.btnChat.setOnClickListener(v -> {
             startActivity(new Intent(this, ChatAct.class)
                     .putExtra("UserId",model.getResult().getSellerId())
-                    .putExtra("UserName",model.getResult().getSellerName())
-                    .putExtra("UserImage",model.getResult().getImages())
+                    .putExtra("UserName",sellerName)
+                    .putExtra("UserImage",sellerImg)
                     .putExtra("id",userId)
                     .putExtra("name",userName)
                     .putExtra("img",userImg));
@@ -105,6 +107,9 @@ public class OrderDetailsAct extends AppCompatActivity {
                         // binding.tvNotFount.setVisibility(View.GONE);
                         model = new Gson().fromJson(stringResponse, OrderDetailsModel.class);
                         binding.tvAfaryCode.setText(model.getResult().getAfaryCode());
+                        Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImg);
+                        GetSellerProfileAPI(model.getResult().getSellerId());
+/*
                         if (model.getResult().getShopImage().size() == 1) {
                             binding.llOne.setVisibility(View.VISIBLE);
                             binding.llTwo.setVisibility(View.GONE);
@@ -143,6 +148,23 @@ public class OrderDetailsAct extends AppCompatActivity {
                             binding.tvImgCount.setText("+" + (model.getResult().getShopImage().size() - 3));
 
                         }
+*/
+
+
+                        totalPriceToToPay = Double.parseDouble(model.getResult().getTotalAmount());
+                        taxN1 = Double.parseDouble(model.getResult().getTaxN1());
+                        taxN2 = Double.parseDouble(model.getResult().getTaxN2());
+                        platFormsFees = Double.parseDouble(model.getResult().getPlatFormsFees());
+                        deliveryFees = Double.parseDouble(model.getResult().getDeliveryCharges());
+                        subTotal =  totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
+
+                        binding.plateformFees.setText("Rs. " + String.format("%.2f", platFormsFees));
+                        binding.tvTax1.setText("Rs. " + String.format("%.2f", taxN1));
+                        binding.tvtax2.setText("Rs. " + String.format("%.2f", taxN2));
+                        binding.tvDelivery.setText("Rs. " + String.format("%.2f", deliveryFees));
+                        binding.tvTotalAmt.setText("Rs. " + String.format("%.2f", totalPriceToToPay));
+                        binding.subTotal.setText("Rs. " + String.format("%.2f", subTotal));
+
                         binding.rvDetails.setAdapter(new ItemsAdapter(OrderDetailsAct.this, (ArrayList<OrderDetailsModel.Result.Product>) model.getResult().getProductList()));
 
                     }
@@ -204,6 +226,49 @@ public class OrderDetailsAct extends AppCompatActivity {
         });
     }
 
+    private void GetSellerProfileAPI(String id) {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id",id);
+        Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
+
+        loginCall.enqueue(new Callback<GetProfileModal>() {
+            @Override
+            public void onResponse(Call<GetProfileModal> call,
+                                   Response<GetProfileModal> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+
+                    GetProfileModal data = response.body();
+                    String dataResponse = new Gson().toJson(response.body());
+
+                    Log.e("MapMap", "GET RESPONSE" + dataResponse);
+
+                    if (data.status.equals("1")) {
+
+                        sellerName = data.getResult().userName;
+                        sellerImg = data.getResult().image;
+                        sellerId = data.getResult().id;
+
+
+
+                    } else if (data.status.equals("0")) {
+                        // Toast.makeText(OrderDetailsAct.this, data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetProfileModal> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
 
 
 

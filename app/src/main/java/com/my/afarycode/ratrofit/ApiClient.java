@@ -21,9 +21,9 @@ public class ApiClient {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(10, TimeUnit.SECONDS) // connect timeout
-                .writeTimeout(10, TimeUnit.SECONDS) // write timeout
-                .readTimeout(10, TimeUnit.SECONDS); // read timeout
+        builder.connectTimeout(100, TimeUnit.SECONDS) // connect timeout
+                .writeTimeout(100, TimeUnit.SECONDS) // write timeout
+                .readTimeout(100, TimeUnit.SECONDS); // read timeout
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(Constant.BASE_URL)

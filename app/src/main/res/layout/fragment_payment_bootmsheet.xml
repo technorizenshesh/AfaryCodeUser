@@ -7,6 +7,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
+
+    <RelativeLayout
+        android:id="@+id/rlPayment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/RRtoolbar"
             android:layout_width="match_parent"
@@ -282,6 +290,7 @@
 
         </androidx.core.widget.NestedScrollView>
 
+<!--
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/loader"
             android:layout_width="match_parent"
@@ -291,7 +300,43 @@
             android:padding="@dimen/_130sdp"
             android:src="@drawable/coin"
             android:visibility="gone" />
+-->
 
     </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlPaymentStatus"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:layout_marginStart="@dimen/_20sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:text="@string/please_wait"
+            android:textColor="@color/quantum_grey"
+            android:textSize="@dimen/_25sdp"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center_horizontal"/>
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:background="#6A000000"
+            android:padding="@dimen/_130sdp"
+            android:src="@drawable/coin"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+
+    </RelativeLayout>
+
 
 </layout>

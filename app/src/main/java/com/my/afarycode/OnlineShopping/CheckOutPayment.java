@@ -202,8 +202,8 @@ public class CheckOutPayment extends AppCompatActivity {
 
 
     private void PaymentAPI(String operateur, String strList,String number,String paymentType) {
-        binding.loader.setVisibility(View.VISIBLE);
-        //DataManager.getInstance().showProgressMessage(CheckOutPayment.this, "Please wait...");
+        //binding.loader.setVisibility(View.VISIBLE);
+        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, "Please wait...");
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -219,7 +219,7 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("taxN2", taxN2);
         map.put("operateur", operateur);
         map.put("cart_id", strList);
-        if(operateur.equals("MC"))  map.put("num_marchand", "074272732");
+        if(operateur.equals("MC"))  map.put("num_marchand", "060110217");
         else if(operateur.equals("AM")) map.put("num_marchand", "074272732");
         else if(operateur.equals("VM")) map.put("num_marchand", "074272732");
         else if(operateur.equals(""))map.put("num_marchand", "");
@@ -237,20 +237,29 @@ public class CheckOutPayment extends AppCompatActivity {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
-                binding.loader.setVisibility(View.GONE);
+               // binding.loader.setVisibility(View.GONE);
                 try {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Payment RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                       //  PaymentModal data = new Gson().fromJson(responseData, PaymentModal.class);
-                        binding.loader.setVisibility(View.GONE);
-                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(CheckOutPayment.this,HomeActivity.class)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                         finish();
+                       // binding.loader.setVisibility(View.GONE);
+                         if(paymentType.equals("Wallet") || paymentType.equals("Cash")) {
+                             Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                             startActivity(new Intent(CheckOutPayment.this, HomeActivity.class)
+                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                             finish();
+                         }
+                         else {
+                             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
+                             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
+
+                             startActivity(new Intent(CheckOutPayment.this, CheckPaymentStatusAct.class));
+
+                         }
                     } else if (object.optString("status").equals("0")) {
-                        binding.loader.setVisibility(View.GONE);
+                        //binding.loader.setVisibility(View.GONE);
                         Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();                    }
 
 
@@ -271,7 +280,7 @@ public class CheckOutPayment extends AppCompatActivity {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 Toast.makeText(CheckOutPayment.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
-                binding.loader.setVisibility(View.GONE);
+              //  binding.loader.setVisibility(View.GONE);
                 DataManager.getInstance().hideProgressMessage();
             }
         });

@@ -58,7 +58,7 @@ public interface AfaryCode {
 
     @FormUrlEncoded
     @POST("add_money")
-    Call<AddWalletModal> add_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> add_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("transfer_money_wllet_to_wallet")
@@ -315,6 +315,10 @@ public interface AfaryCode {
   @FormUrlEncoded
   @POST("get_delivery_partner")
   Call<ResponseBody> getDeliveryAgencyApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+  @FormUrlEncoded
+  @POST("payment_processing")
+  Call<ResponseBody> checkPaymentStatusApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
 }

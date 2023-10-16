@@ -39,46 +39,46 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.orderId.setText(arrayList.get(position).getOrderId());
-        holder.binding.orderPrice.setText("Rs"+arrayList.get(position).getTotalText());
-        if(arrayList.get(position).getProductImageList().size() == 1){
+        holder.binding.orderPrice.setText("Rs"+arrayList.get(position).getTotalAmount());
+        if(arrayList.get(position).getProductList().size() == 1){
             holder.binding.llOne.setVisibility(View.VISIBLE);
             holder.binding.llTwo.setVisibility(View.GONE);
             holder.binding.llThree.setVisibility(View.GONE);
             holder.binding.llFour.setVisibility(View.GONE);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(0).getImage()).into(holder.binding.productImage);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(0).getProductImages()).into(holder.binding.productImage);
 
         }
 
-       else if(arrayList.get(position).getProductImageList().size() == 2){
+       else if(arrayList.get(position).getProductList().size() == 2){
             holder.binding.llOne.setVisibility(View.GONE);
             holder.binding.llTwo.setVisibility(View.VISIBLE);
             holder.binding.llThree.setVisibility(View.GONE);
             holder.binding.llFour.setVisibility(View.GONE);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(0).getImage()).into(holder.binding.productImageTw01);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(1).getImage()).into(holder.binding.productImageTwo2);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(0).getProductImages()).into(holder.binding.productImageTw01);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(1).getProductImages()).into(holder.binding.productImageTwo2);
 
        }
 
-        else if(arrayList.get(position).getProductImageList().size() == 3){
+        else if(arrayList.get(position).getProductList().size() == 3){
             holder.binding.llOne.setVisibility(View.GONE);
             holder.binding.llTwo.setVisibility(View.GONE);
             holder.binding.llThree.setVisibility(View.VISIBLE);
             holder.binding.llFour.setVisibility(View.GONE);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(0).getImage()).into(holder.binding.productImageThree1);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(1).getImage()).into(holder.binding.productImageThree2);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(2).getImage()).into(holder.binding.productImageThree3);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(0).getProductImages()).into(holder.binding.productImageThree1);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(1).getProductImages()).into(holder.binding.productImageThree2);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(2).getProductImages()).into(holder.binding.productImageThree3);
 
         }
 
-        else if(arrayList.get(position).getProductImageList().size() <= 4){
+        else if(arrayList.get(position).getProductList().size() <= 4){
             holder.binding.llOne.setVisibility(View.GONE);
             holder.binding.llTwo.setVisibility(View.GONE);
             holder.binding.llThree.setVisibility(View.GONE);
             holder.binding.llFour.setVisibility(View.VISIBLE);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(0).getImage()).into(holder.binding.productImageFour1);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(1).getImage()).into(holder.binding.productImageFour2);
-            Glide.with(context).load(arrayList.get(position).getProductImageList().get(2).getImage()).into(holder.binding.productImageFour3);
-            holder.binding.tvImgCount.setText("+"+(arrayList.get(position).getProductImageList().size()-3));
+            Glide.with(context).load(arrayList.get(position).getProductList().get(0).getProductImages()).into(holder.binding.productImageFour1);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(1).getProductImages()).into(holder.binding.productImageFour2);
+            Glide.with(context).load(arrayList.get(position).getProductList().get(2).getProductImages()).into(holder.binding.productImageFour3);
+            holder.binding.tvImgCount.setText("+"+(arrayList.get(position).getProductList().size()-3));
 
         }
 
@@ -89,7 +89,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
         }
 
-       else if(arrayList.get(position).getStatus().equals("Accept")){
+       else if(arrayList.get(position).getStatus().equals("Accepted")){
 
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
@@ -99,7 +99,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
         }
 
 
-        else if(arrayList.get(position).getStatus().equals("Decline")){
+        else if(arrayList.get(position).getStatus().equals("Cancelled")){
 
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
