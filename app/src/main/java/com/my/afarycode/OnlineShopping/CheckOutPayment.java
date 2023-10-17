@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityCheckOutPaymentBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -247,7 +248,7 @@ public class CheckOutPayment extends AppCompatActivity {
                        // binding.loader.setVisibility(View.GONE);
                          if(paymentType.equals("Wallet") || paymentType.equals("Cash")) {
                              Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                             startActivity(new Intent(CheckOutPayment.this, HomeActivity.class)
+                             startActivity(new Intent(CheckOutPayment.this, MyOrderScreen.class)
                                      .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                              finish();
                          }

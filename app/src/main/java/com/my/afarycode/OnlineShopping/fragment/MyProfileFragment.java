@@ -70,10 +70,20 @@ public class MyProfileFragment extends Fragment {
 
         });
 
+
+        binding.txtOnlineOrder.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), MyOrderScreen.class));
+
+        });
+
+
         binding.txtPrivacy.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), PrivacyPolicy.class));
 
         });
+
+
+
 
         binding.txtTerms.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), TermsCondition.class));
