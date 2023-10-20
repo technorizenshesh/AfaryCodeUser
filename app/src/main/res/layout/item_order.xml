@@ -35,6 +35,17 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvShopName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="OD - 424923192 - N"
+                            android:textColor="#000"
+                            android:textSize="@dimen/_12sdp"
+                            android:textStyle="bold" />
+
+                        <TextView
                             android:id="@+id/orderId"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -42,20 +53,34 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="OD - 424923192 - N"
                             android:textColor="#000"
-                            android:textSize="@dimen/_13sdp"
+                            android:textSize="@dimen/_12sdp"
                             android:textStyle="bold" />
+
+<!--
+                        android:drawableLeft="@drawable/location"
+-->
+
 
                         <TextView
                             android:id="@+id/orderPrice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="false"
-                            android:drawableLeft="@drawable/location"
                             android:drawablePadding="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:layoutDirection="rtl"
-                            android:padding="@dimen/_4sdp"
-                            android:text="Rs. 4,500"
+                            android:text="ccc"
+                            android:textColor="@color/purple_700"
+                            android:textSize="@dimen/_12sdp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvProductName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="OD -  - N"
                             android:textColor="#000"
                             android:textSize="@dimen/_12sdp"
                             android:textStyle="bold" />
@@ -63,18 +88,17 @@
 
 
                         <TextView
-                            android:id="@+id/orderStatus"
-                            android:paddingLeft="@dimen/_10sdp"
-                            android:paddingRight="@dimen/_10sdp"
+                            android:id="@+id/tvDateTime"
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_30sdp"
-                            android:background="@color/red"
-                            android:gravity="center"
-                            android:text="Delivered"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
+                            android:text="23-10-2022"
+                            android:layout_gravity="start"
+                            android:textColor="#000"
                             android:layout_marginTop="@dimen/_5sdp"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_10sdp"
+                            android:textStyle="bold" />
+
 
 
                     </LinearLayout>
@@ -175,8 +199,8 @@
 
                     <LinearLayout
                         android:id="@+id/llFour"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="@dimen/_100sdp"
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_80sdp"
                         android:visibility="visible"
                         android:orientation="vertical"
                         android:weightSum="1"
@@ -250,6 +274,47 @@
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_below="@+id/linear_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_margin="@dimen/_15sdp">
+
+                    <TextView
+                        android:id="@+id/orderStatus"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:text="Delivered"
+                        android:fontFamily="@font/poppins_regular"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <TextView
+                        android:id="@+id/btnCancel"
+                        android:paddingLeft="@dimen/_10sdp"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:background="@color/red"
+                        android:gravity="center"
+                        android:layout_marginStart="@dimen/_20sdp"
+                        android:text="@string/cancel"
+                        android:fontFamily="@font/poppins_regular"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        android:visibility="gone"/>
+
+
+
+                </LinearLayout>
 
 
             </RelativeLayout>

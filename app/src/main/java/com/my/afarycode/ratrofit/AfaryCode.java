@@ -321,4 +321,16 @@ public interface AfaryCode {
   Call<ResponseBody> checkPaymentStatusApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
+@FormUrlEncoded
+  @POST("order_cancel_by_user")
+  Call<ResponseBody>cancelOrderByUserApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
+
+
+  @FormUrlEncoded
+  @POST("logout")
+  Call<ResponseBody>logoutApi(@FieldMap Map<String,String>params);
+
+
+
+
 }

@@ -75,7 +75,13 @@ public class MyFirebaseMessagingService extends
                       .putExtra("status", type);
           }
 
+          else if(msg.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait"))
+          {
+              intent = new Intent(getApplicationContext(), HomeActivity.class)
+                      .putExtra("status", "openPaymentDialog")
+                      .putExtra("msg",msg);
 
+          }
           else {
               intent = new Intent(getApplicationContext(), HomeActivity.class)
                       .putExtra("status", "accept");

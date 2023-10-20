@@ -47,6 +47,10 @@ public class ProductItemModel {
         @SerializedName("pro_id")
         @Expose
         private String proId;
+
+        @SerializedName("cat_id")
+        @Expose
+        private  String catId;
         @SerializedName("category_id")
         @Expose
         private String categoryId;
@@ -135,6 +139,14 @@ public class ProductItemModel {
         @SerializedName("image")
         @Expose
         private String image;
+
+        public String getCatId() {
+            return catId;
+        }
+
+        public void setCatId(String catId) {
+            this.catId = catId;
+        }
 
         public String getImage() {
             return image;

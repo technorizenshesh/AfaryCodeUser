@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.AllShopOnlineActivity;
 import com.my.afarycode.OnlineShopping.Model.ProductItemModel;
 import com.my.afarycode.OnlineShopping.ProductDetailAct;
+import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ItemProducts2Binding;
 import com.my.afarycode.databinding.ItemProductsBinding;
@@ -51,6 +52,7 @@ public class ProductAdapter2 extends RecyclerView.Adapter<ProductAdapter2.MyView
         if(!arrayList.get(position).getProductImages().contains("/")) Glide.with(context).load("http://technorizen.com/afarycodewebsite/uploads/product/"+arrayList.get(position).getProductImages()).into(holder.binding.img);
          else Glide.with(context).load(arrayList.get(position).getProductImages()).into(holder.binding.img);
         holder.binding.img.setOnClickListener(v -> {
+            PreferenceConnector.writeString(context,PreferenceConnector.Cat_id,arrayList.get(position).getCatId());
             context.startActivity(new Intent(context, ProductDetailAct.class)
                     .putExtra("product_id",arrayList.get(position).getProId())
                     .putExtra("restaurant_id",arrayList.get(position).getRestaurantId())

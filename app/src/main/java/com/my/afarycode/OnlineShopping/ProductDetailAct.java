@@ -27,6 +27,7 @@ import com.my.afarycode.OnlineShopping.Model.HomeOfferModel;
 import com.my.afarycode.OnlineShopping.Model.ShoppingProductModal;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
+import com.my.afarycode.OnlineShopping.adapter.MainAttributeAdapter;
 import com.my.afarycode.OnlineShopping.adapter.ReviewAdapter;
 import com.my.afarycode.OnlineShopping.adapter.ReviewProductAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
@@ -200,7 +201,14 @@ public class ProductDetailAct extends AppCompatActivity {
                         if(get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("0"))
                             binding.ivDeliveryType.setVisibility(View.VISIBLE);
                         else binding.ivDeliveryType.setVisibility(View.GONE);
-                        if(validateNameArrayList.size()==1){
+
+                        if(validateNameArrayList.size()>0){
+                            binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this,validateNameArrayList));
+                        }
+
+
+
+                      /*  if(validateNameArrayList.size()==1){
                             binding.tvSize.setVisibility(View.VISIBLE);
                             binding.tvColor.setVisibility(View.GONE);
                             binding.tvSize.setText("Select "+validateNameArrayList.get(0).getName());
@@ -213,7 +221,7 @@ public class ProductDetailAct extends AppCompatActivity {
                             binding.tvSize.setText("Select "+validateNameArrayList.get(0).getName());
                             binding.tvColor.setText("Select "+validateNameArrayList.get(1).getName());
 
-                        }
+                        }*/
 
                       /*  if (!get_result1.get(0).image.equals("")) {
                             Picasso.get().load(get_result1.get(0).image).into(binding.imgShop);

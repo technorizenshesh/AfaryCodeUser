@@ -54,7 +54,6 @@ public class MyOrderScreen extends AppCompatActivity implements OrderListener{
         adapter = new OrderAdapter(MyOrderScreen.this, arrayList,MyOrderScreen.this);
         binding.rvOrders.setAdapter(adapter);
 
-        GetOrderHistoryAPI();
 
         binding.RRback.setOnClickListener(v -> {
             onBackPressed();
@@ -112,6 +111,13 @@ public class MyOrderScreen extends AppCompatActivity implements OrderListener{
 
     @Override
     public void onOrder(OrderModel.Result result) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GetOrderHistoryAPI();
 
     }
 }

@@ -361,6 +361,18 @@ public class ShoppingProductModal {
                 @Expose
                 private String dateTime;
 
+                @SerializedName("chk")
+                @Expose
+                private boolean chk = false;
+
+                public boolean isChk() {
+                    return chk;
+                }
+
+                public void setChk(boolean chk) {
+                    this.chk = chk;
+                }
+
                 public String getId() {
                     return id;
                 }

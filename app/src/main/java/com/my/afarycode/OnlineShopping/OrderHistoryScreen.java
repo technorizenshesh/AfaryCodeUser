@@ -56,11 +56,10 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
         binding.recyclerOrderHistory.setAdapter(adapter);
 
         binding.RRback.setOnClickListener(v -> {
-            onBackPressed();
+            finish();
 
         });
 
-        getOrderHistory();
     }
 
 
@@ -114,6 +113,14 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
 
     @Override
     public void onOrder(OrderModel.Result result) {
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getOrderHistory();
 
     }
 }

@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.orderdetails;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -66,7 +68,7 @@ public class OrderDetailsAct extends AppCompatActivity {
 
         callOrderDetail();
 
-        binding.backNavigation.setOnClickListener(v -> onBackPressed());
+        binding.backNavigation.setOnClickListener(v -> finish());
 
         binding.btnChat.setOnClickListener(v -> {
             startActivity(new Intent(this, ChatAct.class)
@@ -76,6 +78,13 @@ public class OrderDetailsAct extends AppCompatActivity {
                     .putExtra("id",userId)
                     .putExtra("name",userName)
                     .putExtra("img",userImg));
+        });
+
+
+        binding.btnDecline.setOnClickListener(view -> {
+            if(model!=null){
+              if(model.getResult().getStatus().equalsIgnoreCase("Pending") || model.getResult().getStatus().equalsIgnoreCase("Accepted")) alertCancelOrder();
+            }
         });
 
 
@@ -149,6 +158,32 @@ public class OrderDetailsAct extends AppCompatActivity {
 
                         }
 */
+                        if(model.getResult().getStatus().equals("Pending")){
+                            binding.llButtons.setVisibility(View.VISIBLE);
+                            binding.btnAccept.setText(getString(R.string.accept));
+                            binding.btnAccept.setVisibility(View.GONE);
+                            binding.tvAfaryCode.setVisibility(View.GONE);
+                        }
+                        else if(model.getResult().getStatus().equals("Accepted")){
+                            binding.llButtons.setVisibility(View.VISIBLE);
+                            binding.btnAccept.setVisibility(View.GONE);
+                            binding.tvAfaryCode.setVisibility(View.VISIBLE);
+
+                           // binding.btnAccept.setText(getString(R.string.assign));
+
+                        }
+                        else if(model.getResult().getStatus().equals("Cancelled")){
+                            binding.llButtons.setVisibility(View.GONE);
+                            binding.tvAfaryCode.setVisibility(View.GONE);
+
+                        }
+
+                        else if(model.getResult().getStatus().equals("Cancelled_by_user")){
+                            binding.llButtons.setVisibility(View.GONE);
+                            binding.tvAfaryCode.setVisibility(View.GONE);
+
+                        }
+
 
 
                         totalPriceToToPay = Double.parseDouble(model.getResult().getTotalAmount());
@@ -271,7 +306,73 @@ public class OrderDetailsAct extends AppCompatActivity {
     }
 
 
+   private void  cancelOrderByUser(){
+           DataManager.getInstance().showProgressMessage(this, "Please wait...");
+           Map<String,String> headerMap = new HashMap<>();
+           headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token,""));
+           headerMap.put("Accept","application/json");
 
+           Map<String, String> map = new HashMap<>();
+           map.put("order_id", orderId);
+       map.put("user_id", model.getResult().getUserId());
+       map.put("seller_id", model.getResult().getSellerId());
+       map.put("status", "Cancelled_by_user");
+
+       Log.e(TAG, "Order Cancel Request" + map);
+           Call<ResponseBody> loginCall = apiInterface.cancelOrderByUserApi(headerMap,map);
+           loginCall.enqueue(new Callback<ResponseBody>() {
+
+               @Override
+               public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                   DataManager.getInstance().hideProgressMessage();
+
+                   try {
+                       String stringResponse = response.body().string();
+                       JSONObject jsonObject = new JSONObject(stringResponse);
+                       Log.e("response===", response.body().string());
+                       if (jsonObject.getString("status").equals("1")) {
+                           Toast.makeText(OrderDetailsAct.this, "Order Cancelled...", Toast.LENGTH_SHORT).show();
+                           finish();
+                       }
+                   } catch (Exception e) {
+                       e.printStackTrace();
+                   }
+               }
+
+               @Override
+               public void onFailure(Call<ResponseBody> call, Throwable t) {
+                   call.cancel();
+                   DataManager.getInstance().hideProgressMessage();
+               }
+           });
+       }
+
+
+
+
+    private void alertCancelOrder() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsAct.this);
+        builder.setMessage("Are you sure you want to refuse this order?")
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        cancelOrderByUser();
+                    }
+                }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+    }
 
 
 }

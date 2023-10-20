@@ -50,7 +50,9 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
 
                         } else {
                         Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class)
+                                .putExtra("status","")
+                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
                         }
 

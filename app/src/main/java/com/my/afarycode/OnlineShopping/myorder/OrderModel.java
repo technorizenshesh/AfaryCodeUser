@@ -422,6 +422,30 @@ public class OrderModel {
             @Expose
             private String image1;
 
+            @SerializedName("product_name")
+            @Expose
+            private String productName;
+
+            @SerializedName("shop_name")
+            @Expose
+            private String shopName;
+
+            public String getProductName() {
+                return productName;
+            }
+
+            public void setProductName(String productName) {
+                this.productName = productName;
+            }
+
+            public String getShopName() {
+                return shopName;
+            }
+
+            public void setShopName(String shopName) {
+                this.shopName = shopName;
+            }
+
             public String getId() {
                 return id;
             }

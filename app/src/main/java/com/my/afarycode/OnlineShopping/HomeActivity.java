@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,6 +14,10 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyBookingFragment;
@@ -32,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     private Toast backToast;
     FragmentManager fragmentManager = getSupportFragmentManager();
     private AfaryCode apiInterface;
-    private String status;
+    private String status="",msg="";
 
 
 
@@ -79,17 +84,15 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
-      /*  if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            status = extras.getString("status");
-        }*/
 
-       /* if (status.equals("accept")) {
-            new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                    .setTitleText("Request Accepted !")
-                    .setContentText("Your Order Have  SuccessFully Accepted!!!")
-                    .show();
-        }*/
+           if(getIntent()!=null) {
+               status = getIntent().getStringExtra("status");
+               msg = getIntent().getStringExtra("msg");
+                 if(status.equals("openPaymentDialog")) createAndShowDialog(HomeActivity.this,msg);
+           }
+
+
+
 
         apiInterface = ApiClient.getClient(this).create(AfaryCode.class);
 
@@ -163,6 +166,26 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+
+
+    public void createAndShowDialog(Context context,String msg) {
+       // Dialog dialog = new Dialog(context, R.style.FullScreenDialog);
+
+        Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.layout_fullscreen_dialog);
+        dialog.setCanceledOnTouchOutside(true);
+
+        TextView tv = dialog.findViewById(R.id.tvMsg);
+        RelativeLayout btnOk = dialog.findViewById(R.id.btnOk);
+
+        tv.setText(msg);
+        btnOk.setOnClickListener(view -> dialog.dismiss());
+
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dialog.getWindow().setAttributes(layoutParams);
+        dialog.show();
+    }
 
 
 }

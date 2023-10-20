@@ -40,6 +40,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.orderId.setText(arrayList.get(position).getOrderId());
         holder.binding.orderPrice.setText("Rs"+arrayList.get(position).getTotalAmount());
+        holder.binding.tvShopName.setText(arrayList.get(position).getProductList().get(0).getShopName());
+        holder.binding.tvProductName.setText(arrayList.get(position).getProductList().get(0).getProductName());
+        holder.binding.tvDateTime.setText(arrayList.get(position).getDateTime());
+
+
+
         if(arrayList.get(position).getProductList().size() == 1){
             holder.binding.llOne.setVisibility(View.VISIBLE);
             holder.binding.llTwo.setVisibility(View.GONE);
@@ -85,7 +91,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
         if(arrayList.get(position).getStatus().equals("Pending")){
 
-            holder.binding.orderStatus.setVisibility(View.GONE);
+            holder.binding.orderStatus.setVisibility(View.VISIBLE);
+            holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
+            holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.blue_circle));
+            holder.binding.btnCancel.setVisibility(View.VISIBLE);
+
 
         }
 
@@ -95,6 +105,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
 
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.colorGreen));
+            holder.binding.btnCancel.setVisibility(View.VISIBLE);
 
         }
 
@@ -104,6 +115,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.red));
+            holder.binding.btnCancel.setVisibility(View.GONE);
+
+        }
+
+        else if(arrayList.get(position).getStatus().equals("Cancelled_by_user")){
+
+            holder.binding.orderStatus.setVisibility(View.VISIBLE);
+            holder.binding.orderStatus.setText("Cancelled");
+            holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.red));
+            holder.binding.btnCancel.setVisibility(View.GONE);
 
         }
 
