@@ -279,9 +279,22 @@ public class ShoppingProductModal {
             @SerializedName("date_time")
             @Expose
             private String dateTime;
+
+            @SerializedName("checked")
+            @Expose
+            private boolean checked=false;
             @SerializedName("attribute_name")
             @Expose
             private List<AttributeName> attributeName;
+
+
+            public boolean isChecked() {
+                return checked;
+            }
+
+            public void setChecked(boolean checked) {
+                this.checked = checked;
+            }
 
             public String getId() {
                 return id;

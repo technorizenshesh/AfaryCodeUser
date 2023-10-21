@@ -10,19 +10,23 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.my.afarycode.OnlineShopping.Model.ShoppingProductModal;
+import com.my.afarycode.OnlineShopping.listener.InnerClickListener;
+import com.my.afarycode.OnlineShopping.listener.MainClickListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ItemMainBinding;
 
 import java.util.ArrayList;
 
-public class MainAttributeAdapter extends RecyclerView.Adapter<MainAttributeAdapter.MyViewHolder> {
+public class MainAttributeAdapter extends RecyclerView.Adapter<MainAttributeAdapter.MyViewHolder> implements InnerClickListener {
 
     Context context;
     ArrayList<ShoppingProductModal.Result.ValidateName>arrayList;
+    MainClickListener listener;
 
-    public MainAttributeAdapter(Context context, ArrayList<ShoppingProductModal.Result.ValidateName> arrayList) {
+    public MainAttributeAdapter(Context context, ArrayList<ShoppingProductModal.Result.ValidateName> arrayList,MainClickListener listener) {
         this.context = context;
         this.arrayList = arrayList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,12 +40,17 @@ public class MainAttributeAdapter extends RecyclerView.Adapter<MainAttributeAdap
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.binding.tvmainName.setText(arrayList.get(position).getName());
-        holder.binding.rvInner.setAdapter(new InnerAttributeAdapter(context, (ArrayList<ShoppingProductModal.Result.ValidateName.AttributeName>) arrayList.get(position).getAttributeName()));
+        holder.binding.rvInner.setAdapter(new InnerAttributeAdapter(context, (ArrayList<ShoppingProductModal.Result.ValidateName.AttributeName>) arrayList.get(position).getAttributeName(),position,MainAttributeAdapter.this));
     }
 
     @Override
     public int getItemCount() {
         return arrayList.size();
+    }
+
+    @Override
+    public void innerClick(int position, String val,int innerPosition) {
+          listener.mainClick(arrayList.get(position).getName(),val,position,innerPosition);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

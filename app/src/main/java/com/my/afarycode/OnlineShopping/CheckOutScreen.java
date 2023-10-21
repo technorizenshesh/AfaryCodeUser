@@ -530,7 +530,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                     if (object.optString("status").equals("1")) {
                          // JSONObject jsonObject = object.getJSONObject("result");
-
+                        sendTaxToServer(object.toString());
                         mainTotalPay = Double.parseDouble(object.getString("sub_total"));
                         taxN1 = Double.parseDouble(object.getString("taxes_first"));
                         taxN2 = Double.parseDouble(object.getString("taxes_second"));
@@ -596,5 +596,55 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             }
         });
     }
+
+
+
+
+
+
+    public void  sendTaxToServer(String sendData){
+      //  DataManager.getInstance().showProgressMessage(CheckOutScreen.this, getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
+        map.put("sub_orderdata",sendData);
+        Log.e(TAG, "Send AllTax Server Request :" + map);
+        Call<ResponseBody> loginCall = apiInterface.sendTaxTServerApi(headerMap,map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Send All Tax Server RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        // JSONObject jsonObject = object.getJSONObject("result");
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        Toast.makeText(CheckOutScreen.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
 
 }

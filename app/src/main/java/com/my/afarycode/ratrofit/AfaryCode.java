@@ -330,6 +330,9 @@ public interface AfaryCode {
   @POST("logout")
   Call<ResponseBody>logoutApi(@FieldMap Map<String,String>params);
 
+  @FormUrlEncoded
+  @POST("insert_tax_delivery_chareges")
+  Call<ResponseBody>sendTaxTServerApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
 
 
 

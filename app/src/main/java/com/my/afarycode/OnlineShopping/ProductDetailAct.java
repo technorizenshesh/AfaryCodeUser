@@ -33,6 +33,7 @@ import com.my.afarycode.OnlineShopping.adapter.ReviewProductAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.listener.MainClickListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityShoppingProductDetailBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -42,6 +43,8 @@ import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -54,8 +57,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductDetailAct extends AppCompatActivity {
-    public String TAG ="ProductDetailAct";
+public class ProductDetailAct extends AppCompatActivity implements MainClickListener {
+    public String TAG = "ProductDetailAct";
     ReviewProductAdapter mAdapter;
     private ArrayList<HomeOfferModel> modelList = new ArrayList<>();
     private ArrayList<ShoppingProductModal.Result> get_result1 = new ArrayList<>();
@@ -77,20 +80,21 @@ public class ProductDetailAct extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_shopping_product_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_shopping_product_detail);
         apiInterface = ApiClient.getClient(ProductDetailAct.this).create(AfaryCode.class);
         initViews();
     }
 
     private void initViews() {
-        if(getIntent()!=null){
+        if (getIntent() != null) {
             product_id = getIntent().getStringExtra("product_id");
             restaurant_id = getIntent().getStringExtra("restaurant_id");
             productPrice = getIntent().getStringExtra("productPrice");
         }
 
         binding.RRback.setOnClickListener(v -> {
-            onBackPressed();});
+            onBackPressed();
+        });
 
         GetProductDetailsAPI(product_id, restaurant_id);
 
@@ -105,16 +109,17 @@ public class ProductDetailAct extends AppCompatActivity {
 
         binding.cardAdd.setOnClickListener(v -> {
 
-           if (get_result1.get(0).getProductStock().equalsIgnoreCase("In Stock"))dialogContinue();
-           else Toast.makeText(this, getString(R.string.out_of_stock), Toast.LENGTH_SHORT).show();
+            if (get_result1.get(0).getProductStock().equalsIgnoreCase("In Stock")) dialogContinue();
+            else Toast.makeText(this, getString(R.string.out_of_stock), Toast.LENGTH_SHORT).show();
 
         });
 
 
-        binding.tvShopName.setOnClickListener(v -> {startActivity(new Intent(ProductDetailAct.this,ShopDetailsAct.class)
-                .putExtra("shopId",restaurant_id)
-                .putExtra("sellerId",get_result1.get(0).getSellerId()));});
-
+        binding.tvShopName.setOnClickListener(v -> {
+            startActivity(new Intent(ProductDetailAct.this, ShopDetailsAct.class)
+                    .putExtra("shopId", restaurant_id)
+                    .putExtra("sellerId", get_result1.get(0).getSellerId()));
+        });
 
 
         binding.rlCart.setOnClickListener(v -> {
@@ -127,11 +132,13 @@ public class ProductDetailAct extends AppCompatActivity {
 
 
         binding.tvSize.setOnClickListener(v -> {
-           if(validateNameArrayList.size()==1) showDropDownSize(v,binding.tvSize,validateNameArrayList.get(0).getAttributeName());
+            if (validateNameArrayList.size() == 1)
+                showDropDownSize(v, binding.tvSize, validateNameArrayList.get(0).getAttributeName());
         });
 
         binding.tvColor.setOnClickListener(v -> {
-            if(validateNameArrayList.size()==2) showDropDownSize(v,binding.tvColor,validateNameArrayList.get(1).getAttributeName());
+            if (validateNameArrayList.size() == 2)
+                showDropDownSize(v, binding.tvColor, validateNameArrayList.get(1).getAttributeName());
 
         });
 
@@ -161,13 +168,12 @@ public class ProductDetailAct extends AppCompatActivity {
     }
 
 
-
     private void GetProductDetailsAPI(String product_id, String restaurant_id) {
 
         DataManager.getInstance().showProgressMessage(ProductDetailAct.this, "Please wait...");
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
@@ -176,7 +182,7 @@ public class ProductDetailAct extends AppCompatActivity {
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
-        Call<ShoppingProductModal> loginCall = apiInterface.get_product_detail(headerMap,map);
+        Call<ShoppingProductModal> loginCall = apiInterface.get_product_detail(headerMap, map);
 
         loginCall.enqueue(new Callback<ShoppingProductModal>() {
 
@@ -198,12 +204,12 @@ public class ProductDetailAct extends AppCompatActivity {
                         productImgList.add(get_result1.get(0).getImage());
                         productImgList.add(get_result1.get(0).getImage1());
                         validateNameArrayList.addAll(get_result1.get(0).getValidateName());
-                        if(get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("0"))
+                        if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("0"))
                             binding.ivDeliveryType.setVisibility(View.VISIBLE);
                         else binding.ivDeliveryType.setVisibility(View.GONE);
 
-                        if(validateNameArrayList.size()>0){
-                            binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this,validateNameArrayList));
+                        if (validateNameArrayList.size() > 0) {
+                            binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
                         }
 
 
@@ -227,22 +233,23 @@ public class ProductDetailAct extends AppCompatActivity {
                             Picasso.get().load(get_result1.get(0).image).into(binding.imgShop);
                         }*/
 
-                        binding.tvSellerName.setText(" "+get_result1.get(0).getSellerName().trim());
+                        binding.tvSellerName.setText(" " + get_result1.get(0).getSellerName().trim());
                         binding.tvShopName.setText(get_result1.get(0).getShopName().trim());
 
-                        if (get_result1.get(0).getProductStock().equalsIgnoreCase("In Stock")){
+                        if (get_result1.get(0).getProductStock().equalsIgnoreCase("In Stock")) {
                             binding.tvStock.setText(getString(R.string.in_stock));
                             binding.tvStock.setTextColor(getResources().getColor(R.color.colorGreen));
 
-                        }else {
-                                    binding.tvStock.setText(getString(R.string.out_of_stock));
+                        } else {
+                            binding.tvStock.setText(getString(R.string.out_of_stock));
                             binding.tvStock.setTextColor(getResources().getColor(R.color.red));
                         }
-                        if(get_result1.get(0).getVerify().equalsIgnoreCase("Yes"))  binding.ivVerify.setVisibility(View.VISIBLE);
-                         else  binding.ivVerify.setVisibility(View.GONE);
-                        if(get_result1.get(0).getAddedtowishlist().equalsIgnoreCase("Yes")){
+                        if (get_result1.get(0).getVerify().equalsIgnoreCase("Yes"))
+                            binding.ivVerify.setVisibility(View.VISIBLE);
+                        else binding.ivVerify.setVisibility(View.GONE);
+                        if (get_result1.get(0).getAddedtowishlist().equalsIgnoreCase("Yes")) {
                             binding.ivStar.setImageResource(R.drawable.ic_red_star);
-                        }else binding.ivStar.setImageResource(R.drawable.outline);
+                        } else binding.ivStar.setImageResource(R.drawable.outline);
 
 
                         adapter1 = new SliderAdapterExample(ProductDetailAct.this, productImgList);
@@ -262,12 +269,12 @@ public class ProductDetailAct extends AppCompatActivity {
                         binding.productPrice.setText("Rs. " + get_result1.get(0).productPrice);
                         binding.productPrice1.setText("Rs. " + get_result1.get(0).productPrice);
 
-                        if(get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1")) binding.switchDelivery.setChecked(true);
-                          else binding.switchDelivery.setChecked(false);
+                        if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1"))
+                            binding.switchDelivery.setChecked(true);
+                        else binding.switchDelivery.setChecked(false);
                     } else if (data.status.equals("0")) {
                         Toast.makeText(ProductDetailAct.this, data.message, Toast.LENGTH_SHORT).show();
                     }
-
 
 
                 } catch (Exception e) {
@@ -283,7 +290,7 @@ public class ProductDetailAct extends AppCompatActivity {
         });
     }
 
-    public void dialogContinue(){
+    public void dialogContinue() {
         Dialog mDialog = new Dialog(ProductDetailAct.this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_continue);
@@ -295,14 +302,14 @@ public class ProductDetailAct extends AppCompatActivity {
 
         btnCheckout.setOnClickListener(v -> {
             mDialog.dismiss();
-            Add_To_Cart_API(product_id, restaurant_id, productPrice,"checkOut");
+            Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
 
         });
 
         btnContinue.setOnClickListener(v -> {
             mDialog.dismiss();
-          //  Add_To_Cart_API(product_id, restaurant_id, productPrice,"continue");
-             finish();
+            //  Add_To_Cart_API(product_id, restaurant_id, productPrice,"continue");
+            finish();
 
         });
 
@@ -322,13 +329,13 @@ public class ProductDetailAct extends AppCompatActivity {
     }
 
 
-    private void Add_To_Cart_API(String product_id, String restaurant_id, String productPrice,String chk) {
+    private void Add_To_Cart_API(String product_id, String restaurant_id, String productPrice, String chk) {
 
         DataManager.getInstance().showProgressMessage(ProductDetailAct.this, "Please wait...");
 
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
         Map<String, String> map = new HashMap<>();
         map.put("item_id", product_id);
@@ -336,12 +343,15 @@ public class ProductDetailAct extends AppCompatActivity {
         map.put("shop_id", restaurant_id);
         map.put("quantity", "1");
         map.put("amount", productPrice);
-        map.put("cat_id",PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Cat_id, ""));
-
+        map.put("cat_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Cat_id, ""));
+       if (validateNameArrayList.size()>0) {
+           map.put("options", getOption());
+       }
+       else map.put("options","[]");
 
         Log.e("MapMap", "cart_params" + map);
 
-        Call<ResponseBody> reviewModalCall = apiInterface.add_to_cart(headerMap,map);
+        Call<ResponseBody> reviewModalCall = apiInterface.add_to_cart(headerMap, map);
 
         reviewModalCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -353,11 +363,11 @@ public class ProductDetailAct extends AppCompatActivity {
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "AddToCart RESPONSE" + object);
                     if (object.getString("status").equals("1")) {
-                        Toast.makeText(ProductDetailAct.this, "Add Cart SuccessFully ",Toast.LENGTH_SHORT).show();
-                        if(chk.equalsIgnoreCase("checkOut")) startActivity(new Intent(ProductDetailAct.this, CheckOutDeliveryAct.class).putExtra("sellerId",restaurant_id));
+                        Toast.makeText(ProductDetailAct.this, "Add Cart SuccessFully ", Toast.LENGTH_SHORT).show();
+                        if (chk.equalsIgnoreCase("checkOut"))
+                            startActivity(new Intent(ProductDetailAct.this, CheckOutDeliveryAct.class).putExtra("sellerId", restaurant_id));
                         else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
-                    }
-                    else if (object.getString("status").equals("0")) {
+                    } else if (object.getString("status").equals("0")) {
                         Toast.makeText(ProductDetailAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
@@ -374,18 +384,40 @@ public class ProductDetailAct extends AppCompatActivity {
 
     }
 
+    private String getOption() {
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < validateNameArrayList.size(); i++) {
+            for(int j=0;j<validateNameArrayList.get(i).getAttributeName().size();j++){
+                if(validateNameArrayList.get(i).getAttributeName().get(j).isChk()==true){
+                    try {
+                        JSONObject jsonObject= new JSONObject();
+                        jsonObject.put("mainName",validateNameArrayList.get(i).getName());
+                        jsonObject.put("innerName",validateNameArrayList.get(i).getAttributeName().get(j).getName());
+
+                      //  jsonObject.put(validateNameArrayList.get(i).getName().toString(),validateNameArrayList.get(i).getAttributeName().get(j).getName().toString());
+                        jsonArray.put(jsonObject);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+        Log.e("Added attribute value==",jsonArray+"");
+        return  jsonArray+"";
+        }
+
 
     private void GetCartItem() {
 
         // DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
         Log.e("MapMap", "EXERSICE111 LIST" + map);
 
-        Call<CartModal> loginCall = apiInterface.get_cart(headerMap,map);
+        Call<CartModal> loginCall = apiInterface.get_cart(headerMap, map);
 
         loginCall.enqueue(new Callback<CartModal>() {
 
@@ -400,10 +432,10 @@ public class ProductDetailAct extends AppCompatActivity {
                     if (data.status.equals("1")) {
 
 
-                        if(data.getResult().size()>0){
+                        if (data.getResult().size() > 0) {
                             binding.reqcountCart.setVisibility(View.VISIBLE);
-                            binding.reqcountCart.setText(data.getResult().size()+"");
-                        }else {
+                            binding.reqcountCart.setText(data.getResult().size() + "");
+                        } else {
                             binding.reqcountCart.setVisibility(View.GONE);
 
                         }
@@ -429,20 +461,19 @@ public class ProductDetailAct extends AppCompatActivity {
     }
 
 
-
     private void AddToWIshListAPI(String productId) {
 
         DataManager.getInstance().showProgressMessage(ProductDetailAct.this, "Please wait...");
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
         map.put("product_id", productId);
         Log.e("MapMap", "Add to WishList LIST" + map);
 
-        Call<ResponseBody> loginCall = apiInterface.addToFavApi(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.addToFavApi(headerMap, map);
 
         loginCall.enqueue(new Callback<ResponseBody>() {
 
@@ -452,14 +483,14 @@ public class ProductDetailAct extends AppCompatActivity {
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
-                    Log.e("response===",response.body().toString());
+                    Log.e("response===", response.body().toString());
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     GetProductDetailsAPI(product_id, restaurant_id);
 
                     if (jsonObject.getString("status").toString().equals("1")) {
                         Toast.makeText(ProductDetailAct.this, " Add Wish List ", Toast.LENGTH_SHORT).show();
-                    }   else if (jsonObject.getString("status").toString().equals("0")) {
+                    } else if (jsonObject.getString("status").toString().equals("0")) {
 
                         Toast.makeText(ProductDetailAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
@@ -478,7 +509,6 @@ public class ProductDetailAct extends AppCompatActivity {
     }
 
 
-
     private void showDropDownSize(View v, TextView textView, List<ShoppingProductModal.Result.ValidateName.AttributeName> stringList) {
         PopupMenu popupMenu = new PopupMenu(ProductDetailAct.this, v);
         for (int i = 0; i < stringList.size(); i++) {
@@ -487,8 +517,8 @@ public class ProductDetailAct extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             textView.setText(menuItem.getTitle());
             for (int i = 0; i < stringList.size(); i++) {
-                if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
-                  //  countryId = stringList.get(i).getId();
+                if (stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
+                    //  countryId = stringList.get(i).getId();
 
                 }
             }
@@ -498,4 +528,21 @@ public class ProductDetailAct extends AppCompatActivity {
     }
 
 
+    @Override
+    public void mainClick(String mainVal, String innerVal, int mainPosition, int innerPosition) {
+        for (int i = 0; i < validateNameArrayList.size(); i++) {
+            if (i == mainPosition) {
+                for (int j = 0; j < validateNameArrayList.get(i).getAttributeName().size(); j++) {
+                    if (j == innerPosition) {
+                        for (int k = 0; k < validateNameArrayList.get(i).getAttributeName().size(); k++) {
+                            validateNameArrayList.get(i).getAttributeName().get(k).setChk(false);
+
+                        }
+                        validateNameArrayList.get(i).getAttributeName().get(j).setChk(true);
+                        validateNameArrayList.get(i).setChecked(true);
+                    }
+                }
+            }
+        }
+    }
 }
