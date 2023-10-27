@@ -77,6 +77,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
     private String productPrice;
     Fragment fragment;
 
+    boolean checkRead = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +141,19 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         binding.tvColor.setOnClickListener(v -> {
             if (validateNameArrayList.size() == 2)
                 showDropDownSize(v, binding.tvColor, validateNameArrayList.get(1).getAttributeName());
+
+        });
+
+
+        binding.btnReadMore.setOnClickListener(view -> {
+            if(checkRead==false){
+                binding.productDetails.setMaxLines(Integer.MAX_VALUE);//your TextView
+                checkRead = true;
+            }else {
+                binding.productDetails.setMaxLines(1);//your TextView
+                checkRead = false;
+
+            }
 
         });
 
@@ -265,6 +280,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                         binding.tvTitle.setText(get_result1.get(0).productName);
                         binding.shopName.setText(get_result1.get(0).productName.toUpperCase());
+                        binding.productDetails.setMaxLines(1);//your TextView
                         binding.productDetails.setText(get_result1.get(0).productDetails);
                         binding.productPrice.setText("Rs. " + get_result1.get(0).productPrice);
                         binding.productPrice1.setText("Rs. " + get_result1.get(0).productPrice);

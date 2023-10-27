@@ -48,9 +48,17 @@
             android:layout_below="@+id/RRtoolbar"
             android:orientation="vertical">
 
+
+            <ImageView
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:src="@drawable/ic_afary"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_10sdp"/>
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_100sdp"
+                android:layout_height="@dimen/_80sdp"
                 android:layout_margin="@dimen/_20sdp"
                 app:cardBackgroundColor="@color/purple_200"
                 app:cardCornerRadius="@dimen/_10sdp">
@@ -68,7 +76,7 @@
                         android:layout_gravity="center"
                         android:text="$0"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_32sdp"
+                        android:textSize="@dimen/_30sdp"
                         android:textStyle="bold">
 
                     </TextView>
@@ -79,7 +87,7 @@
                         android:layout_gravity="center"
                         android:text="@string/available_balance"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_16sdp">
+                        android:textSize="@dimen/_14sdp">
 
                     </TextView>
 

@@ -177,7 +177,7 @@ public interface AfaryCode {
 
     @FormUrlEncoded
     @POST("get_wallet_history")
-    Call<GetTransferDetails> get_transfer_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> get_transfer_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
@@ -334,6 +334,11 @@ public interface AfaryCode {
   @POST("insert_tax_delivery_chareges")
   Call<ResponseBody>sendTaxTServerApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
 
+
+
+  @FormUrlEncoded
+  @POST("update_withdrawal_request")
+  Call<ResponseBody> withdraw_money_update( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
 }

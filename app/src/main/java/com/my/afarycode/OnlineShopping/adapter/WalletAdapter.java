@@ -2,7 +2,9 @@ package com.my.afarycode.OnlineShopping.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -54,10 +56,112 @@ public class WalletAdapter extends
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
-        holder.progressAdapterBinding.userName.setText(all_category_subcategory.get(position).getTransectionId());
-        holder.progressAdapterBinding.amount.setText("$"+all_category_subcategory.get(position).amount);
+        holder.progressAdapterBinding.userName.setText(all_category_subcategory.get(position).getDatetime());
+        holder.progressAdapterBinding.amount.setText("$" + String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getAmount())));
+        holder.progressAdapterBinding.tvWalletBal.setText("$" + String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getWalletBalance())));
+
+
+        holder.progressAdapterBinding.tvTransId.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Transaction ID :" + "</b>" + all_category_subcategory.get(position).getTransactionId()   +"</font>")  );
+        holder.progressAdapterBinding.tvRefInfo.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Reference Info :"+ "</b>"+  all_category_subcategory.get(position).getReferenceInfo()    +"</font>")  );
+        holder.progressAdapterBinding.tvTemps.setText(Html.fromHtml("<font color='#000'>"+"<b>"+"Temps :" + "</b>" + all_category_subcategory.get(position).getDatetime() +"</font>"));
+        holder.progressAdapterBinding.tvAmount.setText(Html.fromHtml("<font color='#000'>" +  "<b>" +"Amount : "+ "</b>"  + "$"+String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getAmount()))  + "</font>"));
+
+
+
+        if (all_category_subcategory.get(position).getTransactionType().equalsIgnoreCase("Wallet")) {
+            holder.progressAdapterBinding.tvProductType.setText(Html.fromHtml("<font color='#000'>"+"<b>"+"Description : purchase"+ "</b>"+"</font>"));
+            holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Transaction type :" + "</b>" + "Wallet"+"</font>")  );
+            holder.progressAdapterBinding.ivType.setImageResource(R.drawable.ic_payment);
+
+
+
+        } else if (all_category_subcategory.get(position).getTransactionType().equalsIgnoreCase("Booking")) {
+          if(all_category_subcategory.get(position).getOperateur().equalsIgnoreCase("AM"))
+          {
+              holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"+ "<b>" +  "Transaction type : " + "</b>"+"Airtel money number "  + all_category_subcategory.get(position).getClient()+ "</font>" ));
+
+          }
+           else if (all_category_subcategory.get(position).getOperateur().equalsIgnoreCase("MC"))
+          {
+              holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"+ "<b>" +  "Transaction type : " + "</b>"+"Moov money number "  + all_category_subcategory.get(position).getClient()+ "</font>" ));
+          }
+
+          else  {
+              holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Transaction type :" + "</b>" + "Wallet"+    "</font>")  );
+          }
+
+            holder.progressAdapterBinding.userName2.setText("To " + all_category_subcategory.get(position).getReferenceInfo());
+
+            holder.progressAdapterBinding.tvProductType.setText(Html.fromHtml("<font color='#000'>"+"<b>"+"Description : purchase" +"</b>"+"</font>"));
+            holder.progressAdapterBinding.tvTransId.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Transaction ID :" + "</b>" + all_category_subcategory.get(position).getTransactionId()   +"</font>")  );
+            holder.progressAdapterBinding.tvRefInfo.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Reference Info :"+ "</b>"+  all_category_subcategory.get(position).getReferenceInfo()    +"</font>")  );
+            holder.progressAdapterBinding.ivType.setImageResource(R.drawable.ic_payment);
+
+
+        } else if (all_category_subcategory.get(position).getTransactionType().equalsIgnoreCase("AddMoney")) {
+            holder.progressAdapterBinding.ivType.setImageResource(R.drawable.received);
+            holder.progressAdapterBinding.userName2.setText("From " +all_category_subcategory.get(position).getTransactionBy());
+
+
+            if(all_category_subcategory.get(position).getOperateur().equalsIgnoreCase("AM"))
+                holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"+ "<b>" +  "Transaction type : " + "</b>"+"Airtel money number "  + all_category_subcategory.get(position).getClient()+ "</font>" ));
+
+            else if (all_category_subcategory.get(position).getOperateur().equalsIgnoreCase("MC"))
+                holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"+ "<b>" +  "Transaction type : " + "</b>"+"Moov money number "  + all_category_subcategory.get(position).getClient()+ "</font>" ));
+
+
+
+
+            holder.progressAdapterBinding.tvProductType.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Description : recharge"+ "</b>"+"</font>"));
+            holder.progressAdapterBinding.rlOne.setVisibility(View.VISIBLE);
+            holder.progressAdapterBinding.rlTwo.setVisibility(View.GONE);
+
+
+        }
+
+    else if (all_category_subcategory.get(position).getTransactionType().equalsIgnoreCase("Withdraw")) {
+        holder.progressAdapterBinding.ivType.setImageResource(R.drawable.withdraw);
+        holder.progressAdapterBinding.userName2.setText("To " + " withdraw money");
+        holder.progressAdapterBinding.tvProductType.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Description : withdraw"+ "</b>"+"</font>"));
+            holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Transaction type :" + "</b>" + "wallet"+"</font>")  );
+        //    holder.progressAdapterBinding.userName2.setText("To " + all_category_subcategory.get(position).getReferenceInfo());
+
+      //  holder.progressAdapterBinding.rlOne.setVisibility(View.VISIBLE);
+      //  holder.progressAdapterBinding.rlTwo.setVisibility(View.GONE);
+
 
     }
+
+     else if (all_category_subcategory.get(position).getTransactionType().equalsIgnoreCase("TransferMoney")) {
+        holder.progressAdapterBinding.ivType.setImageResource(R.drawable.withdraw);
+        holder.progressAdapterBinding.userName2.setText("To " + all_category_subcategory.get(position).getReferenceInfo());
+            holder.progressAdapterBinding.tvProductType.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Description : transfer"+ "</b>"+"</font>"));
+            holder.progressAdapterBinding.tvTransactonType.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Transaction type :" + "</b>" + "wallet "+"</font>")  );
+            holder.progressAdapterBinding.userName2.setText("To " + all_category_subcategory.get(position).getReferenceInfo());
+
+      //  holder.progressAdapterBinding.rlOne.setVisibility(View.VISIBLE);
+      //  holder.progressAdapterBinding.rlTwo.setVisibility(View.GONE);
+
+
+    }
+
+
+     if(all_category_subcategory.get(position).isChk()==true){
+
+         holder.progressAdapterBinding.ivExpen.setImageResource(R.drawable.ic_expen_minus);
+         holder.progressAdapterBinding.rlDetail.setVisibility(View.GONE);
+         holder.progressAdapterBinding.rlTwo.setVisibility(View.VISIBLE);
+
+     }
+     else {
+
+         holder.progressAdapterBinding.ivExpen.setImageResource(R.drawable.ic_expen_plus);
+         holder.progressAdapterBinding.rlDetail.setVisibility(View.VISIBLE);
+         holder.progressAdapterBinding.rlTwo.setVisibility(View.GONE);
+
+     }
+
+}
 
     @Override
     public int getItemCount() {
@@ -70,9 +174,33 @@ public class WalletAdapter extends
         public MyViewHolder(ItemWalletBinding itemView) {
             super(itemView.getRoot());
             progressAdapterBinding = itemView;
+
+            progressAdapterBinding.ivExpen.setOnClickListener(view -> {
+              if(all_category_subcategory.get(getAdapterPosition()).isChk()==false)
+                  all_category_subcategory.get(getAdapterPosition()).setChk(true);
+                else all_category_subcategory.get(getAdapterPosition()).setChk(false);
+                notifyDataSetChanged();
+
+            });
+
+            progressAdapterBinding.tvTransId.setOnClickListener(view -> setClipboard(activity,all_category_subcategory.get(getAdapterPosition()).getTransactionId()));
+
         }
     }
 
+
+    private void setClipboard(Context context, String text) {
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.HONEYCOMB) {
+            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            clipboard.setText(text);
+        } else {
+            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
+            clipboard.setPrimaryClip(clip);
+        }
+
+        Toast.makeText(activity,"copy...",Toast.LENGTH_SHORT).show();
+    }
 
 }
 

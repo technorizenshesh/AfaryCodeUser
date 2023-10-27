@@ -215,22 +215,24 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:id="@+id/product_details"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:textSize="@dimen/_12sdp"
                         android:text=""
-                        android:maxLength="25"
                         android:visibility="visible"
+                        android:layout_toStartOf="@+id/llShop"
                         />
 
 
                     <LinearLayout
+                        android:id="@+id/llShop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:orientation="horizontal"
+                        android:layout_centerInParent="true"
                         >
                         <TextView
                             android:textColor="@color/natural_gray"
@@ -282,6 +284,7 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                        android:id="@+id/btnReadMore"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_width="wrap_content"
@@ -460,14 +463,26 @@
                 </RelativeLayout>
 
 
+                <TextView
+                    android:id="@+id/tvShopTag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:text="@string/see_other_products_from_nthis_shop_by_clicking_here"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:textSize="@dimen/_13sdp"
+                    android:visibility="visible"/>
 
 
                 <RelativeLayout
-                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     >
 
                     <TextView
@@ -494,26 +509,42 @@
                         />
 
                     <LinearLayout
+                        android:layout_toEndOf="@id/txtWright"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
+                        android:gravity="right"
                         android:layout_alignParentRight="true"
-                        android:layout_centerInParent="true"
                         android:layout_marginEnd="@dimen/_10sdp"
                         >
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="right"
+                            android:layout_gravity="right">
+
+
                         <TextView
                             android:id="@+id/tvShopName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:inputType="text"
-                            android:text=""
+                            android:text="sss"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_13sdp"
+                            android:singleLine="false"/>
 
                            <View
                                android:layout_width="match_parent"
                                android:layout_height="1dp"
                                android:background="@color/black"/>
+
+                        </LinearLayout>
+
+
 
                     </LinearLayout>
 

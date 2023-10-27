@@ -130,9 +130,9 @@ public class BottomAddFragment extends BottomSheetDialogFragment implements AskL
 */
 
     @Override
-    public void ask(String value) {
+    public void ask(String value,String status) {
         Toast.makeText(getContext(), value, Toast.LENGTH_SHORT).show();
-        listener.ask("");
+        listener.ask("","payment");
         dismiss();
     }
 }

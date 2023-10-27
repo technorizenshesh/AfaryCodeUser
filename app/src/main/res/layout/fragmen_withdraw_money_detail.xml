@@ -31,7 +31,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
-                android:text="Insert the transaction ID for which you wish to be reimbursed"
+                android:text="reference of the transaction to be reimbursed"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp" />
 
@@ -45,23 +45,59 @@
                 android:textSize="@dimen/_14sdp"
                 android:visibility="gone"/>
 
+
+            <TextView
+                android:id="@+id/tvTransaction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/natural_gray"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/tvAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/natural_gray"
+                android:textSize="@dimen/_12sdp" />
+
+            <TextView
+                android:id="@+id/tvNewBalance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/natural_gray"
+                android:textSize="@dimen/_12sdp" />
+
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:background="@color/white"
                 android:elevation="@dimen/_3sdp">
 
 
                 <EditText
-                    android:id="@+id/withdrawal_money"
+                    android:id="@+id/edHelp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:hint="Insert ID here"
+                    android:hint="Text area for help"
                     android:imeOptions="actionNext"
                     android:inputType="text"
-                    android:maxLength="50"
+                    android:maxLength="70"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"
                     android:textColor="@color/black"
@@ -72,7 +108,7 @@
             </RelativeLayout>
 
 
-              <RelativeLayout
+            <RelativeLayout
                 android:id="@+id/done_withdraw"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_45sdp"
@@ -87,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
-                    android:text="Next"
+                    android:text="Done"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp" />
 

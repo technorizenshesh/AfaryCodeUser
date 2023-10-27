@@ -40,7 +40,7 @@ public class CheckOutPayment extends AppCompatActivity {
     ActivityCheckOutPaymentBinding binding;
    // private ArrayList<String> cart_id_string = new ArrayList<>();
     private String strList = "",cart_id_string="";
-    private String totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="";
+    private String totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="",sendToServer="";
     private AfaryCode apiInterface;
     GetProfileModal data;
 
@@ -65,7 +65,7 @@ public class CheckOutPayment extends AppCompatActivity {
                 platFormsFees = extras.getString("platFormsFees");
                 taxN1 = extras.getString("taxN1");
                 taxN2 = extras.getString("taxN2");
-
+                sendToServer = extras.getString("sendToServer");
 
 
 
@@ -230,6 +230,8 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("address_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.ADDRESS_ID, ""));
 
         map.put("payment_type",paymentType);
+        map.put("sub_orderdata",sendToServer);
+        map.put("datetime",DataManager.getCurrent());
 
         Log.e("MapMap", "payment_params" + map);
 

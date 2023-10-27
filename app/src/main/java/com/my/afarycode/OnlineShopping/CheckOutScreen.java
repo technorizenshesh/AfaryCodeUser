@@ -65,7 +65,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     String deliveryAgencyType="",deliveryYesNo="";
     String deliveryCharge="0.0";
 
-    String deliveryAgencyId="";
+    String deliveryAgencyId="",sendToServer="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                     .putExtra("deliveryCharge", "" + deliveryFees)
                     .putExtra("platFormsFees", "" + platFormsFees)
                     .putExtra("taxN1", "" + taxN1)
-                    .putExtra("taxN2", "" + taxN2));
+                    .putExtra("taxN2", "" + taxN2)
+                    .putExtra("sendToServer",sendToServer));
 
         });
 
@@ -530,6 +531,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                     if (object.optString("status").equals("1")) {
                          // JSONObject jsonObject = object.getJSONObject("result");
+                        sendToServer = object.toString();
                         sendTaxToServer(object.toString());
                         mainTotalPay = Double.parseDouble(object.getString("sub_total"));
                         taxN1 = Double.parseDouble(object.getString("taxes_first"));

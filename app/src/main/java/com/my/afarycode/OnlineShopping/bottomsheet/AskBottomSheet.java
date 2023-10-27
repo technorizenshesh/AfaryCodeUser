@@ -59,11 +59,11 @@ public class AskBottomSheet extends BottomSheetDialogFragment {
         binding.tvText.setText(Html.fromHtml(sourceString));
 
         binding.btnYes.setOnClickListener(view -> {
-            listener.ask("Yes");
+            listener.ask("Yes","");
         });
 
         binding.btnNo.setOnClickListener(view -> {
-            listener.ask("No");
+            listener.ask("No","");
         });
     }
 }

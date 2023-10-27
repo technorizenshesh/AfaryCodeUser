@@ -1,4 +1,4 @@
-package com.my.afarycode.OnlineShopping.fragment;
+package com.my.afarycode.OnlineShopping.bottomsheet;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -15,12 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
-import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
-import com.my.afarycode.OnlineShopping.Model.TransferMoneyModal;
-import com.my.afarycode.OnlineShopping.Model.WithDrawalMoney;
-import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
-import com.my.afarycode.OnlineShopping.bottomsheet.PaymentBottomSheet;
-import com.my.afarycode.OnlineShopping.bottomsheet.WithdrawDetailBottomSheet;
+import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
@@ -28,6 +23,7 @@ import com.my.afarycode.R;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -39,23 +35,30 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class WithDrawFragment extends BottomSheetDialogFragment implements AskListener{
+
+
+
+
+
+
+
+public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
     Context context;
     private RelativeLayout done_withdraw;
     private AfaryCode apiInterface;
-    private EditText edtEmail;
+    private EditText edHelp;
     private EditText withdrawal_money;
-    private TextView tvNote;
-    String walletBal="0";
+    private TextView tvNote,tvTransaction,tvAmount,tvNewBalance;
+    String dataResponse="",id="",walletBal="";
     AskListener listener;
-
-    public WithDrawFragment(Context context,String walletBal) {
+    public WithdrawDetailBottomSheet(Context context,String dataResponse,String walletBal) {
         this.context = context;
+        this.dataResponse = dataResponse;
         this.walletBal = walletBal;
     }
 
 
-    public WithDrawFragment callBack(AskListener listener) {
+    public WithdrawDetailBottomSheet callBack(AskListener listener) {
         this.listener = listener;
         return this;
     }
@@ -68,23 +71,46 @@ public class WithDrawFragment extends BottomSheetDialogFragment implements AskLi
     @SuppressLint("RestrictedApi")
     public void setupDialog(Dialog dialog, int style) {
 
-        View contentView = View.inflate(getContext(), R.layout.fragmen_withdraw_money, (ViewGroup) null);
+        View contentView = View.inflate(getContext(), R.layout.fragmen_withdraw_money_detail, (ViewGroup) null);
 
-        edtEmail = contentView.findViewById(R.id.edtEmail);
+        edHelp = contentView.findViewById(R.id.edHelp);
         done_withdraw = contentView.findViewById(R.id.done_withdraw);
 
         apiInterface = ApiClient.getClient(context).create(AfaryCode.class);
 
-        withdrawal_money = contentView.findViewById(R.id.withdrawal_money);
         tvNote  = contentView.findViewById(R.id.tvNote);
-        tvNote.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Note:" + "</b>" + "</font>"+ "<font color='#01709B'>" +
+        tvTransaction  = contentView.findViewById(R.id.tvTransaction);
+        tvAmount  = contentView.findViewById(R.id.tvAmount);
+        tvNewBalance  = contentView.findViewById(R.id.tvNewBalance);
+
+        try {
+            JSONObject jsonObject = new JSONObject(dataResponse);
+             JSONObject resultObj = jsonObject.getJSONObject("result");
+             id = resultObj.getString("id");
+
+            tvTransaction.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Transaction ID:" + "</b>" + "</font>"+ "<font color='#9098B1'>"  +
+                    resultObj.getString("transaction_id")+"</font>"));
+
+            tvAmount.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Amounts:" + "</b>" + "</font>"+ "<font color='#9098B1'>" +
+                  "$"+  resultObj.getString("amount")+"</font>"));
+
+            tvNewBalance.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "New Balance:" + "</b>" + "</font>"+ "<font color='#9098B1'>" +
+                    String.format("%.2f",Double.parseDouble(walletBal) - Double.parseDouble(resultObj.getString("amount")))+"</font>"));
+
+
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        tvNote.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Note:" + "</b>" + "</font>"+ "<font color='#01709B'>"  +
                 "Go and Click on the transaction that interests you in the list of transactions then copy its ID and paste it here"+"</font>"));
 
 
 
         done_withdraw.setOnClickListener(v -> {
-           if(!withdrawal_money.getText().toString().equalsIgnoreCase("")) WithDrawalAPI();
-            else Toast.makeText(context, "Please enter transaction id", Toast.LENGTH_SHORT).show();
+            sendWithdrawRequestAPI();
         });
 
         dialog.setContentView(contentView);
@@ -93,19 +119,18 @@ public class WithDrawFragment extends BottomSheetDialogFragment implements AskLi
 
     }
 
-    private void WithDrawalAPI() {
+    private void sendWithdrawRequestAPI() {
         DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
 
         Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
 
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-        map.put("transaction_id", withdrawal_money.getText().toString());
-        map.put("datetime", DataManager.getCurrent());
-        Log.e("MapMap", "Send Withdraw Request" + map);
-        Call<ResponseBody> SignupCall = apiInterface.withdraw_money(headerMap,map);
+        map.put("user_help", edHelp.getText().toString());
+        map.put("request_id", id);
+        Log.e("MapMap", "Send Withdraw Details Request" + map);
+        Call<ResponseBody> SignupCall = apiInterface.withdraw_money_update(headerMap,map);
 
         SignupCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -115,12 +140,13 @@ public class WithDrawFragment extends BottomSheetDialogFragment implements AskLi
                 try {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
-                    Log.e("MapMap", "Send Withdraw Request RESPONSE" + object);
+                    Log.e("MapMap", "Send Withdraw Details RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
-                       // Toast.makeText(getContext(), "Send Withdraw Request Successful", Toast.LENGTH_SHORT).show();
-                        callMethod(responseData);
+                        Toast.makeText(getContext(), "Send Withdraw Request Successful", Toast.LENGTH_SHORT).show();
+                        listener.ask(responseData,"withdrawTwo");
+                        dismiss();
                     } else if (object.optString("status").equals("0")) {
-                        listener.ask("","withdraw");
+                        listener.ask("","withdrawTwo");
                         dismiss();
                         Toast.makeText(getContext(), object.optString("message"), Toast.LENGTH_SHORT).show();
 
@@ -139,16 +165,7 @@ public class WithDrawFragment extends BottomSheetDialogFragment implements AskLi
         });
     }
 
-    private void callMethod(String responseData) {
-        new WithdrawDetailBottomSheet(getActivity(),responseData,walletBal).callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
 
-    }
-
-    @Override
-    public void ask(String value,String status) {
-        listener.ask("","withdrawOne");
-        dismiss();
-    }
 
 
 }

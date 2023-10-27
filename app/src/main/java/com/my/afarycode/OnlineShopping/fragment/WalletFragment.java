@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.AddAvailable;
 import com.my.afarycode.OnlineShopping.Model.Add_Wish_To_Cart_Modal;
 import com.my.afarycode.OnlineShopping.Model.CategoryModal;
+import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.Model.GetTransferDetails;
 import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
@@ -33,10 +34,13 @@ import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -75,12 +79,12 @@ public class WalletFragment extends Fragment implements AskListener {
 
         binding.txtWithdrawMoney.setOnClickListener(v -> {
            // WithDrawFragment bottomSheetFragment = new WithDrawFragment(getActivity());
-           new WithDrawFragment(getActivity(),data.getResult().getWallet()).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+           new WithDrawFragment(getActivity(),data.getResult().getWallet()).callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
         });
 
         binding.txtTransactMoney.setOnClickListener(v -> {
             TransferMOneyFragment bottomSheetFragment = new TransferMOneyFragment(getActivity());
-            bottomSheetFragment.show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+            bottomSheetFragment.callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
         });
 
         return binding.getRoot();
@@ -185,29 +189,30 @@ public class WalletFragment extends Fragment implements AskListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("type","All");
         Log.e("MapMap", "" + map);
 
-        Call<GetTransferDetails> loginCall = apiInterface.get_transfer_money(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.get_transfer_money(headerMap,map);
 
-        loginCall.enqueue(new Callback<GetTransferDetails>() {
+        loginCall.enqueue(new Callback<ResponseBody>() {
 
             @Override
-            public void onResponse(Call<GetTransferDetails> call, Response<GetTransferDetails> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
-                    GetTransferDetails data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "Exersice_List" + dataResponse);
-
-                    if (data.status.equals("1")) {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e("MapMap", "Exersice_List RESPONSE" + object);
+                    if (object.getString("status").equals("1")) {
+                        GetTransferDetails data = new Gson().fromJson(responseData, GetTransferDetails.class);
                         get_result.clear();
                         get_result.addAll(data.getResult());
                         setAdapter();
 
-                    } else if (data.status.equals("0")) {
-                        Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
+                    } else if (object.getString("status").equals("0")) {
+                        Toast.makeText(getContext(), object.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
@@ -216,7 +221,7 @@ public class WalletFragment extends Fragment implements AskListener {
             }
 
             @Override
-            public void onFailure(Call<GetTransferDetails> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
             }
@@ -232,8 +237,10 @@ public class WalletFragment extends Fragment implements AskListener {
     }
 
     @Override
-    public void ask(String value) {
+    public void ask(String value,String status) {
         GetTransactionAPI();
-        GetProfile();
+           GetProfile();
+
+
     }
 }

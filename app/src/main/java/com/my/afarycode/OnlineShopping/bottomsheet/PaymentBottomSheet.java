@@ -73,7 +73,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
                       //  startActivity(new Intent(getActivity(), HomeActivity.class)
                          //       .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                       //  finish();
-                        listener.ask("Your Money Is Add SuccessFully ");
+                        listener.ask("Your Money Is Add SuccessFully ","add money");
                         dismiss();
 
                     }
@@ -87,7 +87,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
                         Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
                        // startActivity(new Intent(getActivity.this,HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                        // finish();
-                        listener.ask("Failed ");
+                        listener.ask("Failed ","");
                         dismiss();
                     }
 
@@ -229,6 +229,8 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         map.put("operateur", operator);
         map.put("num_marchand", operatorNumber);
         map.put("user_number", number);
+        map.put("datetime", DataManager.getCurrent());
+
 
         Log.e("MapMap", "WALLET RECHARGE REQUEST" + map);
 
@@ -248,7 +250,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
                         binding.rlPayment.setVisibility(View.GONE);
                         binding.rlPaymentStatus.setVisibility(View.VISIBLE);
                         PreferenceConnector.writeString(getActivity(),PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
-                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.serviceType,PreferenceConnector.Wallet);
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.serviceType,"AddMoney");
                         getActivity().startService(new Intent(getActivity(), MyService.class));
 
 

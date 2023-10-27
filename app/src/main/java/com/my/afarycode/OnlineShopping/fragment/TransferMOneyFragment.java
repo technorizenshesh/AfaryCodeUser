@@ -19,6 +19,7 @@ import com.my.afarycode.OnlineShopping.Model.TransferMoneyModal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -44,9 +45,15 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
     private EditText et_money;
     private CountryCodePicker ccp;
     private String code;
-
+    AskListener listener;
     public TransferMOneyFragment(Context context) {
         this.context = context;
+    }
+
+
+    public TransferMOneyFragment callBack(AskListener listener) {
+        this.listener = listener;
+        return this;
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +74,7 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
             code = ccp.getSelectedCountryCode();
             Log.e("code>>>", code);
 
-            TransferMoneyAPI("+" + code, mobile_no_et.getText().toString()
+            TransferMoneyAPI( code, mobile_no_et.getText().toString()
                     , et_money.getText().toString());
         });
 
@@ -88,6 +95,7 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         map.put("amount", add_money);
         map.put("to_country_code", countryCode);
          map.put("to_mobile", mobile_no_et);
+         map.put("datetime", DataManager.getCurrent());
 
         Log.e("MapMap", "TransferMoney REQUEST" + map);
 
@@ -103,12 +111,16 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
                     JSONObject object = new JSONObject(responseData);
                     Log.e("MapMap", "TransferMoney RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
+                        listener.ask("","transfer");
                         dismiss();
                         Toast.makeText(getContext(), "Your Money Transfer  SuccessFully ", Toast.LENGTH_SHORT).show();
 
                     } else if (object.optString("status").equals("0")) {
 
                         Toast.makeText(getActivity(), object.optString("message"), Toast.LENGTH_SHORT).show();
+                        listener.ask("","transfer");
+                        dismiss();
+
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

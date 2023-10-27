@@ -28,7 +28,7 @@ public class AskAct extends AppCompatActivity implements AskListener {
     }
 
     @Override
-    public void ask(String value) {
+    public void ask(String value,String status) {
         if(value.equalsIgnoreCase("No")) {
             startActivity(new Intent(AskAct.this, WellcomeScreen.class));
             finish();
