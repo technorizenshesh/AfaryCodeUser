@@ -6,7 +6,7 @@ import android.content.SharedPreferences.Editor;
 
 public class PreferenceConnector {
 
-    public static final String PREF_NAME = "DOCTOR";
+    public static final String PREF_NAME = "Afary";
     public static final int MODE = Context.MODE_PRIVATE;
     public static final String LoginStatus = "statuss";
     public static final String User_id = "user_idd";

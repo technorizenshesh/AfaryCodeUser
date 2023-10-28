@@ -25,6 +25,7 @@ import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
 import com.my.afarycode.OnlineShopping.WishListActivity;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.adapter.WalletAdapter;
+import com.my.afarycode.OnlineShopping.bottomsheet.TransferMoneyBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
@@ -83,8 +84,10 @@ public class WalletFragment extends Fragment implements AskListener {
         });
 
         binding.txtTransactMoney.setOnClickListener(v -> {
-            TransferMOneyFragment bottomSheetFragment = new TransferMOneyFragment(getActivity());
-            bottomSheetFragment.callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+          //  TransferMOneyFragment bottomSheetFragment = new TransferMOneyFragment(getActivity());
+          //  bottomSheetFragment.callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+            new TransferMoneyBottomSheet(getActivity()).callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
+
         });
 
         return binding.getRoot();

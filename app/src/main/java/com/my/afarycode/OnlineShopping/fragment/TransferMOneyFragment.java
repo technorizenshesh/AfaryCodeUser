@@ -3,16 +3,31 @@ package com.my.afarycode.OnlineShopping.fragment;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
+import com.my.afarycode.OnlineShopping.CheckOutPayment;
+import com.my.afarycode.OnlineShopping.CheckOutScreen;
+import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.AddWalletModal;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.TransferMoneyModal;
@@ -111,6 +126,89 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
                     JSONObject object = new JSONObject(responseData);
                     Log.e("MapMap", "TransferMoney RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
+                        dialogNumberExit(object.getString("amount"),object.getString("total_amount"),object.getString("wallet_fees"),mobile_no_et , countryCode);
+
+                        } else if (object.optString("status").equals("0")) {
+                        AlertNumberNotExit();
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+    public void dialogNumberExit(String Amount,String totalAmount,String fee,String number,String countryCode){
+        Dialog mDialog = new Dialog(getActivity());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_transfer_money);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+
+        TextView tvAmount = mDialog.findViewById(R.id.tvAmount);
+        TextView tvFee = mDialog.findViewById(R.id.tvFee);
+        TextView tvTotalAmount = mDialog.findViewById(R.id.tvTotalAmount);
+
+        LinearLayout btnOk = mDialog.findViewById(R.id.btnOk);
+
+        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + "Amount : " + "</b>" + "$" +Amount + "</font>"  ));
+        tvFee.setText(Html.fromHtml("<font color='#000'>" + "<b>" + "Fees : " + "</b>" + "$" +fee + "</font>"  ));
+        tvTotalAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + "Total Amount : " + "</b>" + "$" + totalAmount + "</font>"  ));
+
+        btnOk.setOnClickListener(v -> {
+            mDialog.dismiss();
+            TransferMoneyFirstAPI(countryCode,number,Amount,totalAmount,fee);
+
+
+        });
+        mDialog.show();
+
+    }
+
+
+
+
+
+
+
+
+    private void TransferMoneyFirstAPI(String countryCode,String number, String amount,String totalAmount, String fee) {
+        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("amount", amount);
+        map.put("to_country_code", countryCode);
+        map.put("to_mobile", number);
+        map.put("datetime", DataManager.getCurrent());
+        map.put("total_amount", totalAmount);
+        map.put("admin_fees", fee);
+
+        Log.e("MapMap", "TransferMoney First REQUEST" + map);
+
+        Call<ResponseBody> SignupCall = apiInterface.transfer_moneyFirstApi(headerMap,map);
+
+        SignupCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e("MapMap", "TransferMoney First RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
                         listener.ask("","transfer");
                         dismiss();
                         Toast.makeText(getContext(), "Your Money Transfer  SuccessFully ", Toast.LENGTH_SHORT).show();
@@ -134,4 +232,29 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
             }
         });
     }
+
+
+
+
+    private void AlertNumberNotExit() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Your beneficiary does not have a wallet to receive the funds. send him this link to download our app. show link")
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+
+    }
+
+
+
 }

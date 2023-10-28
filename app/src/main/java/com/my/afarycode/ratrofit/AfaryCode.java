@@ -340,5 +340,9 @@ public interface AfaryCode {
   @POST("update_withdrawal_request")
   Call<ResponseBody> withdraw_money_update( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
+  @FormUrlEncoded
+  @POST("yes_transfer_money_wllet_to_wallet")
+  Call<ResponseBody> transfer_moneyFirstApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 
 }
