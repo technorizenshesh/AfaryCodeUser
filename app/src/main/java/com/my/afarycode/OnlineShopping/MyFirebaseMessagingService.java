@@ -76,7 +76,8 @@ public class MyFirebaseMessagingService extends
           }
 
           else if(msg.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait")
-          || msg.equalsIgnoreCase("Dear customer,Your refund request has been successfully transmitted. Within 4 working hours, the refund will only be made on the method used to pay. Note that the refund will be made on the method used for payment.Thank you for your comprehension"))
+          || msg.equalsIgnoreCase("Dear customer,Your refund request has been successfully transmitted. Within 4 working hours, the refund will only be made on the method used to pay. Note that the refund will be made on the method used for payment.Thank you for your comprehension")
+          || msg.equalsIgnoreCase("Your request has been sent to your correspondent"))
           {
               intent = new Intent(getApplicationContext(), HomeActivity.class)
                       .putExtra("status", "openPaymentDialog")

@@ -345,4 +345,14 @@ public interface AfaryCode {
   Call<ResponseBody> transfer_moneyFirstApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
+  @FormUrlEncoded
+  @POST("money_transfer_request")
+  Call<ResponseBody> transfer_money_request( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+
+  @FormUrlEncoded
+  @POST("send_money_transfer_request")
+  Call<ResponseBody> transferMoneyRequestSend( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 }

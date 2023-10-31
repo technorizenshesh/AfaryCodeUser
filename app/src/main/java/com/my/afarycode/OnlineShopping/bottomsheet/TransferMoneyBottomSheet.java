@@ -78,6 +78,7 @@ public class TransferMoneyBottomSheet extends BottomSheetDialogFragment implemen
         });
 
         btnSecond.setOnClickListener(v -> {
+            new RequestMoneyBottomSheet(getActivity()).callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
 
         });
 
