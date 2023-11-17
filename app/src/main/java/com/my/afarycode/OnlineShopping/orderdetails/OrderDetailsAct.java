@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.orderdetails;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -81,6 +82,22 @@ public class OrderDetailsAct extends AppCompatActivity {
         });
 
 
+       // PreferenceConnector.writeString(OrderDetailsAct.this,"afaryCode",model.getResult().getAfaryCode());
+
+        binding.btnAccept.setOnClickListener(v ->
+        {
+            if(model!=null){
+                if(model.getResult().getStatus().equals("Accepted") || model.getResult().getStatus().equalsIgnoreCase("PickedUp")){
+                    PreferenceConnector.writeString(OrderDetailsAct.this,"afaryCode",model.getResult().getAfaryCode());
+                    PreferenceConnector.writeString(OrderDetailsAct.this,"orderId",model.getResult().getDeliveryPerson().getOrderId());
+                    startActivity(new Intent(OrderDetailsAct.this,OrderTrackAct.class)
+                            .putExtra("orderDetails",model.getResult()));
+                }
+            }
+
+        });
+
+
         binding.btnDecline.setOnClickListener(view -> {
             if(model!=null){
               if(model.getResult().getStatus().equalsIgnoreCase("Pending") || model.getResult().getStatus().equalsIgnoreCase("Accepted")) alertCancelOrder();
@@ -115,7 +132,6 @@ public class OrderDetailsAct extends AppCompatActivity {
                     if (jsonObject.getString("status").toString().equals("1")) {
                         // binding.tvNotFount.setVisibility(View.GONE);
                         model = new Gson().fromJson(stringResponse, OrderDetailsModel.class);
-                        binding.tvAfaryCode.setText(model.getResult().getAfaryCode());
                         Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImg);
                         GetSellerProfileAPI(model.getResult().getSellerId());
 /*
@@ -163,15 +179,32 @@ public class OrderDetailsAct extends AppCompatActivity {
                             binding.btnAccept.setText(getString(R.string.accept));
                             binding.btnAccept.setVisibility(View.GONE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
+                            binding.rlDeliveryPerson.setVisibility(View.GONE);
+
                         }
                         else if(model.getResult().getStatus().equals("Accepted")){
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setVisibility(View.GONE);
-                            binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                            binding.tvAfaryCode.setVisibility(View.GONE);
+                            binding.rlDeliveryPerson.setVisibility(View.GONE);
 
                            // binding.btnAccept.setText(getString(R.string.assign));
 
                         }
+
+                        else if(model.getResult().getStatus().equals("PickedUp")) {
+                            binding.llButtons.setVisibility(View.VISIBLE);
+                            binding.btnAccept.setVisibility(View.VISIBLE);
+                            binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                            binding.btnAccept.setText(getString(R.string.track_order));
+                            binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
+                        }
+
+
+
+
+
                         else if(model.getResult().getStatus().equals("Cancelled")){
                             binding.llButtons.setVisibility(View.GONE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
@@ -186,12 +219,22 @@ public class OrderDetailsAct extends AppCompatActivity {
 
 
 
-                        totalPriceToToPay = Double.parseDouble(model.getResult().getTotalAmount());
                         taxN1 = Double.parseDouble(model.getResult().getTaxN1());
                         taxN2 = Double.parseDouble(model.getResult().getTaxN2());
                         platFormsFees = Double.parseDouble(model.getResult().getPlatFormsFees());
                         deliveryFees = Double.parseDouble(model.getResult().getDeliveryCharges());
-                        subTotal =  totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
+                       // subTotal =  totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
+                       // totalPriceToToPay = Double.parseDouble(model.getResult().getTotalAmount());
+
+                        subTotal =  Double.parseDouble(model.getResult().getPrice());  // - deliveryFees;
+
+                        totalPriceToToPay = Double.parseDouble(model.getResult().getPrice())
+                                + Double.parseDouble(model.getResult().getPlatFormsFees())
+                                + Double.parseDouble(model.getResult().getDeliveryCharges())
+                                + Double.parseDouble(model.getResult().getTaxN1())
+                                + Double.parseDouble(model.getResult().getTaxN2());
+
+
 
                         binding.plateformFees.setText("Rs. " + String.format("%.2f", platFormsFees));
                         binding.tvTax1.setText("Rs. " + String.format("%.2f", taxN1));
@@ -201,6 +244,30 @@ public class OrderDetailsAct extends AppCompatActivity {
                         binding.subTotal.setText("Rs. " + String.format("%.2f", subTotal));
 
                         binding.rvDetails.setAdapter(new ItemsAdapter(OrderDetailsAct.this, (ArrayList<OrderDetailsModel.Result.Product>) model.getResult().getProductList()));
+
+
+                        if(jsonObject.getJSONObject("result").getJSONObject("delivery_person")==null)  { //    model.getResult().getDeliveryPerson()==null){
+                            binding.rlDeliveryPerson.setVisibility(View.GONE);
+                        }
+                        else {
+                            //  if(jsonObject.getJSONObject("result").getJSONObject("delivery_person").has("")) {
+                            if(model.getResult().getStatus().equalsIgnoreCase("PickedUp")) {
+                                binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+
+                            }
+                            else  {
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                binding.btnAccept.setVisibility(View.GONE);
+
+                            }
+
+                            binding.tvDeliveryPerson.setText(Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+                            binding.btnAccept.setText(getString(R.string.track_order));
+
+                            //  }
+                        }
+
 
                     }
                 } catch (Exception e) {

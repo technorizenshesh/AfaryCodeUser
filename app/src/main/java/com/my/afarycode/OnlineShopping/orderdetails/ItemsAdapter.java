@@ -38,7 +38,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
      //   holder.binding.tvProductTotal.setText(Integer.parseInt(arrayList.get(position).getQuantity()) * Integer.parseInt(arrayList.get(position).getProductPrice())+"");
 
         holder.binding.tvProductPrice.setText(arrayList.get(position).getQuantity() + " X " + arrayList.get(position).getPrice() );
-        holder.binding.tvProductTotal.setText(Integer.parseInt(arrayList.get(position).getQuantity()) * Integer.parseInt(arrayList.get(position).getPrice())+"");
+        holder.binding.tvProductTotal.setText(Integer.parseInt(arrayList.get(position).getQuantity()) * Double.parseDouble(arrayList.get(position).getPrice())+"");
 
     }
 

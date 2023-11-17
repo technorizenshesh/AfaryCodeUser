@@ -348,10 +348,22 @@ public class OrderModel {
         @SerializedName("date_time")
         @Expose
         private String dateTime;
+
+        @SerializedName("price")
+        @Expose
+        private String price;
+
         @SerializedName("product_list")
         @Expose
         private List<Product> productList;
 
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
 
         public class Product {
 

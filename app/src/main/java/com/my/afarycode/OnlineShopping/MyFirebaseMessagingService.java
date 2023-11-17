@@ -84,6 +84,19 @@ public class MyFirebaseMessagingService extends
                       .putExtra("msg",msg);
 
           }
+
+          else if(msg.equalsIgnoreCase("Dear Customer your order has just been delivered we hope to see you again soon on afarycode You can consult all of our services on this page   www……..thank you for choosing AfaryCode"))
+          {
+              intent = new Intent(getApplicationContext(), HomeActivity.class)
+                      .putExtra("status", "orderCompleteDialog")
+                      .putExtra("order_id", remoteMessage.getData().get("order_id"))
+                      .putExtra("msg",msg);
+
+          }
+
+
+
+
           else {
               intent = new Intent(getApplicationContext(), HomeActivity.class)
                       .putExtra("status", "accept");

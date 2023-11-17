@@ -39,7 +39,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.orderId.setText(arrayList.get(position).getOrderId());
-        holder.binding.orderPrice.setText("Rs"+arrayList.get(position).getTotalAmount());
+        double total = Double.parseDouble(arrayList.get(position).getPrice())
+                + Double.parseDouble(arrayList.get(position).getPlatFormsFees())
+                + Double.parseDouble(arrayList.get(position).getDeliveryCharges())
+                + Double.parseDouble(arrayList.get(position).getTaxN1())
+                + Double.parseDouble(arrayList.get(position).getTaxN2());
+        holder.binding.orderPrice.setText("Rs"+String.format("%.2f",total));
         holder.binding.tvShopName.setText(arrayList.get(position).getProductList().get(0).getShopName());
         holder.binding.tvProductName.setText(arrayList.get(position).getProductList().get(0).getProductName());
         holder.binding.tvDateTime.setText(arrayList.get(position).getDateTime());

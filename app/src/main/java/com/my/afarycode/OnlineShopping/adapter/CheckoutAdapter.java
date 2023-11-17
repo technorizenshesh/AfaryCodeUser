@@ -56,7 +56,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
             holder.progressAdapterBinding.itemQuantity.setText(all_category_subcategory.get(position).quantity);
             //   holder.progressAdapterBinding.price.setText("Rs. " + all_category_subcategory.get(position).productPrice);
 
-            holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).productPrice)
+            holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).getItemAmount())
                     * Integer.valueOf(all_category_subcategory.get(position).quantity));
 
 
@@ -80,7 +80,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
             int count = Integer.parseInt(String.valueOf(holder.progressAdapterBinding.itemQuantity.getText()));
             count++;
             holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
-            holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).productPrice)
+            holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).getItemAmount())
                     * Integer.valueOf(count));
 
             //  UpdateQuanityAPI(all_category_subcategory.get(position).cartId
@@ -105,7 +105,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
                 count--;
                 holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
                 holder.progressAdapterBinding.price.setText("Rs. " +
-                        Integer.valueOf(all_category_subcategory.get(position).productPrice)
+                        Integer.valueOf(all_category_subcategory.get(position).getItemAmount())
                                 * Integer.valueOf(count));
 
                 //UpdateQuanityAPI(all_category_subcategory.get(position).cartId,

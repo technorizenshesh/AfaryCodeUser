@@ -1453,9 +1453,10 @@ package com.my.afarycode.OnlineShopping.orderdetails;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class OrderDetailsModel {
+public class OrderDetailsModel implements Serializable {
 
     @SerializedName("result")
     @Expose
@@ -1493,7 +1494,7 @@ public class OrderDetailsModel {
 
 
 
-    public class Result {
+    public class Result implements Serializable{
 
         @SerializedName("id")
         @Expose
@@ -1525,6 +1526,11 @@ public class OrderDetailsModel {
         @SerializedName("total_amount")
         @Expose
         private String totalAmount;
+
+        @SerializedName("price")
+        @Expose
+        private String price;
+
         @SerializedName("shop_id")
         @Expose
         private String shopId;
@@ -1573,14 +1579,200 @@ public class OrderDetailsModel {
         @SerializedName("address_name")
         @Expose
         private String addressName;
+
+        @SerializedName("deliver_lat")
+        @Expose
+        private String deliverLat;
+
+
+        @SerializedName("delivery_lon")
+        @Expose
+        private String deliverLon;
+
+        public String getDeliverLat() {
+            return deliverLat;
+        }
+
+        public void setDeliverLat(String deliverLat) {
+            this.deliverLat = deliverLat;
+        }
+
+        public String getDeliverLon() {
+            return deliverLon;
+        }
+
+        public void setDeliverLon(String deliverLon) {
+            this.deliverLon = deliverLon;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
         @SerializedName("product_list")
         @Expose
 
         private List<Product> productList;
 
 
+        @SerializedName("delivery_person")
+        @Expose
+        private DeliveryPerson deliveryPerson;
 
-        public class Product {
+        public DeliveryPerson getDeliveryPerson() {
+            return deliveryPerson;
+        }
+
+        public void setDeliveryPerson(DeliveryPerson deliveryPerson) {
+            this.deliveryPerson = deliveryPerson;
+        }
+
+        public class DeliveryPerson implements Serializable {
+
+            @SerializedName("id")
+            @Expose
+            private String id;
+            @SerializedName("delivery_person_id")
+            @Expose
+            private String deliveryPersonId;
+            @SerializedName("order_id")
+            @Expose
+            private String orderId;
+            @SerializedName("afary_code")
+            @Expose
+            private String afaryCode;
+            @SerializedName("delivery_person_name")
+            @Expose
+            private String deliveryPersonName;
+            @SerializedName("delivery_person_image")
+            @Expose
+            private String deliveryPersonImage;
+            @SerializedName("delivery_person_email")
+            @Expose
+            private String deliveryPersonEmail;
+            @SerializedName("delivery_person_number")
+            @Expose
+            private String deliveryPersonNumber;
+            @SerializedName("current_latitude")
+            @Expose
+            private String currentLatitude;
+            @SerializedName("current_longitude")
+            @Expose
+            private String currentLongitude;
+            @SerializedName("status")
+            @Expose
+            private String status;
+
+            @SerializedName("cutomer_afary_code")
+            @Expose
+            private String cutomerAfaryCode;
+
+
+            public String getCutomerAfaryCode() {
+                return cutomerAfaryCode;
+            }
+
+            public void setCutomerAfaryCode(String cutomerAfaryCode) {
+                this.cutomerAfaryCode = cutomerAfaryCode;
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getDeliveryPersonId() {
+                return deliveryPersonId;
+            }
+
+            public void setDeliveryPersonId(String deliveryPersonId) {
+                this.deliveryPersonId = deliveryPersonId;
+            }
+
+            public String getOrderId() {
+                return orderId;
+            }
+
+            public void setOrderId(String orderId) {
+                this.orderId = orderId;
+            }
+
+            public String getAfaryCode() {
+                return afaryCode;
+            }
+
+            public void setAfaryCode(String afaryCode) {
+                this.afaryCode = afaryCode;
+            }
+
+            public String getDeliveryPersonName() {
+                return deliveryPersonName;
+            }
+
+            public void setDeliveryPersonName(String deliveryPersonName) {
+                this.deliveryPersonName = deliveryPersonName;
+            }
+
+            public String getDeliveryPersonImage() {
+                return deliveryPersonImage;
+            }
+
+            public void setDeliveryPersonImage(String deliveryPersonImage) {
+                this.deliveryPersonImage = deliveryPersonImage;
+            }
+
+            public String getDeliveryPersonEmail() {
+                return deliveryPersonEmail;
+            }
+
+            public void setDeliveryPersonEmail(String deliveryPersonEmail) {
+                this.deliveryPersonEmail = deliveryPersonEmail;
+            }
+
+            public String getDeliveryPersonNumber() {
+                return deliveryPersonNumber;
+            }
+
+            public void setDeliveryPersonNumber(String deliveryPersonNumber) {
+                this.deliveryPersonNumber = deliveryPersonNumber;
+            }
+
+            public String getCurrentLatitude() {
+                return currentLatitude;
+            }
+
+            public void setCurrentLatitude(String currentLatitude) {
+                this.currentLatitude = currentLatitude;
+            }
+
+            public String getCurrentLongitude() {
+                return currentLongitude;
+            }
+
+            public void setCurrentLongitude(String currentLongitude) {
+                this.currentLongitude = currentLongitude;
+            }
+
+            public String getStatus() {
+                return status;
+            }
+
+            public void setStatus(String status) {
+                this.status = status;
+            }
+        }
+
+
+
+
+        public class Product implements Serializable{
 
             @SerializedName("id")
             @Expose
@@ -1657,6 +1849,31 @@ public class OrderDetailsModel {
             @SerializedName("shop_name")
             @Expose
             private String shopName;
+
+            @SerializedName("shop_lat")
+            @Expose
+            private String shopLat;
+
+
+            @SerializedName("shop_lon")
+            @Expose
+            private String shopLon;
+
+            public String getShopLat() {
+                return shopLat;
+            }
+
+            public void setShopLat(String shopLat) {
+                this.shopLat = shopLat;
+            }
+
+            public String getShopLon() {
+                return shopLon;
+            }
+
+            public void setShopLon(String shopLon) {
+                this.shopLon = shopLon;
+            }
 
             public String getId() {
                 return id;

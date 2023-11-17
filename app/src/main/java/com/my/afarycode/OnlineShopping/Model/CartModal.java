@@ -156,6 +156,17 @@ public class CartModal {
         @Expose
         public String productImage;
 
+        @SerializedName("item_amount")
+        @Expose
+        public String itemAmount;
+
+        public String getItemAmount() {
+            return itemAmount;
+        }
+
+        public void setItemAmount(String itemAmount) {
+            this.itemAmount = itemAmount;
+        }
 
         @SerializedName("wish_list")
         @Expose

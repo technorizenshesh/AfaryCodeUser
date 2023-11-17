@@ -69,9 +69,6 @@
             android:exported="false"
             />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".OnlineShopping.TrackingActivity"
@@ -267,6 +264,21 @@
             android:theme="@style/AppTheme"
             android:exported="false"/>
 
+
+        <activity
+            android:name=".OnlineShopping.orderdetails.OrderTrackAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+        <activity
+            android:name=".OnlineShopping.ratereview.RateReviewAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.my.afarycode.fileprovider"
@@ -294,6 +306,25 @@
             android:exported="true" />
 
 
-</application>
+        <service
+            android:name=".OnlineShopping.helper.GetdriverLocationService"
+            android:enabled="true"
+            android:exported="true" />
+
+
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="@string/api_key_map" />
+
+
+<!--
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key_map" />
+-->
+
+
+
+    </application>
 
 </manifest>

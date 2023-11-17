@@ -540,6 +540,29 @@
                             android:textStyle="bold" />
                     </RelativeLayout>
 
+
+
+                    <RelativeLayout
+                        android:id="@+id/rlDeliveryPerson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:padding="@dimen/_3sdp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/tvDeliveryPerson"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp" />
+
+
+                    </RelativeLayout>
+
+
                 </LinearLayout>
 
 

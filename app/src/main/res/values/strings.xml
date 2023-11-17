@@ -179,5 +179,15 @@
     <string name="submit">Submit</string>
     <string name="cancel">Cancel</string>
     <string name="see_other_products_from_nthis_shop_by_clicking_here">See other products from\nthis shop by clicking here</string>
+    <string name="track_order">Track Order</string>
+
+
+    <string name="api_key_map">AIzaSyAXTJrvnDTC8AjYzK2dPatsSAMJaTIc-c0</string>
+    <string name="google_direction_key">AIzaSyAAjp4wuz5FyteoKH3Yp7Cv8pS1K86fJw0</string>
+    <string name="rate_the_product">Rate the Product</string>
+    <string name="review_here">Review here.</string>
+    <string name="rate_the_delivery_person">Rate the Delivery Person</string>
+    <string name="rate_review"><![CDATA[Rate & Review]]></string>
+
 
 </resources>

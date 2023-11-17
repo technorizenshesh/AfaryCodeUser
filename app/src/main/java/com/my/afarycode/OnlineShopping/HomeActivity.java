@@ -23,6 +23,7 @@ import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyBookingFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyProfileFragment;
 import com.my.afarycode.OnlineShopping.fragment.WalletFragment;
+import com.my.afarycode.OnlineShopping.ratereview.RateReviewAct;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityHomeBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -37,7 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     private Toast backToast;
     FragmentManager fragmentManager = getSupportFragmentManager();
     private AfaryCode apiInterface;
-    private String status="",msg="";
+    private String status="",msg="",orderId="";
 
 
 
@@ -89,6 +90,10 @@ public class HomeActivity extends AppCompatActivity {
                status = getIntent().getStringExtra("status");
                msg = getIntent().getStringExtra("msg");
                  if(status.equals("openPaymentDialog")) createAndShowDialog(HomeActivity.this,msg);
+                 else if(status.equals("orderCompleteDialog")){
+                     orderId = getIntent().getStringExtra("order_id");
+                     createAndShowDialog(HomeActivity.this,msg);
+                 }
            }
 
 
@@ -179,7 +184,15 @@ public class HomeActivity extends AppCompatActivity {
         RelativeLayout btnOk = dialog.findViewById(R.id.btnOk);
 
         tv.setText(msg);
-        btnOk.setOnClickListener(view -> dialog.dismiss());
+        btnOk.setOnClickListener(view -> {
+            if(status.equals("")){
+                startActivity(new Intent(HomeActivity.this, RateReviewAct.class)
+                        .putExtra("order_id",orderId));
+            }
+
+            dialog.dismiss();
+
+        });
 
         WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
         dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <RelativeLayout
+            android:id="@+id/rlHeader"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60sdp"
+            android:background="@drawable/border_new">
+
+            <LinearLayout
+                android:id="@+id/llBack"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:src="@drawable/back_icon" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/rate_review"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_18sdp"
+                android:textStyle="bold">
+
+            </TextView>
+
+        </RelativeLayout>
+
+
+
+        <ScrollView
+            android:layout_below="@+id/rlHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rate_the_product"
+                    android:textSize="@dimen/_15sdp"
+                    android:fontFamily="@font/poppins_bold"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:id="@+id/ivProduct"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/tvProductName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Product Name"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_5sdp"/>
+
+                <RatingBar
+                    android:id="@+id/productRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/RatingBar"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:stepSize=".5"
+                    />
+
+                <EditText
+                    android:id="@+id/edProductReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    android:background="@drawable/rounded_gray_bg"
+                    android:text=""
+                    android:hint="@string/review_here"
+                    android:gravity="center_vertical|top"
+                    android:layout_gravity="center_vertical|top"
+                    android:padding="@dimen/_10sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="@dimen/_12sdp"
+                    android:inputType="text"
+                    android:layout_marginTop="@dimen/_5sdp"/>
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rate_the_delivery_person"
+                    android:textSize="@dimen/_15sdp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:layout_marginTop="@dimen/_15sdp"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:id="@+id/ivDelivery"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:id="@+id/tvDeliveryPersonName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery Person Name"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_5sdp"/>
+
+                <RatingBar
+                    android:id="@+id/deliveryRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/RatingBar"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:stepSize=".5"
+                    />
+
+                <EditText
+                    android:id="@+id/edDeliveryReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    android:background="@drawable/rounded_gray_bg"
+                    android:text=""
+                    android:hint="@string/review_here"
+                    android:gravity="center_vertical|top"
+                    android:layout_gravity="center_vertical|top"
+                    android:padding="@dimen/_10sdp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textSize="@dimen/_12sdp"
+                    android:inputType="text"
+                    android:layout_marginTop="@dimen/_5sdp"/>
+
+
+
+                <RelativeLayout
+                    android:id="@+id/rlSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_40sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:background="@drawable/border_btn">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:paddingLeft="@dimen/_20sdp"
+                        android:text="@string/submit"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_14sdp" />
+
+                </RelativeLayout>
+
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+
+    </RelativeLayout>
+</layout>

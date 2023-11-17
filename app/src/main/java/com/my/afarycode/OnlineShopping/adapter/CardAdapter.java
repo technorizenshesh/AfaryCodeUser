@@ -76,7 +76,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
               holder.progressAdapterBinding.itemQuantity.setText(all_category_subcategory.get(position).quantity);
               //   holder.progressAdapterBinding.price.setText("Rs. " + all_category_subcategory.get(position).productPrice);
 
-              holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).productPrice)
+              holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).getItemAmount())
                       * Integer.valueOf(all_category_subcategory.get(position).quantity));
 
               if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("0"))
@@ -88,7 +88,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
             int count = Integer.parseInt(String.valueOf(holder.progressAdapterBinding.itemQuantity.getText()));
             count++;
             holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
-            holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).productPrice)
+            holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).getItemAmount())
                     * Integer.valueOf(count));
 
           //  UpdateQuanityAPI(all_category_subcategory.get(position).cartId
@@ -113,7 +113,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
                 count--;
                 holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
                 holder.progressAdapterBinding.price.setText("Rs. " +
-                        Integer.valueOf(all_category_subcategory.get(position).productPrice)
+                        Integer.valueOf(all_category_subcategory.get(position).getQuantity())
                                 * Integer.valueOf(count));
 
                 //UpdateQuanityAPI(all_category_subcategory.get(position).cartId,

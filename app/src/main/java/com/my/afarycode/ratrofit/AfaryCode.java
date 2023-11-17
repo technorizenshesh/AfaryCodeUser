@@ -355,4 +355,16 @@ public interface AfaryCode {
   @POST("send_money_transfer_request")
   Call<ResponseBody> transferMoneyRequestSend( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
+
+
+  @FormUrlEncoded
+  @POST("get_driver_location")
+  Call<ResponseBody> getDriverLocationApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String,String> paramHashMap);
+
+
+
+  @FormUrlEncoded
+  @POST("add_product_review_rating")
+  Call<ResponseBody> giveRateReviewApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 }
