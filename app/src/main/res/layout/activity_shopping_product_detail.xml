@@ -429,7 +429,7 @@
                         android:layout_height="wrap_content"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/item_main"
-                        android:layout_below="@+id/tvStock"/>
+                        android:layout_below="@+id/rlStock"/>
 
 
 
@@ -447,18 +447,67 @@
                         />
 
 
-                    <TextView
-                        android:id="@+id/tvStock"
-                        android:layout_width="wrap_content"
+                    <RelativeLayout
+                        android:id="@+id/rlStock"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:inputType="text"
-                        android:text="fxdffdf"
-                        android:textColor="@color/colorGreen"
-                        android:textSize="@dimen/_12sdp" />
+                        android:layout_marginBottom="@dimen/_5sdp">
+                        <LinearLayout
+                            android:id="@+id/llCheckProduct"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:layout_marginRight="13dp"
+                            android:visibility="gone"
+                            >
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/_5sdp"
+                                android:text="@string/product_probably_out_of_stock"
+                                android:textColor="@color/red"
+                                android:textSize="@dimen/_11sdp"
+                                />
+
+
+
+                            <TextView
+                                android:id="@+id/tvCheckAvailable"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/_5sdp"
+                                android:inputType="text"
+                                android:text="@string/check_availability"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/_11sdp"
+                                android:background="@color/colorGreen"/>
+
+
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvStock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginRight="13dp"
+                            android:inputType="text"
+                            android:text="fxdffdf"
+                            android:textColor="@color/colorGreen"
+                            android:textSize="@dimen/_11sdp"
+                            android:visibility="visible"/>
+                    </RelativeLayout>
+
+
 
                 </RelativeLayout>
 
@@ -552,14 +601,30 @@
 
                 </RelativeLayout>
 
+
+                <TextView
+                    android:id="@+id/tvReview"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Review"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_14sdp"
+                    android:visibility="gone"
+                    android:layout_margin="@dimen/_10sdp"
+
+                    />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerReview"
                     android:layout_below="@+id/RRShop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scrollbars="vertical"
-                    android:nestedScrollingEnabled="false"
                     android:visibility="gone"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     />
 
             </LinearLayout>

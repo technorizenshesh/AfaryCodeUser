@@ -367,4 +367,9 @@ public interface AfaryCode {
   @POST("add_product_review_rating")
   Call<ResponseBody> giveRateReviewApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
+
+  @FormUrlEncoded
+  @POST("check_product_availability")
+  Call<ResponseBody> checkProductAvailabilityApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 }

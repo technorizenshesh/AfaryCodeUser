@@ -60,7 +60,7 @@ import retrofit2.Response;
 public class ProductDetailAct extends AppCompatActivity implements MainClickListener {
     public String TAG = "ProductDetailAct";
     ReviewProductAdapter mAdapter;
-    private ArrayList<HomeOfferModel> modelList = new ArrayList<>();
+  //  private ArrayList<HomeOfferModel> modelList = new ArrayList<>();
     private ArrayList<ShoppingProductModal.Result> get_result1 = new ArrayList<>();
 
     private ArrayList<ShoppingProductModal.Result.ValidateName> validateNameArrayList = new ArrayList<>();
@@ -111,8 +111,12 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
         binding.cardAdd.setOnClickListener(v -> {
 
-            if (get_result1.get(0).getProductStock().equalsIgnoreCase("In Stock")) dialogContinue();
-            else Toast.makeText(this, getString(R.string.out_of_stock), Toast.LENGTH_SHORT).show();
+            if (get_result1.get(0).getInStock().equalsIgnoreCase("Yes")) dialogContinue();
+            else{
+                //Toast.makeText(this, getString(R.string.out_of_stock), Toast.LENGTH_SHORT).show();
+                Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+
+            }
 
         });
 
@@ -157,10 +161,18 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
         });
 
-        setAdapter();
+
+
+        binding.tvCheckAvailable.setOnClickListener(v -> {
+            checkProductAvailability(product_id);
+        });
+
+
+
     }
 
 
+/*
     private void setAdapter() {
 
         modelList.add(new HomeOfferModel("Reliance Fresh"));
@@ -174,13 +186,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         binding.recyclerReview.setLayoutManager(linearLayoutManager);
         binding.recyclerReview.setAdapter(mAdapter);
 
-        mAdapter.SetOnItemClickListener(new ReviewProductAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, HomeOfferModel model) {
-
-            }
-        });
     }
+*/
 
 
     private void GetProductDetailsAPI(String product_id, String restaurant_id) {
@@ -248,16 +255,34 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                             Picasso.get().load(get_result1.get(0).image).into(binding.imgShop);
                         }*/
 
+                        if(get_result1.get(0).getReview().size()>0){
+                            binding.tvReview.setVisibility(View.VISIBLE);
+                            binding.recyclerReview.setVisibility(View.VISIBLE);
+                            binding.recyclerReview.setAdapter( new ReviewProductAdapter(ProductDetailAct.this, (ArrayList<ShoppingProductModal.Result.review>) get_result1.get(0).getReview()));
+
+                        }else {
+                            binding.tvReview.setVisibility(View.GONE);
+                            binding.recyclerReview.setVisibility(View.GONE);
+
+                        }
+
+
+
                         binding.tvSellerName.setText(" " + get_result1.get(0).getSellerName().trim());
                         binding.tvShopName.setText(get_result1.get(0).getShopName().trim());
 
-                        if (get_result1.get(0).getProductStock().equalsIgnoreCase("In Stock")) {
+                        if (get_result1.get(0).getInStock().equalsIgnoreCase("Yes")) {
+                            binding.llCheckProduct.setVisibility(View.GONE);
+                            binding.tvStock.setVisibility(View.VISIBLE);
                             binding.tvStock.setText(getString(R.string.in_stock));
                             binding.tvStock.setTextColor(getResources().getColor(R.color.colorGreen));
 
                         } else {
-                            binding.tvStock.setText(getString(R.string.out_of_stock));
-                            binding.tvStock.setTextColor(getResources().getColor(R.color.red));
+                           // binding.tvStock.setText(getString(R.string.out_of_stock));
+                           // binding.tvStock.setTextColor(getResources().getColor(R.color.red));
+                            binding.llCheckProduct.setVisibility(View.VISIBLE);
+                            binding.tvStock.setVisibility(View.GONE);
+
                         }
                         if (get_result1.get(0).getVerify().equalsIgnoreCase("Yes"))
                             binding.ivVerify.setVisibility(View.VISIBLE);
@@ -523,6 +548,56 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             }
         });
     }
+
+
+
+    private void checkProductAvailability(String productId) {
+
+        DataManager.getInstance().showProgressMessage(ProductDetailAct.this, "Please wait...");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
+        map.put("product_id", productId);
+        Log.e("MapMap", "Check Product availability LIST" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.checkProductAvailabilityApi(headerMap, map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    Log.e("response===", response.body().toString());
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    GetProductDetailsAPI(product_id, restaurant_id);
+
+                    if (jsonObject.getString("status").toString().equals("1")) {
+                    //    Toast.makeText(ProductDetailAct.this, " Add Wish List ", Toast.LENGTH_SHORT).show();
+                    } else if (jsonObject.getString("status").toString().equals("0")) {
+
+                      //  Toast.makeText(ProductDetailAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
 
 
     private void showDropDownSize(View v, TextView textView, List<ShoppingProductModal.Result.ValidateName.AttributeName> stringList) {

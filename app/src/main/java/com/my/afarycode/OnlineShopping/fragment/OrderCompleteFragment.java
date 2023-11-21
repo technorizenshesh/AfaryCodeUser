@@ -1,26 +1,26 @@
-package com.my.afarycode.OnlineShopping;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
+package com.my.afarycode.OnlineShopping.fragment;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+
 import com.google.gson.Gson;
-import com.my.afarycode.OnlineShopping.Model.Get_Transaction_Modal;
-import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
-import com.my.afarycode.OnlineShopping.adapter.OrderFragmentAdapter;
+import com.my.afarycode.OnlineShopping.OrderHistoryScreen;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
-import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.OnlineShopping.myorder.OrderAdapter;
 import com.my.afarycode.OnlineShopping.myorder.OrderListener;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
 import com.my.afarycode.R;
-import com.my.afarycode.databinding.ActivityOrderHistoryScreenBinding;
+import com.my.afarycode.databinding.FragmentCompleteOrderBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
@@ -35,56 +35,45 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrderHistoryScreen extends AppCompatActivity implements OrderListener {
-    public String TAG = "OrderHistoryScreen";
-   // OrderAdapter adapter;
-    OrderFragmentAdapter adapter;
-    ActivityOrderHistoryScreenBinding binding;
+public class OrderCompleteFragment extends Fragment implements OrderListener {
+    public String TAG = "OrderCompleteFragment";
+    FragmentCompleteOrderBinding binding;
+
     private AfaryCode apiInterface;
+    OrderAdapter adapter;
+
     private ArrayList<OrderModel.Result> arrayList;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_complete_order, container, false);
+        apiInterface = ApiClient.getClient(getActivity()).create(AfaryCode.class);
+
+        return binding.getRoot();
+
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_order_history_screen);
-        //apiInterface = ApiClient.getClient(this).create(AfaryCode.class);
-        initViews();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        arrayList = new ArrayList<>();
+
+
+        adapter = new OrderAdapter(getActivity(), arrayList,OrderCompleteFragment.this);
+        binding.rvComplete.setAdapter(adapter);
+
+        getOrderHistory();
     }
-
-    private void initViews() {
-     //   arrayList = new ArrayList<>();
-
-
-   //     adapter = new OrderAdapter(OrderHistoryScreen.this, arrayList,OrderHistoryScreen.this);
-    //    binding.recyclerOrderHistory.setAdapter(adapter);
-
-        binding.RRback.setOnClickListener(v -> {
-            finish();
-
-        });
-
-
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Complete"));
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Cancel"));
-        binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        adapter = new OrderFragmentAdapter(OrderHistoryScreen.this,getSupportFragmentManager(), binding.tabLayout.getTabCount());
-
-        binding.viewPager.setAdapter(adapter);
-        binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
-
-
-
-    }
-
 
     private void getOrderHistory() {
-        DataManager.getInstance().showProgressMessage(this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
         Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(OrderHistoryScreen.this, PreferenceConnector.access_token,""));
+        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
 
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", PreferenceConnector.readString(this, PreferenceConnector.User_id, ""));
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("status", "Completed");
 
         Log.e(TAG, "EXERSICE LIST" + map);
@@ -110,7 +99,7 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
                         adapter.notifyDataSetChanged();
                     } else if (jsonObject.getString("status").toString().equals("0")) {
                         // binding.tvNotFount.setVisibility(View.VISIBLE);
-                        Toast.makeText(OrderHistoryScreen.this, jsonObject.getString("message").toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), jsonObject.getString("message").toString(), Toast.LENGTH_SHORT).show();
                         arrayList.clear();
                         adapter.notifyDataSetChanged();
                     }
@@ -127,16 +116,9 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
         });
     }
 
+
     @Override
     public void onOrder(OrderModel.Result result) {
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-     //   getOrderHistory();
 
     }
 }

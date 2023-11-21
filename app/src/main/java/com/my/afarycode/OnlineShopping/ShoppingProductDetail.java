@@ -116,7 +116,7 @@ public class ShoppingProductDetail extends Fragment {
 
        GetProductDetailsAPI(product_id, restaurant_id);
 
-        setAdapter();
+      //  setAdapter();
 
         return binding.getRoot();
 
@@ -261,6 +261,7 @@ public class ShoppingProductDetail extends Fragment {
     }
 
 
+/*
     private void setAdapter() {
 
         modelList.add(new HomeOfferModel("Reliance Fresh"));
@@ -281,6 +282,7 @@ public class ShoppingProductDetail extends Fragment {
             }
         });
     }
+*/
 
     public boolean loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

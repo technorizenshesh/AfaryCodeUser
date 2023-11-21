@@ -100,9 +100,9 @@ public class ShoppingProductModal {
         @Expose
         public String shipBy;
 
-        @SerializedName("product_stock")
+        @SerializedName("in_stock")
         @Expose
-        public String productStock;
+        public String inStock;
 
         @SerializedName("seller_name")
         @Expose
@@ -126,9 +126,26 @@ public class ShoppingProductModal {
         public String addedtowishlist;
 
 
+
+
+
+
         @SerializedName("validate_name")
         @Expose
         private List<ValidateName> validateName;
+
+
+        @SerializedName("review")
+        @Expose
+        private List<review> review;
+
+        public List<Result.review> getReview() {
+            return review;
+        }
+
+        public void setReview(List<Result.review> review) {
+            this.review = review;
+        }
 
         public List<ValidateName> getValidateName() {
             return validateName;
@@ -186,12 +203,12 @@ public class ShoppingProductModal {
             this.shipBy = shipBy;
         }
 
-        public String getProductStock() {
-            return productStock;
+        public String getInStock() {
+            return inStock;
         }
 
-        public void setProductStock(String productStock) {
-            this.productStock = productStock;
+        public void setInStock(String inStock) {
+            this.inStock = inStock;
         }
 
         public String getSellerName() {
@@ -257,6 +274,87 @@ public class ShoppingProductModal {
         public void setDeliveryCharges(String deliveryCharges) {
             this.deliveryCharges = deliveryCharges;
         }
+
+
+
+
+
+
+        public class review {
+
+            @SerializedName("id")
+            @Expose
+            private String id;
+            @SerializedName("product_id")
+            @Expose
+            private String productId;
+            @SerializedName("product_rating")
+            @Expose
+            private String productRating;
+            @SerializedName("product_review")
+            @Expose
+            private String productReview;
+            @SerializedName("user_name")
+            @Expose
+            private String userName;
+            @SerializedName("image")
+            @Expose
+            private String image;
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getProductId() {
+                return productId;
+            }
+
+            public void setProductId(String productId) {
+                this.productId = productId;
+            }
+
+            public String getProductRating() {
+                return productRating;
+            }
+
+            public void setProductRating(String productRating) {
+                this.productRating = productRating;
+            }
+
+            public String getProductReview() {
+                return productReview;
+            }
+
+            public void setProductReview(String productReview) {
+                this.productReview = productReview;
+            }
+
+            public String getUserName() {
+                return userName;
+            }
+
+            public void setUserName(String userName) {
+                this.userName = userName;
+            }
+
+            public String getImage() {
+                return image;
+            }
+
+            public void setImage(String image) {
+                this.image = image;
+            }
+        }
+
+
+
+
+
+
 
 
         public class ValidateName {

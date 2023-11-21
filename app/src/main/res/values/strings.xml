@@ -188,6 +188,9 @@
     <string name="review_here">Review here.</string>
     <string name="rate_the_delivery_person">Rate the Delivery Person</string>
     <string name="rate_review"><![CDATA[Rate & Review]]></string>
+    <string name="order_history">Order History</string>
+    <string name="check_availability">Check Availability</string>
+    <string name="product_probably_out_of_stock">Product probably out of stock</string>
 
 
 </resources>

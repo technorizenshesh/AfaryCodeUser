@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.my.afarycode.OnlineShopping.ChangePassword;
+import com.my.afarycode.OnlineShopping.OrderHistoryScreen;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.OnlineShopping.PrivacyPolicy;
@@ -55,7 +56,7 @@ public String TAG ="MyProfileFragment";
 
         binding.txtMyOrder.setOnClickListener(v -> {
 
-            startActivity(new Intent(getActivity(), MyOrderScreen.class));
+            startActivity(new Intent(getActivity(), OrderHistoryScreen.class));
 
         });
 

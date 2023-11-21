@@ -33,4 +33,12 @@
     </style>
 
 
+    <style name="tab_text"
+        parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:textAllCaps" tools:targetApi="ice_cream_sandwich">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
 </resources>

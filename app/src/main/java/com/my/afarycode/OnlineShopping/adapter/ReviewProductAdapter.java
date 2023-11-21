@@ -6,46 +6,46 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.Model.HomeOfferModel;
+import com.my.afarycode.OnlineShopping.Model.ShoppingProductModal;
 import com.my.afarycode.R;
+import com.my.afarycode.databinding.ItemReviewItemBinding;
 
 import java.util.ArrayList;
 
-public class ReviewProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ReviewProductAdapter extends RecyclerView.Adapter<ReviewProductAdapter.MyViewHolder> {
 
     private Context mContext;
-    private ArrayList<HomeOfferModel> modelList;
-    private OnItemClickListener mItemClickListener;
+    private ArrayList<ShoppingProductModal.Result.review> modelList;
 
-    public ReviewProductAdapter(Context context, ArrayList<HomeOfferModel> modelList) {
+    public ReviewProductAdapter(Context context, ArrayList<ShoppingProductModal.Result.review> modelList) {
         this.mContext = context;
         this.modelList = modelList;
     }
 
-    public void updateList(ArrayList<HomeOfferModel> modelList) {
-        this.modelList = modelList;
-        notifyDataSetChanged();
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        ItemReviewItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext),R.layout.item_review_item,viewGroup,false);
+        return new MyViewHolder(binding);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_review_item, viewGroup, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         //Here you can fill your row view
-        if (holder instanceof ViewHolder) {
-            final HomeOfferModel model = getItem(position);
-            final ViewHolder genericViewHolder = (ViewHolder) holder;
-
-            // genericViewHolder.txtName.setText(model.getName());
-
+           holder.binding.userName.setText(modelList.get(position).getUserName());
+        holder.binding.comments.setText(modelList.get(position).getProductReview());
+        holder.binding.ratingBar.setRating(Float.parseFloat(modelList.get(position).getProductRating()));
+        Glide.with(mContext).load(modelList.get(position).getImage()).placeholder(R.drawable.user_default)
+                .override(70,70).into(holder.binding.ivPic);
         }
 
-    }
+
 
 
     @Override
@@ -54,38 +54,17 @@ public class ReviewProductAdapter extends RecyclerView.Adapter<RecyclerView.View
         return modelList.size();
     }
 
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
-    }
-
-    private HomeOfferModel getItem(int position) {
-        return modelList.get(position);
-    }
 
 
-    public interface OnItemClickListener {
 
-        void onItemClick(View view, int position, HomeOfferModel model);
 
-    }
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+        ItemReviewItemBinding binding;
+        public MyViewHolder(final ItemReviewItemBinding itemView) {
+            super(itemView.getRoot());
+           binding = itemView;
 
-        private TextView txtName;
-
-        public ViewHolder(final View itemView) {
-            super(itemView);
-
-            // this.txtName=itemView.findViewById(R.id.txtName);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    mItemClickListener.onItemClick(itemView, getAdapterPosition(), modelList.get(getAdapterPosition()));
-
-                }
-            });
         }
     }
 

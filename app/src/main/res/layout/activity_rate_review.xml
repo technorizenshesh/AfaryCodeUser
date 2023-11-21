@@ -86,6 +86,7 @@
                     style="@style/RatingBar"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:progressTint="@color/yelllow"
                     android:stepSize=".5"
                     />
 
@@ -139,6 +140,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:stepSize=".5"
+                    android:progressTint="@color/yelllow"
                     />
 
                 <EditText
