@@ -17,11 +17,12 @@ import java.util.ArrayList;
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder> {
     Context context;
     ArrayList<OrderDetailsModel.Result.Product> arrayList;
+    ItemOrderListener listener;
 
-
-    public ItemsAdapter(Context context, ArrayList<OrderDetailsModel.Result.Product> arrayList) {
+    public ItemsAdapter(Context context, ArrayList<OrderDetailsModel.Result.Product> arrayList,ItemOrderListener listener) {
         this.context = context;
         this.arrayList = arrayList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -52,6 +53,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
         public MyViewHolder(@NonNull ItemDetailsBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
+
+            binding.ivItem.setOnClickListener(view -> listener.onItem(getAdapterPosition(),arrayList.get(getAdapterPosition())));
         }
     }
 }

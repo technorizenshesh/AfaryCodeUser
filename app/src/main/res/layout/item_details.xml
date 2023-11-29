@@ -23,7 +23,7 @@
                     android:id="@+id/tvProductName"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".5"
+                    android:layout_weight=".3"
                     android:layout_gravity="center_vertical"
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/black"
@@ -35,7 +35,7 @@
                     android:id="@+id/tvProductPrice"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".27"
+                    android:layout_weight=".25"
                     android:layout_gravity="center_vertical"
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/black"
@@ -47,12 +47,27 @@
                     android:id="@+id/tvProductTotal"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight=".23"
+                    android:layout_weight=".25"
                     android:layout_gravity="center_vertical"
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".2"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/ivItem"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/delete"
+                        app:tint="@color/red" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

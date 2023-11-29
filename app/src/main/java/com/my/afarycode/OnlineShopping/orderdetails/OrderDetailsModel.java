@@ -1527,9 +1527,9 @@ public class OrderDetailsModel implements Serializable {
         @Expose
         private String totalAmount;
 
-        @SerializedName("price")
+      /*  @SerializedName("price")
         @Expose
-        private String price;
+        private String price;*/
 
         @SerializedName("shop_id")
         @Expose
@@ -1605,13 +1605,13 @@ public class OrderDetailsModel implements Serializable {
             this.deliverLon = deliverLon;
         }
 
-        public String getPrice() {
+   /*     public String getPrice() {
             return price;
         }
 
         public void setPrice(String price) {
             this.price = price;
-        }
+        }*/
 
         @SerializedName("product_list")
         @Expose

@@ -126,6 +126,9 @@ public class ShoppingProductModal {
         public String addedtowishlist;
 
 
+        @SerializedName("avg_rating")
+        @Expose
+        public String avgRating;
 
 
 
@@ -276,9 +279,13 @@ public class ShoppingProductModal {
         }
 
 
+        public String getAvgRating() {
+            return avgRating;
+        }
 
-
-
+        public void setAvgRating(String avgRating) {
+            this.avgRating = avgRating;
+        }
 
         public class review {
 

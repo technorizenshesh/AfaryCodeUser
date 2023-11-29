@@ -372,4 +372,8 @@ public interface AfaryCode {
   @POST("check_product_availability")
   Call<ResponseBody> checkProductAvailabilityApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
+
+  @FormUrlEncoded
+  @POST("delete_user_order")
+  Call<ResponseBody>deleteItemByUserApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
 }

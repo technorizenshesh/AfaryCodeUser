@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -94,6 +95,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             productPrice = getIntent().getStringExtra("productPrice");
         }
 
+      //  binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + "See other products from" + "<br>" +"this shop by clicking here"+ "</b>" + "</font>"));
+
         binding.RRback.setOnClickListener(v -> {
             onBackPressed();
         });
@@ -121,7 +124,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         });
 
 
-        binding.tvShopName.setOnClickListener(v -> {
+        binding.tvShopTag.setOnClickListener(v -> {
             startActivity(new Intent(ProductDetailAct.this, ShopDetailsAct.class)
                     .putExtra("shopId", restaurant_id)
                     .putExtra("sellerId", get_result1.get(0).getSellerId()));
@@ -154,7 +157,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                 binding.productDetails.setMaxLines(Integer.MAX_VALUE);//your TextView
                 checkRead = true;
             }else {
-                binding.productDetails.setMaxLines(1);//your TextView
+                binding.productDetails.setMaxLines(5);//your TextView
                 checkRead = false;
 
             }
@@ -269,7 +272,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
 
                         binding.tvSellerName.setText(" " + get_result1.get(0).getSellerName().trim());
-                        binding.tvShopName.setText(get_result1.get(0).getShopName().trim());
+                        binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + "See other products from" + "<br>" +"this shop by clicking here "+ "</b>" + "</font>"  +"<font color='#0288D1'>" + "<b>"  +get_result1.get(0).getShopName().trim() + "</b>" + "</font>"  ));
+
+
 
                         if (get_result1.get(0).getInStock().equalsIgnoreCase("Yes")) {
                             binding.llCheckProduct.setVisibility(View.GONE);
@@ -305,10 +310,15 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                         binding.tvTitle.setText(get_result1.get(0).productName);
                         binding.shopName.setText(get_result1.get(0).productName.toUpperCase());
-                        binding.productDetails.setMaxLines(1);//your TextView
+                        binding.productDetails.setMaxLines(5);//your TextView
                         binding.productDetails.setText(get_result1.get(0).productDetails);
                         binding.productPrice.setText("Rs. " + get_result1.get(0).productPrice);
                         binding.productPrice1.setText("Rs. " + get_result1.get(0).productPrice);
+
+                        binding.tvRate.setText(get_result1.get(0).getAvgRating()+" ");
+                        binding.ratingbar.setRating(Float.parseFloat(get_result1.get(0).getAvgRating()));
+
+
 
                         if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1"))
                             binding.switchDelivery.setChecked(true);

@@ -41,12 +41,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class OrderDetailsAct extends AppCompatActivity {
+public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListener{
     public String TAG = "OrderDetailsAct";
     ActivityOrderDetailsBinding binding;
     String orderId ="",orderStatus="",userName="",userId="",userImg="",sellerId="",sellerName,sellerImg="";
     OrderDetailsModel model;
     private AfaryCode apiInterface;
+    ItemsAdapter itemsAdapter;
+    ArrayList<OrderDetailsModel.Result.Product>arrayList;
     double totalPriceToToPay=0.0,taxN1=0.0,taxN2=0.0,platFormsFees=0.0,deliveryFees=0.0,subTotal=0.0;
 
 
@@ -66,6 +68,12 @@ public class OrderDetailsAct extends AppCompatActivity {
             orderId  = getIntent().getStringExtra("id");
 
         }
+
+        arrayList = new ArrayList<>();
+
+        itemsAdapter = new ItemsAdapter(OrderDetailsAct.this,arrayList,OrderDetailsAct.this);
+        binding.rvDetails.setAdapter(itemsAdapter);
+
 
         callOrderDetail();
 
@@ -132,48 +140,54 @@ public class OrderDetailsAct extends AppCompatActivity {
                     if (jsonObject.getString("status").toString().equals("1")) {
                         // binding.tvNotFount.setVisibility(View.GONE);
                         model = new Gson().fromJson(stringResponse, OrderDetailsModel.class);
-                        Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImg);
+                      //  Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImg);
+                        binding.tvShopName.setText(model.getResult().getProductList().get(0).getShopName());
+                        binding.tvOrderNumber.setText(orderId);
+                        binding.tvDate.setText(model.getResult().getProductList().get(0).getDateTime());
+
+
+
                         GetSellerProfileAPI(model.getResult().getSellerId());
-/*
-                        if (model.getResult().getShopImage().size() == 1) {
+
+                        if (model.getResult().getProductList().size() == 1) {
                             binding.llOne.setVisibility(View.VISIBLE);
                             binding.llTwo.setVisibility(View.GONE);
                             binding.llThree.setVisibility(View.GONE);
                             binding.llFour.setVisibility(View.GONE);
                            // Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImage);
 
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImage);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImage);
 
 
-                        } else if (model.getResult().getShopImage().size() == 2) {
+                        } else if (model.getResult().getProductList().size() == 2) {
                             binding.llOne.setVisibility(View.GONE);
                             binding.llTwo.setVisibility(View.VISIBLE);
                             binding.llThree.setVisibility(View.GONE);
                             binding.llFour.setVisibility(View.GONE);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImageTw01);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(1).getImage()).into(binding.productImageTwo2);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImageTw01);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(1).getProductImages()).into(binding.productImageTwo2);
 
-                        } else if (model.getResult().getShopImage().size() == 3) {
+                        } else if (model.getResult().getProductList().size() == 3) {
                             binding.llOne.setVisibility(View.GONE);
                             binding.llTwo.setVisibility(View.GONE);
                             binding.llThree.setVisibility(View.VISIBLE);
                             binding.llFour.setVisibility(View.GONE);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImageThree1);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(1).getImage()).into(binding.productImageThree2);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(2).getImage()).into(binding.productImageThree3);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImageThree1);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(1).getProductImages()).into(binding.productImageThree2);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(2).getProductImages()).into(binding.productImageThree3);
 
-                        } else if (model.getResult().getShopImage().size() <= 4) {
+                        } else if (model.getResult().getProductList().size() <= 4) {
                             binding.llOne.setVisibility(View.GONE);
                             binding.llTwo.setVisibility(View.GONE);
                             binding.llThree.setVisibility(View.GONE);
                             binding.llFour.setVisibility(View.VISIBLE);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImageFour1);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(1).getImage()).into(binding.productImageFour2);
-                            Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(2).getImage()).into(binding.productImageFour3);
-                            binding.tvImgCount.setText("+" + (model.getResult().getShopImage().size() - 3));
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImageFour1);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(1).getProductImages()).into(binding.productImageFour2);
+                            Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(2).getProductImages()).into(binding.productImageFour3);
+                            binding.tvImgCount.setText("+" + (model.getResult().getProductList().size() - 3));
 
                         }
-*/
+
                         if(model.getResult().getStatus().equals("Pending")){
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setText(getString(R.string.accept));
@@ -196,6 +210,9 @@ public class OrderDetailsAct extends AppCompatActivity {
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                            binding.btnDecline.setVisibility(View.GONE);
+                            binding.btnChat.setVisibility(View.GONE);
+
                             binding.btnAccept.setText(getString(R.string.track_order));
                             binding.rlDeliveryPerson.setVisibility(View.GONE);
                             binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
@@ -223,16 +240,16 @@ public class OrderDetailsAct extends AppCompatActivity {
                         taxN2 = Double.parseDouble(model.getResult().getTaxN2());
                         platFormsFees = Double.parseDouble(model.getResult().getPlatFormsFees());
                         deliveryFees = Double.parseDouble(model.getResult().getDeliveryCharges());
-                       // subTotal =  totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
-                       // totalPriceToToPay = Double.parseDouble(model.getResult().getTotalAmount());
+                        totalPriceToToPay = Double.parseDouble(model.getResult().getTotalAmount());
+                        subTotal =   totalPriceToToPay;//totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
 
-                        subTotal =  Double.parseDouble(model.getResult().getPrice());  // - deliveryFees;
+                     //   subTotal =  Double.parseDouble(model.getResult().getPrice());  // - deliveryFees;
 
-                        totalPriceToToPay = Double.parseDouble(model.getResult().getPrice())
-                                + Double.parseDouble(model.getResult().getPlatFormsFees())
-                                + Double.parseDouble(model.getResult().getDeliveryCharges())
-                                + Double.parseDouble(model.getResult().getTaxN1())
-                                + Double.parseDouble(model.getResult().getTaxN2());
+                     //   totalPriceToToPay = Double.parseDouble(model.getResult().getPrice())
+                     //           + Double.parseDouble(model.getResult().getPlatFormsFees())
+                     //           + Double.parseDouble(model.getResult().getDeliveryCharges())
+                     //           + Double.parseDouble(model.getResult().getTaxN1())
+                     //           + Double.parseDouble(model.getResult().getTaxN2());
 
 
 
@@ -243,7 +260,10 @@ public class OrderDetailsAct extends AppCompatActivity {
                         binding.tvTotalAmt.setText("Rs. " + String.format("%.2f", totalPriceToToPay));
                         binding.subTotal.setText("Rs. " + String.format("%.2f", subTotal));
 
-                        binding.rvDetails.setAdapter(new ItemsAdapter(OrderDetailsAct.this, (ArrayList<OrderDetailsModel.Result.Product>) model.getResult().getProductList()));
+
+                        arrayList.clear();
+                        arrayList.addAll(model.getResult().getProductList());
+                        itemsAdapter.notifyDataSetChanged();
 
 
                         if(jsonObject.getJSONObject("result").getJSONObject("delivery_person")==null)  { //    model.getResult().getDeliveryPerson()==null){
@@ -270,6 +290,12 @@ public class OrderDetailsAct extends AppCompatActivity {
 
 
                     }
+                    else {
+                        arrayList.clear();
+                        itemsAdapter.notifyDataSetChanged();
+
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -415,6 +441,47 @@ public class OrderDetailsAct extends AppCompatActivity {
            });
        }
 
+    private void deleteItemByUser(String orderId){
+        DataManager.getInstance().showProgressMessage(this, "Please wait...");
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("order_id", orderId);
+        map.put("user_id", model.getResult().getUserId());
+
+        Log.e(TAG, "Delete Item Request" + map);
+        Call<ResponseBody> loginCall = apiInterface.deleteItemByUserApi (headerMap,map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    Log.e("response===", response.body().string());
+                    if (jsonObject.getString("status").equals("1")) {
+                        Toast.makeText(OrderDetailsAct.this, "Item deleted...", Toast.LENGTH_SHORT).show();
+                        callOrderDetail();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
 
 
 
@@ -442,4 +509,32 @@ public class OrderDetailsAct extends AppCompatActivity {
     }
 
 
+    private void alertDeleteItem(String orderId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsAct.this);
+        builder.setMessage("Are you sure you want to delete this item?")
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        deleteItemByUser(orderId);
+                    }
+                }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+    }
+
+
+    @Override
+    public void onItem(int position, OrderDetailsModel.Result.Product product) {
+        alertDeleteItem(product.getOrderId());
+    }
 }
