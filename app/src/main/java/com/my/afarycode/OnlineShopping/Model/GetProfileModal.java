@@ -50,6 +50,10 @@ public class GetProfileModal {
         @SerializedName("user_name")
         @Expose
         public String userName;
+
+        @SerializedName("name")
+        @Expose
+        public String name;
         @SerializedName("mobile")
         @Expose
         public String mobile;
@@ -93,6 +97,26 @@ public class GetProfileModal {
         @Expose
         public String wallet;
 
+        @SerializedName("password_request_status")
+        @Expose
+        private String passwordRequestStatus;
+
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPasswordRequestStatus() {
+            return passwordRequestStatus;
+        }
+
+        public void setPasswordRequestStatus(String passwordRequestStatus) {
+            this.passwordRequestStatus = passwordRequestStatus;
+        }
 
         public String getWallet() {
             return wallet;

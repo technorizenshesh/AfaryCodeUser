@@ -105,7 +105,7 @@ public class VerificationScreen extends AppCompatActivity implements SMSReceiver
 
      private void sendVerificationCode() {
 
-        binding.description.setText("We have sent you an SMS on" + mobile + " with 6 digit verfication code");
+        binding.description.setText(getString(R.string.otp_text1)+ " " + mobile + " " + getString(R.string.otp_text2));
 
         new CountDownTimer(60000, 1000) {
             @Override

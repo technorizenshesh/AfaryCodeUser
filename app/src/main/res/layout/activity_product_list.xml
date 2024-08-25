@@ -44,7 +44,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_toRightOf="@+id/img_search"
-                    android:text="Nike Air Max"
+                    android:text=""
                     android:visibility="gone"
                     android:textColor="@color/purple_500"
                     android:textSize="@dimen/_12sdp">
@@ -68,7 +68,7 @@
                 android:padding="@dimen/_5sdp"
                 android:layout_toLeftOf="@+id/llicon"
                 android:focusable="true"
-                android:queryHint="Search Here"
+                android:queryHint="@string/search_here"
                 app:defaultQueryHint="Search Here" />
 
 
@@ -155,7 +155,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:text="145 Result"
+                        android:text=""
                         android:textColor="@color/purple_500"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold"/>
@@ -195,7 +195,7 @@
                             android:textStyle="bold"
                             android:drawablePadding="@dimen/_5sdp"
                             android:drawableTint="@color/teal_700"
-                            android:drawableRight="@drawable/ccp_down_arrow"/>
+                            android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"/>
 
 
                     </androidx.cardview.widget.CardView>
@@ -221,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="More"
+                        android:text="@string/more"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold"/>

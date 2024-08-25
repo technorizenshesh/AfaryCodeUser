@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityShopDetailsBinding;
 import com.my.afarycode.databinding.ActivityShoppingProductDetailBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -39,7 +41,7 @@ public class ShopDetailsAct extends AppCompatActivity {
     ActivityShopDetailsBinding binding;
 
     private AfaryCode apiInterface;
-    private String shopId="",sellerId="";
+    private String shopId="",sellerId="",currency="";
     SliderAdapterExample adapter;
     ArrayList<String>banner_array_list;
     ArrayList<ShopDetailModel.Result.Product>productArrayList;
@@ -80,7 +82,11 @@ public class ShopDetailsAct extends AppCompatActivity {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id",sellerId);
+      //  map.put("user_id",PreferenceConnector.readString(ShopDetailsAct.this,PreferenceConnector.User_id,""));
+
         map.put("shop_id", shopId);
+        map.put("register_id", PreferenceConnector.readString(ShopDetailsAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "Shop Details====" + map);
 
         Call<ResponseBody> loginCall = apiInterface.get_shop_detail(headerMap,map);
@@ -122,20 +128,33 @@ public class ShopDetailsAct extends AppCompatActivity {
                         binding.imageSlider.startAutoCycle();
 
 
+
+                        if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("Dollars")) currency = "USD";
+                        else if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("Euro")) currency = "EUR";
+                        else if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("Franc CFA")) currency = "XAF";
+                        else if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("INDIA RUPEE")) currency = "INR";
+                        else  currency = "";
+
                         if(shopDetailModel.getResult().getProduct().size()!=0){
                             productArrayList.clear();
                             productArrayList.addAll(shopDetailModel.getResult().getProduct());
-                            binding.rvProduct.setAdapter(new ShopProductAdapter(ShopDetailsAct.this, productArrayList));
+                            binding.rvProduct.setAdapter(new ShopProductAdapter(ShopDetailsAct.this, productArrayList,currency));
                         }
                         else {
                             productArrayList.clear();
-                            binding.rvProduct.setAdapter(new ShopProductAdapter(ShopDetailsAct.this, productArrayList));
+                            binding.rvProduct.setAdapter(new ShopProductAdapter(ShopDetailsAct.this, productArrayList,""));
 
                         }
 
                     } else if (jsonObject.getString("status").toString().equals("0")) {
                         //  binding.tvNotFount.setVisibility(View.VISIBLE);
                         Toast.makeText(ShopDetailsAct.this, jsonObject.getString("message").toString(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(ShopDetailsAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ShopDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
                     }
 
 

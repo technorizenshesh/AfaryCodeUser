@@ -55,7 +55,7 @@ public class AskBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void initBinding() {
-        String sourceString = "Do you have a "+"<b>" + "Seller" + "</b> " + " account?";
+        String sourceString = "Do you already have a "+"<b>" + "Seller" + "</b> " + " account with AfaryCode??";
         binding.tvText.setText(Html.fromHtml(sourceString));
 
         binding.btnYes.setOnClickListener(view -> {

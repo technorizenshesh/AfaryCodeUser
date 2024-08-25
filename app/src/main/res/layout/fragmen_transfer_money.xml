@@ -16,7 +16,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Transfer Money"
+                android:text="@string/transfer_money_"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_18sdp"
                 android:textStyle="bold">
@@ -29,7 +29,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
-                android:text="Please indicate the number that will receive your transfer and enter the amount."
+                android:text="@string/please_indicate_the_number_that_will_receive_your_transfer_and_enter_the_amount"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp" />
 
@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:text="Number"
+                android:text="@string/number"
                 android:textColor="@color/natural_gray"
                 android:textSize="@dimen/_14sdp" />
 
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:text="Amount"
+                android:text="@string/amount"
                 android:textColor="@color/natural_gray"
                 android:textSize="@dimen/_14sdp" />
 

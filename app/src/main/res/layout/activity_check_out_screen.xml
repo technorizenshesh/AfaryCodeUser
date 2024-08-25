@@ -87,7 +87,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="Sub Total"
+                            android:text="@string/sub_total"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:text="Platform Fees"
+                            android:text="@string/platform_fees"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -142,7 +142,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:text="Tax 1"
+                            android:text="@string/tax_1"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -173,7 +173,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="Tax 2"
+                            android:text="@string/tax_2"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -231,7 +231,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="Shipping Cost Amount"
+                            android:text="@string/shipping_cost_amount"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -272,7 +272,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Price to Pay"
+                    android:text="@string/total_price_to_pay"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"/>
 
@@ -301,7 +301,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="@dimen/_10sdp"
-                    android:text="  Pay  "
+                    android:text="@string/pay"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />

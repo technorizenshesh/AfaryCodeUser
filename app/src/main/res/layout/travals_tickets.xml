@@ -28,6 +28,7 @@
                     android:layout_gravity="center"
                     android:src="@drawable/back_icon" />
 
+
              </RelativeLayout>
 
              <LinearLayout

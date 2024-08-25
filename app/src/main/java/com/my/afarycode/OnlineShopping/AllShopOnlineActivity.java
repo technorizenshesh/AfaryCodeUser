@@ -28,6 +28,7 @@ import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityAllShopOnlineBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -121,6 +122,7 @@ public class AllShopOnlineActivity extends Fragment {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("restaurant_id", restorents_id);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -184,6 +186,13 @@ public class AllShopOnlineActivity extends Fragment {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -232,6 +241,8 @@ public class AllShopOnlineActivity extends Fragment {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "EXERSICE LIST" + map);
 
         Call<CartModal> loginCall = apiInterface.get_cart(headerMap,map);
@@ -269,6 +280,13 @@ public class AllShopOnlineActivity extends Fragment {
 
 
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

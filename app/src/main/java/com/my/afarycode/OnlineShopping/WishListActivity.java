@@ -30,6 +30,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityWishListBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -90,6 +91,7 @@ public class WishListActivity extends Fragment {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -123,6 +125,13 @@ public class WishListActivity extends Fragment {
                         adapter.notifyDataSetChanged();
 
                     }
+
+                    else if (jsonObject.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

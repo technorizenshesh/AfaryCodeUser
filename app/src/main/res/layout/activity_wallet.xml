@@ -72,7 +72,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_32sdp"
-                        android:text="$255"
+                        android:text=""
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         >

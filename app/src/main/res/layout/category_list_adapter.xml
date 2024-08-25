@@ -22,7 +22,6 @@
                 android:src="@drawable/shopping_online"/>
 
 
-
             <TextView
                 android:id="@+id/category_name"
                 android:layout_width="wrap_content"
@@ -30,7 +29,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_margin="@dimen/_5sdp"
-                android:text="Shopping\nOnline"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"/>
 

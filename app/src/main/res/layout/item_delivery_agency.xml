@@ -41,7 +41,7 @@
                     android:fontFamily="@font/poppins_regular"
                     android:gravity="start|center"
                     android:paddingStart="@dimen/_5sdp"
-                    android:text="@string/deliver_to_my_home"
+                    android:text=""
                     android:textAlignment="viewStart"
                     android:textColor="@color/black"
                     android:textDirection="locale"
@@ -73,7 +73,7 @@
                     android:layout_centerInParent="true"
                     android:layout_marginEnd="@dimen/_7sdp"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="234"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     />

@@ -19,12 +19,16 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.my.afarycode.OnlineShopping.chat.ChatListAct;
+import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyBookingFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyProfileFragment;
 import com.my.afarycode.OnlineShopping.fragment.WalletFragment;
 import com.my.afarycode.OnlineShopping.ratereview.RateReviewAct;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityHomeBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -46,10 +50,21 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getStringExtra("status") != null) {
+                Log.e("msg====",intent.getStringExtra("msg"));
                 try {
                     if ("Order Accepted".equals(intent.getStringExtra("status")) || "Order Rejected".equalsIgnoreCase(intent.getStringExtra("status"))) {
                         AlertOrderStatus(intent.getStringExtra("msg"));
                         Log.e("order msg====",intent.getStringExtra("msg"));
+                    }
+
+                    else if("You have been logged out because you have logged in on another device".equals(intent.getStringExtra("msg")))
+                    {
+                        Log.e("Logout msg====",intent.getStringExtra("msg"));
+                        PreferenceConnector.writeString(HomeActivity.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(HomeActivity.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+
                     }
 
                 } catch (Exception e) {
@@ -94,6 +109,14 @@ public class HomeActivity extends AppCompatActivity {
                      orderId = getIntent().getStringExtra("order_id");
                      createAndShowDialog(HomeActivity.this,msg);
                  }
+/*
+                 else if(status.equals("You have been logged out because you have logged in on another device")){
+                     PreferenceConnector.writeString(HomeActivity.this, PreferenceConnector.LoginStatus, "false");
+                     startActivity(new Intent(HomeActivity.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                     finish();
+
+                 }
+*/
            }
 
 
@@ -107,10 +130,12 @@ public class HomeActivity extends AppCompatActivity {
 
         });
 
-        binding.RRMyBooking.setOnClickListener(v -> {
+        binding.RRChat.setOnClickListener(v -> {
 
           //  fragment = new MyBookingFragment();
            // loadFragment(fragment);
+
+            startActivity(new Intent(HomeActivity.this, ChatListAct.class));
 
         });
 

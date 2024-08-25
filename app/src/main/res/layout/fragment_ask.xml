@@ -63,7 +63,6 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_weight=".4"
-
                 android:background="@drawable/rounded_black_bg">
 
                 <TextView

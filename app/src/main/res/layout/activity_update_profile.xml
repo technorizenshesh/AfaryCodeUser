@@ -87,7 +87,9 @@
                 </RelativeLayout>
 
 
+
                 <RelativeLayout
+                    android:id="@+id/rlName"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_45sdp"
                     android:layout_marginTop="@dimen/_20sdp"
@@ -99,7 +101,35 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:hint="Akash"
+                        android:hint="@string/name"
+                        android:imeOptions="actionNext"
+                        android:inputType="textEmailAddress"
+                        android:maxLength="30"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/natural_gray"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="normal" />
+
+                </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:id="@+id/rlUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:background="@color/white">
+
+
+                    <EditText
+                        android:id="@+id/et_userName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="@string/username"
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
                         android:maxLength="30"
@@ -124,7 +154,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:hint="user@gmail.com"
+                        android:hint=""
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
                         android:maxLength="30"
@@ -150,7 +180,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:hint="phone number"
+                        android:hint=""
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="30"

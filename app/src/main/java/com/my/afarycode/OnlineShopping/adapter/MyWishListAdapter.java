@@ -2,6 +2,7 @@ package com.my.afarycode.OnlineShopping.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,20 +25,25 @@ import com.my.afarycode.OnlineShopping.Model.DeleteCartModal;
 import com.my.afarycode.OnlineShopping.Model.GetRestorentsModal;
 import com.my.afarycode.OnlineShopping.Model.GetWishListModal;
 import com.my.afarycode.OnlineShopping.WishListActivity;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ItemWishListBinding;
 import com.my.afarycode.databinding.NearMyHomeBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,36 +93,43 @@ public class MyWishListAdapter extends
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(activity, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(activity, PreferenceConnector.Register_id, ""));
+
         map.put("wish_id", wis_id);
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
-        Call<Add_Wish_To_Cart_Modal> loginCall = apiInterface.wishlist_to_cart(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.wishlist_to_cart(headerMap,map);
 
-        loginCall.enqueue(new Callback<Add_Wish_To_Cart_Modal>() {
+        loginCall.enqueue(new Callback<ResponseBody>() {
 
             @Override
-            public void onResponse(Call<Add_Wish_To_Cart_Modal> call, Response<Add_Wish_To_Cart_Modal> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
-
-                    Add_Wish_To_Cart_Modal data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "Exersice_List" + dataResponse);
-
-                    if (data.status.equals("1")) {
-
+                    Log.e("response===", response.body().toString());
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    if (jsonObject.getString("status").toString().equals("1")) {
                         notifyDataSetChanged();
                         fragment1 = new WishListActivity();
                         loadFragment(fragment1);
-
                         Toast.makeText(activity, "Add  cart item ", Toast.LENGTH_SHORT).show();
 
-                    } else if (data.status.equals("0")) {
-                        Toast.makeText(activity, data.message, Toast.LENGTH_SHORT).show();
+                    } else if (jsonObject.getString("status").equals("0")) {
+                        Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (jsonObject.getString("message").equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+                        PreferenceConnector.writeString(activity, PreferenceConnector.LoginStatus, "false");
+                        activity.startActivity(new Intent(activity, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                       ((Activity) activity).finish();
+
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -124,7 +137,7 @@ public class MyWishListAdapter extends
             }
 
             @Override
-            public void onFailure(Call<Add_Wish_To_Cart_Modal> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
             }

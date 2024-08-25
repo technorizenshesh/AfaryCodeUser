@@ -13,8 +13,10 @@ import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.my.afarycode.OnlineShopping.Model.LoginModel;
+import com.my.afarycode.OnlineShopping.bottomsheet.WebViewBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityLoginBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -31,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements AskListener {
 
     ActivityLoginBinding binding;
     private AfaryCode apiInterface;
@@ -57,9 +59,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
         binding.txtTerms.setOnClickListener(v ->
-                startActivity(new Intent(LoginActivity.this, WebViewAct.class)
-                        .putExtra("url", Constant.TERMS_AND_CONDITIONS)
-                        .putExtra("title",getString(R.string.terms_and_conditions))));
+               // startActivity(new Intent(LoginActivity.this, WebViewAct.class)
+              //          .putExtra("url", Constant.TERMS_AND_CONDITIONS)
+                //        .putExtra("title",getString(R.string.terms_and_conditions))));
+                new WebViewBottomSheet(Constant.TERMS_AND_CONDITIONS,getString(R.string.terms_and_conditions)).callBack(this::ask).show(getSupportFragmentManager(),""));
 
 
     }
@@ -143,6 +146,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.FROM, "splash");
 
+                        PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Register_id, data.getResult().getRegisterId());
 
 
 
@@ -166,5 +170,10 @@ public class LoginActivity extends AppCompatActivity {
                 DataManager.getInstance().hideProgressMessage();
             }
         });
+    }
+
+    @Override
+    public void ask(String value, String status) {
+
     }
 }

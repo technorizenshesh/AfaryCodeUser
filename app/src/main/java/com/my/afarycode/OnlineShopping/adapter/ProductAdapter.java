@@ -67,9 +67,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.MyViewHo
             loadFragment(fragment);*/
         });
 
-        if(arrayList.get(position).getDeliveryCharges().equalsIgnoreCase("0")){
-            holder.binding.tvDelivery.setVisibility(View.VISIBLE);
-        } else holder.binding.tvDelivery.setVisibility(View.GONE);
+        if(arrayList.get(position).getDeliveryCharges().equalsIgnoreCase("1"))
+            holder.binding.ivDeliveryType.setVisibility(View.VISIBLE);
+ else holder.binding.ivDeliveryType.setVisibility(View.GONE);
 
 
     }

@@ -34,6 +34,20 @@
 
 
         <activity
+            android:name=".OnlineShopping.chat.ChatListAct"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
+            android:name=".OnlineShopping.deliveryaddress.DeliveryAddress"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:exported="false"/>
+
+
+        <activity
             android:name=".OnlineShopping.PaymentWebViewAct"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"

@@ -36,8 +36,7 @@ public class WebViewAct extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        binding = DataBindingUtil.setContentView(this, R.layout.activity_webview);
-        apiInterface = ApiClient.getClient(WebViewAct
-                .this).create(AfaryCode.class);
+        apiInterface = ApiClient.getClient(WebViewAct.this).create(AfaryCode.class);
 
         initViews();
     }

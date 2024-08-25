@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -19,7 +20,9 @@ import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.OnlineShopping.myorder.OrderAdapter;
 import com.my.afarycode.OnlineShopping.myorder.OrderListener;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
+import com.my.afarycode.OnlineShopping.ratereview.RateReviewAct;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityOrderHistoryScreenBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -86,6 +89,7 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(this, PreferenceConnector.User_id, ""));
         map.put("status", "Completed");
+        map.put("register_id", PreferenceConnector.readString(this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "EXERSICE LIST" + map);
         Call<ResponseBody> loginCall = apiInterface.getHistoryOnlineOrderApi(headerMap,map);
@@ -114,6 +118,15 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
                         arrayList.clear();
                         adapter.notifyDataSetChanged();
                     }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(OrderHistoryScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(OrderHistoryScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

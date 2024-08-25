@@ -47,6 +47,11 @@ public class SignupModel {
         @SerializedName("user_name")
         @Expose
         public String userName;
+        @SerializedName("name")
+        @Expose
+        public String name;
+
+
         @SerializedName("mobile")
         @Expose
         public String mobile;
@@ -91,6 +96,14 @@ public class SignupModel {
         @SerializedName("register_id")
         @Expose
         public String registerId;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
 
         public String getId() {
             return id;

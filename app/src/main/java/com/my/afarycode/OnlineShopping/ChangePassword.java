@@ -60,17 +60,21 @@ public class ChangePassword extends Fragment {
 
             if (binding.oldPassword.getText().toString().trim().isEmpty()) {
                 binding.oldPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "please enter old password ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Please enter old password ", Toast.LENGTH_SHORT).show();
             }
             else if (binding.newPassword.getText().toString().trim().isEmpty()) {
                 binding.newPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "please enter password ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Please enter password ", Toast.LENGTH_SHORT).show();
             } else if (binding.repeatPassword.getText().toString().trim().isEmpty()) {
                 binding.repeatPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "please enter password ", Toast.LENGTH_SHORT).show();
-            } else if (!binding.repeatPassword.getText().toString().equals(binding.newPassword.getText().toString().trim().isEmpty())) {
+                Toast.makeText(getContext(), "Please enter password ", Toast.LENGTH_SHORT).show();
+            }
+
+
+
+            else if (!binding.repeatPassword.getText().toString().equals(binding.newPassword.getText().toString())) {
                 binding.repeatPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "Password Shuold Be Same", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Password Should be Same", Toast.LENGTH_SHORT).show();
 
             } else {
                 ChangePasswordAPI();
@@ -81,12 +85,19 @@ public class ChangePassword extends Fragment {
     private void ChangePasswordAPI() {
 
         DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
-        Map<String, String> map = new HashMap<>();
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+        HashMap<String,String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-        map.put("password", binding.newPassword.getText().toString());
+        map.put("old_password",binding.oldPassword.getText().toString());
+        map.put("new_password",binding.newPassword.getText().toString());
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
-        Log.e("MapMap", "LOGIN REQUEST" + map);
-        Call<ResponseBody> loginCall = apiInterface.login(map);
+
+
+        Log.e("MapMap", "Change Password REQUEST" + map);
+        Call<ResponseBody> loginCall = apiInterface.changePasswordRepo(headerMap,map);
 
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -96,14 +107,12 @@ public class ChangePassword extends Fragment {
                 try {
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
-                    Log.e("MapMap", "LOGIN RESPONSE" + stringResponse);
+                    Log.e("MapMap", "Change Password RESPONSE" + stringResponse);
                     if (jsonObject.getString("status").equals("1")) {
-                        LoginModel data = new Gson().fromJson(stringResponse,LoginModel.class);
-                        String user_id = data.result.id;
                        // startActivity(new Intent(getContext(), LoginActivity.class)
                             ///    .putExtra("status", "login3"));
                         Toast.makeText(getContext(), getString(R.string.password_successfully_changes), Toast.LENGTH_SHORT).show();
-
+                     //   getActivity().onBackPressed();
 
                     } else if (jsonObject.getString("status").equals("0")) {
                         Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();

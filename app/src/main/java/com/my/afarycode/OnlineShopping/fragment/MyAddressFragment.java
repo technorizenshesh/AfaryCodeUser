@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.addAddressListener;
 import com.my.afarycode.OnlineShopping.listener.onPosListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.FragmentMyAddressBinding;
 import com.my.afarycode.databinding.FragmentMyBookingBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -88,6 +90,8 @@ public class MyAddressFragment extends Fragment implements addAddressListener, o
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "Get Location Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAddress(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -111,6 +115,13 @@ public class MyAddressFragment extends Fragment implements addAddressListener, o
                         adapter.notifyDataSetChanged();
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
 
                 }  catch (Exception e) {
@@ -198,6 +209,7 @@ public class MyAddressFragment extends Fragment implements addAddressListener, o
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
         map.put("id", id);
         Log.e(TAG, "Delete Location Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.deleteAddres(headerMap,map);
@@ -219,6 +231,13 @@ public class MyAddressFragment extends Fragment implements addAddressListener, o
 
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 }
                 catch (Exception e) {

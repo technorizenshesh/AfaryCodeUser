@@ -143,7 +143,7 @@
 
 
     <string name="one_app_that_takes_care_in_every_thing">One app that takes care in every thing</string>
-    <string name="do_you_have_a_customer_account">Do yu have a vendor account?</string>
+    <string name="do_you_have_a_customer_account">Do you already have a seller account with AfaryCode??</string>
     <string name="no">No</string>
     <string name="you_do_not_create">You don\'t need to create a new account. just use your seller credentials here.</string>
     <string name="order_details">Order details</string>
@@ -166,7 +166,7 @@
     <string name="domestic">Domestic</string>
     <string name="delivery">Delivery</string>
     <string name="all_country">All Country</string>
-    <string name="in_stock">In stock</string>
+    <string name="in_stock">IN STOCK</string>
     <string name="out_of_stock">Out of stock</string>
     <string name="products">Products</string>
 
@@ -181,7 +181,6 @@
     <string name="see_other_products_from_nthis_shop_by_clicking_here">See other products from\nthis shop by clicking here</string>
     <string name="track_order">Track Order</string>
 
-
     <string name="api_key_map">AIzaSyAXTJrvnDTC8AjYzK2dPatsSAMJaTIc-c0</string>
     <string name="google_direction_key">AIzaSyAAjp4wuz5FyteoKH3Yp7Cv8pS1K86fJw0</string>
     <string name="rate_the_product">Rate the Product</string>
@@ -191,6 +190,94 @@
     <string name="order_history">Order History</string>
     <string name="check_availability">Check Availability</string>
     <string name="product_probably_out_of_stock">Product probably out of stock</string>
+    <string name="username">Username</string>
+    <string name="send_request_to_admin">Send request to admin reset password</string>
+    <string name="go_to_cart">GO TO CART</string>
+    <string name="delivery_">Delivery</string>
+    <string name="payments_">Payments</string>
+    <string name="sub_total">Sub Total</string>
+    <string name="platform_fees">Platform Fees</string>
+    <string name="tax_1">Tax 1</string>
+    <string name="tax_2">Tax 2</string>
+    <string name="shipping_cost_amount">Shipping Cost Amount</string>
+    <string name="total_price_to_pay">Total Price to Pay</string>
+    <string name="pay">  Pay  </string>
+    <string name="send">Send</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="shopping_online">Shopping Online</string>
+    <string name="search_here_">"   Search here"</string>
+    <string name="categories">Categories</string>
+    <string name="house_cleaning">House Cleaning</string>
+    <string name="request_id_87w3320">Request ID: 87W3320</string>
+    <string name="description">Description</string>
+    <string name="service_provider_available">Service Provider Available</string>
+    <string name="my_travel_tickets">My travel tickets</string>
+    <string name="my_restaurant_orders">My restaurant orders</string>
+    <string name="my_parcel_deliveries">My parcel deliveries</string>
+    <string name="my_direct_payments_and_invoices">My direct payments and invoices</string>
+    <string name="all_my_order_history">All My order History</string>
+    <string name="order_status">Order Status</string>
+    <string name="order_id">Order Id</string>
+    <string name="search">search</string>
+    <string name="more">More</string>
+    <string name="delivery_person_name">Delivery Person Name</string>
+    <string name="sold_by">Sold by :</string>
+    <string name="paymentN">Payment :</string>
+    <string name="secure_transaction">secure transaction</string>
+    <string name="ship_by">Ship by :</string>
+    <string name="product_details">Product Details</string>
+    <string name="select_size">Select size</string>
+    <string name="select_color">Select color</string>
+    <string name="write_your_review">Write your review</string>
+    <string name="review">Review</string>
+    <string name="price">PRICE</string>
+    <string name="add_to_cart">ADD TO CART</string>
+    <string name="details">Details</string>
+    <string name="reviews">Reviews</string>
+    <string name="name">Name</string>
+    <string name="e_mail">E - mail</string>
+    <string name="phone">Phone</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="already_have_an_account">Already have an account ?</string>
+    <string name="enter_code">Enter code.</string>
+    <string name="otp_text1">"We have sent you an SMS on "</string>
+    <string name="otp_text2">with 6 digit verfication code.</string>
+    <string name="did_not_receive_the_code">Did not receive the code?</string>
+    <string name="write_a_review">Write a review</string>
+    <string name="please_give_your_review">Please give your review.</string>
+    <string name="tell_us_your_experience">Tell us your experience</string>
+    <string name="post_review">Post Review</string>
+    <string name="order_to_pick_up_by_yourself">Order to pick up by yourself</string>
+    <string name="for_order_to_be_picked_up_by_yourself_afarycode_s_responsibilty_ends_upon_connection_and_payment_in_advance_from_the_seller_afarycode_cannot_be_held_responsible_for_some_reason_you_cannot_collect_your_order">For order to be picked up by yourself, Afarycode’s responsibilty ends upon connection and payment in advance from the seller. AfaryCode cannot be held responsible for some reason you cannot collect your order.</string>
+    <string name="select_image_from">Select Image From</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="your_wallet_will_be_debited_for">Your wallet will be debited for</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="amount">Amount</string>
+    <string name="fess">Fees</string>
+    <string name="your_request_has_been_sent_to_your_correspondent">Your request has been sent to your correspondent.</string>
+    <string name="transfer_money_request">Transfer Money Request</string>
+    <string name="please_indicate_the_number_that_will_receive_your_transfer_and_enter_the_amount">Please indicate the number that will receive your transfer and enter the amount.</string>
+    <string name="number">Number</string>
+    <string name="reason">Reason</string>
+    <string name="enter_here">enter here</string>
+    <string name="re_order">Re-Order</string>
+    <string name="delivered">Delivered</string>
+    <string name="in_wish_list">In Wish List</string>
+    <string name="top_categorie">Top Categorie</string>
+    <string name="transfer_money_">Transfer Money</string>
+    <string name="send_money_to_someone_else_s_wallet">Send money to someone else\'s wallet</string>
+    <string name="request_money_from_someone_receive_in_my_wallet">Request money from someone(receive in my wallet)</string>
+    <string name="withdraw_money_">Withdraw Money</string>
+    <string name="reference_of_the_transaction_to_be_reimbursed">reference of the transaction to be reimbursed</string>
+    <string name="text_area_for_help">Text area for help</string>
+    <string name="insert_the_transaction_id_for_which_you_wish_to_be_reimbursed">Insert the transaction ID for which you wish to be reimbursed</string>
+    <string name="insert_id_here">Insert ID here</string>
+    <string name="choose_or_enter_amount">Choose or enter amount</string>
+    <string name="please_change_your_password">Please change your password</string>
+    <string name="delivery_address_setting">Delivery Address Settings</string>
 
 
 </resources>

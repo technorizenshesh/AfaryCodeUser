@@ -109,8 +109,8 @@ public class OrderTrackAct extends AppCompatActivity implements OnMapReadyCallba
 
         if(getIntent()!=null){
             model = (OrderDetailsModel.Result)getIntent().getSerializableExtra("orderDetails");
-            binding.tvOrderId.setText("Order Id : " + model.getDeliveryPerson().getOrderId());
-            binding.tvOrderStatus.setText("Order Status : " + model.getDeliveryPerson().getStatus());
+            binding.tvOrderId.setText(getString(R.string.order_id)+" : " + model.getDeliveryPerson().getOrderId());
+            binding.tvOrderStatus.setText(getString(R.string.order_status)+" : " + model.getDeliveryPerson().getStatus());
             pickLocation = new LatLng(Double.parseDouble(model.getProductList().get(0).getShopLat()),Double.parseDouble(model.getProductList().get(0).getShopLon()));
             droplocation = new LatLng(Double.parseDouble(model.getDeliverLat()),Double.parseDouble(model.getDeliverLon()));
 

@@ -41,7 +41,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/img_search"
                     android:textSize="@dimen/_12sdp"
-                    android:text="Nike Air Max"
+                    android:text=""
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/purple_500"
@@ -136,7 +136,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/purple_500"
                         android:textSize="@dimen/_14sdp"
-                        android:text="145 Result"
+                        android:text=""
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         >

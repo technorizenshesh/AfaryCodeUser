@@ -40,7 +40,7 @@
                 android:layout_centerInParent="true"
                 android:layout_toStartOf="@+id/llicon"
                 android:layout_toEndOf="@+id/RRback"
-                android:text="Being Human Shirt"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16sdp"
                 android:textStyle="bold" />
@@ -118,7 +118,7 @@
                         android:id="@+id/shop_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Being Human Shirt"
+                        android:text=""
                         android:textColor="@color/black"
                         android:layout_toStartOf="@+id/product_price"
                         android:textSize="@dimen/_18sdp"
@@ -134,7 +134,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:textSize="@dimen/_14sdp"
-                        android:text="Rs. 9,000"
+                        android:text=""
                         />
 
                 </RelativeLayout>
@@ -156,7 +156,7 @@
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Details"
+                    android:text="@string/details"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textSize="@dimen/_16sdp"
@@ -171,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/_12sdp"
-                    android:text="Nike Dri-FIT is a polyester fabric designed to help you keep dry so you can more comfortably work."
+                    android:text=""
                     />
 
 
@@ -217,7 +217,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Reviews"
+                        android:text="@string/reviews"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_16sdp"
                         />
@@ -227,7 +227,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Write your review"
+                        android:text="@string/write_your_review"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/_14sdp"
                         />
@@ -267,7 +267,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PRICE"
+                    android:text="@string/price"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     />
@@ -277,7 +277,7 @@
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rs. 9000"
+                    android:text=""
                     android:textColor="@color/purple_500"
                     android:textSize="@dimen/_12sdp"
                     />
@@ -299,7 +299,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="@dimen/_7sdp"
-                    android:text="ADD TO CART"
+                    android:text="@string/add_to_cart"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />

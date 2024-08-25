@@ -36,7 +36,6 @@
                         android:id="@+id/txtName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="OD - 424923192 - N"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_16sdp"
                         android:textStyle="bold" />
@@ -46,7 +45,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10sp"
-                        android:text="Rs. 4,500"
                         android:textColor="@color/purple_500"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold" />
@@ -64,14 +62,14 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
-                android:layout_toRightOf="@+id/img1">
+                >
 
                 <TextView
                     android:layout_width="@dimen/_80sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:background="@color/red"
                     android:gravity="center"
-                    android:text="Delivered"
+                    android:text="@string/delivered"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp" />
 

@@ -36,6 +36,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
@@ -111,6 +112,7 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         map.put("to_country_code", countryCode);
          map.put("to_mobile", mobile_no_et);
          map.put("datetime", DataManager.getCurrent());
+         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "TransferMoney REQUEST" + map);
 
@@ -132,6 +134,15 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
                         AlertNumberNotExit();
 
                     }
+
+                    else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -159,9 +170,9 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
 
         LinearLayout btnOk = mDialog.findViewById(R.id.btnOk);
 
-        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + "Amount : " + "</b>" + "$" +Amount + "</font>"  ));
-        tvFee.setText(Html.fromHtml("<font color='#000'>" + "<b>" + "Fees : " + "</b>" + "$" +fee + "</font>"  ));
-        tvTotalAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + "Total Amount : " + "</b>" + "$" + totalAmount + "</font>"  ));
+        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.amount)+" : " + "</b>" + "$" +Amount + "</font>"  ));
+        tvFee.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.fess)+" : " + "</b>" + "$" +fee + "</font>"  ));
+        tvTotalAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.total_amount)+" : " + "</b>" + "$" + totalAmount + "</font>"  ));
 
         btnOk.setOnClickListener(v -> {
             mDialog.dismiss();
@@ -194,6 +205,7 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         map.put("datetime", DataManager.getCurrent());
         map.put("total_amount", totalAmount);
         map.put("admin_fees", fee);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "TransferMoney First REQUEST" + map);
 
@@ -220,6 +232,13 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
                         dismiss();
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

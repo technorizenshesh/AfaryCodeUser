@@ -68,7 +68,6 @@
                         app:tint="@color/red" />
 
                 </LinearLayout>
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 </layout>

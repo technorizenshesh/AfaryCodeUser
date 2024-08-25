@@ -27,8 +27,6 @@
             android:layout_marginEnd="@dimen/_10sdp"/>
 
 
-
-
     </RelativeLayout>
 
 </layout>

@@ -30,6 +30,7 @@ import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.DeliveryTypeModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
 import com.my.afarycode.OnlineShopping.Model.SignupModel;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.adapter.DeliveryAgencyAdapter;
 import com.my.afarycode.OnlineShopping.adapter.DeliveryTypeAdapter;
@@ -43,6 +44,7 @@ import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.addAddressListener;
 import com.my.afarycode.OnlineShopping.listener.onPosListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityCheckOutDeliveryBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -357,6 +359,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         map.put("city_3", "");
         map.put("phone", "" + phone_no);
         map.put("type", "" + type);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "LOGIN REQUEST" + map);
 
@@ -380,6 +383,13 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -503,6 +513,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "Get Location Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAddress(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -526,6 +538,12 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         adapter.notifyDataSetChanged();
 
                     }
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                     geDeliveryType();
 
@@ -549,7 +567,11 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
-        Call<ResponseBody> loginCall = apiInterface.getDelivery(headerMap);
+
+
+
+        Call<ResponseBody> loginCall = apiInterface.getDelivery(headerMap,PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id,"")
+        ,PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id,""));
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -572,6 +594,13 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         deliveryTypeAdapter.notifyDataSetChanged();
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 }  catch (Exception e) {
                     e.printStackTrace();
@@ -779,6 +808,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         map.put("id", id);
         Log.e(TAG, "Delete Location Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.deleteAddres(headerMap,map);
@@ -799,6 +830,11 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
 
 
+                    }
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
                     }
 
                 }
@@ -825,6 +861,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("address_id", addressId);
         map.put("shop_id", productId);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Delivery Agency Request :" + map);
 
@@ -851,6 +888,13 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         deliveryAgencyType ="Afary Code";
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

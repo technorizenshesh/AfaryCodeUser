@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.my.afarycode.OnlineShopping.adapter.WalletAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityNotificationScreenBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -68,6 +70,8 @@ public class NotificationScreen extends AppCompatActivity {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", "8");
+        map.put("register_id", PreferenceConnector.readString(NotificationScreen.this, PreferenceConnector.Register_id, ""));
+
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -101,6 +105,14 @@ public class NotificationScreen extends AppCompatActivity {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(NotificationScreen.this, data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(NotificationScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(NotificationScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

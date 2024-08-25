@@ -93,7 +93,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="House Cleaning"
+                                android:text="@string/house_cleaning"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_14sdp"
                                 android:textStyle="bold">
@@ -105,7 +105,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:text="Request ID: 87W3320"
+                                android:text="@string/request_id_87w3320"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_14sdp"
                                 >
@@ -204,7 +204,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Description"
+                        android:text="@string/description"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold">
@@ -233,7 +233,7 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Service Provider Available"
+                android:text="@string/service_provider_available"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold">

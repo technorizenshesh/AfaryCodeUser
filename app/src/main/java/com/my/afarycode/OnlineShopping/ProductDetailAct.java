@@ -36,6 +36,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.MainClickListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityShoppingProductDetailBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -204,6 +205,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
         map.put("restaurant_id", restaurant_id);
         map.put("pro_id", product_id);
+        map.put("register_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -229,7 +231,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         productImgList.add(get_result1.get(0).getImage());
                         productImgList.add(get_result1.get(0).getImage1());
                         validateNameArrayList.addAll(get_result1.get(0).getValidateName());
-                        if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("0"))
+                        if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1"))
                             binding.ivDeliveryType.setVisibility(View.VISIBLE);
                         else binding.ivDeliveryType.setVisibility(View.GONE);
 
@@ -328,6 +330,14 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     }
 
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -359,8 +369,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
         btnContinue.setOnClickListener(v -> {
             mDialog.dismiss();
-            //  Add_To_Cart_API(product_id, restaurant_id, productPrice,"continue");
-            finish();
+              Add_To_Cart_API(product_id, restaurant_id, productPrice,"continue");
+           // finish();
 
         });
 
@@ -395,7 +405,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         map.put("quantity", "1");
         map.put("amount", productPrice);
         map.put("cat_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Cat_id, ""));
-       if (validateNameArrayList.size()>0) {
+        map.put("register_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Register_id, ""));
+
+        if (validateNameArrayList.size()>0) {
            map.put("options", getOption());
        }
        else map.put("options","[]");
@@ -417,10 +429,19 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         Toast.makeText(ProductDetailAct.this, "Add Cart SuccessFully ", Toast.LENGTH_SHORT).show();
                         if (chk.equalsIgnoreCase("checkOut"))
                             startActivity(new Intent(ProductDetailAct.this, CheckOutDeliveryAct.class).putExtra("sellerId", restaurant_id));
-                        else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
+                       else if(chk.equalsIgnoreCase("continue"))  finish();
+                       else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
                     } else if (object.getString("status").equals("0")) {
                         Toast.makeText(ProductDetailAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                     }
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -466,6 +487,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         headerMap.put("Accept", "application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "EXERSICE111 LIST" + map);
 
         Call<CartModal> loginCall = apiInterface.get_cart(headerMap, map);
@@ -498,6 +521,13 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -522,6 +552,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
         map.put("product_id", productId);
+        map.put("register_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "Add to WishList LIST" + map);
 
         Call<ResponseBody> loginCall = apiInterface.addToFavApi(headerMap, map);
@@ -545,6 +577,13 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                         Toast.makeText(ProductDetailAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -571,6 +610,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.User_id, ""));
         map.put("product_id", productId);
+        map.put("register_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "Check Product availability LIST" + map);
 
         Call<ResponseBody> loginCall = apiInterface.checkProductAvailabilityApi(headerMap, map);
@@ -594,6 +635,13 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                       //  Toast.makeText(ProductDetailAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                      finish();
+                    }
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

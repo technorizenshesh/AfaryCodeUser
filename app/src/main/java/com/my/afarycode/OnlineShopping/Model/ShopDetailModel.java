@@ -102,6 +102,19 @@ public class ShopDetailModel implements Serializable {
         @Expose
         private String city_name;
 
+
+        @SerializedName("currency")
+        @Expose
+        private String currency;
+
+        public String getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
+
         public String getCountry_name() {
             return country_name;
         }

@@ -12,7 +12,6 @@
             android:id="@+id/tvProductName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cosy Borg Jacket"
             android:textSize="@dimen/_12sdp"
             android:textColor="@color/main_blue_color"/>
 

@@ -62,7 +62,6 @@
                         android:id="@+id/product_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Maximus Gold"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold" />
@@ -85,7 +84,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-5dp"
-                    android:text="Rs. 00.00"
                     android:textColor="@color/purple_500"
                     android:textSize="@dimen/_14sdp" />
 
@@ -198,7 +196,7 @@
                             android:layout_alignParentRight="true"
                             android:background="@color/red"
                             android:gravity="center"
-                            android:text="In Wish List"
+                            android:text="@string/in_wish_list"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp" />
 

@@ -116,6 +116,7 @@ public class MyService extends Service {
         map.put("user_id",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.User_id,""));
         map.put("reference",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.transId,""));
         map.put("type",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.serviceType,""));
+        map.put("register_id", PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.Register_id, ""));
 
 
         Log.e(TAG,"Check Payment Status Request "+map);

@@ -19,10 +19,11 @@ import java.util.ArrayList;
 public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.MyViewHolder> {
     Context context;
     ArrayList<ShopDetailModel.Result.Product> arrayList;
-
-    public ShopProductAdapter(Context context,ArrayList<ShopDetailModel.Result.Product>arrayList) {
+    String currency="";
+    public ShopProductAdapter(Context context,ArrayList<ShopDetailModel.Result.Product>arrayList,String currency) {
         this.context = context;
         this.arrayList = arrayList;
+        this.currency = currency;
     }
 
     @NonNull
@@ -35,7 +36,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.tvProduct.setText(arrayList.get(position).getProductName());
-        holder.binding.tvProductPrice.setText(arrayList.get(position).getProductPrice());
+        holder.binding.tvProductPrice.setText(currency+arrayList.get(position).getProductPrice());
         Glide.with(context).load(arrayList.get(position).getImage1())
                 .override(250,250).into(holder.binding.ivImg);
 

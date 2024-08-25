@@ -45,6 +45,8 @@ public String TAG ="MyProfileFragment";
     FragmentMyprofileBinding binding;
     Fragment fragment;
 
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_myprofile, container, false);
@@ -130,6 +132,8 @@ public String TAG ="MyProfileFragment";
         AfaryCode apiInterface = ApiClient.getClient(context.getApplicationContext()).create(AfaryCode.class);
         Map<String, String> map = new HashMap<>();
         map.put("user_id",id);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e(TAG,"User Logout Request "+map);
         Call<ResponseBody> loginCall = apiInterface.logoutApi(map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -145,6 +149,9 @@ public String TAG ="MyProfileFragment";
                     }
                     else if(jsonObject.getString("status").equals("0")){
                         //App.showToast(context,"data not available", Toast.LENGTH_SHORT);
+                    }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        logttt();
                     }
 
 

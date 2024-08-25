@@ -42,12 +42,14 @@ import com.my.afarycode.OnlineShopping.adapter.HomeShoppingNearsetRestorents;
 import com.my.afarycode.OnlineShopping.adapter.ProductAdapter2;
 import com.my.afarycode.OnlineShopping.adapter.SubCategoryAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.deliveryaddress.DeliveryAddress;
 import com.my.afarycode.OnlineShopping.fragment.MyAddressFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.onItemClickListener;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.OnlineShopping.servercommunication.GPSTracker;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityHomeShoppingNavBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -120,7 +122,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
         GetCategoryAPi();
         initViews();
-        GetProfileAPI();
+       // GetProfileAPI();
         //GetDemo();
         GetCartItem();
 
@@ -144,8 +146,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         });
 
         binding.childNavDrawer.RRDelivryAddress.setOnClickListener(v -> {
-            fragment = new MyAddressFragment();
-            loadFragment(fragment);
+            startActivity(new Intent(getActivity(),DeliveryAddress.class));
         });
 
         binding.dashboard.imgSearch.setOnClickListener(v -> {
@@ -194,6 +195,14 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
             }
         });
+
+
+        binding.childNavDrawer.imgUser.setOnClickListener(v -> {
+            fragment = new UpdateProfile();
+            loadFragment(fragment);
+
+        });
+
 
 
         binding.childNavDrawer.RROrderHistory.setOnClickListener(v -> {
@@ -253,9 +262,9 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                 gpsTracker = new GPSTracker(getActivity());
                 lat = gpsTracker.getLatitude();
                 lon = gpsTracker.getLongitude();
-
                 Log.e("latitute", "" + lat);
                 Log.e("longitute", "" + lon);
+
 
             } else {
                 ActivityCompat.requestPermissions(getActivity(),
@@ -276,6 +285,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {
@@ -306,6 +317,13 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -332,6 +350,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         map.put("latitute", "" + lat);
         map.put("longitute", "" + lon);
         map.put("category_id", "" + cat_id);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<ResponseBody> loginCall = apiInterface.get_restaurant(headerMap,map);
@@ -361,6 +380,13 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (jsonObject.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -383,6 +409,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("cat_id", cat_id);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<GetShopingCategoryModal> loginCall = apiInterface.get_shopping_category(headerMap,map);
@@ -415,6 +442,14 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
+
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -460,6 +495,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "EXERSICE LIST" + map);
 
         Call<CartModal> loginCall = apiInterface.get_cart(headerMap,map);
@@ -491,6 +528,13 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -518,11 +562,12 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
-        // map.put("user_id",PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
 
 
-        map.put("country_id",countryId);
+         map.put("user_id",PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+         map.put("country_id",countryId);
         map.put("category_id",categoryId);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e(TAG,"getProduct Search Request = "+map.toString());
         Call<ResponseBody> call = apiInterface.getAllProductCatCountry(headerMap,map);
@@ -541,7 +586,16 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         adapterSearch.notifyDataSetChanged();
                         //  binding.tvNotFound.setVisibility(View.GONE);
 
-                    } else {
+                    }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
+
+                    else {
                         arrayList.clear();
                         adapterSearch.notifyDataSetChanged();
                         // binding.tvNotFound.setVisibility(View.VISIBLE);

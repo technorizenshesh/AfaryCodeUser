@@ -40,6 +40,7 @@ import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.addAddressListener;
 import com.my.afarycode.OnlineShopping.listener.onPosListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityCheckOutDeliveryBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -237,6 +238,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         map.put("city_3", "");
         map.put("phone", "" + phone_no);
         map.put("type", "" + type);
+        map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "LOGIN REQUEST" + map);
 
@@ -259,6 +261,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     } else if (data.status.equals("0")) {
                         Toast.makeText(CheckOutDeliveryAct.this, data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutDeliveryAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -286,6 +295,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "Get Location Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAddress(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -310,6 +321,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                     }
 
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutDeliveryAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
                     geDeliveryType();
 
                 }  catch (Exception e) {
@@ -332,8 +350,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
-        Call<ResponseBody> loginCall = apiInterface.getDelivery(headerMap);
-        loginCall.enqueue(new Callback<ResponseBody>() {
+        Call<ResponseBody> loginCall = apiInterface.getDelivery(headerMap,PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id,"")
+                ,PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id,""));        loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
@@ -376,6 +394,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         deliveryTypeAdapter.notifyDataSetChanged();
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutDeliveryAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 }  catch (Exception e) {
                     e.printStackTrace();
@@ -597,6 +622,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
+
         map.put("id", id);
         Log.e(TAG, "Delete Location Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.deleteAddres(headerMap,map);
@@ -618,6 +645,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutDeliveryAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 }
                 catch (Exception e) {
@@ -644,6 +678,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
         map.put("address_id", addressId);
         map.put("shop_id", productId);
+        map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Delivery Agency Request :" + map);
 
@@ -670,6 +705,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         deliveryAgencyType ="Afary Code";
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutDeliveryAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                       finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

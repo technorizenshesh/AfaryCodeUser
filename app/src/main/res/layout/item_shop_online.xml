@@ -77,7 +77,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="Reliance Fresh"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
@@ -110,7 +109,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:textSize="@dimen/_12sdp"
-                    android:text="Annapurna Road"
                     android:textColor="@color/natural_gray" />
 
             </RelativeLayout>

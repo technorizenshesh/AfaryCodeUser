@@ -140,6 +140,18 @@ public class ProductItemModel {
         @Expose
         private String image;
 
+        @SerializedName("country_id")
+        @Expose
+        private String countryId;
+
+        public String getCountryId() {
+            return countryId;
+        }
+
+        public void setCountryId(String countryId) {
+            this.countryId = countryId;
+        }
+
         public String getCatId() {
             return catId;
         }

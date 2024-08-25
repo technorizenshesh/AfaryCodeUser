@@ -209,7 +209,7 @@
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
-                        android:text="My travel tickets"
+                        android:text="@string/my_travel_tickets"
                         android:textColor="@color/natural_gray"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="normal" />
@@ -236,7 +236,7 @@
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
-                        android:text="My restaurant orders"
+                        android:text="@string/my_restaurant_orders"
                         android:textColor="@color/natural_gray"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="normal" />
@@ -263,7 +263,7 @@
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
-                        android:text="My parcel deliveries"
+                        android:text="@string/my_parcel_deliveries"
                         android:textColor="@color/natural_gray"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="normal" />
@@ -290,7 +290,7 @@
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
-                        android:text="My direct payments and invoices"
+                        android:text="@string/my_direct_payments_and_invoices"
                         android:textColor="@color/natural_gray"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="normal" />
@@ -317,7 +317,7 @@
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
-                        android:text="My parcel deliveries"
+                        android:text="@string/my_parcel_deliveries"
                         android:textColor="@color/natural_gray"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="normal" />
@@ -345,7 +345,7 @@
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
-                        android:text="All My order History"
+                        android:text="@string/all_my_order_history"
                         android:textColor="@color/natural_gray"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="normal" />
@@ -373,7 +373,7 @@
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
-                        android:text="Wishlist"
+                        android:text="@string/wishlist"
                         android:textColor="@color/natural_gray"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="normal" />

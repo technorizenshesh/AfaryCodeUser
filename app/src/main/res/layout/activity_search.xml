@@ -29,8 +29,8 @@
             android:iconifiedByDefault="false"
             android:layoutDirection="rtl"
             android:padding="@dimen/_5sdp"
-            android:queryHint="Search Here"
-            app:defaultQueryHint="Search Here" />
+            android:queryHint="@string/search_here"
+            app:defaultQueryHint="@string/search_here" />
 
 
 

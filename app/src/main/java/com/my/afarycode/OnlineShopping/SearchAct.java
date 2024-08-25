@@ -20,6 +20,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.onItemClickListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivitySearchBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -96,8 +97,12 @@ public class SearchAct extends AppCompatActivity implements onItemClickListener 
         headerMap.put("Accept","application/json");
 
         HashMap<String,String> param = new HashMap<>();
-            param.put("title",queryString);
-            Call<ResponseBody> call = apiInterface.searchProduct(headerMap,param);
+        param.put("title",queryString);
+        param.put("user_id", PreferenceConnector.readString(SearchAct.this, PreferenceConnector.User_id, ""));
+
+        param.put("register_id", PreferenceConnector.readString(SearchAct.this, PreferenceConnector.Register_id, ""));
+
+        Call<ResponseBody> call = apiInterface.searchProduct(headerMap,param);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -114,7 +119,18 @@ public class SearchAct extends AppCompatActivity implements onItemClickListener 
                             adapter.notifyDataSetChanged();
                             binding.tvNotFound.setVisibility(View.GONE);
 
-                        } else {
+                        }
+
+                        else if (jsonObject.getString("status").equals("5")) {
+                            PreferenceConnector.writeString(SearchAct.this, PreferenceConnector.LoginStatus, "false");
+                            startActivity(new Intent(SearchAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
+
+                        }
+
+
+
+                        else {
                             arrayList.clear();
                             adapter.notifyDataSetChanged();
                             binding.tvNotFound.setVisibility(View.VISIBLE);
@@ -140,9 +156,14 @@ public class SearchAct extends AppCompatActivity implements onItemClickListener 
 
     @Override
     public void onItem(int position) {
-        startActivity(new Intent(context, ProductListAct.class)
+
+        if(arrayList.get(position).getCountryId().equalsIgnoreCase(PreferenceConnector.readString(SearchAct.this, PreferenceConnector.countryId,"")))
+            PreferenceConnector.writeString(SearchAct.this,PreferenceConnector.filterType,"Domestic");
+      else PreferenceConnector.writeString(SearchAct.this,PreferenceConnector.filterType,"International");
+
+      startActivity(new Intent(context, ProductListAct.class)
                 .putExtra("title",arrayList.get(position).getProductName())
-                .putExtra("byCatId",arrayList.get(position).getSubCat())
+                .putExtra("countryId",arrayList.get(position).getCountryId())
                 .putExtra("by_screen","Search"));
     }
 }

@@ -21,6 +21,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityCheckOutPaymentBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -135,6 +136,8 @@ public class CheckOutPayment extends AppCompatActivity {
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, "Please wait...");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
+
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {
@@ -155,6 +158,13 @@ public class CheckOutPayment extends AppCompatActivity {
 
                     } else if (data.status.equals("0")) {
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -226,7 +236,7 @@ public class CheckOutPayment extends AppCompatActivity {
         else if(operateur.equals(""))map.put("num_marchand", "");
         map.put("type", "USER");
         map.put("user_number",number);
-        map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Firebash_Token, ""));
+        map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
         map.put("address_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.ADDRESS_ID, ""));
 
         map.put("payment_type",paymentType);
@@ -264,6 +274,13 @@ public class CheckOutPayment extends AppCompatActivity {
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
                         Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();                    }
+
+
+                    else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
 
 
                 } catch (Exception e) {

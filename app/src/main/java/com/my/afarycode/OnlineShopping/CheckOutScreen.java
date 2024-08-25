@@ -28,6 +28,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityCheckOutScreenBinding;
 import com.my.afarycode.listener.OnPositionListener;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -128,6 +129,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(this, PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "FINAL CART  LIST" + map);
 
@@ -159,7 +161,9 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         int lastValue = 0;
 
                         for (int i = 0; i < get_result.size(); i++) {
-                            get_cart_id = get_result.get(0).getCartId();
+                          //  get_cart_id = get_result.get(0).getCartId();
+                            get_cart_id = get_result.get(0).getId();
+
                             get_cart_id_list.add(get_cart_id);
                             mainTotalPay = Double.parseDouble(get_result.get(i).getProductPrice()) * Integer.parseInt(get_result.get(i).getQuantity());
 
@@ -189,6 +193,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         Toast.makeText(CheckOutScreen.this, "No Data Found !!!!", Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(CheckOutScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -213,6 +224,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
         map.put("product_id", cartId);
+        map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "Add to WishList LIST" + map);
 
         Call<ResponseBody> loginCall = apiInterface.addToFavApi(headerMap,map);
@@ -236,6 +249,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         Toast.makeText(CheckOutScreen.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -258,6 +278,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
+
         map.put("cart_id", cartId);
         map.put("id", id);
 
@@ -290,6 +312,14 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         GetCartItem();
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(CheckOutScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -313,7 +343,9 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
-      //  map.put("cart_id", cart_id);
+        map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
+
+        //  map.put("cart_id", cart_id);
         map.put("pro_id", proId);
         map.put("id", cart_id);
         map.put("quantity", count+"");
@@ -352,6 +384,14 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                     } else if (data.status.equals("0")) {
                         Toast.makeText(CheckOutScreen.this, data.message, Toast.LENGTH_SHORT).show();
                     }
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(CheckOutScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -393,6 +433,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("pickuplon", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.LON, ""));
         map.put("yes_no", ShopComp);
         map.put("country_id",PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.COUNTRY_ID,""));
+        map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Get All Taxs Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTax(headerMap,map);
@@ -451,6 +492,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                       finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -517,6 +565,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("delivery_partner",deliveryAgencyId);
         map.put("self_collect",deliveryYesNo);
         map.put("type",deliveryMethod);
+        map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "Get AllTax Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -585,6 +635,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
                     }
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -613,6 +670,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.User_id, ""));
         map.put("sub_orderdata",sendData);
+        map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "Send AllTax Server Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.sendTaxTServerApi(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -634,6 +693,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutScreen.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

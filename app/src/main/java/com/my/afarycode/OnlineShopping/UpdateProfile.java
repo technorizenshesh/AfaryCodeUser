@@ -40,6 +40,7 @@ import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityUpdateProfileBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -89,9 +90,7 @@ public class UpdateProfile extends Fragment {
         });
 
         binding.RRUpdateProfile.setOnClickListener(v -> {
-
             UpdateProfileApi();
-
         });
 
 
@@ -123,7 +122,12 @@ public class UpdateProfile extends Fragment {
         if (binding.etName.getText().toString().trim().isEmpty()) {
             binding.etName.setError("Field cannot be empty");
             Toast.makeText(getContext(), "please enter name", Toast.LENGTH_SHORT).show();
-        } else if (binding.email.getText().toString().trim().isEmpty()) {
+        }
+       else if (binding.etUserName.getText().toString().trim().isEmpty()) {
+            binding.etUserName.setError("Field cannot be empty");
+            Toast.makeText(getContext(), "please enter username", Toast.LENGTH_SHORT).show();
+        }
+        else if (binding.email.getText().toString().trim().isEmpty()) {
             binding.email.setError("Field cannot be empty");
             Toast.makeText(getContext(), "please enter address ", Toast.LENGTH_SHORT).show();
         } else if (binding.phoneNumber.getText().toString().trim().isEmpty()) {
@@ -164,13 +168,15 @@ public class UpdateProfile extends Fragment {
         }
 
         RequestBody user_id = RequestBody.create(MediaType.parse("text/plain"), PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-        RequestBody user_name = RequestBody.create(MediaType.parse("text/plain"), binding.etName.getText().toString());
+        RequestBody name = RequestBody.create(MediaType.parse("text/plain"), binding.etName.getText().toString());
+        RequestBody user_name = RequestBody.create(MediaType.parse("text/plain"), binding.etUserName.getText().toString());
         RequestBody email = RequestBody.create(MediaType.parse("text/plain"), binding.email.getText().toString());
         RequestBody mobile = RequestBody.create(MediaType.parse("text/plain"), binding.phoneNumber.getText().toString());
         RequestBody etAddresslogin = RequestBody.create(MediaType.parse("text/plain"), binding.address.getText().toString());
+        RequestBody regisId = RequestBody.create(MediaType.parse("text/plain"), PreferenceConnector.readString(getContext(), PreferenceConnector.Register_id, ""));
 
 
-        Call<UpdateProfileModal> signupCall = apiInterface.update_profile(headerMap,user_id, user_name, email, mobile, etAddresslogin, filePart);
+        Call<UpdateProfileModal> signupCall = apiInterface.update_profile(headerMap,user_id,name, user_name, email, mobile, etAddresslogin,regisId, filePart);
 
         signupCall.enqueue(new Callback<UpdateProfileModal>() {
             @Override
@@ -187,6 +193,14 @@ public class UpdateProfile extends Fragment {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -216,6 +230,7 @@ public class UpdateProfile extends Fragment {
         DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {
@@ -234,7 +249,24 @@ public class UpdateProfile extends Fragment {
 
                     if (data.status.equals("1")) {
 
-                        binding.etName.setText(data.getResult().userName);
+                    if (!data.getResult().getName().equalsIgnoreCase(""))   {
+                        binding.rlName.setVisibility(View.VISIBLE);
+                        binding.etName.setText(data.getResult().getName());
+                    }
+                    else {
+                        binding.rlName.setVisibility(View.VISIBLE);
+                    }
+
+                        if (!data.getResult().getUserName().equalsIgnoreCase(""))   {
+                            binding.rlUserName.setVisibility(View.VISIBLE);
+                            binding.etUserName.setText(data.getResult().getUserName());
+                        }
+                        else {
+                            binding.rlUserName.setVisibility(View.VISIBLE);
+                        }
+
+
+
                         binding.email.setText(data.getResult().email);
                         binding.phoneNumber.setText(data.getResult().mobile);
                         binding.address.setText(data.getResult().getCountry());
@@ -253,6 +285,13 @@ public class UpdateProfile extends Fragment {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

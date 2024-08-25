@@ -24,6 +24,7 @@ import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityOrderDetailsBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -124,6 +125,10 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
         Map<String, String> map = new HashMap<>();
         map.put("order_id", orderId);
+        map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
+        map.put("user_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.User_id, ""));
+
+
         Log.e(TAG, "My OrderDetails Request" + map);
         Call<ResponseBody> loginCall = apiInterface.getDetailOnlineOrderApi(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -290,6 +295,17 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
 
                     }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                     else {
                         arrayList.clear();
                         itemsAdapter.notifyDataSetChanged();
@@ -313,6 +329,8 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
     private void GetProfileAPI() {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
+
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {
@@ -340,6 +358,13 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     } else if (data.status.equals("0")) {
                        // Toast.makeText(OrderDetailsAct.this, data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -410,6 +435,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
        map.put("user_id", model.getResult().getUserId());
        map.put("seller_id", model.getResult().getSellerId());
        map.put("status", "Cancelled_by_user");
+       map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
 
        Log.e(TAG, "Order Cancel Request" + map);
            Call<ResponseBody> loginCall = apiInterface.cancelOrderByUserApi(headerMap,map);
@@ -428,6 +454,14 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                            Toast.makeText(OrderDetailsAct.this, "Order Cancelled...", Toast.LENGTH_SHORT).show();
                            finish();
                        }
+
+                       else if (jsonObject.getString("status").equals("5")) {
+                           PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
+                           startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                          finish();
+                       }
+
+
                    } catch (Exception e) {
                        e.printStackTrace();
                    }
@@ -450,6 +484,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         Map<String, String> map = new HashMap<>();
         map.put("order_id", orderId);
         map.put("user_id", model.getResult().getUserId());
+        map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Delete Item Request" + map);
         Call<ResponseBody> loginCall = apiInterface.deleteItemByUserApi (headerMap,map);
@@ -468,6 +503,13 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         Toast.makeText(OrderDetailsAct.this, "Item deleted...", Toast.LENGTH_SHORT).show();
                         callOrderDetail();
                     }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

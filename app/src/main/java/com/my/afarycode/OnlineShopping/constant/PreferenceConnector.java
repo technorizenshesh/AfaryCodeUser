@@ -10,6 +10,9 @@ public class PreferenceConnector {
     public static final int MODE = Context.MODE_PRIVATE;
     public static final String LoginStatus = "statuss";
     public static final String User_id = "user_idd";
+
+    public static final String Register_id = "register_id";
+
     public static final String Cat_id = "cat_id";
 
     public static final String User_Mobile = "User_Mobile";
@@ -25,6 +28,8 @@ public class PreferenceConnector {
     public static final String COUNTRY_ID ="country_id";
 
     public static final String ADDRESS_ID ="address_id";
+
+    public static final String filterType ="filterType";
 
 
 

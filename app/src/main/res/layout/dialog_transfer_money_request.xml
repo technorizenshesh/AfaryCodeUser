@@ -42,7 +42,7 @@
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
                     android:textColor="@color/black"
-                    android:text="Your request has been sent to your correspondent."
+                    android:text="@string/your_request_has_been_sent_to_your_correspondent"
                     android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/poppins_bold"/>
 

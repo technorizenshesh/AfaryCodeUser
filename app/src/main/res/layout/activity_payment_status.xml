@@ -26,5 +26,6 @@
             android:src="@drawable/coin"
             android:visibility="visible" />
 
+
     </RelativeLayout>
 </layout>

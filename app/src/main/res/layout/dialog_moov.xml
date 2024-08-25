@@ -93,7 +93,6 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="bold"
-
                 android:visibility="visible" />
 
             <View
@@ -108,7 +107,6 @@
                 android:layout_below="@+id/recycler"
                 android:layout_gravity="center"
                 android:layout_weight=".45"
-
                 android:background="@drawable/border_btn"
                 android:gravity="center"
                 android:padding="@dimen/_10sdp"

@@ -104,17 +104,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Delivery"
+                        android:text="@string/delivery_"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp"></TextView>
+                        android:textSize="@dimen/_12sdp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:text="Payments"
+                        android:text="@string/payments_"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp"></TextView>
+                        android:textSize="@dimen/_12sdp"/>
 
                 </RelativeLayout>
 

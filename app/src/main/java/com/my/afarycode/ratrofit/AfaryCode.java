@@ -38,6 +38,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -45,6 +46,7 @@ import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface AfaryCode {
     @FormUrlEncoded
@@ -171,8 +173,8 @@ public interface AfaryCode {
     Call<DeleteCartModal> delete_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("get_transfer_money")
-    Call<Add_Wish_To_Cart_Modal> wishlist_to_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @POST("wishlist_to_cart")
+    Call<ResponseBody> wishlist_to_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
@@ -183,10 +185,6 @@ public interface AfaryCode {
     @FormUrlEncoded
     @POST("available_balance")
     Call<AddAvailable> get_available( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-    @FormUrlEncoded
-    @POST("add_to_wishlist")
-    Call<Add_to_Wish> wish_list( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("add_to_cart")
@@ -206,10 +204,13 @@ public interface AfaryCode {
     Call<UpdateProfileModal> update_profile(
             @HeaderMap Map<String, String> auth,
             @Part("user_id") RequestBody user_id,
+            @Part("name") RequestBody name,
             @Part("user_name") RequestBody user_name,
             @Part("email") RequestBody email,
             @Part("mobile") RequestBody title,
             @Part("address") RequestBody address,
+            @Part("register_id") RequestBody register_id,
+
             @Part MultipartBody.Part file);
 
 
@@ -239,10 +240,13 @@ public interface AfaryCode {
   @POST("get_product_by_category_location")
   Call<ResponseBody> getAllProductCatCountry( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
-    @GET("get_home_title")
-    Call<ResponseBody> getHomeTitle( @HeaderMap Map<String, String> auth);
 
-    @GET("get_country")
+  //////////////
+  @FormUrlEncoded
+  @POST("get_home_title")
+    Call<ResponseBody> getHomeTitle( @HeaderMap Map<String, String> auth,@FieldMap Map<String,String> param);
+
+    @POST("get_country")
     Call<ResponseBody> getAllCountry( @HeaderMap Map<String, String> auth);
 
 
@@ -299,10 +303,10 @@ public interface AfaryCode {
 
 
   @GET("get_address_category")
-  Call<ResponseBody> getDelivery( @HeaderMap Map<String, String> auth);
+  Call<ResponseBody> getDelivery(@HeaderMap Map<String, String> auth, @Query("register_id") String registerId,@Query("user_id") String user_id);
 
   @FormUrlEncoded
-  @POST("get_product")
+  @POST("get_seller_shop_detail") // get_product
   Call<ResponseBody> get_shop_detail( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
@@ -376,4 +380,19 @@ public interface AfaryCode {
   @FormUrlEncoded
   @POST("delete_user_order")
   Call<ResponseBody>deleteItemByUserApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
+
+
+  @FormUrlEncoded
+  @POST("get_sellers")
+  Call<ResponseBody> getSellerChatListApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("password_reset")
+  Call<ResponseBody> sendAdminRequest(@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("change_password_user")
+  Call<ResponseBody> changePasswordRepo(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 }

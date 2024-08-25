@@ -2,6 +2,7 @@ package com.my.afarycode.OnlineShopping;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.my.afarycode.OnlineShopping.adapter.SearchProductAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityProductListBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -67,6 +69,9 @@ public class ProductListAct extends AppCompatActivity {
           // byCatId = getIntent().getStringExtra("byCatId");
            title =  getIntent().getStringExtra("title");
            countryId = getIntent().getStringExtra("countryId");
+           queryString = title;
+           if(!PreferenceConnector.readString(ProductListAct.this, PreferenceConnector.filterType,"").equalsIgnoreCase(""))
+            binding.tvFilter.setText(PreferenceConnector.readString(ProductListAct.this, PreferenceConnector.filterType,""));
 
            //binding.tvTitle.setText(title);
        }
@@ -229,6 +234,7 @@ public class ProductListAct extends AppCompatActivity {
         param.put("user_id",PreferenceConnector.readString(ProductListAct.this, PreferenceConnector.User_id, ""));
         param.put("product_type",filterType);
         param.put("country_id",countryId);
+        param.put("register_id", PreferenceConnector.readString(ProductListAct.this, PreferenceConnector.Register_id, ""));
 
 
 
@@ -249,7 +255,17 @@ public class ProductListAct extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                         binding.tvNotFound.setVisibility(View.GONE);
                         binding.tvResult.setText(arrayList.size()+ " Results");
-                    } else {
+                    }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(ProductListAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ProductListAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
+                    else {
                         arrayList.clear();
                         adapter.notifyDataSetChanged();
                         binding.tvNotFound.setVisibility(View.VISIBLE);

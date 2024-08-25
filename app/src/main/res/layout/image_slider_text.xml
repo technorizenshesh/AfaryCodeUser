@@ -17,9 +17,8 @@
         android:textColor="@color/black"
         android:fontFamily="@font/poppins_regular"
         android:textSize="@dimen/_18sdp"
-        android:textStyle="bold">
+        android:textStyle="bold"/>
 
-    </TextView>
 
     <TextView
         android:id="@+id/tvDescription"

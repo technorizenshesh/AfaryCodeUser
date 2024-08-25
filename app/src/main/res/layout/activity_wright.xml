@@ -47,7 +47,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_16sdp"
-                    android:text="Write a review"
+                    android:text="@string/write_a_review"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     >
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_20sdp"
-                    android:text="Please give your review."
+                    android:text="@string/please_give_your_review"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_20sdp"
                     android:textStyle="bold" />
@@ -157,7 +157,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:hint="Tell us your exprience"
+                        android:hint="@string/tell_us_your_experience"
                         android:imeOptions="actionNext"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
@@ -182,7 +182,7 @@
                     android:layout_marginLeft="@dimen/_20sdp"
                     android:layout_marginRight="@dimen/_20sdp"
                     android:layout_marginTop="@dimen/_40sdp"
-                    android:text="Post Review" />
+                    android:text="@string/post_review" />
 
 
                 <TextView

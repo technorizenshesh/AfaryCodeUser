@@ -36,6 +36,7 @@ import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.addAddressListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.FragmentAddAddressBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -314,6 +315,8 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         map.put("country", countryId);
         map.put("zip", binding.etPostCode.getText().toString());
         map.put("city", binding.etTown.getText().toString());
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "Update Location Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.updateAddress(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -332,6 +335,13 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                     } else if (object.optString("status").equals("0")) {
                         Toast.makeText(getActivity(),object.optString("message"), Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
 
                 } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +19,9 @@ import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.myorder.OrderAdapter;
 import com.my.afarycode.OnlineShopping.myorder.OrderListener;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
+import com.my.afarycode.OnlineShopping.ratereview.RateReviewAct;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.FragmentCancelOrderBinding;
 import com.my.afarycode.databinding.FragmentCompleteOrderBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -81,6 +84,7 @@ public class OrderCancelFragment extends Fragment implements OrderListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("status", "Cancelled");
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "EXERSICE LIST" + map);
         Call<ResponseBody> loginCall = apiInterface.getHistoryOnlineOrderApi(headerMap,map);
@@ -109,6 +113,14 @@ public class OrderCancelFragment extends Fragment implements OrderListener {
                         arrayList.clear();
                         adapter.notifyDataSetChanged();
                     }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

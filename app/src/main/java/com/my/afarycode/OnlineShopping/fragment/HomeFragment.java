@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.fragment;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -23,48 +24,39 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.my.afarycode.OnlineShopping.AllShopOnlineActivity;
-import com.my.afarycode.OnlineShopping.HomeActivity;
+import com.my.afarycode.OnlineShopping.ChangePassword;
 import com.my.afarycode.OnlineShopping.HomeShoppingOnlineScreen;
-import com.my.afarycode.OnlineShopping.LoginActivity;
 import com.my.afarycode.OnlineShopping.Model.BannerModal1;
 import com.my.afarycode.OnlineShopping.Model.CartModal;
 import com.my.afarycode.OnlineShopping.Model.CategoryModal;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
-import com.my.afarycode.OnlineShopping.Model.HomeOfferModel;
 import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
 import com.my.afarycode.OnlineShopping.Model.ProductItemModel;
-import com.my.afarycode.OnlineShopping.Model.SliderItem;
 import com.my.afarycode.OnlineShopping.NotificationScreen;
 import com.my.afarycode.OnlineShopping.ProductListAct;
-import com.my.afarycode.OnlineShopping.SearchScreen;
+import com.my.afarycode.OnlineShopping.SearchAct;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
-import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
-import com.my.afarycode.OnlineShopping.adapter.AdapterSearch;
 import com.my.afarycode.OnlineShopping.adapter.BannerAdapter1;
 import com.my.afarycode.OnlineShopping.adapter.CategoryAdapter;
 import com.my.afarycode.OnlineShopping.adapter.HomeBannerAdapter;
 import com.my.afarycode.OnlineShopping.adapter.HomeTopOfferAdapter;
-import com.my.afarycode.OnlineShopping.adapter.ProductAdapter;
 import com.my.afarycode.OnlineShopping.adapter.ProductAdapter2;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.bottomsheet.CountryBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.SearchListener;
-import com.my.afarycode.OnlineShopping.listener.onItemClickListener;
 import com.my.afarycode.OnlineShopping.servercommunication.GPSTracker;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -74,7 +66,6 @@ import com.my.afarycode.ratrofit.ApiClient;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,9 +84,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -169,8 +158,12 @@ public class HomeFragment extends Fragment implements SearchListener {
 
 
         binding.searchEtHome.setOnClickListener(v -> {
-            if(!countryId.equalsIgnoreCase(""))startActivity(new Intent(getActivity(), ProductListAct.class)
-                    .putExtra("countryId",countryId));
+            if(!countryId.equalsIgnoreCase("")){
+                PreferenceConnector.writeString(getActivity(),PreferenceConnector.filterType,"");
+                startActivity(new Intent(getActivity(), ProductListAct.class)
+                        .putExtra("title","")
+                        .putExtra("countryId",countryId));
+            }
             else Toast.makeText(getActivity(), getString(R.string.please_add_country), Toast.LENGTH_SHORT).show();
 
 
@@ -195,6 +188,7 @@ public class HomeFragment extends Fragment implements SearchListener {
     private void GetProfile() {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {
@@ -291,9 +285,19 @@ public class HomeFragment extends Fragment implements SearchListener {
                         }
 
                         getTitle();
+                        if(data.getResult().getPasswordRequestStatus().equalsIgnoreCase("CHANGE_BY_ADMIN")) openResetPasswordAlert();
+
+
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -309,11 +313,39 @@ public class HomeFragment extends Fragment implements SearchListener {
 
     }
 
+    private void openResetPasswordAlert() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(getString(R.string.please_change_your_password))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            fragment = new ChangePassword();
+                            loadFragment(fragment);
+                        }
+                    }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+    }
+
     private void getTitle() {
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
-        Call<ResponseBody> loginCall = apiInterface.getHomeTitle(headerMap);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
+        Call<ResponseBody> loginCall = apiInterface.getHomeTitle(headerMap,map);
 
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -550,8 +582,11 @@ public class HomeFragment extends Fragment implements SearchListener {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-      if(!lastCountryName.equalsIgnoreCase(""))
-          map.put("country_id", lastCountryName);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
+        if(!lastCountryName.equalsIgnoreCase(""))
+       map.put("country_id",countryNames);
+            //   map.put("country_id", lastCountryName);
        else map.put("country_id", addresses.get(0).getCountryName()+"");
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<BannerModal1> loginCall = apiInterface.get_slider(headerMap,map);
@@ -567,7 +602,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                     BannerModal1 data = response.body();
                     String dataResponse = new Gson().toJson(response.body());
                     Log.e("MapMap", "Exersice_List" + dataResponse);
-
+                    GetBannerAPi2();
                     if (data.status.equals("1")) {
 
                         get_result1.clear();
@@ -591,8 +626,19 @@ public class HomeFragment extends Fragment implements SearchListener {
 
 
                     } else if (data.status.equals("0")) {
-                        Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
+                        banner_array_list.clear();
+                        binding.imageSlider.dataSetChanged();
                     }
+
+                    else if (data.status.equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -614,6 +660,8 @@ public class HomeFragment extends Fragment implements SearchListener {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         if(!countryNames.equalsIgnoreCase("")) map.put("country_id", countryNames);
         else map.put("country_id", addresses.get(0).getCountryName()+"");
         Log.e("MapMap", "EXERSICE LIST" + map);
@@ -653,8 +701,20 @@ public class HomeFragment extends Fragment implements SearchListener {
 
 
                     } else if (data.status.equals("0")) {
-                        Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
+                        banner_array_list1.clear();
+                        binding.imageSlider2.dataSetChanged();
+                        // Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -701,6 +761,8 @@ public class HomeFragment extends Fragment implements SearchListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<CategoryModal> loginCall = apiInterface.get_category(headerMap,map);
         loginCall.enqueue(new Callback<CategoryModal>() {
@@ -723,6 +785,14 @@ public class HomeFragment extends Fragment implements SearchListener {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -758,8 +828,10 @@ public class HomeFragment extends Fragment implements SearchListener {
         headerMap.put("Accept","application/json");
        // map.put("user_id",PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
 
-
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("country_id",countryId);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e(TAG,"getProduct Search Request = "+map.toString());
         Call<ResponseBody> call = apiInterface.getAllProduct(headerMap,map);
         call.enqueue(new Callback<ResponseBody>() {
@@ -779,7 +851,17 @@ public class HomeFragment extends Fragment implements SearchListener {
                         adapterSearch.notifyDataSetChanged();
                       //  binding.tvNotFound.setVisibility(View.GONE);
 
-                    } else {
+                    }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
+
+                    else {
                         arrayList.clear();
                         adapterSearch.notifyDataSetChanged();
                        // binding.tvNotFound.setVisibility(View.VISIBLE);
@@ -787,7 +869,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                     }
 
                     GetBannerAPi();
-                    GetBannerAPi2();
+
 
                 } catch (Exception e) {
                     // Toast.makeText(mContext, "Exception = " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -809,6 +891,12 @@ public class HomeFragment extends Fragment implements SearchListener {
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
+
+        Map<String,String> map = new HashMap<>();
+
+
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Call<ResponseBody> chatCount = apiInterface.getAllCountry(headerMap);
         chatCount.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -840,6 +928,12 @@ public class HomeFragment extends Fragment implements SearchListener {
 
                     }
 
+                    else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -864,6 +958,8 @@ public class HomeFragment extends Fragment implements SearchListener {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "EXERSICE111 LIST" + map);
 
         Call<CartModal> loginCall = apiInterface.get_cart(headerMap,map);
@@ -895,6 +991,15 @@ public class HomeFragment extends Fragment implements SearchListener {
                         get_result11.clear();
                         binding.reqcountCart.setVisibility(View.GONE);
 
+
+                    }
+
+                    else if (data.status.equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
 
                     }
 
@@ -982,6 +1087,7 @@ public class HomeFragment extends Fragment implements SearchListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("country", countryId);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
 
         Call<ResponseBody> loginCall = apiInterface.updateCountryApi(headerMap,map);
@@ -1003,10 +1109,24 @@ public class HomeFragment extends Fragment implements SearchListener {
                         binding.tvProduct.setText("Latest Products in " + country );
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.FROM, "");
                         getProduct(countryId);
-                    } else {
+                    }
+
+                    else if (jsonObject.getString("status").equals("0")) {
+
+
+                    }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+                    else {
                         // binding.tvNotFound.setVisibility(View.VISIBLE);
 
                     }
+
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -28,7 +28,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_14sdp"
-                    android:text="Order to pick up by yourself"
+                    android:text="@string/order_to_pick_up_by_yourself"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -42,7 +42,7 @@
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="For order to be picked up by yourself, Afarycode’s responsibilty ends upon connection and payment in advance from the seller. AfaryCode cannot be held responsible for some reason you cannot collect your order."
+                    android:text="@string/for_order_to_be_picked_up_by_yourself_afarycode_s_responsibilty_ends_upon_connection_and_payment_in_advance_from_the_seller_afarycode_cannot_be_held_responsible_for_some_reason_you_cannot_collect_your_order"
                     android:textColor="@color/black"/>
 
 

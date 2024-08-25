@@ -53,7 +53,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_3sdp"
-                            android:text="Home"
+                            android:text="@string/home"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp">
 
@@ -65,7 +65,7 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/RRMyBooking"
+                    android:id="@+id/RRChat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1">
@@ -88,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_5sdp"
-                            android:text="Chat"
+                            android:text="@string/chat"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp">
 
@@ -122,7 +122,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_5sdp"
-                            android:text="Wallet"
+                            android:text="@string/wallet"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp">
 
@@ -157,7 +157,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="@dimen/_7sdp"
-                            android:text="Profile"
+                            android:text="@string/profile"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_11sdp">
 

@@ -13,12 +13,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.ForgotPasswordModal;
+import com.my.afarycode.OnlineShopping.bottomsheet.SendAdminRequestBottomSheet;
+import com.my.afarycode.OnlineShopping.bottomsheet.WebViewBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityForgotPasswordBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
+import com.my.afarycode.ratrofit.Constant;
 
 import org.json.JSONObject;
 
@@ -30,14 +34,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ForgotPassword extends AppCompatActivity {
+public class ForgotPassword extends AppCompatActivity implements AskListener {
 
     ActivityForgotPasswordBinding binding;
     private AfaryCode apiInterface;
-    private FirebaseAuth mAuth;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    private String mVerificationId;
-    private PhoneAuthProvider.ForceResendingToken mResendToken;
     private String code;
 
     @Override
@@ -69,6 +69,10 @@ public class ForgotPassword extends AppCompatActivity {
 
             }
         });
+
+        binding.tvSendAdmin.setOnClickListener(view ->
+                new SendAdminRequestBottomSheet(ForgotPassword.this).callBack(this::ask).show(getSupportFragmentManager(),""));
+
     }
 
 
@@ -117,4 +121,8 @@ public class ForgotPassword extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void ask(String value, String status) {
+        finish();
+    }
 }

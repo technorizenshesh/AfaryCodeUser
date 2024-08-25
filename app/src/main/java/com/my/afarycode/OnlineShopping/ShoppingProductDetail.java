@@ -37,6 +37,7 @@ import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityShoppingProductDetail2Binding;
 import com.my.afarycode.databinding.ActivityShoppingProductDetailBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -137,6 +138,7 @@ public class ShoppingProductDetail extends Fragment {
         map.put("quantity", "1");
         map.put("amount", productPrice);
         map.put("cat_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.Cat_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "cart_params" + map);
         Call<ResponseBody> reviewModalCall = apiInterface.add_to_cart(headerMap,map);
@@ -169,6 +171,16 @@ public class ShoppingProductDetail extends Fragment {
                         Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (object.getString("status").equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -195,6 +207,7 @@ public class ShoppingProductDetail extends Fragment {
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("restaurant_id", restaurant_id);
         map.put("pro_id", product_id);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -246,6 +259,14 @@ public class ShoppingProductDetail extends Fragment {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

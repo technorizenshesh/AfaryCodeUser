@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.bottomsheet;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
@@ -129,6 +131,9 @@ public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
         Map<String, String> map = new HashMap<>();
         map.put("user_help", edHelp.getText().toString());
         map.put("request_id", id);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+
         Log.e("MapMap", "Send Withdraw Details Request" + map);
         Call<ResponseBody> SignupCall = apiInterface.withdraw_money_update(headerMap,map);
 
@@ -151,6 +156,13 @@ public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
                         Toast.makeText(getContext(), object.optString("message"), Toast.LENGTH_SHORT).show();
 
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

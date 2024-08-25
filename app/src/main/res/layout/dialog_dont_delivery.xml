@@ -41,7 +41,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="@dimen/_10sdp"
-                    android:text="Order to pick up by yourself"
+                    android:text="@string/order_to_pick_up_by_yourself"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/poppins_bold"/>
@@ -53,7 +53,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="@dimen/_10sdp"
-                    android:text="For order to be picked up by\yourself. Afarycode's responsibility ends upon connection and payment in advance from the seller. Afarycode cannot be held responsible for some reason you cannot collect your order"
+                    android:text="@string/for_order_to_be_picked_up_by_yourself_afarycode_s_responsibilty_ends_upon_connection_and_payment_in_advance_from_the_seller_afarycode_cannot_be_held_responsible_for_some_reason_you_cannot_collect_your_order"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
 
@@ -86,7 +86,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Skip"
+                        android:text="@string/Skip"
                         android:fontFamily="@font/poppins_bold"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp">
@@ -110,7 +110,6 @@
                         android:gravity="center"
                         android:text="@string/ok"
                         android:fontFamily="@font/poppins_bold"
-
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp">
 

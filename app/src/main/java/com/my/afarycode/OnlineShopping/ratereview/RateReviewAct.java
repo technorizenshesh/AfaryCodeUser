@@ -20,6 +20,7 @@ import com.my.afarycode.OnlineShopping.orderdetails.ItemsAdapter;
 import com.my.afarycode.OnlineShopping.orderdetails.OrderDetailsAct;
 import com.my.afarycode.OnlineShopping.orderdetails.OrderDetailsModel;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityRateReviewBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -81,7 +82,9 @@ public class RateReviewAct extends AppCompatActivity {
             map.put("delivery_person_email", model.getResult().getDeliveryPerson().getDeliveryPersonEmail());
             map.put("delivery_rating", String.valueOf(binding.deliveryRating.getRating()));
             map.put("delivery_review", binding.edDeliveryReview.getText().toString());
-            Log.e(TAG, "giveRate Request" + map);
+            map.put("register_id", PreferenceConnector.readString(RateReviewAct.this, PreferenceConnector.Register_id, ""));
+
+        Log.e(TAG, "giveRate Request" + map);
             Call<ResponseBody> loginCall = apiInterface.giveRateReviewApi(headerMap,map);
             loginCall.enqueue(new Callback<ResponseBody>() {
 
@@ -98,6 +101,13 @@ public class RateReviewAct extends AppCompatActivity {
                             startActivity(new Intent(RateReviewAct.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
                         }
+
+                        else if (jsonObject.getString("status").equals("5")) {
+                            PreferenceConnector.writeString(RateReviewAct.this, PreferenceConnector.LoginStatus, "false");
+                            startActivity(new Intent(RateReviewAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -121,6 +131,8 @@ public class RateReviewAct extends AppCompatActivity {
 
         Map<String, String> map = new HashMap<>();
         map.put("order_id", orderId);
+        map.put("register_id", PreferenceConnector.readString(RateReviewAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "My OrderDetails Request" + map);
         Call<ResponseBody> loginCall = apiInterface.getDetailOnlineOrderApi(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -146,6 +158,14 @@ public class RateReviewAct extends AppCompatActivity {
                           binding.tvDeliveryPersonName.setText(model.getResult().getDeliveryPerson().getDeliveryPersonName());
 
                     }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(RateReviewAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(RateReviewAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

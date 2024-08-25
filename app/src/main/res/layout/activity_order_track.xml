@@ -83,7 +83,7 @@
                 android:id="@+id/tvOrderId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Orde Id : 542424254"
+                android:text="@string/order_id"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppins_regular"
                 android:textSize="@dimen/_12sdp"/>
@@ -92,7 +92,7 @@
                 android:id="@+id/tvOrderStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Orde Id : 542424254"
+                android:text="@string/order_status"
                 android:layout_below="@+id/tvOrderId"
                 android:textColor="@color/black"
                 android:fontFamily="@font/poppins_regular"

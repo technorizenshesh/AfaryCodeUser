@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -15,6 +16,7 @@ import com.my.afarycode.OnlineShopping.adapter.MyWishListAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityWishListBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -64,6 +66,7 @@ public class WishListAct extends AppCompatActivity {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(WishListAct.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(WishListAct.this, PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -97,6 +100,13 @@ public class WishListAct extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
 
                     }
+
+                    else if (jsonObject.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(WishListAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(WishListAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

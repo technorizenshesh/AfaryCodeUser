@@ -34,7 +34,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_5sdp"
             android:gravity="center_horizontal"
-            android:text="Cirolla"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/_10sdp">
 

@@ -26,7 +26,8 @@ public class ApiClient {
                 .readTimeout(100, TimeUnit.SECONDS); // read timeout
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.BASE_URL)
+                //.baseUrl(Constant.BASE_URL)
+                .baseUrl(Constant.BASE_URL_TEST)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();

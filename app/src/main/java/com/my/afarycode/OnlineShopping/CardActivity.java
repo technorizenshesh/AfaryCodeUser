@@ -32,6 +32,7 @@ import com.my.afarycode.OnlineShopping.adapter.CardAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityCardBinding;
 import com.my.afarycode.listener.OnPositionListener;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -101,6 +102,7 @@ public class CardActivity extends Fragment implements OnPositionListener {
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -133,6 +135,13 @@ public class CardActivity extends Fragment implements OnPositionListener {
 
 
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -199,6 +208,8 @@ public class CardActivity extends Fragment implements OnPositionListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("product_id", cartId);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "Add to WishList LIST" + map);
 
 
@@ -226,6 +237,13 @@ public class CardActivity extends Fragment implements OnPositionListener {
                         Toast.makeText(getActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -248,6 +266,8 @@ public class CardActivity extends Fragment implements OnPositionListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         map.put("cart_id", cartId);
         map.put("id", id);
 
@@ -280,6 +300,14 @@ public class CardActivity extends Fragment implements OnPositionListener {
                         GetCartItem();
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -307,6 +335,7 @@ public class CardActivity extends Fragment implements OnPositionListener {
         map.put("pro_id", proId);
         map.put("id", id);
         map.put("quantity", String.valueOf(count));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -340,6 +369,14 @@ public class CardActivity extends Fragment implements OnPositionListener {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

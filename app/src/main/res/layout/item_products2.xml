@@ -65,7 +65,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:text="Being Human Shirt"
                     android:textColor="@color/black"
                     android:singleLine="true"
                     android:layout_marginEnd="@dimen/_3sdp"
@@ -77,7 +76,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:text="Google LLC"
                     android:textColor="@color/natural_gray"
                     android:textSize="@dimen/_12sdp"
                     />
@@ -95,7 +93,6 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Rs.9000"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold"

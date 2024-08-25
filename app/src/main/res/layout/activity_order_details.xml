@@ -78,7 +78,6 @@
                     android:layout_marginTop="@dimen/_20sdp"
                     android:baselineAligned="false"
                     android:gravity="center_horizontal"
-
                     android:orientation="vertical"
                     android:visibility="gone">
 
@@ -220,7 +219,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/poppins_regular"
-                                android:text="+4"
+                                android:text=""
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/_10sdp" />
 
@@ -389,7 +388,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="Sub Total"
+                            android:text="@string/sub_total"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -418,7 +417,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:text="Platform Fees"
+                            android:text="@string/platform_fees"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -446,7 +445,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
-                            android:text="Tax 1"
+                            android:text="@string/tax_1"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -478,7 +477,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="Tax 2"
+                            android:text="@string/tax_2"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 
@@ -570,7 +569,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="Shipping Cost Amount"
+                            android:text="@string/shipping_cost_amount"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_14sdp" />
 

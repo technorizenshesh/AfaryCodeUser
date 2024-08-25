@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.FragmentWalletBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -99,6 +101,8 @@ public class WalletFragment extends Fragment implements AskListener {
         DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {
@@ -119,6 +123,13 @@ public class WalletFragment extends Fragment implements AskListener {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -146,6 +157,8 @@ public class WalletFragment extends Fragment implements AskListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "" + map);
 
         Call<AddAvailable> loginCall = apiInterface.get_available(headerMap,map);
@@ -170,6 +183,16 @@ public class WalletFragment extends Fragment implements AskListener {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (data.status.equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -192,6 +215,8 @@ public class WalletFragment extends Fragment implements AskListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
         map.put("type","All");
         Log.e("MapMap", "" + map);
 
@@ -217,6 +242,16 @@ public class WalletFragment extends Fragment implements AskListener {
                     } else if (object.getString("status").equals("0")) {
                         Toast.makeText(getContext(), object.getString("message"), Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

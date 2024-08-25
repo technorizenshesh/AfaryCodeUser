@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping.bottomsheet;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.SearchListener;
 import com.my.afarycode.OnlineShopping.listener.onPositionClickListener;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.FragmentCountrySheetBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -245,6 +247,7 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("country", countryId);
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
 
         Call<ResponseBody> loginCall = apiInterface.updateCountryApi(headerMap,map);
@@ -263,7 +266,17 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
                         listener.search(country);
                         dialog.dismiss();
 
-                    } else {
+                    }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
+
+
+                    else {
                         // binding.tvNotFound.setVisibility(View.VISIBLE);
 
                     }

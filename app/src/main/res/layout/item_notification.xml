@@ -34,7 +34,6 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_toRightOf="@+id/imgLeftMenu"
-                android:text="kung Fu Chau added new image inFurniture and Garden."
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp" />
 
@@ -46,7 +45,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:text="02:00 PM"
+                android:text=""
                 android:textColor="@color/purple_200"
                 android:textSize="@dimen/_12sdp" />
 

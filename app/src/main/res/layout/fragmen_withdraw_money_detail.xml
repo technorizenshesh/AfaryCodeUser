@@ -18,7 +18,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Withdraw Money"
+                android:text="@string/withdraw_money_"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_18sdp"
                 android:textStyle="bold">
@@ -31,7 +31,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:gravity="center"
-                android:text="reference of the transaction to be reimbursed"
+                android:text="@string/reference_of_the_transaction_to_be_reimbursed"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp" />
 
@@ -40,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:text="Amount"
+                android:text="@string/amount"
                 android:textColor="@color/natural_gray"
                 android:textSize="@dimen/_14sdp"
                 android:visibility="gone"/>
@@ -94,7 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:hint="Text area for help"
+                    android:hint="@string/text_area_for_help"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:maxLength="70"
@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
-                    android:text="Done"
+                    android:text="@string/done"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp" />
 

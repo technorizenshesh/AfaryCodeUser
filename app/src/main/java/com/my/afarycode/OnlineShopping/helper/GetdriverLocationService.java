@@ -111,6 +111,8 @@ public class GetdriverLocationService  extends Service {
         Map<String,String> map = new HashMap<>();
         map.put("order_id", PreferenceConnector.readString(getApplicationContext(),"orderId",""));
         map.put("afary_code",PreferenceConnector.readString(getApplicationContext(),"afaryCode",""));
+        map.put("user_id", PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.Register_id, ""));
 
 
         Log.e(TAG,"Driver Location Request "+map);

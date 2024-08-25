@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.orderdetails.OrderDetailsAct;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityChatBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
@@ -134,9 +136,12 @@ public class ChatAct extends AppCompatActivity {
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(ChatAct.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
 
+        map.put("user_id", PreferenceConnector.readString(ChatAct.this, PreferenceConnector.User_id, ""));
         map.put("sender_id", PreferenceConnector.readString(ChatAct.this, PreferenceConnector.User_id, ""));
         map.put("receiver_id",receiverId);
         map.put("chat_message",messageText);
+        map.put("register_id", PreferenceConnector.readString(ChatAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e(TAG, "Chat msg Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.sendNotification(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
@@ -152,6 +157,13 @@ public class ChatAct extends AppCompatActivity {
                     } else if (object.optString("status").equals("0")) {
                         // Toast.makeText(OrderDetailsAct.this, data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(ChatAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(ChatAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -179,11 +191,14 @@ public class ChatAct extends AppCompatActivity {
         String other_user = pid;
         if (Double.parseDouble(self_user) > Double.parseDouble(other_user)) {
             reference1 = FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl("https://quizup-2fe26.firebaseio.com/" + "messages" + "_" + self_user + "_" + other_user);
 
-                    .getReferenceFromUrl("https://afarycodeseller-default-rtdb.firebaseio.com/" + "messages" + "_" + self_user + "_" + other_user);
+                 //   .getReferenceFromUrl("https://afarycodeseller-default-rtdb.firebaseio.com/" + "messages" + "_" + self_user + "_" + other_user);
         } else {
             reference1 = FirebaseDatabase.getInstance()
-                    .getReferenceFromUrl("https://afarycodeseller-default-rtdb.firebaseio.com/" + "messages" + "_" + other_user + "_" + self_user);
+                    .getReferenceFromUrl("https://quizup-2fe26.firebaseio.com/" + "messages" + "_" + other_user + "_" + self_user);
+
+                  //  .getReferenceFromUrl("https://afarycodeseller-default-rtdb.firebaseio.com/" + "messages" + "_" + other_user + "_" + self_user);
         }
         reference1.addChildEventListener(new ChildEventListener() {
             @Override

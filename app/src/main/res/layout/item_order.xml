@@ -40,7 +40,6 @@
                             android:layout_height="wrap_content"
                             android:checked="false"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="OD - 424923192 - N"
                             android:textColor="#000"
                             android:textSize="@dimen/_12sdp"
                             android:textStyle="bold" />
@@ -51,7 +50,6 @@
                             android:layout_height="wrap_content"
                             android:checked="false"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="OD - 424923192 - N"
                             android:textColor="#000"
                             android:textSize="@dimen/_12sdp"
                             android:textStyle="bold" />
@@ -69,7 +67,6 @@
                             android:drawablePadding="@dimen/_5sdp"
                             android:fontFamily="@font/poppins_regular"
                             android:layoutDirection="rtl"
-                            android:text="ccc"
                             android:textColor="@color/purple_700"
                             android:textSize="@dimen/_12sdp"
                             android:textStyle="bold" />
@@ -80,7 +77,6 @@
                             android:layout_height="wrap_content"
                             android:checked="false"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="OD -  - N"
                             android:textColor="#000"
                             android:textSize="@dimen/_12sdp"
                             android:textStyle="bold" />
@@ -92,7 +88,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="23-10-2022"
                             android:layout_gravity="start"
                             android:textColor="#000"
                             android:layout_marginTop="@dimen/_5sdp"
@@ -254,7 +249,7 @@
                                     android:id="@+id/tvImgCount"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="+4"
+                                    android:text=""
                                     android:fontFamily="@font/poppins_regular"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/_10sdp"/>
@@ -290,7 +285,7 @@
                         android:layout_height="@dimen/_30sdp"
                         android:background="@color/red"
                         android:gravity="center"
-                        android:text="Delivered"
+                        android:text="@string/delivered"
                         android:fontFamily="@font/poppins_regular"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:textColor="@color/white"

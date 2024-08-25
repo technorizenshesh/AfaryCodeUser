@@ -49,7 +49,13 @@ public class SignUpActivity extends AppCompatActivity {
             if(binding.name.getText().toString().trim().isEmpty()) {
                 binding.name.setError("Field cannot be empty");
                 Toast.makeText(SignUpActivity.this, "please enter name", Toast.LENGTH_SHORT).show();
-            } else if (binding.email.getText().toString().trim().isEmpty()) {
+            }
+           else if(binding.userName.getText().toString().trim().isEmpty()) {
+                binding.userName.setError("Field cannot be empty");
+                Toast.makeText(SignUpActivity.this, "please enter Username", Toast.LENGTH_SHORT).show();
+            }
+
+            else if (binding.email.getText().toString().trim().isEmpty()) {
                 binding.email.setError("Field cannot be empty");
                 Toast.makeText(SignUpActivity.this, "please enter email  ", Toast.LENGTH_SHORT).show();
             } else if (binding.phone.getText().toString().trim().isEmpty()) {
@@ -79,7 +85,8 @@ public class SignUpActivity extends AppCompatActivity {
                 (SignUpActivity.this, "Please wait...");
 
         Map<String, String> map = new HashMap<>();
-        map.put("user_name", binding.name.getText().toString());
+        map.put("user_name", binding.userName.getText().toString());
+        map.put("name", binding.name.getText().toString());
         map.put("email", binding.email.getText().toString().trim());
         map.put("password", binding.password.getText().toString());
         map.put("mobile",binding.phone.getText().toString());
@@ -109,7 +116,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                         String user_id = data.result.id;
                         String moble_no = data.result.mobile;
-                        String firstName = data.result.userName;
+                        String firstName = data.result.getName();
                         String email1 = data.result.email;
                         String password = data.result.password;
                         String otp = data.result.otp;
@@ -117,8 +124,8 @@ public class SignUpActivity extends AppCompatActivity {
                         Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
 
                         startActivity(new Intent(SignUpActivity.this, HomeActivity.class)
-                                .putExtra("user_id", user_id)
-                                .putExtra("otp", otp));
+                                .putExtra("status", "")
+                                .putExtra("msg", ""));
 
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.LoginStatus, "true");
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_id, user_id);

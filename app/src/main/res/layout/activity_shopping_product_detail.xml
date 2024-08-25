@@ -35,13 +35,13 @@
             </RelativeLayout>
 
             <TextView
-                android:layout_toEndOf="@+id/RRback"
-                android:layout_toStartOf="@+id/llicon"
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Being Human Shirt"
+                android:layout_toStartOf="@+id/llicon"
+                android:layout_toEndOf="@+id/RRback"
+                android:text=""
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16sdp"
                 android:textStyle="bold" />
@@ -263,7 +263,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:textSize="@dimen/_12sdp"
-                        android:text="Sold by :"
+                        android:text="@string/sold_by"
                         />
 
 
@@ -306,7 +306,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:textSize="@dimen/_12sdp"
-                        android:text="Payment :"
+                        android:text="@string/paymentN"
                         android:maxLength="25"
                         />
 
@@ -318,7 +318,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:textSize="@dimen/_12sdp"
-                        android:text=" secure transaction"
+                        android:text="@string/secure_transaction"
                         android:maxLength="25"
                         />
 
@@ -342,7 +342,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:textSize="@dimen/_12sdp"
-                        android:text="Ship by : "
+                        android:text="@string/ship_by"
                         android:maxLength="25"
                         />
 
@@ -416,7 +416,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginRight="13dp"
                         android:inputType="text"
-                        android:text="fxdffdf"
+                        android:text=""
                         android:textColor="@color/colorGreen"
                         android:textSize="@dimen/_12sdp"
                         android:visibility="visible"/>
@@ -502,7 +502,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Product Details"
+                        android:text="@string/product_details"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:textSize="@dimen/_16sdp"
@@ -557,7 +557,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:textSize="@dimen/_12sdp"
-                        android:text="Select size"
+                        android:text="@string/select_size"
                         android:visibility="gone"
                         />
 
@@ -597,7 +597,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:textSize="@dimen/_12sdp"
-                        android:text="Select c0lor"
+                        android:text="@string/select_color"
                         android:visibility="gone"
                         />
 
@@ -606,7 +606,7 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Write your review"
+                        android:text="@string/write_your_review"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/_14sdp"
                         android:visibility="gone"
@@ -637,7 +637,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:inputType="text"
-                            android:text="sss"
+                            android:text=""
                             android:textColor="@color/black"
                             android:textSize="@dimen/_13sdp"
                             android:singleLine="false"/>
@@ -663,7 +663,7 @@
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Review"
+                    android:text="@string/review"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_14sdp"
                     android:visibility="gone"
@@ -706,7 +706,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PRICE"
+                    android:text="@string/price"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_16sdp"
                     />
@@ -739,7 +739,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="@dimen/_7sdp"
-                    android:text="ADD TO CART"
+                    android:text="@string/add_to_cart"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"

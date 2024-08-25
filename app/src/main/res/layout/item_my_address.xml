@@ -38,7 +38,6 @@
                         android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Home Address"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold">
@@ -62,7 +61,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="21, Alex Davidson Avenue, Opposite Omegatron, Vicent Smith Quarters, Victoria Island, Lagos, Nigeria"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_14sdp"
                     >

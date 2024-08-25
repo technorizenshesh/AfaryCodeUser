@@ -24,7 +24,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_toStartOf="@+id/ivImg"
-               android:text="Pinkk"
+               android:text=""
                android:textColor="@color/red"
                android:layout_centerInParent="true"
                android:layout_marginRight="@dimen/_8sdp"
@@ -54,7 +54,7 @@
             android:elevation="@dimen/_3sdp"
             android:gravity="center_vertical"
             android:padding="@dimen/_10sdp"
-            android:text="eeeetttyytyy"
+            android:text=""
             android:textColor="@color/black" />
 
 
@@ -89,6 +89,6 @@
         android:fontFamily="@font/poppins_regular"
         android:paddingRight="8dp"
         android:textColor="@color/colorGray"
-        android:text="04:05 pm"
+        android:text=""
         android:textSize="9dp" />
 </LinearLayout>

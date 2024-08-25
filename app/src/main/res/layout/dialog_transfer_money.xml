@@ -42,7 +42,7 @@
                     android:gravity="center"
                     android:padding="@dimen/_5sdp"
                     android:textColor="@color/black"
-                    android:text="Your wallet will be debited for"
+                    android:text="@string/your_wallet_will_be_debited_for"
                     android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/poppins_bold"/>
 
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="Amount: "
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
                 <TextView
@@ -64,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="Fee : "
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
                 <TextView
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="Total Amount : "
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
 

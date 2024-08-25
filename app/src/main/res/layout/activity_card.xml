@@ -59,7 +59,6 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:scrollbars="vertical" />
 
-
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/CheckOutScreen"
                     android:layout_width="match_parent"

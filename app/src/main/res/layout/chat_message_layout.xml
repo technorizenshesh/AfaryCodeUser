@@ -31,7 +31,6 @@
                 android:layout_toStartOf="@+id/img_send_icon"/>
 
 
-
             <ImageView
                 android:id="@+id/img_send_icon"
                 android:layout_width="wrap_content"

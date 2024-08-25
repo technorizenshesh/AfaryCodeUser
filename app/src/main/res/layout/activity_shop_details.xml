@@ -116,7 +116,7 @@
                     android:id="@+id/tvShopName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="keshav Ship"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/_13sdp"
                     android:fontFamily="@font/poppins_regular"
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="keshav Ship"
+                    android:text=""
                     android:drawableLeft="@drawable/location"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_10sdp" />
@@ -140,7 +140,7 @@
                     android:id="@+id/tvFullAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="keshav Ship"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/_11sdp"
                     android:fontFamily="@font/poppins_regular"
@@ -155,23 +155,15 @@
                         android:id="@+id/tvClose"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="keshav Ship"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/_11sdp"
                         android:fontFamily="@font/poppins_regular"
                         />
 
-
-
-
                 </RelativeLayout>
 
-
-
-
             </LinearLayout>
-
-
 
         </androidx.cardview.widget.CardView>
 
@@ -231,8 +223,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-
-
 
     </RelativeLayout>
 

@@ -21,9 +21,9 @@
                 android:layout_height="@dimen/_20sdp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:tint="@color/purple_200"
                 android:padding="@dimen/_5sdp"
-                android:src="@drawable/back_icon"/>
+                android:src="@drawable/back_icon"
+                app:tint="@color/purple_200" />
 
 
 

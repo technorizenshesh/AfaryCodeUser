@@ -77,7 +77,7 @@
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Order History"
+                android:text="@string/order_history"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp" />
 
@@ -97,7 +97,7 @@
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wishlist"
+                android:text="@string/wishlist"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp" />
 
@@ -117,7 +117,7 @@
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Delivery Address"
+                android:text="@string/delivery_address"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_16sdp" />
 

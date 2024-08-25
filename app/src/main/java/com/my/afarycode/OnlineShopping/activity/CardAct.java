@@ -16,15 +16,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.google.gson.Gson;
+import com.my.afarycode.OnlineShopping.CheckOutScreen;
 import com.my.afarycode.OnlineShopping.Model.Add_to_Wish;
 import com.my.afarycode.OnlineShopping.Model.CartModal;
 import com.my.afarycode.OnlineShopping.Model.DeleteCartModal;
 import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
 import com.my.afarycode.OnlineShopping.Model.UpdateCartModal;
+import com.my.afarycode.OnlineShopping.ProductDetailAct;
 import com.my.afarycode.OnlineShopping.adapter.CardAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityCardBinding;
 import com.my.afarycode.listener.OnPositionListener;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -88,6 +91,7 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.Register_id, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -120,6 +124,13 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
 
 
                     }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(CardAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CardAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -188,6 +199,8 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.User_id, ""));
         map.put("product_id", cartId);
+        map.put("register_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.Register_id, ""));
+
         Log.e("MapMap", "Add to WishList LIST" + map);
 
 
@@ -215,6 +228,13 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
                         Toast.makeText(CardAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                     }
 
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CardAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CardAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -237,6 +257,8 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.Register_id, ""));
+
         map.put("cart_id", cartId);
         map.put("id", id);
 
@@ -269,6 +291,14 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
                         GetCartItem();
                     }
 
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(CardAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CardAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -292,7 +322,9 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.User_id, ""));
-       // map.put("cart_id", cart_id);
+        map.put("register_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.Register_id, ""));
+
+        // map.put("cart_id", cart_id);
         map.put("pro_id", proId);
         map.put("id", id);
         map.put("quantity", String.valueOf(count));
@@ -332,6 +364,16 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
                     } else if (data.status.equals("0")) {
                         Toast.makeText(CardAct.this, data.message, Toast.LENGTH_SHORT).show();
                     }
+
+                    else if (data.status.equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+
+                        PreferenceConnector.writeString(CardAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CardAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
