@@ -130,15 +130,25 @@
          </WebView>
 
 
-        <TextView
-            android:id="@+id/tvDetails"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="@dimen/_12sdp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/RRtoolbar"
-            android:layout_margin="@dimen/_10sdp"
-            android:textColor="@color/black"/>
+            android:scrollbars="none"
+            >
+
+            <TextView
+                android:id="@+id/tvDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="@dimen/_12sdp"
+                android:layout_margin="@dimen/_10sdp"
+                android:textColor="@color/black"/>
+
+
+
+        </ScrollView>
 
 
         <ir.alirezabdn.wp7progress.WP10ProgressBar

@@ -202,7 +202,7 @@
                         android:inputType="text"
                         android:fontFamily="@font/poppins_bold"
                         android:textSize="@dimen/_18sdp"
-                        android:text="Rs. 9,000"
+                        android:text=""
                         />
 
                 </RelativeLayout>
@@ -229,7 +229,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:textSize="@dimen/_12sdp"
-                            android:text="0.0"
+                            android:text=""
                             />
 
 
@@ -716,7 +716,7 @@
                     android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rs. 9000"
+                    android:text=""
                     android:textColor="@color/purple_500"
                     android:textSize="@dimen/_18sdp"
 

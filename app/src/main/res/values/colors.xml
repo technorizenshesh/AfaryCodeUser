@@ -23,5 +23,6 @@
     <color name="colorGray">#808080</color>
 
     <color name="color_grey_two">#707070</color>
+    <color name="color_gray_text">#ADA4A5</color>
 
 </resources>

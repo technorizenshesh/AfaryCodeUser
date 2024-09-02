@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,31 +52,44 @@ public class ForgotPassword extends AppCompatActivity implements AskListener {
 
     private void SetupUI() {
 
-        binding.RRLogin.setOnClickListener(v -> {
+        binding.RRSend.setOnClickListener(v -> {
 
-            code = binding.ccp.getSelectedCountryCode();
-            Log.e("code>>>", code);
+            //  code = binding.ccp.getSelectedCountryCode();
+            //  Log.e("code>>>", code);
 
-            if (binding.edtmobile.getText().toString().trim().isEmpty()) {
-                binding.edtmobile.setError("Field cannot be empty");
+            if (binding.edEmail.getText().toString().trim().isEmpty()) {
+                binding.edEmail.setError(getString(R.string.can_not_be_empty));
 
-                Toast.makeText(ForgotPassword.this, "Please Enter Valid Email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ForgotPassword.this, getString(R.string.please_enter_valied_email), Toast.LENGTH_SHORT).show();
 
             } else {
-                ForgotPasswordAPI(binding.edtmobile.getText().toString());
-              //  startActivity(new Intent(ForgotPassword.this, VerificationScreen.class)
-                  //      .putExtra("user_email", binding.edtmobile.getText().toString()));
+                ForgotPasswordAPI(binding.edEmail.getText().toString());
+                //  startActivity(new Intent(ForgotPassword.this, VerificationScreen.class)
+                //      .putExtra("user_email", binding.edtmobile.getText().toString()));
 
 
             }
         });
 
-        binding.tvSendAdmin.setOnClickListener(view ->
-                new SendAdminRequestBottomSheet(ForgotPassword.this).callBack(this::ask).show(getSupportFragmentManager(),""));
+
+        binding.llEmail.setOnClickListener(v -> {
+            binding.llEmail.setBackground(getDrawable(R.drawable.rounded_corner_stroke_10));
+            binding.llSendAdmin.setBackground(getDrawable(R.drawable.rounded_corner_white_10));
+            binding.RRSend.setVisibility(View.VISIBLE);
+        });
+
+
+        binding.llSendAdmin.setOnClickListener(v -> {
+                    binding.llEmail.setBackground(getDrawable(R.drawable.rounded_corner_white_10));
+                    binding.llSendAdmin.setBackground(getDrawable(R.drawable.rounded_corner_stroke_10));
+                    binding.RRSend.setVisibility(View.GONE);
+                    new SendAdminRequestBottomSheet(ForgotPassword.this).callBack(this::ask).show(getSupportFragmentManager(), "");
+
+                }
+        );
+
 
     }
-
-
 
 
     private void ForgotPasswordAPI(String user_email) {
@@ -93,10 +107,9 @@ public class ForgotPassword extends AppCompatActivity implements AskListener {
 
                 try {
 
-                    Log.e("response===",response.body().toString());
+                    Log.e("response===", response.body().toString());
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
-
 
 
                     if (jsonObject.getString("status").equals("1")) {

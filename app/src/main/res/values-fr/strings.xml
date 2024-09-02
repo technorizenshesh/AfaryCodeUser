@@ -280,4 +280,9 @@
 
     <string name="please_change_your_password">Please change your password</string>
 
+
+    <string name="delivery_address_setting">Delivery Address Settings</string>
+    <string name="can_not_be_empty">Field cannot be empty</string>
+    <string name="please_enter_valied_email">Please Enter Valid Email</string>
+
 </resources>

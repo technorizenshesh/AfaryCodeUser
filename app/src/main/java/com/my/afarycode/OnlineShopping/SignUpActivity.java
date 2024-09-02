@@ -47,25 +47,25 @@ public class SignUpActivity extends AppCompatActivity {
             Log.e("code>>>", code);
 
             if(binding.name.getText().toString().trim().isEmpty()) {
-                binding.name.setError("Field cannot be empty");
-                Toast.makeText(SignUpActivity.this, "please enter name", Toast.LENGTH_SHORT).show();
+                binding.name.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_name), Toast.LENGTH_SHORT).show();
             }
            else if(binding.userName.getText().toString().trim().isEmpty()) {
-                binding.userName.setError("Field cannot be empty");
-                Toast.makeText(SignUpActivity.this, "please enter Username", Toast.LENGTH_SHORT).show();
+                binding.userName.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_user_name), Toast.LENGTH_SHORT).show();
             }
 
             else if (binding.email.getText().toString().trim().isEmpty()) {
-                binding.email.setError("Field cannot be empty");
-                Toast.makeText(SignUpActivity.this, "please enter email  ", Toast.LENGTH_SHORT).show();
+                binding.email.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_email), Toast.LENGTH_SHORT).show();
             } else if (binding.phone.getText().toString().trim().isEmpty()) {
-                binding.phone.setError("Field cannot be empty ");
-                Toast.makeText(SignUpActivity.this, "please enter phone number  ", Toast.LENGTH_SHORT).show();
+                binding.phone.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_mobile_number), Toast.LENGTH_SHORT).show();
             } else if (binding.password.getText().toString().trim().isEmpty()) {
-                binding.password.setError("Field cannot be empty ");
-                Toast.makeText(SignUpActivity.this, "please enter password ", Toast.LENGTH_SHORT).show();
+                binding.password.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
             } else if (!binding.password.getText().toString().equals(binding.confirmPassword.getText().toString())) {
-                binding.confirmPassword.setError("Password Should Be Same  ");
+                binding.confirmPassword.setError(getString(R.string.password_should_be_same));
 
             } else {
                 SignUpAPi();

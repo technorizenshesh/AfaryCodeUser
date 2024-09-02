@@ -104,7 +104,6 @@
                         android:gravity="center"
                         android:text="@string/ok"
                         android:fontFamily="@font/poppins_bold"
-
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp">
 

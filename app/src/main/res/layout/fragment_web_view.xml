@@ -83,16 +83,14 @@
                     android:id="@+id/btnTwo"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/use_conditions"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:fontFamily="@font/poppins_regular"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_11sdp"
+                    android:layout_weight="1"
                     android:background="@drawable/blue_bg_rounded"
-                    />
-
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="@string/use_conditions"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp" />
 
                 <View
                     android:layout_width="0dp"
