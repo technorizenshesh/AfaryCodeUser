@@ -53,7 +53,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:padding="@dimen/_10sdp"
-                    android:text="@string/for_order_to_be_picked_up_by_yourself_afarycode_s_responsibilty_ends_upon_connection_and_payment_in_advance_from_the_seller_afarycode_cannot_be_held_responsible_for_some_reason_you_cannot_collect_your_order"
+                    android:text="@string/some_reason_you_cannot_collect_your_order"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
 

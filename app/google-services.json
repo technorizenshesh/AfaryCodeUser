@@ -8,6 +8,56 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:323330167188:android:1dc66fb55987c70f7eff81",
+        "android_client_info": {
+          "package_name": "com.afaryseller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "323330167188-ptgqmph1gdesdlvtsb3mfm2763eulg6v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.afaryseller",
+            "certificate_hash": "907fbec512c7a4926a6948829f0f25b566b72dfd"
+          }
+        },
+        {
+          "client_id": "323330167188-jbv2doj1haesa9pahp71jaroqvvgfgt4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxdCNa5hYcYFAuvCxOedxbwqJxN39EHTI"
+        },
+        {
+          "current_key": "AIzaSyAXTJrvnDTC8AjYzK2dPatsSAMJaTIc-c0"
+        },
+        {
+          "current_key": "AIzaSyBXCWVFh3KJw_11qkpJpuMg9yMprvlw1W8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "323330167188-jbv2doj1haesa9pahp71jaroqvvgfgt4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "323330167188-5qtk1e1tq33tp09phf3doh5k0endo1oj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.skuper"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:323330167188:android:8680e094c9e591127eff81",
         "android_client_info": {
           "package_name": "com.ludian"

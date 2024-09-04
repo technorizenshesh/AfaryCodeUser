@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -192,8 +193,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(OrderStatusReceiver, new IntentFilter("check_status"));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(OrderStatusReceiver, new IntentFilter("check_status"),Context.RECEIVER_EXPORTED);
+        }
+        else {
+            registerReceiver(OrderStatusReceiver, new IntentFilter("check_status"));
+        }
     }
 
 

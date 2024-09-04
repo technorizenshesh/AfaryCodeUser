@@ -6,6 +6,9 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -19,13 +22,17 @@
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="com.myapp.mobile.permission.MAPS_RECEIVE" />
 
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/logo"
+        android:icon="@drawable/logo_well1"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@drawable/logo"
+        android:roundIcon="@drawable/logo_well1"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
@@ -337,7 +344,28 @@
             android:value="@string/api_key_map" />
 -->
 
+   <!--     <meta-data
+            android:name="com.google.firebase.MESSAGING_DEFAULT_CHANNEL_ID"
+            android:value="@string/default_channel_id"/>-->
 
+
+        <meta-data
+            android:name="com.google.firebase.MESSAGING_DEFAULT_CHANNEL_ID"
+            android:value="@string/default_notification_channel_id" />
+
+
+        <meta-data
+            android:name="com.google.android.gms.otp.AUTO_VERIFY"
+            android:value="true" />
+
+
+      <!--  <receiver android:name=".OnlineShopping.helper.MySMSBroadcastReceiver"
+            android:permission="android.permission.BROADCAST_SMS"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
+            </intent-filter>
+        </receiver>-->
 
     </application>
 

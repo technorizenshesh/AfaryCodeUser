@@ -96,9 +96,9 @@ public class SendAdminRequestBottomSheet extends BottomSheetDialogFragment {
 
 
             if (binding.edtmobile.getText().toString().trim().isEmpty()) {
-                binding.edtmobile.setError("Field cannot be empty");
+                binding.edtmobile.setError(getString(R.string.can_not_be_empty));
 
-                Toast.makeText(getActivity(), "Please Enter Valid Email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.please_enter_valied_email), Toast.LENGTH_SHORT).show();
 
             } else {
                 sendAdminRequestAPI(binding.edtmobile.getText().toString());
@@ -133,13 +133,13 @@ public class SendAdminRequestBottomSheet extends BottomSheetDialogFragment {
                     JSONObject object = new JSONObject(responseData);
                     Log.e("MapMap", "Send Admin Response" + responseData);
                     if (object.optString("status").equals("1")) {
-                        Toast.makeText(getContext(), "Send Admin Request Successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),getString(R.string.send_admin_request_successfull) , Toast.LENGTH_LONG).show();
                         listener.ask(responseData,"send");
                         dialog.dismiss();
                     } else if (object.optString("status").equals("0")) {
                         listener.ask("","send");
                         dialog.dismiss();
-                        Toast.makeText(getContext(), object.optString("message"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), object.optString("message"), Toast.LENGTH_LONG).show();
 
                     }
 

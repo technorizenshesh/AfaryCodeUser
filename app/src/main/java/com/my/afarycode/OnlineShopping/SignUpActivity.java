@@ -121,19 +121,24 @@ public class SignUpActivity extends AppCompatActivity {
                         String password = data.result.password;
                         String otp = data.result.otp;
 
-                        Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
 
-                        startActivity(new Intent(SignUpActivity.this, HomeActivity.class)
-                                .putExtra("status", "")
-                                .putExtra("msg", ""));
-
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.LoginStatus, "true");
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_id, user_id);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_email, email1);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_Mobile, moble_no);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_First_name, firstName);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.Password, password);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.OTP, otp);
+
+                        startActivity(new Intent(SignUpActivity.this, VerificationScreen.class)
+                                .putExtra("status", "")
+                                .putExtra("msg", "")
+                                .putExtra("user_id", user_id)
+                                .putExtra("mobile", binding.phone.getText().toString())
+                                .putExtra("countryCode", binding.ccp.getSelectedCountryCode())
+                        );
+                           finish();
+
 
                     } else if (data.status.equals("0")) {
                         Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();

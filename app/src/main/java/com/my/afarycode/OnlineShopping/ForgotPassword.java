@@ -6,7 +6,10 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -75,20 +78,50 @@ public class ForgotPassword extends AppCompatActivity implements AskListener {
         binding.llEmail.setOnClickListener(v -> {
             binding.llEmail.setBackground(getDrawable(R.drawable.rounded_corner_stroke_10));
             binding.llSendAdmin.setBackground(getDrawable(R.drawable.rounded_corner_white_10));
-            binding.RRSend.setVisibility(View.VISIBLE);
         });
 
 
         binding.llSendAdmin.setOnClickListener(v -> {
                     binding.llEmail.setBackground(getDrawable(R.drawable.rounded_corner_white_10));
                     binding.llSendAdmin.setBackground(getDrawable(R.drawable.rounded_corner_stroke_10));
-                    binding.RRSend.setVisibility(View.GONE);
                     new SendAdminRequestBottomSheet(ForgotPassword.this).callBack(this::ask).show(getSupportFragmentManager(), "");
 
                 }
         );
 
 
+
+        binding.edEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed here
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Validate email and update button visibility
+                if (isValidEmail(s.toString())) {
+                    binding.RRSend.setVisibility(View.VISIBLE);
+                } else {
+                    binding.RRSend.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed here
+            }
+        });
+
+
+
+    }
+
+
+
+    private boolean isValidEmail(CharSequence email) {
+        // Check if the email is valid using Android's Patterns utility
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
 
@@ -114,11 +147,11 @@ public class ForgotPassword extends AppCompatActivity implements AskListener {
 
                     if (jsonObject.getString("status").equals("1")) {
 
-                        Toast.makeText(ForgotPassword.this, "Please check your email we have sent a link to your email address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgotPassword.this, getString(R.string.please_check_your_email_address), Toast.LENGTH_LONG).show();
                         finish();
 
                     } else if (jsonObject.getString("status").equals("0")) {
-                        Toast.makeText(ForgotPassword.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgotPassword.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     }
 
                 } catch (Exception e) {

@@ -160,7 +160,7 @@
 
 
          <RelativeLayout
-            android:id="@+id/RR_Book"
+            android:id="@+id/btnVerify"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:layout_marginTop="@dimen/_20sdp"
@@ -215,10 +215,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_10sdp"
-            android:text="Try Another Way"
+            android:text="@string/try_another_way"
             android:textColor="@color/black"
             android:textSize="@dimen/_12sdp"
-            android:visibility="gone">
+            android:visibility="visible">
 
         </TextView>
 

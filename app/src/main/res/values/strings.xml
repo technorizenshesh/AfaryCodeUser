@@ -12,7 +12,7 @@
     <string name="usd">USD</string>
     <string name="order_confirmation">Order Confirmation</string>
     <string name="order_notes">You have not received any invoice from vendor yet. Please Wait...</string>
-    <string name="pharma_notes">AfaryCode Pharmatical Invoice...</string>
+    <string name="pharma_notes" translatable="false">AfaryCode Pharmatical Invoice...</string>
 
     <string name="register12">Register</string>
     <string name="sign_up">Sign Up</string>
@@ -249,7 +249,7 @@
     <string name="tell_us_your_experience">Tell us your experience</string>
     <string name="post_review">Post Review</string>
     <string name="order_to_pick_up_by_yourself">Order to pick up by yourself</string>
-    <string name="for_order_to_be_picked_up_by_yourself_afarycode_s_responsibilty_ends_upon_connection_and_payment_in_advance_from_the_seller_afarycode_cannot_be_held_responsible_for_some_reason_you_cannot_collect_your_order">For order to be picked up by yourself, Afarycode’s responsibilty ends upon connection and payment in advance from the seller. AfaryCode cannot be held responsible for some reason you cannot collect your order.</string>
+    <string name="some_reason_you_cannot_collect_your_order">For order to be picked up by yourself, Afarycode’s responsibilty ends upon connection and payment in advance from the seller. AfaryCode cannot be held responsible for some reason you cannot collect your order.</string>
     <string name="select_image_from">Select Image From</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
@@ -286,5 +286,15 @@
     <string name="password_should_be_same">Password Should Be Same</string>
     <string name="email">Email</string>
 
+
+
+    <string name="default_notification_channel_id">my_channel_id</string>
+    <string name="please_check_your_email_address">Please check your email we have sent a password on your email address</string>
+    <string name="send_admin_request_successfull">Send Admin Request Successful</string>
+    <string name="enter_otp">enter otp</string>
+    <string name="otp_text">We have sent you an SMS on\n</string>
+    <string name="with_6_digit">with 6 digit verification code.</string>
+    <string name="otp_successfully_send">otp successfully send your mobile number</string>
+    <string name="try_another_way">Try Another Way</string>
 
 </resources>

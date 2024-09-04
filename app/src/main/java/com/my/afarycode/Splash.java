@@ -21,6 +21,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.LoginActivity;
+import com.my.afarycode.OnlineShopping.VerificationScreen;
 import com.my.afarycode.OnlineShopping.WellcomeScreen;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.databinding.ActivitySplashBinding;
@@ -86,6 +87,10 @@ public class Splash extends AppCompatActivity {
                     startActivity(new Intent(Splash.this, LoginActivity.class)
                             .putExtra("type",""));
                     finish();
+
+                /*    startActivity(new Intent(Splash.this, VerificationScreen.class)
+                            .putExtra("type",""));
+                    finish();*/
                 }
             }
         }, 3000);

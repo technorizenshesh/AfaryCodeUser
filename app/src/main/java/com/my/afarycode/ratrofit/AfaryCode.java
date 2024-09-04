@@ -94,6 +94,16 @@ public interface AfaryCode {
     @POST("forgot_password")
     Call<ForgotPasswordModal> forgot_password(@FieldMap Map<String, String> params);
 
+
+  @FormUrlEncoded
+  @POST("send_otp")
+  Call<ResponseBody> sendOtpApi(@FieldMap Map<String, String> params);
+
+  @FormUrlEncoded
+  @POST("verify_mobile_otp")
+  Call<ResponseBody> verifyOtpApi(@FieldMap Map<String, String> params);
+
+
   @FormUrlEncoded
   @POST("forgot_password")
   Call<ResponseBody> forgot_passwordNew(@FieldMap Map<String, String> params);
