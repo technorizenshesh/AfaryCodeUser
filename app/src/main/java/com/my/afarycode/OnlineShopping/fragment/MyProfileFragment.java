@@ -2,7 +2,10 @@ package com.my.afarycode.OnlineShopping.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -32,6 +36,7 @@ import com.my.afarycode.ratrofit.ApiClient;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -51,16 +56,26 @@ public String TAG ="MyProfileFragment";
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_myprofile, container, false);
 
+
+        showLang(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, ""));
+
         binding.RRback.setOnClickListener(v -> {
             getFragmentManager().popBackStack();
         });
 
 
         binding.txtMyOrder.setOnClickListener(v -> {
-
             startActivity(new Intent(getActivity(), OrderHistoryScreen.class));
-
         });
+
+
+        binding.RRChangeLanguage.setOnClickListener(v -> {
+            showLanguageChangeDialog();
+        });
+
+
+
+
 
 
         binding.RRLogout.setOnClickListener(v -> {
@@ -111,6 +126,14 @@ public String TAG ="MyProfileFragment";
 
     }
 
+    private void showLang(String language) {
+        if(language.equalsIgnoreCase("en"))
+        binding.txtLang.setText(getString(R.string.english));
+        else if(language.equalsIgnoreCase("fr")) binding.txtLang.setText(getString(R.string.french));
+        else binding.txtLang.setText(getString(R.string.english));
+
+    }
+
 
     public boolean loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -125,15 +148,99 @@ public String TAG ="MyProfileFragment";
     }
 
 
+    private void showLanguageChangeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(R.string.change_language)
+                .setItems(new CharSequence[]{
+                        getString(R.string.english),
+                        getString(R.string.french)
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                // English
+                                changeLocale("en");
+                                break;
+                            case 1:
+                                // French
+                                changeLocale("fr");
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
+    }
+
+
+    private void changeLocale(String en) {
+        updateResources(requireActivity(),en);
+        updateLanguage(PreferenceConnector.readString(getActivity(),PreferenceConnector.User_id,""),en,requireActivity());
+
+    }
+
+
+    private void updateResources(Context wellcomeScreen, String en) {
+        Locale locale = new Locale(en);
+        Locale.setDefault(locale);
+        Resources resources = wellcomeScreen.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+
+    }
+
+
+    public  void updateLanguage(String id,String language, Context context) {
+        DataManager.getInstance().showProgressMessage(getActivity(),getString(R.string.please_wait));
+        AfaryCode apiInterface = ApiClient.getClient(context.getApplicationContext()).create(AfaryCode.class);
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id",id);
+        map.put("language",language);
+        Log.e(TAG,"Update Language Request "+map);
+        Call<ResponseBody> loginCall = apiInterface.updateLanguageApi(map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    if(jsonObject.getString("status").equals("1")){
+                        PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LANGUAGE, language);
+                        showLang(language);
+                        Intent intent = new Intent(requireActivity(), Splash.class);
+                        startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                    else if(jsonObject.getString("status").equals("0")){
+                        //App.showToast(context,"data not available", Toast.LENGTH_SHORT);
+                    }
+                    else if (jsonObject.getString("status").equals("5")) {
+                        logttt();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
 
     public  void Logout(String id, Context context) {
-        DataManager.getInstance().showProgressMessage(getActivity(),"Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(),getString(R.string.please_wait));
 
         AfaryCode apiInterface = ApiClient.getClient(context.getApplicationContext()).create(AfaryCode.class);
         Map<String, String> map = new HashMap<>();
         map.put("user_id",id);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
-
         Log.e(TAG,"User Logout Request "+map);
         Call<ResponseBody> loginCall = apiInterface.logoutApi(map);
         loginCall.enqueue(new Callback<ResponseBody>() {

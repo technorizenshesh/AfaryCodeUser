@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -46,6 +48,8 @@ import com.my.afarycode.OnlineShopping.Model.ProductItemModel;
 import com.my.afarycode.OnlineShopping.NotificationScreen;
 import com.my.afarycode.OnlineShopping.ProductListAct;
 import com.my.afarycode.OnlineShopping.SearchAct;
+import com.my.afarycode.OnlineShopping.SignUpActivity;
+import com.my.afarycode.OnlineShopping.WellcomeScreen;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.adapter.BannerAdapter1;
 import com.my.afarycode.OnlineShopping.adapter.CategoryAdapter;
@@ -206,8 +210,9 @@ public class HomeFragment extends Fragment implements SearchListener {
                     Log.e("MapMap", "GET RESPONSE" + dataResponse);
 
                     if (data.status.equals("1")) {
-                        binding.tvNames.setText("Hello, "+data.getResult().getUserName());
-                       // lastCountryName
+                       String g =  getString(R.string.hello);
+                        binding.tvNames.setText(g+" "+data.getResult().getUserName());
+                        // lastCountryName
                         if(PreferenceConnector.readString(getActivity(),PreferenceConnector.FROM,"").equalsIgnoreCase("splash")){
                             if(!data.getResult().getCountryName().equals("")) {
                                 lastCountryName = data.getResult().getCountryName();
@@ -284,9 +289,12 @@ public class HomeFragment extends Fragment implements SearchListener {
                             Log.e("image>>>", data.getResult().image);
                         }
 
+
                         getTitle();
                         if(data.getResult().getPasswordRequestStatus().equalsIgnoreCase("CHANGE_BY_ADMIN")) openResetPasswordAlert();
-
+                      //  if(data.getResult().getLanguage().equalsIgnoreCase("en")) changeLocale("en");
+                      //  else if(data.getResult().getLanguage().equalsIgnoreCase("fr")) changeLocale("fr");
+                     //   else changeLocale("en");
 
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
@@ -312,6 +320,11 @@ public class HomeFragment extends Fragment implements SearchListener {
         });
 
     }
+
+
+
+
+
 
     private void openResetPasswordAlert() {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -576,7 +589,7 @@ public class HomeFragment extends Fragment implements SearchListener {
 
 
     private void GetBannerAPi() {
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -654,7 +667,7 @@ public class HomeFragment extends Fragment implements SearchListener {
     }
 
     private void GetBannerAPi2() {
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -754,7 +767,7 @@ public class HomeFragment extends Fragment implements SearchListener {
 
     private void GetCategoryAPi() {
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

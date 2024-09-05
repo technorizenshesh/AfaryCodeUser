@@ -5,47 +5,27 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.auth.api.phone.SmsRetrieverClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.gson.Gson;
-import com.my.afarycode.OnlineShopping.Model.CheckOtp;
-import com.my.afarycode.OnlineShopping.Model.ForgotPasswordModal;
+
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
-import com.my.afarycode.OnlineShopping.helper.MySMSBroadcastReceiver;
+import com.my.afarycode.readotp.SmsBroadcastReceiver;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityVerificationScreenBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
-import com.my.afarycode.readotp.AppSignatureHashHelper;
-import com.my.afarycode.readotp.SMSReceiver;
-
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,6 +36,8 @@ public class VerificationScreen extends AppCompatActivity {
     private AfaryCode apiInterface;
     String userId="",mobile="",countryCode="";
     public static final String TAG = VerificationScreen.class.getSimpleName();
+    private static final int REQ_USER_CONSENT = 200;
+    SmsBroadcastReceiver smsBroadcastReceiver;
 
 
 
@@ -65,58 +47,21 @@ public class VerificationScreen extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_verification_screen);
         apiInterface = ApiClient.getClient(this).create(AfaryCode.class);
         SetupUI();
+        startSmartUserConsent();
     }
 
 
-
     private void SetupUI() {
-
-
-
-        SmsRetrieverClient client = SmsRetriever.getClient(this /* context */);
-
-// Starts SmsRetriever, which waits for ONE matching SMS message until timeout
-// (5 minutes). The matching SMS message will be sent via a Broadcast Intent with
-// action SmsRetriever#SMS_RETRIEVED_ACTION.
-        Task<Void> task = client.startSmsRetriever();
-
-// Listen for success/failure of the start Task. If in a background thread, this
-// can be made blocking using Tasks.await(task, [timeout]);
-        task.addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                // Successfully started retriever, expect broadcast intent
-                // ...
-            }
-        });
-
-        task.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // Failed to start retriever, inspect Exception for more details
-                // ...
-            }
-        });
-
-
-
-
         if(getIntent()!=null){
             userId = getIntent().getStringExtra("user_id");
             mobile = getIntent().getStringExtra("mobile");
            countryCode = "+"+getIntent().getStringExtra("countryCode");
 
-            binding.description.setText(getString(R.string.otp_text) + " " + mobile +" " + getString(R.string.with_6_digit));
+            binding.description.setText(getString(R.string.otp_text1) + " " +countryCode +mobile +" " + getString(R.string.otp_text2));
         }
 
-
-      //  mobile = "9111276286";
-     //   countryCode = "+91";
-
-      //  binding.description.setText(getString(R.string.otp_text) + " " + mobile +" " + getString(R.string.with_6_digit));
-
-        binding.description.setText(getString(R.string.otp_text1)+ " " + mobile + " " + getString(R.string.otp_text2));
-
+        //  mobile = "9755463923";
+       //  countryCode = "+91";
 
         binding.btnVerify.setOnClickListener(v -> {
             if(binding.Otp.getOTP().equals("")){
@@ -129,26 +74,15 @@ public class VerificationScreen extends AppCompatActivity {
         });
 
         binding.resendOtp.setOnClickListener(v -> {
+            binding.Otp.setOTP("");
+            startSmartUserConsent();
             sendVerificationCode(mobile,countryCode);
         });
 
         sendVerificationCode(mobile,countryCode);
-
-
-        MySMSBroadcastReceiver receiver = new MySMSBroadcastReceiver();
-        IntentFilter filter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
-        }
-        else {
-            registerReceiver(receiver, filter);
-
-        }
-
     }
 
     private void sendVerificationCode(String mobileNumber,String countryCode) {
-
         DataManager.getInstance().showProgressMessage(VerificationScreen.this, getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("mobile_number",mobileNumber);
@@ -187,7 +121,6 @@ public class VerificationScreen extends AppCompatActivity {
     }
 
     private void VerificationAPI() {
-
         DataManager.getInstance().showProgressMessage(VerificationScreen.this, getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("mobile_number",mobile);
@@ -212,6 +145,8 @@ public class VerificationScreen extends AppCompatActivity {
                         finish();
                     } else if (jsonObject.getString("status").equals("0")) {
                         Toast.makeText(VerificationScreen.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        sendVerificationCode(mobile,countryCode);
+
                     }
 
                 } catch (Exception e) {
@@ -229,6 +164,82 @@ public class VerificationScreen extends AppCompatActivity {
 
 
 
+    private void startSmartUserConsent() {
+        SmsRetrieverClient client = SmsRetriever.getClient(this);
+        client.startSmsUserConsent(null);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_USER_CONSENT){
+
+            if ((resultCode == RESULT_OK) && (data != null)){
+                String message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE);
+                getOtpFromMessage(message);
+            }
+        }
+
+    }
+
+    private void getOtpFromMessage(String message) {
+
+        Pattern otpPattern = Pattern.compile("(|^)\\d{6}");
+        Matcher matcher = otpPattern.matcher(message);
+        if (matcher.find()){
+            /// etOTP.setText();
+            binding.Otp.setOTP(matcher.group(0));
+
+        }
+
+    }
+
+    private void registerBroadcastReceiver(){
+
+        smsBroadcastReceiver = new SmsBroadcastReceiver();
+
+        smsBroadcastReceiver.smsBroadcastReceiverListener = new SmsBroadcastReceiver.SmsBroadcastReceiverListener() {
+            @Override
+            public void onSuccess(Intent intent) {
+
+                startActivityForResult(intent,REQ_USER_CONSENT);
+
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(smsBroadcastReceiver, intentFilter,Context.RECEIVER_NOT_EXPORTED);
+            Log.e("11111:","====");
+
+        }
+        else {
+            registerReceiver(smsBroadcastReceiver,intentFilter);
+            Log.e("22222:","====");
+
+        }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerBroadcastReceiver();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(smsBroadcastReceiver);
+    }
 
 
 

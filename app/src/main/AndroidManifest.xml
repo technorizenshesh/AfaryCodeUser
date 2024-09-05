@@ -23,8 +23,6 @@
     <uses-permission android:name="com.myapp.mobile.permission.MAPS_RECEIVE" />
 
 
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.READ_SMS"/>
 
     <application
         android:allowBackup="true"
@@ -313,13 +311,7 @@
 
 
 
-        <receiver
-        android:name=".readotp.SMSReceiver"
-        android:exported="true">
-        <intent-filter>
-            <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
-        </intent-filter>
-    </receiver>
+
 
         <service
             android:name=".OnlineShopping.helper.MyService"
@@ -352,20 +344,6 @@
         <meta-data
             android:name="com.google.firebase.MESSAGING_DEFAULT_CHANNEL_ID"
             android:value="@string/default_notification_channel_id" />
-
-
-        <meta-data
-            android:name="com.google.android.gms.otp.AUTO_VERIFY"
-            android:value="true" />
-
-
-      <!--  <receiver android:name=".OnlineShopping.helper.MySMSBroadcastReceiver"
-            android:permission="android.permission.BROADCAST_SMS"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>
-            </intent-filter>
-        </receiver>-->
 
     </application>
 

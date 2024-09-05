@@ -24,6 +24,8 @@ public class PreferenceConnector {
     public static final String Firebash_Token ="Firebash_Token";
     public static final String LAT ="lat";
     public static final String LON ="lon";
+    public static final String LANGUAGE ="language";
+
 
     public static final String COUNTRY_ID ="country_id";
 

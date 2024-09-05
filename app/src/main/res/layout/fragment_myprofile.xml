@@ -78,6 +78,66 @@
 
                 </RelativeLayout>
 
+
+                <RelativeLayout
+                    android:id="@+id/RRChangeLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:background="@color/white"
+                    android:elevation="@dimen/_5sdp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_toStartOf="@+id/ivNext"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_centerInParent="true"
+                        >
+                        <TextView
+                            android:id="@+id/txtChangeLang"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="@string/change_language"
+                            android:textColor="@color/natural_gray"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="normal"
+                            />
+
+                        <TextView
+                            android:id="@+id/txtLang"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/natural_gray"
+                            android:textSize="@dimen/_10sdp"
+                            android:textStyle="normal"
+                            />
+
+
+                    </LinearLayout>
+
+
+
+                    <ImageView
+                        android:id="@+id/ivNext"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:src="@drawable/back_right"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/_3sdp"
+                        android:layout_marginEnd="@dimen/_3sdp"/>
+
+
+
+                </RelativeLayout>
+
+
                 <RelativeLayout
                     android:id="@+id/RRUpdateProfile"
                     android:layout_width="match_parent"

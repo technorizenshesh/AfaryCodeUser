@@ -100,6 +100,17 @@ public class GetProfileModal {
         @SerializedName("password_request_status")
         @Expose
         private String passwordRequestStatus;
+        @SerializedName("language")
+        @Expose
+        public String language;
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
+        }
 
 
         public String getName() {

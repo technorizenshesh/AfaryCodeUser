@@ -135,6 +135,11 @@ public class MyFirebaseMessagingService extends
                    intent = new Intent(getApplicationContext(), Splash.class);
                }
 
+               else if (type.contains("Registration")){
+                   // PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.LoginStatus, "false");
+                   intent = new Intent(getApplicationContext(), Splash.class);
+               }
+
 
 
                else {

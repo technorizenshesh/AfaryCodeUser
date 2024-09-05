@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     ActivitySignUpBinding binding;
     private AfaryCode apiInterface;
-    private String code;
+    private String code,lang="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void SetupUi() {
+
+        if(getIntent()!=null){
+            lang = getIntent().getStringExtra("lang");
+        }
+
 
         binding.RRSigUp.setOnClickListener(v -> {
             code = binding.ccp.getSelectedCountryCode();
@@ -92,6 +97,7 @@ public class SignUpActivity extends AppCompatActivity {
         map.put("mobile",binding.phone.getText().toString());
         map.put("country_code",code);
         map.put("country","");
+        map.put("language",lang);
 
         map.put("register_id", PreferenceConnector.readString(SignUpActivity.this,
                 PreferenceConnector.Firebash_Token, ""));
@@ -120,6 +126,7 @@ public class SignUpActivity extends AppCompatActivity {
                         String email1 = data.result.email;
                         String password = data.result.password;
                         String otp = data.result.otp;
+                        String lang = data.getResult().getLanguage();
 
                       //  Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
 
@@ -129,6 +136,7 @@ public class SignUpActivity extends AppCompatActivity {
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_First_name, firstName);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.Password, password);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.OTP, otp);
+                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.LANGUAGE, lang);
 
                         startActivity(new Intent(SignUpActivity.this, VerificationScreen.class)
                                 .putExtra("status", "")

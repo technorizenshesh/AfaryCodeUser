@@ -30,6 +30,7 @@ public class WellcomeScreen extends AppCompatActivity {
     private Object item;
 
     ArrayList<SliderData>arrayList =new ArrayList<>();
+    String lang="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +53,12 @@ public class WellcomeScreen extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 item = parent.getSelectedItem();
                 if (item.equals("English")) {
-
+                    lang = "en";
                     updateResources(WellcomeScreen.this, "en");
 
 
                 } else if (item.equals("Français")) {
+                    lang = "fr";
                     updateResources(WellcomeScreen.this, "fr");
                 }
 
@@ -75,7 +77,7 @@ public class WellcomeScreen extends AppCompatActivity {
         });
 
         binding.RRSignUp.setOnClickListener(v -> {
-            startActivity(new Intent(WellcomeScreen.this, SignUpActivity.class));
+            startActivity(new Intent(WellcomeScreen.this, SignUpActivity.class).putExtra("lang",lang));
            finish();
         });
 

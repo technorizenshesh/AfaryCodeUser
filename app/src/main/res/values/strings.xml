@@ -8,15 +8,13 @@
     <string name="GETACall"><u>GET A Call</u></string>
     <string name="Login"><u>LOGIN</u></string>
     <string name="book_your_nearby_provider">Book Your Nearby Provider</string>
-    <string name="english">English</string>
     <string name="usd">USD</string>
     <string name="order_confirmation">Order Confirmation</string>
-    <string name="order_notes">You have not received any invoice from vendor yet. Please Wait...</string>
+    <string name="order_notes">You have not received any invoice from vendor yet. Please Wait…</string>
     <string name="pharma_notes" translatable="false">AfaryCode Pharmatical Invoice...</string>
-
-    <string name="register12">Register</string>
-    <string name="sign_up">Sign Up</string>
-    <string name="sign_in">Sign In</string>
+    <string name="register12" translatable="false">Register</string>
+    <string name="sign_up" translatable="false">Sign Up</string>
+    <string name="sign_in" translatable="false">Sign In</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="don_t_have_an_account">Don\'t have an account ?</string>
     <string name="password">Password</string>
@@ -242,7 +240,7 @@
     <string name="already_have_an_account">Already have an account ?</string>
     <string name="enter_code">Enter code.</string>
     <string name="otp_text1">"We have sent you an SMS on "</string>
-    <string name="otp_text2">with 6 digit verfication code.</string>
+    <string name="otp_text2">with 6 digit verification code.</string>
     <string name="did_not_receive_the_code">Did not receive the code?</string>
     <string name="write_a_review">Write a review</string>
     <string name="please_give_your_review">Please give your review.</string>
@@ -288,6 +286,8 @@
 
 
 
+
+
     <string name="default_notification_channel_id">my_channel_id</string>
     <string name="please_check_your_email_address">Please check your email we have sent a password on your email address</string>
     <string name="send_admin_request_successfull">Send Admin Request Successful</string>
@@ -296,5 +296,9 @@
     <string name="with_6_digit">with 6 digit verification code.</string>
     <string name="otp_successfully_send">otp successfully send your mobile number</string>
     <string name="try_another_way">Try Another Way</string>
-
+    <string name="change_language">Change Language</string>
+    <string name="english">English</string>
+    <string name="french">French</string>
+    <string name="language_changed">Language changed to %1$s</string>
+    <string name="hello">Hello,</string>
 </resources>

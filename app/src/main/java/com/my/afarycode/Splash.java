@@ -88,7 +88,7 @@ public class Splash extends AppCompatActivity {
                             .putExtra("type",""));
                     finish();
 
-                /*    startActivity(new Intent(Splash.this, VerificationScreen.class)
+                  /*  startActivity(new Intent(Splash.this, VerificationScreen.class)
                             .putExtra("type",""));
                     finish();*/
                 }

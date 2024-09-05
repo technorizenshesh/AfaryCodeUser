@@ -1,21 +1,19 @@
-<!--
 <resources>
     <string name="app_name">AfaryCode</string>
     <string name="login_now">Connectez-vous maintenant</string>
     <string name="register">S\'inscrire</string>
-    <string name="register1"><u>S'inscrire</u></string>
+    <string name="register1">S\'inscrire</string>
     <string name="Skip"><u>Quitter</u></string>
     <string name="Resend"><u>Renvoyer</u></string>
     <string name="GETACall"><u>OBTENIR UN APPEL</u></string>
     <string name="Login"><u>SE CONNECTER</u></string>
     <string name="book_your_nearby_provider">Recherché un prestataire à proximité</string>
-    <string name="english">Anglais</string>
     <string name="usd">USD</string>
     <string name="order_confirmation">Confirmation de commande</string>
     <string name="order_notes">Vous n\'avez pas encore reçu de facture du Prestataire. Veuillez patienter…</string>
     <string name="pharma_notes">Facture pharmaceutique AfaryCode…</string>
-    <string name="register12">S&apos;inscrire</string>
-    <string name="sign_up">S&apos;inscrire</string>
+    <string name="register12">S\'inscrire</string>
+    <string name="sign_up">S\'inscrire</string>
     <string name="sign_in">Se connecter</string>
     <string name="forgot_password">Mot de passe oublié?</string>
     <string name="don_t_have_an_account">Vous n\'avez pas de compte ?</string>
@@ -50,7 +48,7 @@
     <string name="new_password">Nouveau mot de passe</string>
     <string name="repeat_password">Répéter le mot de passe</string>
     <string name="save_password">Enregistrer le mot de passe</string>
-    <string name="_135_136_sneh_nagar_near_agrasen_marg">135–136 sneh nagar, near agrasen marg</string>
+    <string name="_135_136_sneh_nagar_near_agrasen_marg">135-136 sneh nagar, near agrasen marg</string>
     <string name="update">Mise à jour</string>
     <string name="terms_and_conditions">Termes et conditions</string>
     <string name="privacy_policy">Politique de confidentialité</string>
@@ -62,8 +60,8 @@
     <string name="available_balance">Solde disponible</string>
     <string name="add_money"><u>CREDITER VOTRE COMPTE</u></string>
     <string name="add_money1">CREDITER VOTRE COMPTE</string>
-    <string name="transfer_money"><u>TRANSFÉRER DE L'ARGENT</u></string>
-    <string name="withdraw_money"><u>RETIRER DE L'ARGENT</u></string>
+    <string name="transfer_money">TRANSFÉRER DE L\'ARGENT</string>
+    <string name="withdraw_money">ETIRER DE L\'ARGENT</string>
     <string name="wishlist">Liste de souhaits</string>
     <string name="add_to_card"><u>Ajouter au panier</u></string>
     <string name="please_deliver_it_to_my_home">Veuillez le livrez à mon domicile</string>
@@ -76,8 +74,6 @@
     <string name="done">Terminer</string>
     <string name="count">National</string>
     <string name="send_my_invoice_to_another_person">Envoyer ma facture à une autre personne</string>
-
-
     <string name="skip">Quitter</string>
     <string name="ok">Ok</string>
     <string name="address">Adresse</string>
@@ -86,7 +82,7 @@
     <string name="select_buy_car">Acheter une voiture</string>
     <string name="medicine">Médicaments</string>
     <string name="Qty">Qty</string>
-    <string name="please_wait">Veuillez patienter…</string>
+    <string name="please_wait">Veuillez patienter...</string>
     <string name="search_here">Rechercher ici</string>
     <string name="not_available">Pas disponible</string>
     <string name="change_your_location">Changer votre emplacement</string>
@@ -115,9 +111,9 @@
     <string name="your_address_title">le titre de votre adresse</string>
 
 
-    &lt;!&ndash;
+    <!--
            AIzaSyD5KJs-4W2v_SJM5oJrwrC92KCcu34m9do
-    &ndash;&gt;
+    -->
     <string name="place_api_key">AIzaSyAAjp4wuz5FyteoKH3Yp7Cv8pS1K86fJw0</string>
     <string name="please_select_address_type">Sélectionner le type d\'adresse</string>
     <string name="please_enter_mobile_number">Sélectionner le numéro de téléphone</string>
@@ -251,7 +247,7 @@
     <string name="tell_us_your_experience">Racontez-nous votre expérience</string>
     <string name="post_review">Poster un avis</string>
     <string name="order_to_pick_up_by_yourself">Commande à récupérer soi-même</string>
-    <string name="some_reason_you_cannot_collect_your_order">Pour les commandes à récupérer par vos soins, la responsabilité d\'AfaryCode prend fin dès la connexion et le paiement anticipé auprès du vendeur. AfaryCode ne peut être tenu responsable de l'impossibilité pour vous de récupérer votre commande.</string>
+    <string name="some_reason_you_cannot_collect_your_order">Pour les commandes à récupérer par vos soins, la responsabilité d\'AfaryCode prend fin dès la connexion et le paiement anticipé auprès du vendeur. AfaryCode ne peut être tenu responsable de l\'impossibilité pour vous de récupérer votre commande.</string>
     <string name="select_image_from">Sélectionner une image à partir de</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallerie</string>
@@ -269,14 +265,10 @@
     <string name="delivered">Livré</string>
     <string name="in_wish_list">Dans la liste de souhaits</string>
     <string name="top_categorie">Catégorie supérieure</string>
-    <string name="transfer_money_">Transférer de l&apos;argent</string>
-    <string name="send_money_to_someone_else_s_wallet">Envoyer de l\'argent sur le portefeuille de quelqu'un d'autre</string>
+    <string name="transfer_money_">Transférer de l\'argent</string>
+    <string name="send_money_to_someone_else_s_wallet">Envoyer de l\'argent sur le portefeuille de quelqu\'un d\'autre</string>
     <string name="request_money_from_someone_receive_in_my_wallet">Demander de l\'argent à quelqu\'un (recevoir dans mon portefeuille)</string>
-&lt;!&ndash;
     <string name="withdraw_money_">Retirer de l\'argent</string>
-&ndash;&gt;
-    <string name="withdraw_money_">Retirer de l&apos;argent</string>
-
     <string name="reference_of_the_transaction_to_be_reimbursed">Référence de la transaction à rembourser</string>
     <string name="text_area_for_help">Zone de texte pour l\'aide</string>
     <string name="insert_the_transaction_id_for_which_you_wish_to_be_reimbursed">Insérez l\'ID de transaction pour laquelle vous souhaitez être remboursé</string>
@@ -293,13 +285,32 @@
     <string name="email">Email</string>
 
 
+
+
+
     <string name="default_notification_channel_id">my_channel_id</string>
-    <string name="please_check_your_email_address">Veuillez vérifier votre email, nous avons envoyé un mot de passe sur votre adresse email</string>
-    <string name="send_admin_request_successfull">Envoyer la demande d\'administration avec succès</string>
+    <string name="please_check_your_email_address">Please check your email we have sent a password on your email address</string>
+    <string name="send_admin_request_successfull">Send Admin Request Successful</string>
+    <string name="enter_otp">enter otp</string>
+    <string name="otp_text">We have sent you an SMS on\n</string>
+    <string name="with_6_digit">with 6 digit verification code.</string>
+    <string name="otp_successfully_send">otp successfully send your mobile number</string>
+    <string name="try_another_way">Try Another Way</string>
+    <string name="change_language">Changer la langue</string>
+    <string name="english">Anglais</string>
+    <string name="french">Français</string>
+    <string name="language_changed">Langue changée en %1$s</string>
+    <string name="hello">Bonjour,</string>
 
-</resources>-->
+</resources>
 
 
+
+
+
+
+
+<!--
 <resources>
     <string name="app_name">AfaryCode</string>
     <string name="login_now">Login Now</string>
@@ -415,9 +426,9 @@
     <string name="your_address_title">Your Address Title</string>
 
 
-    <!--
+    &lt;!&ndash;
            AIzaSyD5KJs-4W2v_SJM5oJrwrC92KCcu34m9do
-    -->
+    &ndash;&gt;
     <string name="place_api_key">AIzaSyAAjp4wuz5FyteoKH3Yp7Cv8pS1K86fJw0</string>
     <string name="please_select_address_type">Please select address type</string>
     <string name="please_enter_mobile_number">Please select phone number</string>
@@ -598,4 +609,13 @@
     <string name="enter_otp">enter otp</string>
     <string name="otp_text">We have sent you an SMS on\n</string>
     <string name="with_6_digit">with 6 digit verification code.</string>
-</resources>
+</resources>-->
+
+
+    <!--
+        <string name="register1"><u>S'inscrire</u></string>
+    -->
+
+    <!--
+        <string name="send_my_invoice_to_another_person">Envoyer ma facture à une autre personne</string>
+    -->

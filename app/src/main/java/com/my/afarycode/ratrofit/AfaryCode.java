@@ -405,4 +405,11 @@ public interface AfaryCode {
   @FormUrlEncoded
   @POST("change_password_user")
   Call<ResponseBody> changePasswordRepo(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("update_language")
+  Call<ResponseBody> updateLanguageApi(@FieldMap Map<String, String> params);
+
+
 }
