@@ -411,5 +411,7 @@ public interface AfaryCode {
   @POST("update_language")
   Call<ResponseBody> updateLanguageApi(@FieldMap Map<String, String> params);
 
+  @GET("get_register_description")
+    Call<ResponseBody> getTitleDes();
 
 }

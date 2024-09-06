@@ -22,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.my.afarycode.OnlineShopping.ForgotPassword;
+import com.my.afarycode.OnlineShopping.SignUpActivity;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
@@ -111,7 +112,7 @@ public class SendAdminRequestBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void sendAdminRequestAPI(String email) {
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
 
         Map<String,String> headerMap = new HashMap<>();
        // headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
@@ -119,6 +120,9 @@ public class SendAdminRequestBottomSheet extends BottomSheetDialogFragment {
 
         Map<String, String> map = new HashMap<>();
         map.put("email", email);
+        map.put("user_type", "User");
+        map.put("device_id", PreferenceConnector.readString(requireActivity(),
+                PreferenceConnector.Firebash_Token, ""));
 
         Log.e("MapMap", "Send Admin Request" + map);
         Call<ResponseBody> SignupCall = apiInterface.sendAdminRequest(map);
@@ -137,8 +141,8 @@ public class SendAdminRequestBottomSheet extends BottomSheetDialogFragment {
                         listener.ask(responseData,"send");
                         dialog.dismiss();
                     } else if (object.optString("status").equals("0")) {
-                        listener.ask("","send");
-                        dialog.dismiss();
+                       // listener.ask("","send");
+                      //  dialog.dismiss();
                         Toast.makeText(getContext(), object.optString("message"), Toast.LENGTH_LONG).show();
 
                     }

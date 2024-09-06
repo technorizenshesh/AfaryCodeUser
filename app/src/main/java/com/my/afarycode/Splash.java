@@ -8,6 +8,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,9 +26,12 @@ import com.my.afarycode.OnlineShopping.LoginActivity;
 import com.my.afarycode.OnlineShopping.VerificationScreen;
 import com.my.afarycode.OnlineShopping.WellcomeScreen;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
 import com.my.afarycode.databinding.ActivitySplashBinding;
 
 import static android.content.ContentValues.TAG;
+
+import java.util.Locale;
 
 public class Splash extends AppCompatActivity {
 
@@ -71,6 +76,23 @@ public class Splash extends AppCompatActivity {
         });
 
 
+
+        String lang = PreferenceConnector.readString(Splash.this, PreferenceConnector.LANGUAGE, "");
+        Log.e("Language====",lang);
+        switch (lang) {
+            case "en":
+                changeLocale("en");
+                break;
+            case "fr":
+                changeLocale("fr");
+                break;
+            default:
+                changeLocale("en");
+                break;
+
+        }
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -83,7 +105,7 @@ public class Splash extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                 //   Intent intent = new Intent(Splash.this, WellcomeScreen.class);
+                    //   Intent intent = new Intent(Splash.this, WellcomeScreen.class);
                     startActivity(new Intent(Splash.this, LoginActivity.class)
                             .putExtra("type",""));
                     finish();
@@ -94,6 +116,9 @@ public class Splash extends AppCompatActivity {
                 }
             }
         }, 3000);
+
+
+
     }
 
 
@@ -134,7 +159,21 @@ public class Splash extends AppCompatActivity {
         }
     }
 
+    private void changeLocale(String en) {
+        updateResources(Splash.this,en);
+        PreferenceConnector.writeString(Splash.this, PreferenceConnector.LANGUAGE, en);
+    }
 
+
+    private void updateResources(Context wellcomeScreen, String en) {
+        Locale locale = new Locale(en);
+        Locale.setDefault(locale);
+        Resources resources = wellcomeScreen.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+
+    }
 
 
 }

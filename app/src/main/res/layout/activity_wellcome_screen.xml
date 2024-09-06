@@ -54,7 +54,7 @@
                 <com.smarteist.autoimageslider.SliderView
                     android:id="@+id/imageSlider"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="@dimen/_200sdp"
                     app:sliderAnimationDuration="15"
                     app:sliderAutoCycleDirection="back_and_forth"
                     app:sliderAutoCycleEnabled="true"
@@ -92,35 +92,37 @@
                         android:visibility="visible">
 
 
-                        <Spinner
+                       <!-- <Spinner
                             android:id="@+id/langougeChange"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            />
+                            />-->
 
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:id="@+id/tvLanguage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_centerVertical="true"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/_20sdp"
-                            android:text="@string/english"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:text="@string/select"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_14sdp"
-                            android:textStyle="bold"
-                            android:visibility="gone"
-                            />
+                            android:textSize="@dimen/_12sdp"
+                            android:textStyle="normal"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_toStartOf="@+id/ivLanguage"/>
 
 
                         <ImageView
-                            android:layout_width="@dimen/_12sdp"
-                            android:layout_height="@dimen/_12sdp"
-                            android:layout_alignParentRight="true"
+                            android:id="@+id/ivLanguage"
+                            android:layout_width="@dimen/_10sdp"
+                            android:layout_height="@dimen/_10sdp"
+                            android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/_10sdp"
-                            android:src="@drawable/dropdown"
-                            android:visibility="gone" />
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:src="@drawable/dropdown"/>
 
 
                     </RelativeLayout>
@@ -170,6 +172,7 @@
                     android:background="@drawable/border_btn">
 
                     <TextView
+                        android:id="@+id/tvText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"

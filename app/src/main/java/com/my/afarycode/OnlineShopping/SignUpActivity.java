@@ -127,16 +127,24 @@ public class SignUpActivity extends AppCompatActivity {
                         String password = data.result.password;
                         String otp = data.result.otp;
                         String lang = data.getResult().getLanguage();
-
+                        String token = data.result.getAccessToken();
+                        String username = data.result.userName;
+                        String img = data.result.image;
                       //  Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
+
 
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_id, user_id);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_email, email1);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_Mobile, moble_no);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_First_name, firstName);
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.Password, password);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.OTP, otp);
+                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_First_name, firstName);
+                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_name, username);
+                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_img, img);
+                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.access_token, token);
+                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.Register_id, data.getResult().getRegisterId());
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.LANGUAGE, lang);
+
+
 
                         startActivity(new Intent(SignUpActivity.this, VerificationScreen.class)
                                 .putExtra("status", "")

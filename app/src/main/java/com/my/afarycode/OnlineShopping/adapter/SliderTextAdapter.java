@@ -1,6 +1,8 @@
 package com.my.afarycode.OnlineShopping.adapter;
 
 import android.content.Context;
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.Model.SliderData;
+import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.R;
+import com.my.afarycode.Splash;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
@@ -19,9 +23,9 @@ public class SliderTextAdapter extends
         SliderViewAdapter<SliderTextAdapter.SliderAdapterVH> {
 
     private Context context;
-    private List<SliderData> mSliderItems ;
+    private List<SliderData.Result> mSliderItems ;
 
-    public SliderTextAdapter(Context context, ArrayList<SliderData> get_result1) {
+    public SliderTextAdapter(Context context, ArrayList<SliderData.Result> get_result1) {
         this.context = context;
         this.mSliderItems = get_result1;
     }
@@ -37,10 +41,40 @@ public class SliderTextAdapter extends
 
     @Override
     public void onBindViewHolder(SliderAdapterVH viewHolder, final int position) {
-        viewHolder.tvTitle.setText(mSliderItems.get(position).getTitle());
-        viewHolder.tvDescription.setText(mSliderItems.get(position).getDescription());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            if( PreferenceConnector.readString(context, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))  {
+                viewHolder.tvDescription.setText(Html.fromHtml(mSliderItems.get(position).getDescription(), Html.FROM_HTML_MODE_COMPACT));
+                viewHolder.tvTitle.setText(Html.fromHtml(mSliderItems.get(position).getHeading(), Html.FROM_HTML_MODE_COMPACT));
+            }
+            else if(PreferenceConnector.readString(context, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr")){
+                viewHolder.tvDescription.setText(Html.fromHtml(mSliderItems.get(position).getDescriptionFr(), Html.FROM_HTML_MODE_LEGACY));
+                viewHolder.tvTitle.setText(Html.fromHtml(mSliderItems.get(position).getHeadingFr(), Html.FROM_HTML_MODE_LEGACY));
+            }
+            else {
+                viewHolder.tvDescription.setText(Html.fromHtml(mSliderItems.get(position).getDescription(), Html.FROM_HTML_MODE_COMPACT));
+                viewHolder.tvTitle.setText(Html.fromHtml(mSliderItems.get(position).getHeading(), Html.FROM_HTML_MODE_COMPACT));
+
+            }
 
 
+        } else {
+            if(PreferenceConnector.readString(context, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))    {
+                viewHolder.tvDescription.setText(Html.fromHtml(mSliderItems.get(position).getDescription()));
+                viewHolder.tvTitle.setText(mSliderItems.get(position).getHeading());
+            }
+            else if(PreferenceConnector.readString(context, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))  {
+                viewHolder.tvDescription.setText(Html.fromHtml(mSliderItems.get(position).getDescriptionFr()));
+                viewHolder.tvTitle.setText(mSliderItems.get(position).getHeadingFr());
+            }
+            else  {
+                viewHolder.tvDescription.setText(Html.fromHtml(mSliderItems.get(position).getDescription()));
+                viewHolder.tvTitle.setText(mSliderItems.get(position).getHeading());
+            }
+
+
+
+        }
     }
 
     @Override

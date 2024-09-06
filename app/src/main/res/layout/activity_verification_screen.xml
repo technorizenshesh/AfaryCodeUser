@@ -194,11 +194,11 @@
             android:layout_marginTop="@dimen/_20sdp"
             android:text="@string/did_not_receive_the_code"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp">
+            android:textSize="@dimen/_13sdp">
 
         </TextView>
 
-        <TextView
+     <!--   <TextView
             android:id="@+id/resend_otp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -208,7 +208,47 @@
             android:text="@string/Resend"
             android:textColor="@color/purple_200"
             android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
+            android:textStyle="bold" />-->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:gravity="center"
+            >
+
+
+
+            <TextView
+                android:id="@+id/resend_otp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textStyle="normal"
+                android:text="@string/Resend"
+                android:textAlignment="center"
+                android:textColor="#0292AA"
+                android:textSize="@dimen/_15sdp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textStyle="normal"
+                android:textAlignment="center"
+                android:textColor="#0292AA"
+                android:textSize="@dimen/_15sdp"
+                android:visibility="gone"/>
+
+
+
+        </RelativeLayout>
+
+
+
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -217,7 +257,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:text="@string/try_another_way"
             android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_13sdp"
             android:visibility="visible">
 
         </TextView>

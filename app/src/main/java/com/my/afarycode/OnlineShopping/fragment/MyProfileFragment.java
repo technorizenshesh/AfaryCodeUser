@@ -79,7 +79,8 @@ public String TAG ="MyProfileFragment";
 
 
         binding.RRLogout.setOnClickListener(v -> {
-            Logout(PreferenceConnector.readString(getActivity(),PreferenceConnector.User_id,""),getActivity());
+          //  Logout(PreferenceConnector.readString(getActivity(),PreferenceConnector.User_id,""),getActivity());
+            showLogoutDialog();
         });
 
         binding.txtWishList.setOnClickListener(v -> {
@@ -175,6 +176,7 @@ public String TAG ="MyProfileFragment";
 
     private void changeLocale(String en) {
         updateResources(requireActivity(),en);
+        PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LANGUAGE, en);
         updateLanguage(PreferenceConnector.readString(getActivity(),PreferenceConnector.User_id,""),en,requireActivity());
 
     }
@@ -207,7 +209,6 @@ public String TAG ="MyProfileFragment";
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     if(jsonObject.getString("status").equals("1")){
-                        PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LANGUAGE, language);
                         showLang(language);
                         Intent intent = new Intent(requireActivity(), Splash.class);
                         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
@@ -276,10 +277,35 @@ public String TAG ="MyProfileFragment";
     }
 
     private  void logttt() {
-        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
-        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-        getActivity().finish();
+
     }
+
+
+    private void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(getString(R.string.logout))
+                .setMessage(getString(R.string.are_you_sure_logout))
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Handle cancel action
+                        dialog.dismiss();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
 
 }

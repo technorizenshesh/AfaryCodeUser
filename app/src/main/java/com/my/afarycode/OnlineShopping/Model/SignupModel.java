@@ -100,6 +100,18 @@ public class SignupModel {
         @Expose
         public String language;
 
+        @SerializedName("access_token")
+        @Expose
+        private String accessToken;
+
+        public String getAccessToken() {
+            return accessToken;
+        }
+
+        public void setAccessToken(String accessToken) {
+            this.accessToken = accessToken;
+        }
+
         public String getLanguage() {
             return language;
         }

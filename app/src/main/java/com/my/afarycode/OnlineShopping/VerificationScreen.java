@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,7 +40,8 @@ public class VerificationScreen extends AppCompatActivity {
     public static final String TAG = VerificationScreen.class.getSimpleName();
     private static final int REQ_USER_CONSENT = 200;
     SmsBroadcastReceiver smsBroadcastReceiver;
-
+    private static final long TIMER_DURATION = 60000; // 1 minute in milliseconds
+    private static final long TIMER_INTERVAL = 1000;  // 1 second interval
 
 
     @Override
@@ -60,8 +63,10 @@ public class VerificationScreen extends AppCompatActivity {
             binding.description.setText(getString(R.string.otp_text1) + " " +countryCode +mobile +" " + getString(R.string.otp_text2));
         }
 
-        //  mobile = "9755463923";
-       //  countryCode = "+91";
+        /* mobile = "9755463923";
+        countryCode = "+91";
+        binding.description.setText(getString(R.string.otp_text1) + " " +countryCode +mobile +" " + getString(R.string.otp_text2));*/
+
 
         binding.btnVerify.setOnClickListener(v -> {
             if(binding.Otp.getOTP().equals("")){
@@ -82,6 +87,29 @@ public class VerificationScreen extends AppCompatActivity {
         sendVerificationCode(mobile,countryCode);
     }
 
+
+    private void startTimer() {
+        new CountDownTimer(TIMER_DURATION, TIMER_INTERVAL) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Update the timer TextView with the remaining time
+                long seconds = millisUntilFinished / 1000;
+                binding.tvTimer.setText(String.format("%02d:%02d", seconds / 60, seconds % 60));
+            }
+
+            @Override
+            public void onFinish() {
+                // Timer finished, show the resend button
+                binding.resendOtp.setVisibility(View.VISIBLE);
+                binding.tvTimer.setVisibility(View.GONE);
+
+            }
+        }.start();
+    }
+
+
+
     private void sendVerificationCode(String mobileNumber,String countryCode) {
         DataManager.getInstance().showProgressMessage(VerificationScreen.this, getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
@@ -101,7 +129,11 @@ public class VerificationScreen extends AppCompatActivity {
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     if (jsonObject.getString("status").equals("1")) {
+                        binding.tvTimer.setVisibility(View.VISIBLE);
+                        binding.resendOtp.setVisibility(View.GONE);
+                        startTimer();
                     Toast.makeText(VerificationScreen.this,getString(R.string.otp_successfully_send),Toast.LENGTH_LONG).show();
+
                     } else if (jsonObject.getString("status").equals("0")) {
                         Toast.makeText(VerificationScreen.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     }

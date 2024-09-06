@@ -127,9 +127,11 @@ public class ForgotPassword extends AppCompatActivity implements AskListener {
 
     private void ForgotPasswordAPI(String user_email) {
 
-        DataManager.getInstance().showProgressMessage(ForgotPassword.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(ForgotPassword.this, getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("email", user_email);
+        map.put("user_type", "User");
+
         Log.e("MapMap", "FORGOT PASSWORD REQUEST" + map);
         Call<ResponseBody> loginCall = apiInterface.forgot_passwordNew(map);
 

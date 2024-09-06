@@ -296,6 +296,10 @@ public class HomeActivity extends AppCompatActivity {
                     }
 
                     else if (data.status.equals("5")) {
+                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
+                        PreferenceConnector.writeString(HomeActivity.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(HomeActivity.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
 
                     }
 

@@ -301,4 +301,20 @@
     <string name="french">French</string>
     <string name="language_changed">Language changed to %1$s</string>
     <string name="hello">Hello,</string>
+    <string name="latest_product_in">Latest Products in</string>
+    <string name="login_successfully">Login Successfully</string>
+    <string name="are_you_sure_logout">Are you sure you want to log out this app?</string>
+    <string name="select">Select</string>
+
+    <string name="do_you_have_account">Do you already have a</string>
+    <string name="customer">Seller</string>
+    <string name="with_afary_code">account with AfaryCode??</string>
+    <string name="your_current_location_set_to">Your current location is set to</string>
+    <string name="do_you_maintain">Do you want to maintain your location on</string>
+    <string name="your_location_is">Your real location</string>
+    <string name="has_changes_to">has been changed.</string>
+    <string name="your_current_location_is_set_to">Your current location is set to</string>
+    <string name="do_you_want_to_maintain_your_location_on">Do you want to maintain your location on</string>
+
+
 </resources>

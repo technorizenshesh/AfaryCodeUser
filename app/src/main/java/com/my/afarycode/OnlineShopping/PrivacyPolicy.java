@@ -15,6 +15,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
 
+import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityPrivacyPolicyBinding;
@@ -154,9 +155,20 @@ public class PrivacyPolicy extends AppCompatActivity {
                     if(jsonObject.getString("status").equals("1")) {
                         JSONObject jsonObject11 = jsonObject.getJSONObject("result");
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
+                            if(PreferenceConnector.readString(PrivacyPolicy.this, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
+                            else if(PreferenceConnector.readString(PrivacyPolicy.this, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr"), Html.FROM_HTML_MODE_COMPACT));
+                            else
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
                         } else {
-                            binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+
+                            if(PreferenceConnector.readString(PrivacyPolicy.this, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+                            else if(PreferenceConnector.readString(PrivacyPolicy.this, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr")));
+                            else
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
                         }
                     } else {
                         // binding.tvNotFound.setVisibility(View.VISIBLE);

@@ -301,6 +301,19 @@
     <string name="french">Français</string>
     <string name="language_changed">Langue changée en %1$s</string>
     <string name="hello">Bonjour,</string>
+    <string name="latest_product_in">Derniers produits en</string>
+    <string name="login_successfully">Connectez-vous avec succès</string>
+    <string name="are_you_sure_logout">Êtes-vous sûr de vouloir vous déconnecter de cette application ?</string>
+    <string name="select">Sélectionner</string>
+    <string name="do_you_have_account">Avez-vous déjà un</string>
+    <string name="customer">Vendeuse</string>
+    <string name="with_afary_code">compte avec AfaryCode ??</string>
+    <string name="your_current_location_set_to">Votre position actuelle est définie sur</string>
+    <string name="do_you_maintain">Voulez-vous conserver votre position sur</string>
+    <string name="your_location_is">Votre emplacement réel</string>
+    <string name="has_changes_to">a été modifié.</string>
+    <string name="your_current_location_is_set_to">Votre position actuelle est définie sur</string>
+    <string name="do_you_want_to_maintain_your_location_on">Voulez-vous conserver votre position sur</string>
 
 </resources>
 

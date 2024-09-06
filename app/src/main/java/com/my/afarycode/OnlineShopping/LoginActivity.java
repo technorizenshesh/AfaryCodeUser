@@ -130,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements AskListener {
 
 
 
-                        Toast.makeText(LoginActivity.this, "Login SuccessFully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.login_successfully), Toast.LENGTH_SHORT).show();
 
 
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.LoginStatus, "true");
@@ -139,14 +139,12 @@ public class LoginActivity extends AppCompatActivity implements AskListener {
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.User_Mobile, moble_no);
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Password, password);
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.User_First_name, firstName);
-
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.User_name, username);
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.User_img, img);
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.access_token, token);
-
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.FROM, "splash");
-
                         PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.Register_id, data.getResult().getRegisterId());
+                       // PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.LANGUAGE, data.getResult().get);
 
 
 

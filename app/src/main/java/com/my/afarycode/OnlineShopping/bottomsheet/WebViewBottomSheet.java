@@ -18,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.my.afarycode.OnlineShopping.WebViewAct;
+import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
@@ -129,9 +130,20 @@ public class WebViewBottomSheet extends BottomSheetDialogFragment {
                         JSONObject jsonObject11 = jsonObject.getJSONObject("result");
                         binding.tvDetails.setMovementMethod(new ScrollingMovementMethod());
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
+                            if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
+                            else if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr"), Html.FROM_HTML_MODE_COMPACT));
+                            else
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
                         } else {
-                            binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+
+                            if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+                            else if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr")));
+                            else
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
                         }
                     } else {
                         // binding.tvNotFound.setVisibility(View.VISIBLE);
@@ -171,9 +183,20 @@ public class WebViewBottomSheet extends BottomSheetDialogFragment {
                         JSONObject jsonObject11 = jsonObject.getJSONObject("result");
                         binding.tvDetails.setMovementMethod(new ScrollingMovementMethod());
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
+                            if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
+                            else if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr"), Html.FROM_HTML_MODE_COMPACT));
+                            else
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
                         } else {
-                            binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+
+                            if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+                            else if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr")));
+                            else
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
                         }
                     } else {
                         // binding.tvNotFound.setVisibility(View.VISIBLE);
@@ -213,9 +236,22 @@ public class WebViewBottomSheet extends BottomSheetDialogFragment {
                         JSONObject jsonObject11 = jsonObject.getJSONObject("result");
                         binding.tvDetails.setMovementMethod(new ScrollingMovementMethod());
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                           if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                               binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
+                           else if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                               binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr"), Html.FROM_HTML_MODE_COMPACT));
+                            else
                             binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details"), Html.FROM_HTML_MODE_COMPACT));
                         } else {
-                            binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+
+                            if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+                            else if(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr"))
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details_fr")));
+                            else
+                                binding.tvDetails.setText(Html.fromHtml(jsonObject11.getString("details")));
+
+
                         }
                     } else {
                         // binding.tvNotFound.setVisibility(View.VISIBLE);

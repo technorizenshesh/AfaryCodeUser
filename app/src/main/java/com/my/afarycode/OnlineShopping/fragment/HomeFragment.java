@@ -13,6 +13,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.Html;
@@ -212,6 +213,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                     if (data.status.equals("1")) {
                        String g =  getString(R.string.hello);
                         binding.tvNames.setText(g+" "+data.getResult().getUserName());
+                     //   Log.e("country name4",countryNames);
+
                         // lastCountryName
                         if(PreferenceConnector.readString(getActivity(),PreferenceConnector.FROM,"").equalsIgnoreCase("splash")){
                             if(!data.getResult().getCountryName().equals("")) {
@@ -233,9 +236,10 @@ public class HomeFragment extends Fragment implements SearchListener {
                             dialogAddLocation(lastCountryName,countryNames,countryId);
                             else {
                                 countryNames = data.getResult().getCountryName();
+                                Log.e("country name3",countryNames);
                               //  lastCountryName =  data.getResult().getCountryName();
                                 binding.address.setText(data.getResult().getCountryName());
-                                binding.tvProduct.setText("Latest Products in " + countryNames );
+                                binding.tvProduct.setText(getString(R.string.latest_product_in)+" " + countryNames );
                                 Log.e("countryListSize===",countryArrayList.size()+"");
                                 if(countryArrayList.size()>0) {
                                     for (int i = 0; i < countryArrayList.size(); i++) {
@@ -253,9 +257,10 @@ public class HomeFragment extends Fragment implements SearchListener {
                         else {
                             if(!data.getResult().getCountryName().equals("")) {
                                 countryNames = data.getResult().getCountryName();
+                                Log.e("country name4",countryNames);
                                 lastCountryName =  data.getResult().getCountryName();
                                 binding.address.setText(data.getResult().getCountryName());
-                                binding.tvProduct.setText("Latest Products in " + countryNames );
+                                binding.tvProduct.setText(getString(R.string.latest_product_in)+" " + countryNames );
                                 Log.e("countryListSize===",countryArrayList.size()+"");
                                 if(countryArrayList.size()>0) {
                                     for (int i = 0; i < countryArrayList.size(); i++) {
@@ -272,7 +277,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                             }
                             else {
                                 binding.address.setText("" + addresses.get(0).getCountryName());
-                                binding.tvProduct.setText("Latest Products in " + addresses.get(0).getCountryName() );
+                                binding.tvProduct.setText(getString(R.string.latest_product_in)+" " + addresses.get(0).getCountryName() );
 
                                 if(countryArrayList.size()>0) {
                                     for (int i = 0; i < countryArrayList.size(); i++) {
@@ -405,7 +410,7 @@ public class HomeFragment extends Fragment implements SearchListener {
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryName);
 
             binding.address.setText(countryNames);
-            binding.tvProduct.setText("Latest Products in " + countryNames );
+            binding.tvProduct.setText(getString(R.string.latest_product_in)+" " + countryNames );
 
         }
     }
@@ -577,7 +582,15 @@ public class HomeFragment extends Fragment implements SearchListener {
             Log.e("addresses>>>", "" + addresses.get(0).getAddressLine(0));
 
 
-            countryNames = addresses.get(0).getCountryName();
+
+            if(addresses.get(0).getCountryName().equalsIgnoreCase("Inde"))
+            {
+                countryNames = "India";
+            }else {
+                countryNames = addresses.get(0).getCountryName();
+            }
+
+            Log.e("country name5",countryNames);
             GetProfile();
 
 
@@ -597,10 +610,17 @@ public class HomeFragment extends Fragment implements SearchListener {
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
-        if(!lastCountryName.equalsIgnoreCase(""))
-       map.put("country_id",countryNames);
+        if(!lastCountryName.equalsIgnoreCase("")){
+            map.put("country_id",countryNames);
+            Log.e("country name1=====",countryNames);
+        }
+
             //   map.put("country_id", lastCountryName);
-       else map.put("country_id", addresses.get(0).getCountryName()+"");
+       else{
+           map.put("country_id", addresses.get(0).getCountryName()+"");
+            Log.e("country name2=====",addresses.get(0).getCountryName()+"");
+
+        }
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<BannerModal1> loginCall = apiInterface.get_slider(headerMap,map);
 
@@ -1056,12 +1076,19 @@ public class HomeFragment extends Fragment implements SearchListener {
                     getProduct(countryId);
                 }
             }
-
-            textView.setText(Html.fromHtml("Your current location is set to " + "<font color='#EE0000'>" + countryNameNew+ "</font>" + "<br>" + "<br>Do you want to maintain your location on  "+ "<font color='#EE0000'>"  + countryNameNew + "</font>" + "?"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                textView.setText(Html.fromHtml(getString(R.string.your_current_location_set_to)+" " + "<font color='#EE0000'>" + countryNameNew+ "</font>" + "<br>" + "<br>" + getString(R.string.do_you_maintain) + " "+ "<font color='#EE0000'>"  + countryNameNew + "</font>" + "?",Html.FROM_HTML_MODE_LEGACY));
+           else  textView.setText(Html.fromHtml(getString(R.string.your_current_location_set_to)+" " + "<font color='#EE0000'>" + countryNameNew+ "</font>" + "<br>" + "<br>" + getString(R.string.do_you_maintain) + " "+ "<font color='#EE0000'>"  + countryNameNew + "</font>" + "?"));
         }
 
-         else  textView.setText(Html.fromHtml( "Your real location " +  "<font color='#EE0000'>"  + countryNameNew + "</font>"  +" has been changed." +"<br>"+ "<br>Your current location is set to "+  "<font color='#EE0000'>" + countryName + "</font>" + "<br>"+"<br>Do you want to maintain your location on "
-              + "<font color='#EE0000'>"  + countryName+ "</font>" +"?"));
+         else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                textView.setText(Html.fromHtml(getString(R.string.your_location_is) + " " + "<font color='#EE0000'>" + countryNameNew + "</font>" + " " + getString(R.string.has_changes_to) + "<br>" + "<br>" + getString(R.string.your_current_location_is_set_to) + " " + "<font color='#EE0000'>" + countryName + "</font>" + "<br>" + "<br>"+getString(R.string.do_you_want_to_maintain_your_location_on)+" "
+                        + "<font color='#EE0000'>" + countryName + "</font>" + "?",Html.FROM_HTML_MODE_LEGACY));
+           else textView.setText(Html.fromHtml(getString(R.string.your_location_is) + " " + "<font color='#EE0000'>" + countryNameNew + "</font>" + " " + getString(R.string.has_changes_to) + "<br>" + "<br>" + getString(R.string.your_current_location_is_set_to) + " " + "<font color='#EE0000'>" + countryName + "</font>" + "<br>" + "<br>" +getString(R.string.do_you_want_to_maintain_your_location_on)+" "
+                    + "<font color='#EE0000'>" + countryName + "</font>" + "?"));
+
+        }
 
 
         WindowManager.LayoutParams lp = mDialog.getWindow().getAttributes();
@@ -1119,7 +1146,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                       //  listener.search(country);
                        // dialog.dismiss();
                         binding.address.setText(country);
-                        binding.tvProduct.setText("Latest Products in " + country );
+                        binding.tvProduct.setText(getString(R.string.latest_product_in)+" " + country );
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.FROM, "");
                         getProduct(countryId);
                     }
