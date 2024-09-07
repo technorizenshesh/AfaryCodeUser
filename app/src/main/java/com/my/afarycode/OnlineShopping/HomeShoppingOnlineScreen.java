@@ -351,6 +351,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         map.put("longitute", "" + lon);
         map.put("category_id", "" + cat_id);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId,""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<ResponseBody> loginCall = apiInterface.get_restaurant(headerMap,map);
@@ -372,6 +373,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         get_result1.clear();
                         get_result1.addAll(mainCateModel.getResult());
                         adapter1.notifyDataSetChanged();
+                        if(get_result1.size()>1) binding.dashboard.tvViewAll.setVisibility(View.VISIBLE);
+                        else binding.dashboard.tvViewAll.setVisibility(View.GONE);
 
                     } else if (jsonObject.getString("status").equals("0")) {
                         binding.dashboard.rlShops.setVisibility(View.GONE);
@@ -410,6 +413,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("cat_id", cat_id);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId,""));
+
 
         Log.e("MapMap", "EXERSICE LIST" + map);
         Call<GetShopingCategoryModal> loginCall = apiInterface.get_shopping_category(headerMap,map);
@@ -436,7 +441,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                                 LinearLayoutManager.HORIZONTAL, false));
 
                         binding.dashboard.categoryList.setAdapter(adapter);
-                        binding.dashboard.tvCountryProduct.setText("Latest Product in " + PreferenceConnector.readString(getActivity(), PreferenceConnector.countryName,""));
+                        binding.dashboard.tvCountryProduct.setText(getString(R.string.latest_product_in)+" " + PreferenceConnector.readString(getActivity(), PreferenceConnector.countryName,""));
                         GetNearestRestorentsAPI(get_result.get(0).getId());
 
                     } else if (data.status.equals("0")) {
@@ -581,11 +586,13 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                     Log.e(TAG,"getProduct Search Response = " + responseString);
                     if(jsonObject.getString("status").equals("1")) {
                         ProductItemModel model = new Gson().fromJson(responseString, ProductItemModel.class);
+                        binding.dashboard.rlProduct.setVisibility(View.VISIBLE);
                         arrayList.clear();
                         arrayList.addAll(model.getResult());
                         adapterSearch.notifyDataSetChanged();
                         //  binding.tvNotFound.setVisibility(View.GONE);
-
+                        if(arrayList.size()>1) binding.dashboard.tvViewAllProduct.setVisibility(View.VISIBLE);
+                        else binding.dashboard.tvViewAllProduct.setVisibility(View.GONE);
                     }
                     else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
@@ -596,6 +603,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
 
                     else {
+                        binding.dashboard.rlProduct.setVisibility(View.GONE);
                         arrayList.clear();
                         adapterSearch.notifyDataSetChanged();
                         // binding.tvNotFound.setVisibility(View.VISIBLE);

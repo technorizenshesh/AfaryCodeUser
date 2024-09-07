@@ -305,7 +305,8 @@
                     android:id="@+id/rlShops"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp">
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -354,46 +355,58 @@
                     android:visibility="gone"/>
 
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginBottom="@dimen/_7sdp">
 
-                    <TextView
-                        android:id="@+id/tvCountryProduct"
+
+                    <RelativeLayout
+                        android:id="@+id/rlProduct"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_14sdp"
-                        android:textStyle="bold">
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_7sdp"
+                        android:visibility="gone">
 
-                    </TextView>
+                        <TextView
+                            android:id="@+id/tvCountryProduct"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="bold">
+
+                        </TextView>
 
 
-                    <TextView
-                        android:id="@+id/tvViewAllProduct"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/tvViewAllProduct"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/view_all"
+                            android:textColor="@color/purple_200"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="bold"/>
+
+                    </RelativeLayout>
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvProduct"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:text="@string/view_all"
-                        android:textColor="@color/purple_200"
-                        android:textSize="@dimen/_14sdp"
-                        android:textStyle="bold"/>
-
-                </RelativeLayout>
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
+                        tools:listitem="@layout/item_products" />
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
-                    tools:listitem="@layout/item_products" />
+
+
+
+
+
+
 
             </LinearLayout>
 

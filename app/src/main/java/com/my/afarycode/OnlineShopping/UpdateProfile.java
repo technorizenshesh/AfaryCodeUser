@@ -156,7 +156,7 @@ public class UpdateProfile extends Fragment {
 
             File file = DataManager.getInstance().saveBitmapToFile(new File((str_image_path)));
 
-            filePart = MultipartBody.Part.createFormData("image", file.getName(),
+            filePart = MultipartBody.Part.createFormData("image", "image",
                     RequestBody.create(MediaType.parse("image/*"), file));
 
             Log.e("str_image_path1>>>", "" + str_image_path);

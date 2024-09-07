@@ -46,12 +46,20 @@ public class CategoryModal {
         @SerializedName("icon")
         @Expose
         public String icon;
+        @SerializedName("icon_1")
+        @Expose
+        public String icon1;
+
         @SerializedName("id")
         @Expose
         public String id;
         @SerializedName("name")
         @Expose
         public String categoryName;
+
+        @SerializedName("name_fr")
+        @Expose
+        public String nameFr;
 
         public String getIcon() {
             return icon;
@@ -77,6 +85,21 @@ public class CategoryModal {
             this.categoryName = categoryName;
         }
 
+        public String getIcon1() {
+            return icon1;
+        }
+
+        public void setIcon1(String icon1) {
+            this.icon1 = icon1;
+        }
+
+        public String getNameFr() {
+            return nameFr;
+        }
+
+        public void setNameFr(String nameFr) {
+            this.nameFr = nameFr;
+        }
     }
 
 }

@@ -1128,7 +1128,7 @@ public class HomeFragment extends Fragment implements SearchListener {
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("country", countryId);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
-
+        Log.e("update country request==="+country,map.toString());
 
         Call<ResponseBody> loginCall = apiInterface.updateCountryApi(headerMap,map);
 
@@ -1146,8 +1146,12 @@ public class HomeFragment extends Fragment implements SearchListener {
                       //  listener.search(country);
                        // dialog.dismiss();
                         binding.address.setText(country);
+                        countryNames = country;
                         binding.tvProduct.setText(getString(R.string.latest_product_in)+" " + country );
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.FROM, "");
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,country);
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
+
                         getProduct(countryId);
                     }
 

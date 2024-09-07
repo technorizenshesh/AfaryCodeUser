@@ -16,8 +16,8 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="@dimen/_22sdp"
-                android:layout_height="@dimen/_22sdp"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
                 android:layout_gravity="center"
                 android:src="@drawable/shopping_online"/>
 

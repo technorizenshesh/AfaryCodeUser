@@ -1,7 +1,9 @@
 package com.my.afarycode.OnlineShopping.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -48,9 +50,38 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            if( PreferenceConnector.readString(activity, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en"))  {
+                holder.progressAdapterBinding.categoryName.setText(all_category_subcategory.get(position).getCategoryName());
+            }
+            else if(PreferenceConnector.readString(activity, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr")){
+                holder.progressAdapterBinding.categoryName.setText(Html.fromHtml(all_category_subcategory.get(position).getNameFr(), Html.FROM_HTML_MODE_LEGACY));
+            }
+            else {
+                holder.progressAdapterBinding.categoryName.setText(all_category_subcategory.get(position).getCategoryName());
+            }
 
-        holder.progressAdapterBinding.categoryName.setText(all_category_subcategory.get(position).categoryName);
-        Picasso.get().load(all_category_subcategory.get(position).icon).into(holder.progressAdapterBinding.icon);
+
+        } else {
+            if (PreferenceConnector.readString(activity, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("en")) {
+                holder.progressAdapterBinding.categoryName.setText(all_category_subcategory.get(position).getCategoryName());
+
+            } else if (PreferenceConnector.readString(activity, PreferenceConnector.LANGUAGE, "").equalsIgnoreCase("fr")) {
+                holder.progressAdapterBinding.categoryName.setText(all_category_subcategory.get(position).getNameFr());
+
+            } else {
+                holder.progressAdapterBinding.categoryName.setText(all_category_subcategory.get(position).getCategoryName());
+
+            }
+
+        }
+
+
+
+
+
+
+        Picasso.get().load(all_category_subcategory.get(position).getIcon1()).into(holder.progressAdapterBinding.icon);
 
         holder.progressAdapterBinding.LLShopOnline.setOnClickListener(v -> {
 
