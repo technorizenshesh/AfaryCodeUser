@@ -44,9 +44,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-
-        holder.progressAdapterBinding.notificationTitle.setText(all_category_subcategory.get(position).message);
-        holder.progressAdapterBinding.time.setText(all_category_subcategory.get(position).dateTime);
+        holder.progressAdapterBinding.tvText.setText(all_category_subcategory.get(position).getMessage());
+      //  holder.progressAdapterBinding.notificationTitle.setText(all_category_subcategory.get(position).message);
+      //  holder.progressAdapterBinding.time.setText(all_category_subcategory.get(position).dateTime);
     }
 
 

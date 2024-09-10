@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.LoginModel;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityChangePasswordBinding;
@@ -37,6 +39,7 @@ public class ChangePassword extends Fragment {
 
     ActivityChangePasswordBinding binding;
     private AfaryCode apiInterface;
+    Fragment fragment;
 
     @Nullable
     @Override
@@ -59,22 +62,20 @@ public class ChangePassword extends Fragment {
         binding.changePassword.setOnClickListener(v -> {
 
             if (binding.oldPassword.getText().toString().trim().isEmpty()) {
-                binding.oldPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "Please enter old password ", Toast.LENGTH_SHORT).show();
+                binding.oldPassword.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(getContext(), getString(R.string.please_enter_old_password), Toast.LENGTH_SHORT).show();
             }
             else if (binding.newPassword.getText().toString().trim().isEmpty()) {
-                binding.newPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "Please enter password ", Toast.LENGTH_SHORT).show();
+                binding.newPassword.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(getContext(), getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
             } else if (binding.repeatPassword.getText().toString().trim().isEmpty()) {
-                binding.repeatPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "Please enter password ", Toast.LENGTH_SHORT).show();
+                binding.repeatPassword.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(getContext(), getString(R.string.please_enter_confirm_password), Toast.LENGTH_SHORT).show();
             }
 
-
-
             else if (!binding.repeatPassword.getText().toString().equals(binding.newPassword.getText().toString())) {
-                binding.repeatPassword.setError("Field cannot be empty");
-                Toast.makeText(getContext(), "Password Should be Same", Toast.LENGTH_SHORT).show();
+                binding.repeatPassword.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(getContext(), getString(R.string.password_should_be_same), Toast.LENGTH_SHORT).show();
 
             } else {
                 ChangePasswordAPI();
@@ -111,8 +112,10 @@ public class ChangePassword extends Fragment {
                     if (jsonObject.getString("status").equals("1")) {
                        // startActivity(new Intent(getContext(), LoginActivity.class)
                             ///    .putExtra("status", "login3"));
+                        fragment = new HomeFragment();
+                        loadFragment(fragment);
                         Toast.makeText(getContext(), getString(R.string.password_successfully_changes), Toast.LENGTH_SHORT).show();
-                     //   getActivity().onBackPressed();
+
 
                     } else if (jsonObject.getString("status").equals("0")) {
                         Toast.makeText(getContext(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
@@ -129,6 +132,22 @@ public class ChangePassword extends Fragment {
             }
         });
 
+    }
+
+
+    public boolean loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        if (fragment != null) {
+            // Clear the back stack before adding a new fragment
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_homeContainer, fragment)
+                    .addToBackStack("Home")
+                    .commit();
+            return true;
+        }
+        return false;
     }
 
 }

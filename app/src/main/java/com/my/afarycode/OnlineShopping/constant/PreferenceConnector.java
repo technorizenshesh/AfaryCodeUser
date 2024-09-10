@@ -77,4 +77,9 @@ public class PreferenceConnector {
         return getPreferences(context).edit();
     }
 
+
+    public static void clearSession(final Context context) {
+        getEditor(context).clear().commit();
+    }
+
 }

@@ -143,8 +143,8 @@ public interface AfaryCode {
 
 
     @FormUrlEncoded
-    @POST("notifi_list")
-    Call<GetNotificationModal> notifi_list( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @POST("get_notification_user")
+    Call<ResponseBody> notifi_list( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("notifi_count_view")
@@ -413,5 +413,12 @@ public interface AfaryCode {
 
   @GET("get_register_description")
     Call<ResponseBody> getTitleDes();
+
+
+
+  @FormUrlEncoded
+  @POST("get_notification_count_user")
+  Call<ResponseBody> getNotificationCounterApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 
 }

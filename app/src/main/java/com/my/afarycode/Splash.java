@@ -1,11 +1,13 @@
 package com.my.afarycode;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -49,20 +51,54 @@ public class Splash extends AppCompatActivity {
 
         FirebaseApp.initializeApp(this);
 
+        Intent intent11 = getIntent();
+        if (intent11 != null) {
+            String from = intent11.getStringExtra("from");
+            String msg = intent11.getStringExtra("msg");
+            String title = intent11.getStringExtra("title");
 
-
-
-        if (checkPermissions()) {
-            if (isLocationEnabled()) {  finds();}
+            if ("notification".equalsIgnoreCase(from)) {
+                if (msg != null) {
+                    AlertDialogAdminStatus(title, msg);
+                } else {
+                    // Handle the case where 'msg' is null
+                    Log.e("MainActivity", "Message is null");
+                    // Optionally, you might show a default message or take some other action
+                }
+            }
             else {
-                Toast.makeText(Splash.this, "Turn on location", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
+                Log.e("SplashActivity", "Notification is null");
 
+                if (checkPermissions()) {
+                    if (isLocationEnabled()) {  finds();}
+                    else {
+                        Toast.makeText(Splash.this, "Turn on location", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+
+                    }
+                } else {
+                    requestPermissions();
+                }
             }
         } else {
-            requestPermissions();
+            // Handle the case where 'intent' is null
+            Log.e("SplashActivity", "Intent is null");
+            if (checkPermissions()) {
+                if (isLocationEnabled()) {  finds();}
+                else {
+                    Toast.makeText(Splash.this, "Turn on location", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+
+                }
+            } else {
+                requestPermissions();
+            }
         }
+
+
+
 
 
     }
@@ -107,7 +143,7 @@ public class Splash extends AppCompatActivity {
                 } else {
                     //   Intent intent = new Intent(Splash.this, WellcomeScreen.class);
                     startActivity(new Intent(Splash.this, LoginActivity.class)
-                            .putExtra("type",""));
+                            .putExtra("type","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     finish();
 
                   /*  startActivity(new Intent(Splash.this, VerificationScreen.class)
@@ -175,5 +211,34 @@ public class Splash extends AppCompatActivity {
 
     }
 
+    private void AlertDialogAdminStatus(String title,String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Splash.this);
+        builder //.setTitle(getString(R.string.password_change_by_admin))
+                .setTitle(title)
+                .setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        if (checkPermissions()) {
+                            if (isLocationEnabled()) {  finds();}
+                            else {
+                                Toast.makeText(Splash.this, "Turn on location", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(intent);
 
+                            }
+                        } else {
+                            requestPermissions();
+                        }
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+
+
+    }
 }

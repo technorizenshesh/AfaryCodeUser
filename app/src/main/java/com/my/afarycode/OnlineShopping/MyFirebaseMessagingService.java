@@ -132,7 +132,10 @@ public class MyFirebaseMessagingService extends
 
                else if (type.contains("Statuschange")){
                    // PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.LoginStatus, "false");
-                   intent = new Intent(getApplicationContext(), Splash.class);
+                   intent = new Intent(getApplicationContext(), Splash.class)
+                           .putExtra("title",title)
+                           .putExtra("msg",msg)
+                           .putExtra("from","notification");
                }
 
                else if (type.contains("Registration")){

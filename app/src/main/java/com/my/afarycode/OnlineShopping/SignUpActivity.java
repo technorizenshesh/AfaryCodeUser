@@ -1,23 +1,35 @@
 package com.my.afarycode.OnlineShopping;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.SignupModel;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.helper.CountryCodes;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivitySignUpBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -28,7 +40,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     ActivitySignUpBinding binding;
     private AfaryCode apiInterface;
-    private String code,lang="";
+    private String code, lang = "";
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,45 +54,44 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void SetupUi() {
+        setCountryCodeFromLocation();
 
-        if(getIntent()!=null){
+
+        if (getIntent() != null) {
             lang = getIntent().getStringExtra("lang");
         }
 
 
         binding.RRSigUp.setOnClickListener(v -> {
-            code = binding.ccp.getSelectedCountryCode();
-            Log.e("code>>>", code);
+                    code = binding.ccp.getSelectedCountryCode();
+                    Log.e("code>>>", code);
 
-            if(binding.name.getText().toString().trim().isEmpty()) {
-                binding.name.setError(getString(R.string.can_not_be_empty));
-                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_name), Toast.LENGTH_SHORT).show();
-            }
-           else if(binding.userName.getText().toString().trim().isEmpty()) {
-                binding.userName.setError(getString(R.string.can_not_be_empty));
-                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_user_name), Toast.LENGTH_SHORT).show();
-            }
+                    if (binding.name.getText().toString().trim().isEmpty()) {
+                        binding.name.setError(getString(R.string.can_not_be_empty));
+                        Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_name), Toast.LENGTH_SHORT).show();
+                    } else if (binding.userName.getText().toString().trim().isEmpty()) {
+                        binding.userName.setError(getString(R.string.can_not_be_empty));
+                        Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_user_name), Toast.LENGTH_SHORT).show();
+                    } else if (binding.email.getText().toString().trim().isEmpty()) {
+                        binding.email.setError(getString(R.string.can_not_be_empty));
+                        Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_email), Toast.LENGTH_SHORT).show();
+                    } else if (binding.phone.getText().toString().trim().isEmpty()) {
+                        binding.phone.setError(getString(R.string.can_not_be_empty));
+                        Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_mobile_number), Toast.LENGTH_SHORT).show();
+                    } else if (binding.password.getText().toString().trim().isEmpty()) {
+                        binding.password.setError(getString(R.string.can_not_be_empty));
+                        Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
+                    } else if (!binding.password.getText().toString().equals(binding.confirmPassword.getText().toString())) {
+                        binding.confirmPassword.setError(getString(R.string.password_should_be_same));
 
-            else if (binding.email.getText().toString().trim().isEmpty()) {
-                binding.email.setError(getString(R.string.can_not_be_empty));
-                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_email), Toast.LENGTH_SHORT).show();
-            } else if (binding.phone.getText().toString().trim().isEmpty()) {
-                binding.phone.setError(getString(R.string.can_not_be_empty));
-                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_mobile_number), Toast.LENGTH_SHORT).show();
-            } else if (binding.password.getText().toString().trim().isEmpty()) {
-                binding.password.setError(getString(R.string.can_not_be_empty));
-                Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
-            } else if (!binding.password.getText().toString().equals(binding.confirmPassword.getText().toString())) {
-                binding.confirmPassword.setError(getString(R.string.password_should_be_same));
-
-            } else {
-                SignUpAPi();
-            }
-          }
+                    } else {
+                        SignUpAPi();
+                    }
+                }
         );
 
         binding.txtLogin.setOnClickListener(v -> {
-            startActivity(new Intent(SignUpActivity.this, LoginActivity.class).putExtra("type",""));
+            startActivity(new Intent(SignUpActivity.this, LoginActivity.class).putExtra("type", ""));
         });
 
     }
@@ -87,17 +99,17 @@ public class SignUpActivity extends AppCompatActivity {
     private void SignUpAPi() {
 
         DataManager.getInstance().showProgressMessage
-                (SignUpActivity.this, "Please wait...");
+                (SignUpActivity.this, getString(R.string.please_wait));
 
         Map<String, String> map = new HashMap<>();
         map.put("user_name", binding.userName.getText().toString());
         map.put("name", binding.name.getText().toString());
         map.put("email", binding.email.getText().toString().trim());
         map.put("password", binding.password.getText().toString());
-        map.put("mobile",binding.phone.getText().toString());
-        map.put("country_code",code);
-        map.put("country","");
-        map.put("language",lang);
+        map.put("mobile", binding.phone.getText().toString());
+        map.put("country_code", code);
+        map.put("country", "");
+        map.put("language", lang);
 
         map.put("register_id", PreferenceConnector.readString(SignUpActivity.this,
                 PreferenceConnector.Firebash_Token, ""));
@@ -130,7 +142,8 @@ public class SignUpActivity extends AppCompatActivity {
                         String token = data.result.getAccessToken();
                         String username = data.result.userName;
                         String img = data.result.image;
-                      //  Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
+                      //  String countryCode = data.result.image;
+                        //  Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
 
 
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_id, user_id);
@@ -145,7 +158,6 @@ public class SignUpActivity extends AppCompatActivity {
                         PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.LANGUAGE, lang);
 
 
-
                         startActivity(new Intent(SignUpActivity.this, VerificationScreen.class)
                                 .putExtra("status", "")
                                 .putExtra("msg", "")
@@ -153,7 +165,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 .putExtra("mobile", binding.phone.getText().toString())
                                 .putExtra("countryCode", binding.ccp.getSelectedCountryCode())
                         );
-                           finish();
+                        finish();
 
 
                     } else if (data.status.equals("0")) {
@@ -169,9 +181,66 @@ public class SignUpActivity extends AppCompatActivity {
             public void onFailure(Call<SignupModel> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
-               // Toast.makeText(SignUpActivity.this, "Email Already Exist", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(SignUpActivity.this, "Email Already Exist", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+    private void setCountryCodeFromLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        } else {
+            try {
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+                    if (location != null) {
+                        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            if (addresses != null && !addresses.isEmpty()) {
+                                String countryCode = addresses.get(0).getCountryCode();
+                                if (countryCode != null && !countryCode.isEmpty()) {
+                                    Log.e("country code===", CountryCodes.getPhoneCode(countryCode) + "");
+                                    binding.ccp.setCountryForPhoneCode(/*getCountryPhoneCode(countryCode)*/
+                                            CountryCodes.getPhoneCode(countryCode));
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "Error determining location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private int getCountryPhoneCode(String countryCode) {
+        switch (countryCode) {
+            case "IN": return 91; // India
+            case "US": return 1;  // United States
+            case "GA": return 241;
+
+            // Add other countries as needed
+            default: return 1; // Default to US if unknown
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setCountryCodeFromLocation();
+            }
+        }
+    }
+
+
+
 
 }

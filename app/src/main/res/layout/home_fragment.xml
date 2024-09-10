@@ -57,7 +57,8 @@
                         android:gravity="center"
                         android:padding="1dp"
                         android:textColor="@color/white"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"
+                        android:visibility="gone"/>
 
                 </RelativeLayout>
 

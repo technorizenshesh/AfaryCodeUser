@@ -315,6 +315,7 @@
     <string name="has_changes_to">has been changed.</string>
     <string name="your_current_location_is_set_to">Your current location is set to</string>
     <string name="do_you_want_to_maintain_your_location_on">Do you want to maintain your location on</string>
-
-
+    <string name="please_enter_old_password">Please enter old password</string>
+    <string name="please_enter_confirm_password">Please enter confirm password</string>
+    <string name="password_change_by_admin">Password changed by admin</string>
 </resources>

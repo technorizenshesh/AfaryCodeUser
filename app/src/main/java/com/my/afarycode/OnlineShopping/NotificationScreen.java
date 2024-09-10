@@ -27,10 +27,13 @@ import com.my.afarycode.databinding.ActivityNotificationScreenBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,7 +58,7 @@ public class NotificationScreen extends AppCompatActivity {
             onBackPressed();
         });
 
-        GetNotificationView();
+       /// GetNotificationView();
         GetNotificationList();
 
         setAdapter();
@@ -64,49 +67,42 @@ public class NotificationScreen extends AppCompatActivity {
 
     private void GetNotificationList() {
 
-        DataManager.getInstance().showProgressMessage(this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(NotificationScreen.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", "8");
+        map.put("user_id",PreferenceConnector.readString(NotificationScreen.this, PreferenceConnector.User_id, "") );
         map.put("register_id", PreferenceConnector.readString(NotificationScreen.this, PreferenceConnector.Register_id, ""));
+        Log.e("MapMap", "Notification Request" + map);
 
+        Call<ResponseBody> loginCall = apiInterface.notifi_list(headerMap,map);
 
-        Log.e("MapMap", "EXERSICE LIST" + map);
-
-        Call<GetNotificationModal> loginCall = apiInterface.notifi_list(headerMap,map);
-
-        loginCall.enqueue(new Callback<GetNotificationModal>() {
+        loginCall.enqueue(new Callback<ResponseBody>() {
 
             @Override
-            public void onResponse(Call<GetNotificationModal> call, Response<GetNotificationModal> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 DataManager.getInstance().hideProgressMessage();
 
                 try {
-
-                    GetNotificationModal data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "Exersice_List" + dataResponse);
-
-
-                    if(data.status.equals("1")) {
-
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    Log.e("MapMap", "notification RESPONSE" + stringResponse);
+                    if (jsonObject.getString("status").equals("1")) {
+                        binding.tvNotFound.setVisibility(View.GONE);
                         get_result1.clear();
-                        get_result1.addAll(data.result);
+                        GetNotificationModal model = new Gson().fromJson(stringResponse,GetNotificationModal.class);
+                        get_result1.addAll(model.getResult());
+                        binding.recyclerNotification.setAdapter(new NotificationAdapter(NotificationScreen.this,get_result1));
 
-                        adapter = new NotificationAdapter(NotificationScreen.this, get_result1);
-                        binding.recyclerNotification.setLayoutManager
-                                (new LinearLayoutManager(NotificationScreen.this));
-
-                        binding.recyclerNotification.setAdapter(adapter);
-
-                    } else if (data.status.equals("0")) {
-                        Toast.makeText(NotificationScreen.this, data.message, Toast.LENGTH_SHORT).show();
                     }
 
-                    else if (data.status.equals("5")) {
+                 else if (jsonObject.getString("status").equals("0")) {
+                        binding.tvNotFound.setVisibility(View.VISIBLE);
+                        Toast.makeText(NotificationScreen.this, jsonObject.getString("message").toString(), Toast.LENGTH_SHORT).show();                    }
+
+                    else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(NotificationScreen.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(NotificationScreen.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -120,12 +116,14 @@ public class NotificationScreen extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<GetNotificationModal> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 DataManager.getInstance().hideProgressMessage();
             }
         });
     }
+
+
 
     private void GetNotificationView() {
 

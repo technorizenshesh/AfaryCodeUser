@@ -43,13 +43,30 @@ public class GetNotificationModal {
 
     public class Result {
 
+
+     /*   @SerializedName("id")
+        @Expose
+        private String id;
+        @SerializedName("seller_id")
+        @Expose
+        private String sellerId;
+        @SerializedName("message")
+        @Expose
+        private String message;
+        @SerializedName("status")
+        @Expose
+        private String status;
+        @SerializedName("date_time")
+        @Expose
+        private String dateTime;*/
+
         @SerializedName("id")
         @Expose
         public String id;
         @SerializedName("user_id")
         @Expose
         public String userId;
-        @SerializedName("provider_id")
+        @SerializedName("seller_id")
         @Expose
         public String providerId;
         @SerializedName("message")

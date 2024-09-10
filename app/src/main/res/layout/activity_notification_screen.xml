@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,24 +45,33 @@
 
         </RelativeLayout>
 
-        <LinearLayout
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_below="@+id/RRtoolbar"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="@dimen/_10sdp"
+                android:layout_below="@+id/RRtoolbar"
                 android:id="@+id/recyclerNotification"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="vertical"
                 android:visibility="visible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 />
 
 
-        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvNotFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/_12sdp"
+            android:text="@string/not_available"
+            android:textColor="@color/black"
+            android:visibility="gone"/>
+
+
 
     </RelativeLayout>
 

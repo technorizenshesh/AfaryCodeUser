@@ -120,6 +120,18 @@ public class LoginModel {
         @Expose
         private String accessToken;
 
+        @SerializedName("country_code")
+        @Expose
+        private String countryCode;
+
+        public String getCountryCode() {
+            return countryCode;
+        }
+
+        public void setCountryCode(String countryCode) {
+            this.countryCode = countryCode;
+        }
+
         public String getAccessToken() {
             return accessToken;
         }

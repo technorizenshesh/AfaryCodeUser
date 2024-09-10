@@ -138,15 +138,6 @@ public class HomeFragment extends Fragment implements SearchListener {
         SetupUI();
         getAllCountry();
 
-       /* scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
-        scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                new MyCounterVal().execute();
-            }
-        }, 0, 8, TimeUnit.SECONDS);*/
-
-
-
         binding.LLShopOnline.setOnClickListener(v -> {
             fragment = new HomeShoppingOnlineScreen();
             loadFragment(fragment);
@@ -186,6 +177,52 @@ public class HomeFragment extends Fragment implements SearchListener {
         });
 
         return binding.getRoot();
+
+    }
+
+    private void getNotificationCounter() {
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
+        Call<ResponseBody> loginCall = apiInterface.getNotificationCounterApi(headerMap,map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call,
+                                   Response<ResponseBody> response) {
+                try {
+                    String responseString = response.body().string();
+                    JSONObject jsonObject = new JSONObject(responseString);
+                    GetCartItem();
+                    Log.e(TAG,"get notification counter Response = " + responseString);
+                    if(jsonObject.getString("status").equals("1")) {
+                        if (!jsonObject.getString("result").equals("0")) {
+                            binding.reqcount.setVisibility(View.VISIBLE);
+                            binding.reqcount.setText(jsonObject.getString("result"));
+                        }
+                        else binding.reqcount.setVisibility(View.GONE);
+                    } else {
+                        // binding.tvNotFound.setVisibility(View.VISIBLE);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
 
     }
 
@@ -416,118 +453,6 @@ public class HomeFragment extends Fragment implements SearchListener {
     }
 
 
-    private class MyCounterVal extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            try {
-                super.onPreExecute();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            try {
-                String postReceiverUrl = "https://technorizen.com/afarycode/webservice/notifi_count";
-                URL url = new URL(postReceiverUrl);
-                Map<String, Object> params = new LinkedHashMap<>();
-                params.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-                StringBuilder postData = new StringBuilder();
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    if (postData.length() != 0) postData.append('&');
-                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                    postData.append('=');
-                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-                }
-                String urlParameters = postData.toString();
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-                writer.write(urlParameters);
-                writer.flush();
-                String response = "";
-                String line;
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = reader.readLine()) != null) {
-                    response += line;
-                }
-                writer.close();
-                reader.close();
-                Log.e("MainTabCounter Hire", ">>>>>>>>>>>>" + response);
-                return response;
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            if (result == null) {
-            } else if (result.isEmpty()) {
-            } else {
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    if (jsonObject.getString("status").equalsIgnoreCase("1")) {
-                        int message_unseen_count = 0;
-
-                        result1 = jsonObject.getJSONObject("result");
-                        counter_message_int = result1.getString("count");
-
-
-                        //impliment by sagar panse //
-
-                      /*  String delete_status = jsonObject.getString("delete_status");
-
-                        if (delete_status.equalsIgnoreCase("Deactive")) {
-                            mySession.signinusers(false);
-                            mySession.logoutUser();
-                            Intent i = new Intent(MainTabActivity.this, AccountTypeSelectionAct.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            i.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            startActivity(i);
-                        }*/
-
-                        //impliment by sagar panse //
-
-               /*         notification_unseen_count = jsonObject.getString("notification_unseen_count");
-                        cart_unseen_count = jsonObject.getString("cart_count");*/
-
-            /*            Log.e("notification >> ", " >> " + notification_unseen_count);
-                        Intent j = new Intent("Unseen Count");
-                        j.putExtra("noticount", notification_unseen_count);
-                        j.putExtra("cartcount", cart_unseen_count);
-                        // j.putExtra("ngcash", ngcash);
-
-                        getActivity().sendBroadcast(j);*/
-
-                        if (counter_message_int == null || counter_message_int.equalsIgnoreCase("")) {
-
-                        } else {
-                            message_unseen_count = Integer.parseInt(counter_message_int);
-                        }
-
-                        if (message_unseen_count != 0) {
-
-                            binding.reqcount.setText("" + counter_message_int);
-                            binding.reqcount.setVisibility(View.VISIBLE);
-                        } else {
-                            binding.reqcount.setVisibility(View.GONE);
-                        }
-
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 
 
     private boolean checkPermissions() {
@@ -768,11 +693,7 @@ public class HomeFragment extends Fragment implements SearchListener {
 
         GetCategoryAPi();
 
-
-
-
-
-        binding.reqcount.setOnClickListener(v -> {
+        binding.layNoti.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), NotificationScreen.class));
         });
 
@@ -1187,7 +1108,9 @@ public class HomeFragment extends Fragment implements SearchListener {
     }
 
 
-
-
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        getNotificationCounter();
+    }
 }
