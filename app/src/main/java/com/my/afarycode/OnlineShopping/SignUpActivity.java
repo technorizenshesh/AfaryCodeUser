@@ -85,7 +85,18 @@ public class SignUpActivity extends AppCompatActivity {
                         binding.confirmPassword.setError(getString(R.string.password_should_be_same));
 
                     } else {
-                        SignUpAPi();
+                        startActivity(new Intent(SignUpActivity.this, VerificationScreen.class)
+                                .putExtra("user_name",binding.userName.getText().toString())
+                                .putExtra("name",binding.name.getText().toString())
+                                .putExtra("email",binding.email.getText().toString().trim())
+                                .putExtra("password",binding.password.getText().toString())
+                                .putExtra("mobile",binding.phone.getText().toString())
+                                .putExtra("country_code",code)
+                                .putExtra("country","")
+                                .putExtra("language",lang)
+                                .putExtra("type","User")
+                                .putExtra("register_id",PreferenceConnector.readString(SignUpActivity.this,
+                                        PreferenceConnector.Firebash_Token, "")));
                     }
                 }
         );
@@ -96,95 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void SignUpAPi() {
 
-        DataManager.getInstance().showProgressMessage
-                (SignUpActivity.this, getString(R.string.please_wait));
-
-        Map<String, String> map = new HashMap<>();
-        map.put("user_name", binding.userName.getText().toString());
-        map.put("name", binding.name.getText().toString());
-        map.put("email", binding.email.getText().toString().trim());
-        map.put("password", binding.password.getText().toString());
-        map.put("mobile", binding.phone.getText().toString());
-        map.put("country_code", code);
-        map.put("country", "");
-        map.put("language", lang);
-
-        map.put("register_id", PreferenceConnector.readString(SignUpActivity.this,
-                PreferenceConnector.Firebash_Token, ""));
-
-        map.put("type", "User");
-
-        Log.e("MapMap", "LOGIN REQUEST" + map);
-
-        Call<SignupModel> SignupCall = apiInterface.signup(map);
-
-        SignupCall.enqueue(new Callback<SignupModel>() {
-            @Override
-            public void onResponse(Call<SignupModel> call, Response<SignupModel> response) {
-                DataManager.getInstance().hideProgressMessage();
-
-                try {
-                    SignupModel data = response.body();
-                    String dataResponse = new Gson().toJson(response.body());
-                    Log.e("MapMap", "LOGIN RESPONSE" + dataResponse);
-
-                    if (data.status.equals("1")) {
-
-                        String user_id = data.result.id;
-                        String moble_no = data.result.mobile;
-                        String firstName = data.result.getName();
-                        String email1 = data.result.email;
-                        String password = data.result.password;
-                        String otp = data.result.otp;
-                        String lang = data.getResult().getLanguage();
-                        String token = data.result.getAccessToken();
-                        String username = data.result.userName;
-                        String img = data.result.image;
-                      //  String countryCode = data.result.image;
-                        //  Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
-
-
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_id, user_id);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_email, email1);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_Mobile, moble_no);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.Password, password);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_First_name, firstName);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_name, username);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.User_img, img);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.access_token, token);
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.Register_id, data.getResult().getRegisterId());
-                        PreferenceConnector.writeString(SignUpActivity.this, PreferenceConnector.LANGUAGE, lang);
-
-
-                        startActivity(new Intent(SignUpActivity.this, VerificationScreen.class)
-                                .putExtra("status", "")
-                                .putExtra("msg", "")
-                                .putExtra("user_id", user_id)
-                                .putExtra("mobile", binding.phone.getText().toString())
-                                .putExtra("countryCode", binding.ccp.getSelectedCountryCode())
-                        );
-                        finish();
-
-
-                    } else if (data.status.equals("0")) {
-                        Toast.makeText(SignUpActivity.this, data.message, Toast.LENGTH_SHORT).show();
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<SignupModel> call, Throwable t) {
-                call.cancel();
-                DataManager.getInstance().hideProgressMessage();
-                // Toast.makeText(SignUpActivity.this, "Email Already Exist", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
 
     private void setCountryCodeFromLocation() {

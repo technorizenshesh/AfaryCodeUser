@@ -95,13 +95,24 @@ public interface AfaryCode {
     Call<ForgotPasswordModal> forgot_password(@FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
+ /* @FormUrlEncoded
   @POST("send_otp")
-  Call<ResponseBody> sendOtpApi(@FieldMap Map<String, String> params);
+  Call<ResponseBody> sendOtpApi1(@FieldMap Map<String, String> params);
 
   @FormUrlEncoded
   @POST("verify_mobile_otp")
+  Call<ResponseBody> verifyOtpApi1(@FieldMap Map<String, String> params);
+
+*/
+
+  @FormUrlEncoded
+  @POST("send_otp_before_signup")
+  Call<ResponseBody> sendOtpApi(@FieldMap Map<String, String> params);
+
+  @FormUrlEncoded
+  @POST("verify_mobile_otp_before_signup")
   Call<ResponseBody> verifyOtpApi(@FieldMap Map<String, String> params);
+
 
 
   @FormUrlEncoded
@@ -419,6 +430,11 @@ public interface AfaryCode {
   @FormUrlEncoded
   @POST("get_notification_count_user")
   Call<ResponseBody> getNotificationCounterApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("")
+  Call<ResponseBody> sendNumberOnServerApi(@FieldMap Map<String, String> params);
 
 
 }

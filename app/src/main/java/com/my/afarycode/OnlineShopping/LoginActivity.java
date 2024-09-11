@@ -181,7 +181,11 @@ public class LoginActivity extends AppCompatActivity implements AskListener {
 
                     } else if (jsonObject.getString("status").equals("0")) {
                         Toast.makeText(LoginActivity.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    } else if (jsonObject.getString("status").equals("10")) {
+                    }
+
+
+/*
+                    else if (jsonObject.getString("status").equals("10")) {
                         LoginModel data = new Gson().fromJson(stringResponse, LoginModel.class);
                         String user_id = data.result.id;
                         String moble_no = data.result.mobile;
@@ -192,6 +196,7 @@ public class LoginActivity extends AppCompatActivity implements AskListener {
                         String username = data.result.userName;
                         String img = data.result.image;
                         String token = data.result.getAccessToken();
+                        String countryCode =  data.result.getCountryCode();
                         String countryCode =  data.result.getCountryCode();
 
 
@@ -210,15 +215,20 @@ public class LoginActivity extends AppCompatActivity implements AskListener {
                         // PreferenceConnector.writeString(LoginActivity.this, PreferenceConnector.LANGUAGE, data.getResult().get);
 
                         startActivity(new Intent(LoginActivity.this, VerificationScreen.class)
-                                .putExtra("status", "")
-                                .putExtra("msg", "")
-                                .putExtra("user_id", user_id)
-                                .putExtra("mobile", moble_no)
-                                .putExtra("countryCode",countryCode )
-                        );
+                                .putExtra("user_name",binding.userName.getText().toString())
+                                .putExtra("name",name)
+                                .putExtra("email",email1)
+                                .putExtra("password",password)
+                                .putExtra("mobile",moble_no)
+                                .putExtra("country_code",countryCode)
+                                .putExtra("country","")
+                                .putExtra("language",data.getResult().getLang)
+                                .putExtra("type","User")
+                                .putExtra("register_id",data.getResult().getRegisterId());
                         finish();
 
                     }
+*/
 
 
                 } catch (Exception e) {
