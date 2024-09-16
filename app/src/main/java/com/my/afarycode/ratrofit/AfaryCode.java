@@ -110,6 +110,12 @@ public interface AfaryCode {
   Call<ResponseBody> sendOtpApi(@FieldMap Map<String, String> params);
 
   @FormUrlEncoded
+  @POST("send_otp_before_signup_whatsup")
+  Call<ResponseBody> sendWhatsAppOtpApi(@FieldMap Map<String, String> params);
+
+
+
+  @FormUrlEncoded
   @POST("verify_mobile_otp_before_signup")
   Call<ResponseBody> verifyOtpApi(@FieldMap Map<String, String> params);
 

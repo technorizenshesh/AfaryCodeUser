@@ -258,21 +258,21 @@
             android:text="@string/try_another_way"
             android:textColor="@color/black"
             android:textSize="@dimen/_13sdp"
-            android:visibility="visible">
+            android:visibility="visible"/>
 
-        </TextView>
 
         <TextView
+            android:id="@+id/tvWhatsapp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:padding="@dimen/_5sdp"
-            android:text="@string/GETACall"
+            android:text="@string/receive_the_code_by_whatsapp"
             android:textColor="@color/purple_200"
             android:textSize="@dimen/_14sdp"
             android:textStyle="bold"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
     </LinearLayout>
 

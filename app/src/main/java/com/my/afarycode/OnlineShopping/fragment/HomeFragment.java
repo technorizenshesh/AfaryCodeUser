@@ -795,8 +795,10 @@ public class HomeFragment extends Fragment implements SearchListener {
                 try {
                     String responseString = response.body().string();
                     JSONObject jsonObject = new JSONObject(responseString);
+                    GetBannerAPi();
                     Log.e(TAG,"getProduct Search Response = " + responseString);
                     if(jsonObject.getString("status").equals("1")) {
+                        binding.tvProduct.setVisibility(View.VISIBLE);
                         ProductItemModel model = new Gson().fromJson(responseString, ProductItemModel.class);
                         arrayList.clear();
                         arrayList.addAll(model.getResult());
@@ -818,11 +820,13 @@ public class HomeFragment extends Fragment implements SearchListener {
                     else {
                         arrayList.clear();
                         adapterSearch.notifyDataSetChanged();
-                       // binding.tvNotFound.setVisibility(View.VISIBLE);
+                        binding.tvProduct.setVisibility(View.GONE);
+
+                        // binding.tvNotFound.setVisibility(View.VISIBLE);
 
                     }
 
-                    GetBannerAPi();
+                   // GetBannerAPi();
 
 
                 } catch (Exception e) {
@@ -1068,6 +1072,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                        // dialog.dismiss();
                         binding.address.setText(country);
                         countryNames = country;
+                        binding.tvProduct.setVisibility(View.VISIBLE);
                         binding.tvProduct.setText(getString(R.string.latest_product_in)+" " + country );
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.FROM, "");
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,country);

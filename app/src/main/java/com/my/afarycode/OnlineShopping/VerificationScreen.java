@@ -99,6 +99,14 @@ public class VerificationScreen extends AppCompatActivity {
             sendVerificationCode(mobile,countryCode);
         });
 
+
+        binding.tvWhatsapp.setOnClickListener(v -> {
+            binding.Otp.setOTP("");
+            sendVerificationCodeOnWhatsApp(mobile,countryCode);
+        });
+
+
+
        // sendOnServerNumber(mobile,countryCode);
 
         sendVerificationCode(mobile,countryCode);
@@ -211,6 +219,48 @@ public class VerificationScreen extends AppCompatActivity {
             }
         });
     }
+
+    private void sendVerificationCodeOnWhatsApp(String mobileNumber,String countryCode) {
+        DataManager.getInstance().showProgressMessage(VerificationScreen.this, getString(R.string.please_wait));
+        Map<String, String> map = new HashMap<>();
+        map.put("mobile_number",mobileNumber);
+        map.put("country_code","+"+countryCode);
+        Log.e("OtpScreen", " Otp WhatsApp Request ==="+ map);
+        Call<ResponseBody> loginCall = apiInterface.sendWhatsAppOtpApi(map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+
+                    Log.e("Otp WhatsApp response===", response.body().toString());
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    if (jsonObject.getString("status").equals("1")) {
+                        Toast.makeText(VerificationScreen.this,getString(R.string.otp_successfully_send),Toast.LENGTH_LONG).show();
+
+                    } else if (jsonObject.getString("status").equals("0")) {
+                        Toast.makeText(VerificationScreen.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
 
     private void VerificationAPI() {
         DataManager.getInstance().showProgressMessage(VerificationScreen.this, getString(R.string.please_wait));

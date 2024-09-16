@@ -318,4 +318,7 @@
     <string name="please_enter_old_password">Please enter old password</string>
     <string name="please_enter_confirm_password">Please enter confirm password</string>
     <string name="password_change_by_admin">Password changed by admin</string>
+    <string name="wrong_email">Wrong email</string>
+    <string name="receive_the_code_by_whatsapp">Receive the code by whatsapp</string>
+
 </resources>

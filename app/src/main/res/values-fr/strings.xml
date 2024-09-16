@@ -317,6 +317,7 @@
     <string name="please_enter_old_password">Veuillez saisir l\'ancien mot de passe</string>
     <string name="please_enter_confirm_password">Please enter confirm password</string>
     <string name="password_change_by_admin">Mot de passe modifié par l\'administrateur</string>
+    <string name="wrong_email">Mauvaise adresse e-mail</string>
 </resources>
 
 

@@ -42,6 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
     private AfaryCode apiInterface;
     private String code, lang = "";
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    public static String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,22 +69,33 @@ public class SignUpActivity extends AppCompatActivity {
 
                     if (binding.name.getText().toString().trim().isEmpty()) {
                         binding.name.setError(getString(R.string.can_not_be_empty));
+                        binding.name.setFocusable(true);
                         Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_name), Toast.LENGTH_SHORT).show();
                     } else if (binding.userName.getText().toString().trim().isEmpty()) {
                         binding.userName.setError(getString(R.string.can_not_be_empty));
+                        binding.userName.setFocusable(true);
                         Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_user_name), Toast.LENGTH_SHORT).show();
                     } else if (binding.email.getText().toString().trim().isEmpty()) {
                         binding.email.setError(getString(R.string.can_not_be_empty));
+                        binding.email.setFocusable(true);
                         Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_email), Toast.LENGTH_SHORT).show();
-                    } else if (binding.phone.getText().toString().trim().isEmpty()) {
+                    }
+                    else if (!binding.email.getText().toString().trim().matches(emailPattern)) {
+                        binding.email.setError(getString(R.string.wrong_email));
+                        binding.email.setFocusable(true);
+                        Toast.makeText(SignUpActivity.this, getString(R.string.wrong_email), Toast.LENGTH_SHORT).show();
+                    }
+                    else if (binding.phone.getText().toString().trim().isEmpty()) {
                         binding.phone.setError(getString(R.string.can_not_be_empty));
+                        binding.phone.setFocusable(true);
                         Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_mobile_number), Toast.LENGTH_SHORT).show();
                     } else if (binding.password.getText().toString().trim().isEmpty()) {
                         binding.password.setError(getString(R.string.can_not_be_empty));
+                        binding.password.setFocusable(true);
                         Toast.makeText(SignUpActivity.this, getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
                     } else if (!binding.password.getText().toString().equals(binding.confirmPassword.getText().toString())) {
                         binding.confirmPassword.setError(getString(R.string.password_should_be_same));
-
+                        binding.confirmPassword.setFocusable(true);
                     } else {
                         startActivity(new Intent(SignUpActivity.this, VerificationScreen.class)
                                 .putExtra("user_name",binding.userName.getText().toString())
