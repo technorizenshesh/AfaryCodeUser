@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -76,17 +77,30 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
 
         }
 
+        if(all_category_subcategory.get(position).isClickOn()){
+            Picasso.get().load(all_category_subcategory.get(position).getIcon1()).into(holder.progressAdapterBinding.icon);
+            holder.progressAdapterBinding.categoryName.setTypeface(null, Typeface.BOLD);
 
 
+        }
+        else {
+            Picasso.get().load(all_category_subcategory.get(position).getIcon()).into(holder.progressAdapterBinding.icon);
+            holder.progressAdapterBinding.categoryName.setTypeface(null, Typeface.NORMAL);
+
+        }
 
 
-
-        Picasso.get().load(all_category_subcategory.get(position).getIcon1()).into(holder.progressAdapterBinding.icon);
 
         holder.progressAdapterBinding.LLShopOnline.setOnClickListener(v -> {
+               for (int i =0;i<all_category_subcategory.size();i++){
+                   all_category_subcategory.get(i).setClickOn(false);
+               }
 
-            Log.e("======",all_category_subcategory.size()+"");
-            if (all_category_subcategory.get(position).categoryName.equals("online store")) {
+               all_category_subcategory.get(position).setClickOn(true);
+               notifyDataSetChanged();
+
+               Log.e("======",all_category_subcategory.size()+"");
+            if (all_category_subcategory.get(position).categoryName.equals("Online Store")) {
                 fragment = new HomeShoppingOnlineScreen();
                 Bundle mBundle = new Bundle();
                 mBundle.putString("cat_id", all_category_subcategory.get(position).id);
@@ -99,6 +113,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
                 mBundle.putString("cat_id", all_category_subcategory.get(position).id);
                 PreferenceConnector.writeString(activity, PreferenceConnector.Cat_id, all_category_subcategory.get(position).id);
                 loadFragment(fragment, mBundle);*/
+                Toast.makeText(activity,activity.getString(R.string.coming_soon),Toast.LENGTH_LONG).show();
 
             } else if (all_category_subcategory.get(position).categoryName.equals("pharmacy")) {
               /*  fragment1 = new PharmicyFragment();
@@ -106,6 +121,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
                 mBundle.putString("cat_id", all_category_subcategory.get(position).id);
                 PreferenceConnector.writeString(activity, PreferenceConnector.Cat_id, all_category_subcategory.get(position).id);
                 loadFragment(fragment1, mBundle);*/
+                Toast.makeText(activity,activity.getString(R.string.coming_soon),Toast.LENGTH_LONG).show();
 
             } else if (all_category_subcategory.get(position).categoryName.equals("car services")) {
               /*  fragment2 = new CarServiceFragment();
@@ -113,9 +129,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyView
                 mBundle.putString("cat_id", all_category_subcategory.get(position).id);
                 PreferenceConnector.writeString(activity, PreferenceConnector.Cat_id, all_category_subcategory.get(position).id);
                 loadFragment(fragment2, mBundle);*/
+                Toast.makeText(activity,activity.getString(R.string.coming_soon),Toast.LENGTH_LONG).show();
 
             } else {
-
+                   Toast.makeText(activity,activity.getString(R.string.coming_soon),Toast.LENGTH_LONG).show();
             }
 
         });

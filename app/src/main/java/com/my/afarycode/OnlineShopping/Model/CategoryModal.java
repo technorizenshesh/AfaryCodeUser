@@ -61,6 +61,17 @@ public class CategoryModal {
         @Expose
         public String nameFr;
 
+
+        public boolean clickOn=false;
+
+        public boolean isClickOn() {
+            return clickOn;
+        }
+
+        public void setClickOn(boolean clickOn) {
+            this.clickOn = clickOn;
+        }
+
         public String getIcon() {
             return icon;
         }

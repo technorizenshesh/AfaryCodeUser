@@ -129,9 +129,14 @@ public interface AfaryCode {
     @POST("get_profile")
     Call<GetProfileModal> get_profile(@FieldMap Map<String, String> params);
 
-    @FormUrlEncoded
+   /* @FormUrlEncoded
     @POST("get_skills_client")
-    Call<CategoryModal> get_category( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<CategoryModal> get_category( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);*/
+
+  @FormUrlEncoded
+  @POST("get_home_category")
+  Call<CategoryModal> get_category( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 
     @FormUrlEncoded
     @POST("get_subcat_users")

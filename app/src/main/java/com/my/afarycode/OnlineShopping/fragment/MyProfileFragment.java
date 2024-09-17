@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -18,7 +19,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.ChangePassword;
+import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.OrderHistoryScreen;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
@@ -32,6 +35,7 @@ import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.FragmentMyprofileBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -49,12 +53,14 @@ public class MyProfileFragment extends Fragment {
 public String TAG ="MyProfileFragment";
     FragmentMyprofileBinding binding;
     Fragment fragment;
+    private AfaryCode apiInterface;
 
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_myprofile, container, false);
+        apiInterface = ApiClient.getClient(getContext()).create(AfaryCode.class);
 
 
         showLang(PreferenceConnector.readString(requireActivity(), PreferenceConnector.LANGUAGE, ""));
@@ -122,6 +128,7 @@ public String TAG ="MyProfileFragment";
             startActivity(new Intent(getActivity(), TermsCondition.class));
         });
 
+        GetProfile();
 
         return binding.getRoot();
 
@@ -304,6 +311,78 @@ public String TAG ="MyProfileFragment";
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    private void GetProfile() {
+
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
+
+        loginCall.enqueue(new Callback<GetProfileModal>() {
+            @Override
+            public void onResponse(Call<GetProfileModal> call,
+                                   Response<GetProfileModal> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+
+                    GetProfileModal data = response.body();
+                    String dataResponse = new Gson().toJson(response.body());
+
+                    Log.e("MapMap", "GET RESPONSE" + dataResponse);
+
+                    if (data.status.equals("1")) {
+
+                        if (!data.getResult().getName().equalsIgnoreCase(""))   {
+                            binding.tvName.setVisibility(View.VISIBLE);
+                            binding.tvName.setText(data.getResult().getName());
+                        }
+                        else {
+                            binding.tvName.setVisibility(View.VISIBLE);
+                        }
+
+                        binding.tvEmail.setText(data.getResult().email);
+                        binding.tvMobile.setText(data.getResult().mobile);
+                        Log.e("image>>>", data.getResult().image);
+
+                        Picasso.get().load(data.getResult().image).error(R.drawable.user_default)
+                                .into(binding.imgUser);
+
+                    /*    if (!data.getResult().image.equalsIgnoreCase("http://technorizen.com/afarycode/uploads/images/")) {
+                            Picasso.get().load(data.getResult().image).into(binding.imgUser);
+
+                        } else {
+
+                        }*/
+
+                    } else if (data.status.equals("0")) {
+                        Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
+                    }
+
+                    else if (data.status.equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetProfileModal> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
     }
 
 

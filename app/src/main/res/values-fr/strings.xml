@@ -318,6 +318,8 @@
     <string name="please_enter_confirm_password">Please enter confirm password</string>
     <string name="password_change_by_admin">Mot de passe modifié par l\'administrateur</string>
     <string name="wrong_email">Mauvaise adresse e-mail</string>
+    <string name="receive_the_code_by_whatsapp">Recevez le code par WhatsApp</string>
+
 </resources>
 
 

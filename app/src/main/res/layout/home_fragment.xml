@@ -251,7 +251,8 @@
                     app:sliderIndicatorSelectedColor="@color/colorPrimary"
                     app:sliderIndicatorUnselectedColor="#5A5A5A"
                     app:sliderScrollTimeInSec="1"
-                    app:sliderStartAutoCycle="true" />
+                    app:sliderStartAutoCycle="true"
+                    android:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerBannerMain"
@@ -652,7 +653,8 @@
                     app:sliderIndicatorSelectedColor="@color/colorPrimary"
                     app:sliderIndicatorUnselectedColor="#5A5A5A"
                     app:sliderScrollTimeInSec="1"
-                    app:sliderStartAutoCycle="true" />
+                    app:sliderStartAutoCycle="true"
+                    android:visibility="gone"/>
 
 
                 <TextView

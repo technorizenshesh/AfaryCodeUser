@@ -264,7 +264,7 @@
     <string name="re_order">Re-Order</string>
     <string name="delivered">Delivered</string>
     <string name="in_wish_list">In Wish List</string>
-    <string name="top_categorie">Top Categorie</string>
+    <string name="top_categorie">Top Categories</string>
     <string name="transfer_money_">Transfer Money</string>
     <string name="send_money_to_someone_else_s_wallet">Send money to someone else\'s wallet</string>
     <string name="request_money_from_someone_receive_in_my_wallet">Request money from someone(receive in my wallet)</string>
@@ -320,5 +320,6 @@
     <string name="password_change_by_admin">Password changed by admin</string>
     <string name="wrong_email">Wrong email</string>
     <string name="receive_the_code_by_whatsapp">Receive the code by whatsapp</string>
+    <string name="coming_soon">Coming soon</string>
 
 </resources>

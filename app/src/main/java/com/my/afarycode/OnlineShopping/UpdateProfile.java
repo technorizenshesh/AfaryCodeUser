@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -38,6 +39,8 @@ import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.Model.UpdateProfileModal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
+import com.my.afarycode.OnlineShopping.fragment.MyProfileFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -73,6 +76,7 @@ public class UpdateProfile extends Fragment {
     private static final int REQUEST_CAMERA = 1;
     private static final int SELECT_FILE = 2;
     private static final int MY_PERMISSION_CONSTANT = 5;
+    Fragment fragment;
 
     @Nullable
     @Override
@@ -189,7 +193,8 @@ public class UpdateProfile extends Fragment {
                         String dataResponse = new Gson().toJson(response.body());
                         Log.e("MapMap", "EDIT PROFILE RESPONSE" + dataResponse);
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
-
+                        fragment = new MyProfileFragment();
+                        loadFragment(fragment);
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
@@ -227,7 +232,7 @@ public class UpdateProfile extends Fragment {
 
     private void GetProfile() {
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
@@ -272,7 +277,7 @@ public class UpdateProfile extends Fragment {
                         binding.address.setText(data.getResult().getCountry());
                         Log.e("image>>>", data.getResult().image);
 
-                        Picasso.get().load(data.getResult().image).error(R.drawable.user)
+                        Picasso.get().load(data.getResult().image).error(R.drawable.user_default)
                                 .into(binding.imgUser);
 
                     /*    if (!data.getResult().image.equalsIgnoreCase("http://technorizen.com/afarycode/uploads/images/")) {
@@ -529,4 +534,21 @@ public class UpdateProfile extends Fragment {
 
 
     }
+
+    public boolean loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        if (fragment != null) {
+            // Clear the back stack before adding a new fragment
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_homeContainer, fragment)
+                    .addToBackStack("Home")
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+
 }

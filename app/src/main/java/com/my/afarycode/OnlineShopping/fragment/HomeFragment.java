@@ -566,6 +566,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                         get_result1.clear();
                         get_result1.addAll(data.getResult());
                         banner_array_list.clear();
+                        binding.imageSlider.setVisibility(View.VISIBLE);
                         for (int i = 0; get_result1.size() > i; i++) {
                             banner_array_list.add(get_result1.get(i).image);
 
@@ -586,6 +587,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                     } else if (data.status.equals("0")) {
                         banner_array_list.clear();
                         binding.imageSlider.dataSetChanged();
+                        binding.imageSlider.setVisibility(View.GONE);
+
                     }
 
                     else if (data.status.equals("5")) {
@@ -642,6 +645,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                         get_result1.clear();
                         get_result1.addAll(data.getResult());
                         banner_array_list1.clear();
+                        binding.imageSlider2.setVisibility(View.VISIBLE);
                         for (int i = 0; get_result1.size() > i; i++) {
                             banner_array_list1.add(get_result1.get(i).image);
 
@@ -661,6 +665,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                     } else if (data.status.equals("0")) {
                         banner_array_list1.clear();
                         binding.imageSlider2.dataSetChanged();
+                        binding.imageSlider2.setVisibility(View.GONE);
+
                         // Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     }
 
