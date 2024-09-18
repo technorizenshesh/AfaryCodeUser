@@ -825,6 +825,8 @@ public class HomeFragment extends Fragment implements SearchListener {
 
                     else {
                         arrayList.clear();
+                        adapterSearch = new ProductAdapter2(getActivity(), arrayList,arrayList.size());
+                        binding.recyclernearme.setAdapter(adapterSearch);
                         adapterSearch.notifyDataSetChanged();
                         binding.tvProduct.setVisibility(View.GONE);
 
@@ -838,6 +840,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                 } catch (Exception e) {
                     // Toast.makeText(mContext, "Exception = " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("Exception","Exception = " + e.getMessage());
+                    GetBannerAPi();
                 }
 
             }
