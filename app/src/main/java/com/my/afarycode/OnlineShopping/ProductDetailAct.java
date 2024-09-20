@@ -154,14 +154,16 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
 
         binding.btnReadMore.setOnClickListener(view -> {
-            if(checkRead==false){
+          /*  if(checkRead==false){
                 binding.productDetails.setMaxLines(Integer.MAX_VALUE);//your TextView
                 checkRead = true;
             }else {
                 binding.productDetails.setMaxLines(5);//your TextView
                 checkRead = false;
 
-            }
+            }*/
+
+            toggleText();
 
         });
 
@@ -176,6 +178,32 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
     }
 
 
+    private void toggleText() {
+        if (checkRead) {
+            // Collapse to one line
+            binding.productDetails.setMaxLines(1);
+            binding.btnReadMore.setText("READ MORE");
+        } else {
+            // Expand to five lines
+            binding.productDetails.setMaxLines(5);
+            binding.btnReadMore.setText("READ LESS");
+        }
+        checkRead = !checkRead; // Toggle the state
+    }
+
+
+    private void checkIfTextIsLongEnough() {
+        binding.productDetails.post(new Runnable() {
+            @Override
+            public void run() {
+                if (binding.productDetails.getLineCount() > 1) {
+                    binding.btnReadMore.setVisibility(View.VISIBLE);
+                } else {
+                    binding.btnReadMore.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
 /*
     private void setAdapter() {
 
@@ -234,6 +262,10 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1"))
                             binding.ivDeliveryType.setVisibility(View.VISIBLE);
                         else binding.ivDeliveryType.setVisibility(View.GONE);
+
+                    /*    if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1"))
+                            binding.ivDeliveryType.setVisibility(View.GONE);
+                        else binding.ivDeliveryType.setVisibility(View.VISIBLE);*/
 
                         if (validateNameArrayList.size() > 0) {
                             binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
@@ -312,7 +344,10 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                         binding.tvTitle.setText(get_result1.get(0).productName);
                         binding.shopName.setText(get_result1.get(0).productName.toUpperCase());
-                        binding.productDetails.setMaxLines(5);//your TextView
+                       // binding.productDetails.setMaxLines(5);//your TextView
+
+
+
                         binding.productDetails.setText(get_result1.get(0).productDetails);
                         binding.productPrice.setText("Rs. " + get_result1.get(0).productPrice);
                         binding.productPrice1.setText("Rs. " + get_result1.get(0).productPrice);

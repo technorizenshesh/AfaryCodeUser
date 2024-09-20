@@ -207,222 +207,245 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <LinearLayout
-                        android:id="@+id/llRate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:orientation="horizontal"
-                        >
-                        <TextView
-                            android:id="@+id/tvRate"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:textSize="@dimen/_12sdp"
-                            android:text=""
-                            />
-
-
-                        <RatingBar
-                            android:id="@+id/ratingbar"
-                            android:layout_marginTop="@dimen/_7sdp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/_3sdp"
-                            android:stepSize=".5"
-                            android:progressTint="@color/yelllow"
-                            style="@style/Widget.AppCompat.RatingBar.Small"
-                            />
-
-                    </LinearLayout>
-
-
                 <LinearLayout
-                    android:id="@+id/llShop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:textColor="@color/natural_gray"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="@string/sold_by"
-                        />
-
-
-                    <TextView
-                        android:id="@+id/tvSellerName"
-                        android:textColor="@color/purple_700"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textSize="@dimen/_12sdp"
-                        android:text=""
-                        android:maxLength="25"
-                        />
-                    <ImageView
-                        android:id="@+id/ivVerify"
-                        android:layout_width="@dimen/_15sdp"
-                        android:layout_height="@dimen/_15sdp"
-                        android:src="@drawable/ic_verify"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginStart="@dimen/_5sdp"
-                        android:visibility="gone"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/rl23"
-                    android:layout_below="@+id/llShop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:textColor="@color/natural_gray"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="@string/paymentN"
-                        android:maxLength="25"
-                        />
-
-
-                    <TextView
-                        android:textColor="@color/purple_700"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="@string/secure_transaction"
-                        android:maxLength="25"
-                        />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/rl24"
-                    android:layout_below="@+id/rl23"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:textColor="@color/natural_gray"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="@string/ship_by"
-                        android:maxLength="25"
-                        />
-
-
-                    <TextView
-                        android:textColor="@color/purple_700"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:textSize="@dimen/_12sdp"
-                        android:text="AfaryCode"
-                        android:maxLength="25"
-                        />
-
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rlStock"
-                    android:layout_below="@+id/rl24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_5sdp">
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
                     <LinearLayout
-                        android:id="@+id/llCheckProduct"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginRight="13dp"
-                        android:visibility="gone"
-                        >
+                        android:layout_weight=".35"
+                        android:orientation="vertical">
 
-
-                        <TextView
+                        <LinearLayout
+                            android:id="@+id/llRate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/_5sdp"
-                            android:text="@string/product_probably_out_of_stock"
-                            android:textColor="@color/red"
-                            android:textSize="@dimen/_11sdp"
-                            />
+                            android:layout_alignParentStart="true"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:id="@+id/tvRate"
+                                android:textColor="@color/black"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text=""
+                                />
 
 
+                            <RatingBar
+                                android:id="@+id/ratingbar"
+                                android:layout_marginTop="@dimen/_7sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_3sdp"
+                                android:stepSize=".5"
+                                android:progressTint="@color/yelllow"
+                                style="@style/Widget.AppCompat.RatingBar.Small"
+                                />
 
-                        <TextView
-                            android:id="@+id/tvCheckAvailable"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/_5sdp"
-                            android:inputType="text"
-                            android:text="@string/check_availability"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_11sdp"
-                            android:background="@color/colorGreen"/>
-
-
+                        </LinearLayout>
 
 
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvStock"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginRight="13dp"
-                        android:inputType="text"
-                        android:text=""
-                        android:textColor="@color/colorGreen"
-                        android:textSize="@dimen/_12sdp"
-                        android:visibility="visible"/>
-                </RelativeLayout>
+                        android:layout_weight=".65"
+                        android:orientation="vertical">
 
-                </RelativeLayout>
+                        <LinearLayout
+                            android:id="@+id/llShop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:textColor="@color/natural_gray"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text="@string/sold_by"
+                                />
+
+
+                            <TextView
+                                android:id="@+id/tvSellerName"
+                                android:textColor="@color/purple_700"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text=""
+                                android:maxLength="25"
+                                />
+                            <ImageView
+                                android:id="@+id/ivVerify"
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="@dimen/_15sdp"
+                                android:src="@drawable/ic_verify2"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:visibility="gone"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rl23"
+                            android:layout_below="@+id/llShop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:textColor="@color/natural_gray"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text="@string/paymentN"
+                                android:maxLength="25"
+                                />
+
+
+                            <TextView
+                                android:textColor="@color/purple_700"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text="@string/secure_transaction"
+                                android:maxLength="25"
+                                />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rl24"
+                            android:layout_below="@+id/rl23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:textColor="@color/natural_gray"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text="@string/ship_by"
+                                android:maxLength="25"
+                                />
+
+
+                            <TextView
+                                android:textColor="@color/purple_700"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text="AfaryCode"
+                                android:maxLength="25"
+                                />
+
+
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/rlStock"
+                            android:layout_below="@+id/rl24"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp">
+                            <LinearLayout
+                                android:id="@+id/llCheckProduct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginEnd="@dimen/_10sdp"
+                                android:layout_marginRight="13dp"
+                                android:visibility="gone"
+                                >
+
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/_5sdp"
+                                    android:text="@string/product_probably_out_of_stock"
+                                    android:textColor="@color/red"
+                                    android:textSize="@dimen/_11sdp"
+                                    />
+
+
+
+                                <TextView
+                                    android:id="@+id/tvCheckAvailable"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/_5sdp"
+                                    android:inputType="text"
+                                    android:text="@string/check_availability"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/_11sdp"
+                                    android:background="@color/colorGreen"/>
+
+
+
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvStock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginRight="13dp"
+                                android:inputType="text"
+                                android:text=""
+                                android:textColor="@color/colorGreen"
+                                android:textSize="@dimen/_12sdp"
+                                android:visibility="visible"
+                                android:textStyle="bold"/>
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+                </LinearLayout>
 
 
 
@@ -437,9 +460,9 @@
                         android:id="@+id/product_details"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textMultiLine"
                         android:textSize="@dimen/_12sdp"
                         android:text=""
+                        android:maxLines="1"
                         android:visibility="visible"
                         />
 
@@ -471,7 +494,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/read_more"
-                        android:textColor="@color/black"
+                        android:textColor="@color/blue_circle"
                         android:textStyle="bold"
                         android:textSize="@dimen/_14sdp"
                         />

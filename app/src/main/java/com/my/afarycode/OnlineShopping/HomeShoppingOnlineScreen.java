@@ -405,7 +405,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
     private void GetCategoryAPi() {
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

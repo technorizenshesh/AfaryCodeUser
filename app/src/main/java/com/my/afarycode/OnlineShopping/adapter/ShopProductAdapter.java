@@ -40,7 +40,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
         Glide.with(context).load(arrayList.get(position).getImage1())
                 .override(250,250).into(holder.binding.ivImg);
 
-        if(arrayList.get(position).getDeliveryCharges().equals("0")) holder.binding.tvFeeType.setVisibility(View.VISIBLE);
+        if(arrayList.get(position).getDeliveryCharges().equals("1")) holder.binding.tvFeeType.setVisibility(View.VISIBLE);
         else holder.binding.tvFeeType.setVisibility(View.GONE);
 
         if(arrayList.get(position).getApproval().equals("1")) holder.binding.tvProductApproval.setVisibility(View.GONE);
@@ -54,7 +54,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
             holder.binding.tvStatus.setTextColor(context.getColor(R.color.red));
             holder.binding.tvStatus.setText(context.getString(R.string.deactive));        }*/
 
-        if(arrayList.get(position).getDeliveryCharges().equalsIgnoreCase("0"))
+        if(arrayList.get(position).getDeliveryCharges().equalsIgnoreCase("1"))
             holder.binding.ivDeliveryType.setVisibility(View.VISIBLE);
         else holder.binding.ivDeliveryType.setVisibility(View.GONE);
 

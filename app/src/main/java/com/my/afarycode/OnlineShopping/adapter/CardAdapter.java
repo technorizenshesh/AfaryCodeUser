@@ -79,7 +79,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
               holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).getItemAmount())
                       * Integer.valueOf(all_category_subcategory.get(position).quantity));
 
-              if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("0"))
+              if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("1"))
                   holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.VISIBLE);
               else holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.GONE);
 

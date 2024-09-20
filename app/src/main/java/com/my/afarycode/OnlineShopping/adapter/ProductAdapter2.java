@@ -58,9 +58,16 @@ public class ProductAdapter2 extends RecyclerView.Adapter<ProductAdapter2.MyView
                     .putExtra("restaurant_id",arrayList.get(position).getRestaurantId())
                     .putExtra("productPrice",arrayList.get(position).getProductPrice()));
         });
-        if(arrayList.get(position).getDeliveryCharges().equalsIgnoreCase("1"))
+
+
+        if(arrayList.get(position).getDeliveryCharges().equals("1")) {
             holder.binding.ivDeliveryType.setVisibility(View.VISIBLE);
-        else holder.binding.ivDeliveryType.setVisibility(View.GONE);
+        }
+        else {
+            holder.binding.ivDeliveryType.setVisibility(View.GONE);
+        }
+
+
 
 
     }

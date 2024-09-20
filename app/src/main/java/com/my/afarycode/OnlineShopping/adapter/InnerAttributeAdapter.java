@@ -66,7 +66,7 @@ public class InnerAttributeAdapter extends RecyclerView.Adapter<InnerAttributeAd
                     }
                     arrayList.get(getAdapterPosition()).setChk(true);
                     notifyDataSetChanged();
-                    listener.innerClick(position,arrayList.get(position).getName(),getAdapterPosition());
+                  //  listener.innerClick(position,arrayList.get(position).getName(),getAdapterPosition());
                 });
 
             }

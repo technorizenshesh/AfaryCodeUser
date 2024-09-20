@@ -946,9 +946,11 @@ public class HomeFragment extends Fragment implements SearchListener {
                         get_result11.addAll(data.getResult());
 
                         if(get_result.size()>0){
+                            binding.llicon.setVisibility(View.VISIBLE);
                             binding.reqcountCart.setVisibility(View.VISIBLE);
                             binding.reqcountCart.setText(get_result11.size()+"");
                         }else {
+                            binding.llicon.setVisibility(View.VISIBLE);
                             binding.reqcountCart.setVisibility(View.GONE);
 
                         }
@@ -956,6 +958,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                     } else if (data.status.equals("0")) {
                        // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
                         get_result11.clear();
+                        binding.llicon.setVisibility(View.VISIBLE);
                         binding.reqcountCart.setVisibility(View.GONE);
 
 

@@ -221,9 +221,9 @@
     <string name="more">More</string>
     <string name="delivery_person_name">Delivery Person Name</string>
     <string name="sold_by">Sold by :</string>
-    <string name="paymentN">Payment :</string>
+    <string name="paymentN">Payment : </string>
     <string name="secure_transaction">secure transaction</string>
-    <string name="ship_by">Ship by :</string>
+    <string name="ship_by">Ship by : </string>
     <string name="product_details">Product Details</string>
     <string name="select_size">Select size</string>
     <string name="select_color">Select color</string>
