@@ -155,8 +155,8 @@
 
                     <ImageView
                         android:id="@+id/ivDeliveryType"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_25sdp"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_30sdp"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentStart="true"
                         android:src="@drawable/ic_free_delivery"
@@ -267,7 +267,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
                             android:orientation="horizontal"
                             >
                             <TextView
@@ -293,6 +293,33 @@
                                 android:text=""
                                 android:maxLength="25"
                                 />
+
+
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/rlCertifySeller"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            >
+                            <TextView
+                                android:textColor="@color/natural_gray"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_10sdp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12sdp"
+                                android:text="@string/certify_seller"
+                                android:maxLength="25"
+                                />
+
                             <ImageView
                                 android:id="@+id/ivVerify"
                                 android:layout_width="@dimen/_15sdp"
@@ -302,7 +329,10 @@
                                 android:layout_marginStart="@dimen/_5sdp"
                                 android:visibility="gone"/>
 
+
+
                         </LinearLayout>
+
 
                         <LinearLayout
                             android:id="@+id/rl23"
@@ -561,11 +591,23 @@
 
 
 
+
+                    <TextView
+                        android:id="@+id/tvBrand"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        android:textSize="@dimen/_14sdp"
+                        />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvMain"
+                        android:layout_below="@+id/tvBrand"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="2"
                         tools:listitem="@layout/item_main"
                         />
 
@@ -599,9 +641,8 @@
                     android:layout_gravity="right"
                     android:gravity="right"
                     android:textColor="@color/black"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
                     android:textSize="@dimen/_13sdp"
+                    android:layout_margin="@dimen/_10sdp"
                     android:visibility="visible"/>
 
 

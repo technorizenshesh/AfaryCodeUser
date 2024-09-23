@@ -29,6 +29,7 @@ import com.my.afarycode.OnlineShopping.Model.ShoppingProductModal;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.adapter.MainAttributeAdapter;
+import com.my.afarycode.OnlineShopping.adapter.MainAttributeAdapter2;
 import com.my.afarycode.OnlineShopping.adapter.ReviewAdapter;
 import com.my.afarycode.OnlineShopping.adapter.ReviewProductAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
@@ -78,9 +79,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
     private ReviewAdapter adapter;
     private String productPrice;
     Fragment fragment;
-
+    JSONArray jsonArray = new JSONArray();
     boolean checkRead = false;
-
+    String chkAtleast="";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -256,8 +257,27 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         get_result1.clear();
                         validateNameArrayList.clear();
                         get_result1.addAll(data.getResult());
-                        productImgList.add(get_result1.get(0).getImage());
-                        productImgList.add(get_result1.get(0).getImage1());
+                      //  productImgList.add(get_result1.get(0).getImage());
+                      //  productImgList.add(get_result1.get(0).getImage1());
+
+
+                        if (!get_result1.get(0).getProductImages().equalsIgnoreCase("")) {
+                            productImgList.add(get_result1.get(0).getProductImages());
+                        }
+
+                        if (!get_result1.get(0).getImage1().equalsIgnoreCase(""))
+                        {
+                            productImgList.add(get_result1.get(0).getImage1());
+                        }
+                        if (!get_result1.get(0).getImage2().equalsIgnoreCase("")) {
+                            productImgList.add(get_result1.get(0).getImage2());
+                        }
+
+                        if (!get_result1.get(0).getImage3().equalsIgnoreCase(""))
+                        {
+                            productImgList.add(get_result1.get(0).getImage3());
+                        }
+
                         validateNameArrayList.addAll(get_result1.get(0).getValidateName());
                         if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1"))
                             binding.ivDeliveryType.setVisibility(View.VISIBLE);
@@ -268,9 +288,20 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         else binding.ivDeliveryType.setVisibility(View.VISIBLE);*/
 
                         if (validateNameArrayList.size() > 0) {
-                            binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
-                        }
+                           // binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
 
+                            binding.rvMain.setAdapter(new MainAttributeAdapter2(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
+                         }
+
+                        if(!get_result1.get(0).getProductBrand().equalsIgnoreCase("")){
+                            binding.tvBrand.setVisibility(View.VISIBLE);
+                            binding.tvBrand.setText(getString(R.string.brand)+ " : "+get_result1.get(0).getProductBrand());
+
+                        }
+                        else {
+                            binding.tvBrand.setVisibility(View.GONE);
+
+                        }
 
 
                       /*  if(validateNameArrayList.size()==1){
@@ -324,8 +355,15 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                         }
                         if (get_result1.get(0).getVerify().equalsIgnoreCase("Yes"))
+                        {
                             binding.ivVerify.setVisibility(View.VISIBLE);
-                        else binding.ivVerify.setVisibility(View.GONE);
+                            binding.rlCertifySeller.setVisibility(View.VISIBLE);
+
+                        }
+                        else {
+                            binding.ivVerify.setVisibility(View.GONE);
+                            binding.rlCertifySeller.setVisibility(View.GONE);
+                        }
                         if (get_result1.get(0).getAddedtowishlist().equalsIgnoreCase("Yes")) {
                             binding.ivStar.setImageResource(R.drawable.ic_red_star);
                         } else binding.ivStar.setImageResource(R.drawable.outline);
@@ -398,13 +436,15 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
         btnCheckout.setOnClickListener(v -> {
             mDialog.dismiss();
-            Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+             if(chkAtleast.equalsIgnoreCase("")) Toast.makeText(ProductDetailAct.this,getString(R.string.please_select_atleast_one_attribute),Toast.LENGTH_SHORT).show();
+           else Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
 
         });
 
         btnContinue.setOnClickListener(v -> {
             mDialog.dismiss();
-              Add_To_Cart_API(product_id, restaurant_id, productPrice,"continue");
+            if(chkAtleast.equalsIgnoreCase("")) Toast.makeText(ProductDetailAct.this,getString(R.string.please_select_atleast_one_attribute),Toast.LENGTH_SHORT).show();
+            else Add_To_Cart_API(product_id, restaurant_id, productPrice,"continue");
            // finish();
 
         });
@@ -443,7 +483,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         map.put("register_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Register_id, ""));
 
         if (validateNameArrayList.size()>0) {
-           map.put("options", getOption());
+           map.put("options",jsonArray.toString());
        }
        else map.put("options","[]");
 
@@ -714,6 +754,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
     @Override
     public void mainClick(String mainVal, String innerVal, int mainPosition, int innerPosition) {
+/*
         for (int i = 0; i < validateNameArrayList.size(); i++) {
             if (i == mainPosition) {
                 for (int j = 0; j < validateNameArrayList.get(i).getAttributeName().size(); j++) {
@@ -727,6 +768,24 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     }
                 }
             }
+
+
+
         }
+*/
+
+
+        try {
+            JSONObject jsonObject= new JSONObject();
+            jsonObject.put("mainName",mainVal);
+            jsonObject.put("innerName",innerVal);
+
+            //  jsonObject.put(validateNameArrayList.get(i).getName().toString(),validateNameArrayList.get(i).getAttributeName().get(j).getName().toString());
+            jsonArray.put(jsonObject);
+            chkAtleast = jsonArray.toString();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        Log.e("Added attribute value==",jsonArray+"");
     }
 }

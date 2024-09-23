@@ -63,6 +63,42 @@ public class ShoppingProductModal {
         @Expose
         public String image1;
 
+
+        @SerializedName("product_images")
+        @Expose
+        private String productImages;
+
+        @SerializedName("image_2")
+        @Expose
+        private String image2;
+        @SerializedName("image_3")
+        @Expose
+        private String image3;
+
+        public String getProductImages() {
+            return productImages;
+        }
+
+        public void setProductImages(String productImages) {
+            this.productImages = productImages;
+        }
+
+        public String getImage2() {
+            return image2;
+        }
+
+        public void setImage2(String image2) {
+            this.image2 = image2;
+        }
+
+        public String getImage3() {
+            return image3;
+        }
+
+        public void setImage3(String image3) {
+            this.image3 = image3;
+        }
+
         public String getImage1() {
             return image1;
         }
@@ -130,8 +166,9 @@ public class ShoppingProductModal {
         @Expose
         public String avgRating;
 
-
-
+        @SerializedName("Product_brand")
+        @Expose
+        public String productBrand;
 
         @SerializedName("validate_name")
         @Expose
@@ -278,6 +315,13 @@ public class ShoppingProductModal {
             this.deliveryCharges = deliveryCharges;
         }
 
+        public String getProductBrand() {
+            return productBrand;
+        }
+
+        public void setProductBrand(String productBrand) {
+            this.productBrand = productBrand;
+        }
 
         public String getAvgRating() {
             return avgRating;

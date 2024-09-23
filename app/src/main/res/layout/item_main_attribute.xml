@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/tvAttributeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Color"
+            android:textSize="@dimen/_13sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/black"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_btn_bg_color"
+            >
+
+            <TextView
+                android:id="@+id/tvAttribute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select"
+                android:textSize="@dimen/_12sdp"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:padding="@dimen/_5sdp"
+                android:layout_margin="@dimen/_5sdp"/>
+
+
+             <ImageView
+                 android:layout_width="@dimen/_15sdp"
+                 android:layout_height="@dimen/_15sdp"
+                 android:layout_alignParentEnd="true"
+                 android:layout_centerInParent="true"
+                 android:src="@drawable/dropdown"
+                 android:padding="@dimen/_2sdp"
+                 android:layout_marginEnd="@dimen/_10sdp"/>
+
+        </RelativeLayout>
+
+
+
+
+
+
+    </LinearLayout>
+</layout>

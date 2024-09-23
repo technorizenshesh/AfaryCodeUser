@@ -321,5 +321,8 @@
     <string name="wrong_email">Wrong email</string>
     <string name="receive_the_code_by_whatsapp">Receive the code by whatsapp</string>
     <string name="coming_soon">Coming soon</string>
+    <string name="brand">Brand</string>
+    <string name="certify_seller">Certify Seller : </string>
+    <string name="please_select_atleast_one_attribute">Please select atleast one attribute</string>
 
 </resources>
