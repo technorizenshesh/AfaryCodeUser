@@ -324,5 +324,6 @@
     <string name="brand">Brand</string>
     <string name="certify_seller">Certify Seller : </string>
     <string name="please_select_atleast_one_attribute">Please select atleast one attribute</string>
+    <string name="add_to_cart_successfully">Add Cart SuccessFully</string>
 
 </resources>

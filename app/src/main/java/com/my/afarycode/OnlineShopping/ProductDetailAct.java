@@ -63,7 +63,7 @@ import retrofit2.Response;
 public class ProductDetailAct extends AppCompatActivity implements MainClickListener {
     public String TAG = "ProductDetailAct";
     ReviewProductAdapter mAdapter;
-  //  private ArrayList<HomeOfferModel> modelList = new ArrayList<>();
+    //  private ArrayList<HomeOfferModel> modelList = new ArrayList<>();
     private ArrayList<ShoppingProductModal.Result> get_result1 = new ArrayList<>();
 
     private ArrayList<ShoppingProductModal.Result.ValidateName> validateNameArrayList = new ArrayList<>();
@@ -81,7 +81,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
     Fragment fragment;
     JSONArray jsonArray = new JSONArray();
     boolean checkRead = false;
-    String chkAtleast="";
+    String chkAtleast = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +98,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             productPrice = getIntent().getStringExtra("productPrice");
         }
 
-      //  binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + "See other products from" + "<br>" +"this shop by clicking here"+ "</b>" + "</font>"));
+        //  binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + "See other products from" + "<br>" +"this shop by clicking here"+ "</b>" + "</font>"));
 
         binding.RRback.setOnClickListener(v -> {
             onBackPressed();
@@ -117,7 +118,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         binding.cardAdd.setOnClickListener(v -> {
 
             if (get_result1.get(0).getInStock().equalsIgnoreCase("Yes")) dialogContinue();
-            else{
+            else {
                 //Toast.makeText(this, getString(R.string.out_of_stock), Toast.LENGTH_SHORT).show();
                 Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
 
@@ -169,11 +170,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         });
 
 
-
         binding.tvCheckAvailable.setOnClickListener(v -> {
             checkProductAvailability(product_id);
         });
-
 
 
     }
@@ -257,24 +256,22 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         get_result1.clear();
                         validateNameArrayList.clear();
                         get_result1.addAll(data.getResult());
-                      //  productImgList.add(get_result1.get(0).getImage());
-                      //  productImgList.add(get_result1.get(0).getImage1());
+                        //  productImgList.add(get_result1.get(0).getImage());
+                        //  productImgList.add(get_result1.get(0).getImage1());
 
 
                         if (!get_result1.get(0).getProductImages().equalsIgnoreCase("")) {
                             productImgList.add(get_result1.get(0).getProductImages());
                         }
 
-                        if (!get_result1.get(0).getImage1().equalsIgnoreCase(""))
-                        {
+                        if (!get_result1.get(0).getImage1().equalsIgnoreCase("")) {
                             productImgList.add(get_result1.get(0).getImage1());
                         }
                         if (!get_result1.get(0).getImage2().equalsIgnoreCase("")) {
                             productImgList.add(get_result1.get(0).getImage2());
                         }
 
-                        if (!get_result1.get(0).getImage3().equalsIgnoreCase(""))
-                        {
+                        if (!get_result1.get(0).getImage3().equalsIgnoreCase("")) {
                             productImgList.add(get_result1.get(0).getImage3());
                         }
 
@@ -288,17 +285,19 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         else binding.ivDeliveryType.setVisibility(View.VISIBLE);*/
 
                         if (validateNameArrayList.size() > 0) {
-                           // binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
-
+                            // binding.rvMain.setAdapter(new MainAttributeAdapter(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
+                            binding.rvMain.setVisibility(View.VISIBLE);
                             binding.rvMain.setAdapter(new MainAttributeAdapter2(ProductDetailAct.this, validateNameArrayList, ProductDetailAct.this));
-                         }
-
-                        if(!get_result1.get(0).getProductBrand().equalsIgnoreCase("")){
-                            binding.tvBrand.setVisibility(View.VISIBLE);
-                            binding.tvBrand.setText(getString(R.string.brand)+ " : "+get_result1.get(0).getProductBrand());
+                        } else {
+                            binding.rvMain.setVisibility(View.GONE);
 
                         }
-                        else {
+
+                        if (!get_result1.get(0).getProductBrand().equalsIgnoreCase("")) {
+                            binding.tvBrand.setVisibility(View.VISIBLE);
+                            binding.tvBrand.setText(getString(R.string.brand) + " : " + get_result1.get(0).getProductBrand());
+
+                        } else {
                             binding.tvBrand.setVisibility(View.GONE);
 
                         }
@@ -323,44 +322,41 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                             Picasso.get().load(get_result1.get(0).image).into(binding.imgShop);
                         }*/
 
-                        if(get_result1.get(0).getReview().size()>0){
+                        if (get_result1.get(0).getReview().size() > 0) {
                             binding.tvReview.setVisibility(View.VISIBLE);
                             binding.recyclerReview.setVisibility(View.VISIBLE);
-                            binding.recyclerReview.setAdapter( new ReviewProductAdapter(ProductDetailAct.this, (ArrayList<ShoppingProductModal.Result.review>) get_result1.get(0).getReview()));
+                            binding.recyclerReview.setAdapter(new ReviewProductAdapter(ProductDetailAct.this, (ArrayList<ShoppingProductModal.Result.review>) get_result1.get(0).getReview()));
 
-                        }else {
+                        } else {
                             binding.tvReview.setVisibility(View.GONE);
                             binding.recyclerReview.setVisibility(View.GONE);
 
                         }
 
 
-
                         binding.tvSellerName.setText(" " + get_result1.get(0).getSellerName().trim());
-                        binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + "See other products from" + "<br>" +"this shop by clicking here "+ "</b>" + "</font>"  +"<font color='#0288D1'>" + "<b>"  +get_result1.get(0).getShopName().trim() + "</b>" + "</font>"  ));
-
+                        binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + "See other products from" + "<br>" + "this shop by clicking here " + "</b>" + "</font>" + "<font color='#0288D1'>" + "<b>" + get_result1.get(0).getShopName().trim() + "</b>" + "</font>"));
 
 
                         if (get_result1.get(0).getInStock().equalsIgnoreCase("Yes")) {
                             binding.llCheckProduct.setVisibility(View.GONE);
+                            binding.rlStock.setVisibility(View.VISIBLE);
                             binding.tvStock.setVisibility(View.VISIBLE);
                             binding.tvStock.setText(getString(R.string.in_stock));
                             binding.tvStock.setTextColor(getResources().getColor(R.color.colorGreen));
 
                         } else {
-                           // binding.tvStock.setText(getString(R.string.out_of_stock));
-                           // binding.tvStock.setTextColor(getResources().getColor(R.color.red));
+                            // binding.tvStock.setText(getString(R.string.out_of_stock));
+                            // binding.tvStock.setTextColor(getResources().getColor(R.color.red));
                             binding.llCheckProduct.setVisibility(View.VISIBLE);
-                            binding.tvStock.setVisibility(View.GONE);
+                            binding.rlStock.setVisibility(View.GONE);
 
                         }
-                        if (get_result1.get(0).getVerify().equalsIgnoreCase("Yes"))
-                        {
+                        if (get_result1.get(0).getVerify().equalsIgnoreCase("Yes")) {
                             binding.ivVerify.setVisibility(View.VISIBLE);
                             binding.rlCertifySeller.setVisibility(View.VISIBLE);
 
-                        }
-                        else {
+                        } else {
                             binding.ivVerify.setVisibility(View.GONE);
                             binding.rlCertifySeller.setVisibility(View.GONE);
                         }
@@ -382,17 +378,15 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                         binding.tvTitle.setText(get_result1.get(0).productName);
                         binding.shopName.setText(get_result1.get(0).productName.toUpperCase());
-                       // binding.productDetails.setMaxLines(5);//your TextView
-
+                        // binding.productDetails.setMaxLines(5);//your TextView
 
 
                         binding.productDetails.setText(get_result1.get(0).productDetails);
                         binding.productPrice.setText("Rs. " + get_result1.get(0).productPrice);
                         binding.productPrice1.setText("Rs. " + get_result1.get(0).productPrice);
 
-                        binding.tvRate.setText(get_result1.get(0).getAvgRating()+" ");
+                        binding.tvRate.setText(get_result1.get(0).getAvgRating() + " ");
                         binding.ratingbar.setRating(Float.parseFloat(get_result1.get(0).getAvgRating()));
-
 
 
                         if (get_result1.get(0).getDeliveryCharges().equalsIgnoreCase("1"))
@@ -400,10 +394,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         else binding.switchDelivery.setChecked(false);
                     } else if (data.status.equals("0")) {
                         Toast.makeText(ProductDetailAct.this, data.message, Toast.LENGTH_SHORT).show();
-                    }
-
-
-                    else if (data.status.equals("5")) {
+                    } else if (data.status.equals("5")) {
                         PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -436,17 +427,25 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
         btnCheckout.setOnClickListener(v -> {
             mDialog.dismiss();
-             if(chkAtleast.equalsIgnoreCase("")) Toast.makeText(ProductDetailAct.this,getString(R.string.please_select_atleast_one_attribute),Toast.LENGTH_SHORT).show();
-           else Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
-
+            if (validateNameArrayList.size() == 0) {
+                Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+            } else {
+                if (chkAtleast.equalsIgnoreCase(""))
+                    Toast.makeText(ProductDetailAct.this, getString(R.string.please_select_atleast_one_attribute), Toast.LENGTH_SHORT).show();
+                else Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+            }
         });
 
         btnContinue.setOnClickListener(v -> {
             mDialog.dismiss();
-            if(chkAtleast.equalsIgnoreCase("")) Toast.makeText(ProductDetailAct.this,getString(R.string.please_select_atleast_one_attribute),Toast.LENGTH_SHORT).show();
-            else Add_To_Cart_API(product_id, restaurant_id, productPrice,"continue");
-           // finish();
-
+            if (validateNameArrayList.size() == 0) {
+                Add_To_Cart_API(product_id, restaurant_id, productPrice, "continue");
+            } else {
+                if (chkAtleast.equalsIgnoreCase(""))
+                    Toast.makeText(ProductDetailAct.this, getString(R.string.please_select_atleast_one_attribute), Toast.LENGTH_SHORT).show();
+                else Add_To_Cart_API(product_id, restaurant_id, productPrice, "continue");
+                // finish();
+            }
         });
 
         mDialog.show();
@@ -482,10 +481,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         map.put("cat_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Cat_id, ""));
         map.put("register_id", PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.Register_id, ""));
 
-        if (validateNameArrayList.size()>0) {
-           map.put("options",jsonArray.toString());
-       }
-       else map.put("options","[]");
+        if (validateNameArrayList.size() > 0) {
+            map.put("options", jsonArray.toString());
+        } else map.put("options", "[]");
 
         Log.e("MapMap", "cart_params" + map);
 
@@ -501,15 +499,14 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "AddToCart RESPONSE" + object);
                     if (object.getString("status").equals("1")) {
-                        Toast.makeText(ProductDetailAct.this, "Add Cart SuccessFully ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProductDetailAct.this, getString(R.string.add_to_cart_successfully), Toast.LENGTH_SHORT).show();
                         if (chk.equalsIgnoreCase("checkOut"))
                             startActivity(new Intent(ProductDetailAct.this, CheckOutDeliveryAct.class).putExtra("sellerId", restaurant_id));
-                       else if(chk.equalsIgnoreCase("continue"))  finish();
-                       else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
+                        else if (chk.equalsIgnoreCase("continue")) finish();
+                        else startActivity(new Intent(ProductDetailAct.this, CardAct.class));
                     } else if (object.getString("status").equals("0")) {
                         Toast.makeText(ProductDetailAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-                    else if (object.getString("status").equals("5")) {
+                    } else if (object.getString("status").equals("5")) {
                         PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -534,14 +531,14 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
     private String getOption() {
         JSONArray jsonArray = new JSONArray();
         for (int i = 0; i < validateNameArrayList.size(); i++) {
-            for(int j=0;j<validateNameArrayList.get(i).getAttributeName().size();j++){
-                if(validateNameArrayList.get(i).getAttributeName().get(j).isChk()==true){
+            for (int j = 0; j < validateNameArrayList.get(i).getAttributeName().size(); j++) {
+                if (validateNameArrayList.get(i).getAttributeName().get(j).isChk() == true) {
                     try {
-                        JSONObject jsonObject= new JSONObject();
-                        jsonObject.put("mainName",validateNameArrayList.get(i).getName());
-                        jsonObject.put("innerName",validateNameArrayList.get(i).getAttributeName().get(j).getName());
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("mainName", validateNameArrayList.get(i).getName());
+                        jsonObject.put("innerName", validateNameArrayList.get(i).getAttributeName().get(j).getName());
 
-                      //  jsonObject.put(validateNameArrayList.get(i).getName().toString(),validateNameArrayList.get(i).getAttributeName().get(j).getName().toString());
+                        //  jsonObject.put(validateNameArrayList.get(i).getName().toString(),validateNameArrayList.get(i).getAttributeName().get(j).getName().toString());
                         jsonArray.put(jsonObject);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
@@ -549,9 +546,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                 }
             }
         }
-        Log.e("Added attribute value==",jsonArray+"");
-        return  jsonArray+"";
-        }
+        Log.e("Added attribute value==", jsonArray + "");
+        return jsonArray + "";
+    }
 
 
     private void GetCartItem() {
@@ -594,9 +591,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         binding.reqcountCart.setVisibility(View.GONE);
 
 
-                    }
-
-                    else if (data.status.equals("5")) {
+                    } else if (data.status.equals("5")) {
                         PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -651,9 +646,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     } else if (jsonObject.getString("status").toString().equals("0")) {
 
                         Toast.makeText(ProductDetailAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-
-                    else if (jsonObject.getString("status").equals("5")) {
+                    } else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -672,7 +665,6 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             }
         });
     }
-
 
 
     private void checkProductAvailability(String productId) {
@@ -705,17 +697,15 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     GetProductDetailsAPI(product_id, restaurant_id);
 
                     if (jsonObject.getString("status").toString().equals("1")) {
-                    //    Toast.makeText(ProductDetailAct.this, " Add Wish List ", Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(ProductDetailAct.this, " Add Wish List ", Toast.LENGTH_SHORT).show();
                     } else if (jsonObject.getString("status").toString().equals("0")) {
 
-                      //  Toast.makeText(ProductDetailAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
-                    }
-                    else if (jsonObject.getString("status").equals("5")) {
+                        //  Toast.makeText(ProductDetailAct.this, jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(ProductDetailAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(ProductDetailAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                      finish();
+                        finish();
                     }
-
 
 
                 } catch (Exception e) {
@@ -730,7 +720,6 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             }
         });
     }
-
 
 
     private void showDropDownSize(View v, TextView textView, List<ShoppingProductModal.Result.ValidateName.AttributeName> stringList) {
@@ -776,9 +765,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
 
         try {
-            JSONObject jsonObject= new JSONObject();
-            jsonObject.put("mainName",mainVal);
-            jsonObject.put("innerName",innerVal);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("mainName", mainVal);
+            jsonObject.put("innerName", innerVal);
 
             //  jsonObject.put(validateNameArrayList.get(i).getName().toString(),validateNameArrayList.get(i).getAttributeName().get(j).getName().toString());
             jsonArray.put(jsonObject);
@@ -786,6 +775,6 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        Log.e("Added attribute value==",jsonArray+"");
+        Log.e("Added attribute value==", jsonArray + "");
     }
 }

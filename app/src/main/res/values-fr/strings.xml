@@ -319,7 +319,11 @@
     <string name="password_change_by_admin">Mot de passe modifié par l\'administrateur</string>
     <string name="wrong_email">Mauvaise adresse e-mail</string>
     <string name="receive_the_code_by_whatsapp">Recevez le code par WhatsApp</string>
-
+    <string name="coming_soon">À venir</string>
+    <string name="brand">Marque</string>
+    <string name="certify_seller">Certify Seller : </string>
+    <string name="please_select_atleast_one_attribute">Veuillez sélectionner au moins un attribut</string>
+    <string name="add_to_cart_successfully">Ajouter le panier avec succès</string>
 </resources>
 
 

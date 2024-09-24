@@ -110,6 +110,7 @@ public class MyFirebaseMessagingService extends
                        || msg.equalsIgnoreCase("Dear customer,Your refund request has been successfully transmitted. Within 4 working hours, the refund will only be made on the method used to pay. Note that the refund will be made on the method used for payment.Thank you for your comprehension")
                        || msg.equalsIgnoreCase("Your request has been sent to your correspondent")
                        || msg.contains("product now available")
+                       || msg.contains("product out of stock")
                        || msg.contains("Dear customer, Your order has not been accepted by the seller.Reason: However, your Wallet has been credited with the amount of the order. You can place another order at any time and pay with your wallet.  For more information on using the wallet,")
                ) {
 
