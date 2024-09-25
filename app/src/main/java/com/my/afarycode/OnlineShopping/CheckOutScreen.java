@@ -63,7 +63,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     String Chkkkk;
 
 
-    String deliveryAgencyType="",deliveryYesNo="";
+    String deliveryAgencyType="",deliveryYesNo="",addressId="";
     String deliveryCharge="0.0";
 
     String deliveryAgencyId="",sendToServer="";
@@ -88,7 +88,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                     .putExtra("platFormsFees", "" + platFormsFees)
                     .putExtra("taxN1", "" + taxN1)
                     .putExtra("taxN2", "" + taxN2)
-                    .putExtra("sendToServer",sendToServer));
+                    .putExtra("sendToServer",sendToServer)
+                    .putExtra("selfCollect",deliveryYesNo));
 
         });
 
@@ -103,6 +104,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             deliveryAgencyId = getIntent().getStringExtra("agencyId");
             deliveryYesNo =  getIntent().getStringExtra("deliveryYesNo");
             deliveryMethod = getIntent().getStringExtra("deliveryMethod");
+            addressId =  getIntent().getStringExtra("addressId");
         }
 
         get_result = new ArrayList<>();
@@ -565,6 +567,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("delivery_partner",deliveryAgencyId);
         map.put("self_collect",deliveryYesNo);
         map.put("type",deliveryMethod);
+        map.put("address_id",addressId);
         map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Get AllTax Request :" + map);

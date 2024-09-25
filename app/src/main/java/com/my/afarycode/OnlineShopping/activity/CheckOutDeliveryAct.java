@@ -74,7 +74,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     ArrayList<LocationModel.Result> arrayList;
     LocationAdapter adapter;
     String deliveryType="",lat="";
-    String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="";
+    String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="",addressId="";
     String deliveryCharge="0.0";
 
     ArrayList<DeliveryTypeModel.Result> deliverArrayList;
@@ -154,8 +154,10 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
-                        .putExtra("deliveryMethod",deliveryMethod));
+                        .putExtra("deliveryMethod",deliveryMethod)
+                        .putExtra("addressId",addressId));
                 deliveryMethod = "";
+                addressId ="";
             }
 
             //else startActivity(new Intent(getActivity(), CheckOutScreen.class));
@@ -440,7 +442,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             PreferenceConnector.writeString(CheckOutDeliveryAct.this,PreferenceConnector.ADDRESS_ID,arrayList.get(position).getId());
             deliveryYesNo = "No";
             binding.rdDontDelivery.setChecked(false);
-
+            addressId=arrayList.get(position).getId();
 
             //  arrayList.get(position).getCountry();
             getDeliveryAgency(arrayList.get(position).getId(),shopId);
@@ -703,7 +705,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         deliveryAgencyList.clear();
                         deliveryAgencyAdapter.notifyDataSetChanged();
                         deliveryAgencyType ="Afary Code";
-
+                        agencyId ="";
                     }
 
                     else if (object.getString("status").equals("5")) {

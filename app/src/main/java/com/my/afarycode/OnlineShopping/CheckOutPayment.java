@@ -41,7 +41,7 @@ public class CheckOutPayment extends AppCompatActivity {
     ActivityCheckOutPaymentBinding binding;
    // private ArrayList<String> cart_id_string = new ArrayList<>();
     private String strList = "",cart_id_string="";
-    private String totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="",sendToServer="";
+    private String deliveryYesNo="", totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="",sendToServer="";
     private AfaryCode apiInterface;
     GetProfileModal data;
 
@@ -67,9 +67,21 @@ public class CheckOutPayment extends AppCompatActivity {
                 taxN1 = extras.getString("taxN1");
                 taxN2 = extras.getString("taxN2");
                 sendToServer = extras.getString("sendToServer");
+                deliveryYesNo = extras.getString("selfCollect");
 
 
+                if(deliveryYesNo.equalsIgnoreCase("Yes")){
+                    binding.rl33.setVisibility(View.GONE);
+                    binding.rl22.setVisibility(View.VISIBLE);
+                    binding.rl11.setVisibility(View.GONE);
 
+                }
+                else {
+                    binding.rl33.setVisibility(View.VISIBLE);
+                    binding.rl22.setVisibility(View.GONE);
+                    binding.rl11.setVisibility(View.VISIBLE);
+
+                }
             }
 
         } else {
@@ -106,6 +118,17 @@ public class CheckOutPayment extends AppCompatActivity {
                    .putExtra("url",ll));
         });
 
+        binding.llTransfer11.setOnClickListener(v -> {
+            // PaymentAPI("VM", strList);
+            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&montant=105&ref=Ref13082020ab&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
+                    + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
+
+            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
+                    .putExtra("url",ll));
+        });
+
+
+
         binding.llMoov.setOnClickListener(v -> {
             dialogMoov("MC",strList);
 
@@ -122,7 +145,14 @@ public class CheckOutPayment extends AppCompatActivity {
         binding.llWallet.setOnClickListener(v -> {
            if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
             PaymentAPI("","",data.getResult().getMobile(),"Wallet");
-           else Toast.makeText(this, "Low wallet balance please recharge your wallet.", Toast.LENGTH_SHORT).show();
+           else Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
+        });
+
+
+        binding.llWallet11.setOnClickListener(v -> {
+            if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
+                PaymentAPI("","",data.getResult().getMobile(),"Wallet");
+            else Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
         });
 
 
@@ -133,7 +163,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
 
     private void GetProfile() {
-        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
@@ -214,7 +244,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
     private void PaymentAPI(String operateur, String strList,String number,String paymentType) {
         //binding.loader.setVisibility(View.VISIBLE);
-        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -326,7 +356,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
         btnPayNow.setOnClickListener(v -> {
             if(edNumber.getText().toString().equals(""))
-                Toast.makeText(CheckOutPayment.this, "Please enter number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();
@@ -359,7 +389,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
         btnPayNow.setOnClickListener(v -> {
            if(edNumber.getText().toString().equals(""))
-               Toast.makeText(CheckOutPayment.this, "Please enter number", Toast.LENGTH_SHORT).show();
+               Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
          else {
                mDialog.dismiss();
@@ -389,7 +419,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
         btnPayNow.setOnClickListener(v -> {
             if(edNumber.getText().toString().equals(""))
-                Toast.makeText(CheckOutPayment.this, "Please enter number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();

@@ -22,6 +22,10 @@
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
     <uses-permission android:name="com.myapp.mobile.permission.MAPS_RECEIVE" />
 
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        android:minSdkVersion="33" />
+
 
 
     <application
@@ -34,6 +38,7 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         tools:replace="android:icon">
+
         <activity android:name=".OnlineShopping.ChangePasswordActivity"></activity>
 
 

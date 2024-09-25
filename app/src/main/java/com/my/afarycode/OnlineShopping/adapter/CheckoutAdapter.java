@@ -65,7 +65,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
             } else holder.progressAdapterBinding.wishAdd.setImageResource(R.drawable.star_icon);
 
 
-            if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("0"))
+            if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("1"))
                 holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.VISIBLE);
             else holder.progressAdapterBinding.ivDeliveryType.setVisibility(View.GONE);
 

@@ -325,5 +325,8 @@
     <string name="certify_seller">Certify Seller : </string>
     <string name="please_select_atleast_one_attribute">Please select atleast one attribute</string>
     <string name="add_to_cart_successfully">Add Cart SuccessFully</string>
-
+    <string name="low_wallet_balance">Low wallet balance please recharge your wallet.</string>
+    <string name="please_enter_number">Please enter number</string>
+    <string name="full_name">Full Name</string>
+    <string name="please_enter_full_name">Please enter full name</string>
 </resources>

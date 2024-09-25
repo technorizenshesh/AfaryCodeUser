@@ -324,6 +324,9 @@
     <string name="certify_seller">Certify Seller : </string>
     <string name="please_select_atleast_one_attribute">Veuillez sélectionner au moins un attribut</string>
     <string name="add_to_cart_successfully">Ajouter le panier avec succès</string>
+    <string name="low_wallet_balance">Solde de portefeuille faible, veuillez recharger votre portefeuille.</string>
+    <string name="please_enter_number">Veuillez entrer le numéro</string>
+
 </resources>
 
 

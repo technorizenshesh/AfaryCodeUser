@@ -14,6 +14,8 @@
             android:layout_marginTop="@dimen/_30sdp"
             android:orientation="vertical"
             android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
             android:layout_height="wrap_content">
 
 
@@ -25,14 +27,13 @@
                     android:layout_height="@dimen/_80sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     app:civ_border_width="1dp"
+                    android:layout_gravity="center_horizontal"
                     app:civ_border_color="@color/purple_200"
                     />
 
 
             <TextView
                 android:id="@+id/txtUserName"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,6 +42,27 @@
                 android:textColor="@color/purple_200"
                 android:textStyle="bold"
                 android:textSize="@dimen/_16sdp" />
+
+            <TextView
+                android:id="@+id/tvMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="@dimen/_12sdp" />
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/black"
+                android:layout_marginTop="-3dp"
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="@dimen/_12sdp" />
+
 
         </LinearLayout>
 
@@ -58,8 +80,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/my_orders"
+                android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/_14sdp" />
 
 
         </RelativeLayout>
@@ -69,7 +92,7 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/_30sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_30sdp">
 
@@ -78,8 +101,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/order_history"
+                android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/_14sdp" />
 
 
         </RelativeLayout>
@@ -89,7 +113,7 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/_30sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_30sdp">
 
@@ -98,8 +122,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/wishlist"
+                android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_16sdp" />
+                android:textSize="@dimen/_14sdp" />
 
 
         </RelativeLayout>
@@ -109,7 +134,7 @@
             android:layout_marginLeft="@dimen/_20sdp"
             android:layout_gravity="center"
             android:layout_marginRight="@dimen/_30sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="@dimen/_30sdp">
 
@@ -119,7 +144,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/delivery_address"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_16sdp" />
+                android:fontFamily="@font/poppins_regular"
+                android:textSize="@dimen/_14sdp" />
 
 
         </RelativeLayout>

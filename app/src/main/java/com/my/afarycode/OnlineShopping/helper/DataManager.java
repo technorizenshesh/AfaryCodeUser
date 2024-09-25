@@ -15,6 +15,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -211,6 +212,23 @@ public class DataManager {
             return null;
         }
     }
+
+
+
+    public static File saveBitmapToFile(Context context, Bitmap bitmap, String fileName) {
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = new File(storageDir, fileName);
+
+        try (FileOutputStream out = new FileOutputStream(imageFile)) {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out); // Use JPEG or PNG based on your needs
+            return imageFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
     public Bitmap getImageAngle(String photoPath, Bitmap rotatedBitmap) {
         try {

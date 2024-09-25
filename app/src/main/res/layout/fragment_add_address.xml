@@ -163,7 +163,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/first_name"
+                        android:text="@string/full_name"
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
@@ -175,7 +175,7 @@
                         android:id="@+id/etFname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/first_name"
+                        android:hint="@string/full_name"
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -194,7 +194,9 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"            android:layout_marginTop="@dimen/_12sdp"
+                        android:textAlignment="viewStart"
+                        android:visibility="gone"
+                        android:layout_marginTop="@dimen/_12sdp"
                         android:textColor="@color/color_grey_two"/>
 
 
@@ -211,7 +213,8 @@
                         android:textDirection="locale"
                         android:textAlignment="viewStart"            android:inputType="text"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:visibility="gone"/>
 
 
                     <TextView
