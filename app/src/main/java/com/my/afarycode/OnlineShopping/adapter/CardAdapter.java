@@ -61,10 +61,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
 
     @Override
     public CardAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        ItemCardBinding progressAdapterBinding = DataBindingUtil.inflate(LayoutInflater.from(activity)
-                , R.layout.item_card, parent, false);
-
+        ItemCardBinding progressAdapterBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.item_card, parent, false);
         return new MyViewHolder(progressAdapterBinding);
     }
 

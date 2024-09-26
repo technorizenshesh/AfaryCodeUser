@@ -89,6 +89,7 @@ public class CardActivity extends Fragment implements OnPositionListener {
 
     private void SetupUI() {
         get_result = new ArrayList<>();
+        binding.recycler.setHasFixedSize(true);
         adapter = new CardAdapter(getActivity(), get_result,CardActivity.this);
         binding.recycler.setAdapter(adapter);
         GetCartItem();

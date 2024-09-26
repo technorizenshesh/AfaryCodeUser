@@ -73,9 +73,8 @@
                         android:layout_height="@dimen/_20sdp"
                         android:layout_alignParentRight="true"
                         android:src="@drawable/star_icon"
-                        android:visibility="gone">
+                        android:visibility="gone"/>
 
-                    </ImageView>
 
                 </RelativeLayout>
 
@@ -113,18 +112,16 @@
                                     android:layout_width="@dimen/_12sdp"
                                     android:layout_height="@dimen/_12sdp"
                                     android:layout_centerInParent="true"
-                                    android:src="@drawable/plus">
+                                    android:src="@drawable/plus"/>
 
-                                </ImageView>
 
                             </RelativeLayout>
 
                             <View
                                 android:layout_width="1sp"
                                 android:layout_height="match_parent"
-                                android:background="@color/purple_200">
+                                android:background="@color/purple_200"/>
 
-                            </View>
 
                             <RelativeLayout
                                 android:id="@+id/RR_plus"
@@ -138,18 +135,16 @@
                                     android:layout_centerInParent="true"
                                     android:text="01"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/_14sdp">
+                                    android:textSize="@dimen/_14sdp"/>
 
-                                </TextView>
 
                             </RelativeLayout>
 
                             <View
                                 android:layout_width="1sp"
                                 android:layout_height="match_parent"
-                                android:background="@color/purple_200">
+                                android:background="@color/purple_200"/>
 
-                            </View>
 
                             <RelativeLayout
                                 android:id="@+id/minus"
@@ -162,9 +157,8 @@
                                     android:layout_centerInParent="true"
                                     android:src="@drawable/minus"
                                     android:tint="@color/white"
-                                    tools:ignore="UseAppTint">
+                                    tools:ignore="UseAppTint"/>
 
-                                </ImageView>
 
                             </RelativeLayout>
 
@@ -176,9 +170,8 @@
                             android:layout_height="@dimen/_20sdp"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            android:src="@drawable/delete">
+                            android:src="@drawable/delete"/>
 
-                        </ImageView>
 
                     </RelativeLayout>
 
