@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -82,7 +83,6 @@ public class CardActivity extends Fragment implements OnPositionListener {
 
         });
 
-        setAdapter();
 
         return binding.getRoot();
     }
@@ -92,7 +92,6 @@ public class CardActivity extends Fragment implements OnPositionListener {
         binding.recycler.setHasFixedSize(true);
         adapter = new CardAdapter(getActivity(), get_result,CardActivity.this);
         binding.recycler.setAdapter(adapter);
-        GetCartItem();
     }
 
     private void GetCartItem() {
@@ -111,6 +110,7 @@ public class CardActivity extends Fragment implements OnPositionListener {
 
         loginCall.enqueue(new Callback<CartModal>() {
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<CartModal> call, Response<CartModal> response) {
 
@@ -158,30 +158,12 @@ public class CardActivity extends Fragment implements OnPositionListener {
     }
 
 
-    private void setAdapter() {
 
-       /* modelList.add(new HomeShopeProductModel("Reliance Fresh", R.drawable.shert));
-        modelList.add(new HomeShopeProductModel("Reliance Fresh", R.drawable.img3));
-
-        mAdapter = new CardAdapter(getActivity(), modelList);
-        binding.recycler.setHasFixedSize(true);
-        // use a linear layout manager
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        binding.recycler.setLayoutManager(linearLayoutManager);
-        binding.recycler.setAdapter(mAdapter);
-
-        mAdapter.SetOnItemClickListener(new CardAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, HomeShopeProductModel model) {
-
-            }
-        });*/
-    }
 
     @Override
     public void onResume() {
-        GetCartItem();
         super.onResume();
+        GetCartItem();
     }
 
     public boolean loadFragment(Fragment fragment) {

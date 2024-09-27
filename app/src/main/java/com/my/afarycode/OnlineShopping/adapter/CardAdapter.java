@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.AllShopOnlineActivity;
 import com.my.afarycode.OnlineShopping.CardActivity;
@@ -47,7 +49,7 @@ import static com.my.afarycode.OnlineShopping.CheckOutScreen.total_price_to_to_p
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> {
 
     private ArrayList<CartModal.Result> all_category_subcategory;
-    private final Activity activity;
+    private final Context activity;
     private AllShopOnlineActivity fragment;
     private CardActivity fragment1;
     OnPositionListener listener;
@@ -59,8 +61,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
         this.listener = listener;
     }
 
+    @NonNull
     @Override
-    public CardAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemCardBinding progressAdapterBinding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.item_card, parent, false);
         return new MyViewHolder(progressAdapterBinding);
     }
@@ -69,7 +72,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
           if(all_category_subcategory.get(position)!=null) {
               holder.progressAdapterBinding.productName.setText(all_category_subcategory.get(position).productName);
-              Picasso.get().load(all_category_subcategory.get(position).productImage).into(holder.progressAdapterBinding.img1);
+             // Picasso.get().load(all_category_subcategory.get(position).productImage).into(holder.progressAdapterBinding.img1);
+              Glide.with(activity).load(all_category_subcategory.get(position).productImage).into(holder.progressAdapterBinding.img1);
+
               holder.progressAdapterBinding.itemQuantity.setText(all_category_subcategory.get(position).quantity);
               //   holder.progressAdapterBinding.price.setText("Rs. " + all_category_subcategory.get(position).productPrice);
 
@@ -87,20 +92,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
             holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
             holder.progressAdapterBinding.price.setText("Rs. " + Integer.valueOf(all_category_subcategory.get(position).getItemAmount())
                     * Integer.valueOf(count));
-
-          //  UpdateQuanityAPI(all_category_subcategory.get(position).cartId
-          //          , all_category_subcategory.get(position).proId, count);
-
             listener.onPos(position,"Update",count+"");
 
         });
 
         holder.progressAdapterBinding.wishList.setOnClickListener(v -> {
-
-           // AddToWIshListAPI(all_category_subcategory.get(position).cartId);
-
             listener.onPos(position,"Wishlist","");
-
         });
 
         holder.progressAdapterBinding.minus.setOnClickListener(v -> {
@@ -112,10 +109,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
                 holder.progressAdapterBinding.price.setText("Rs. " +
                         Integer.valueOf(all_category_subcategory.get(position).getQuantity())
                                 * Integer.valueOf(count));
-
-                //UpdateQuanityAPI(all_category_subcategory.get(position).cartId,
-              //          all_category_subcategory.get(position).proId, count);
-
                 listener.onPos(position,"Update",count+"");
 
 
@@ -125,10 +118,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
         });
 
         holder.progressAdapterBinding.deleteItem.setOnClickListener(v -> {
-            //DeleteAPI(all_category_subcategory.get(position).cartId);
             listener.onPos(position,"Delete","");
-
-         //   notifyDataSetChanged();
         });
     }
 
@@ -136,32 +126,19 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
-
         return all_category_subcategory.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ItemCardBinding progressAdapterBinding;
 
-        public MyViewHolder(ItemCardBinding itemView) {
+        public MyViewHolder(@NonNull ItemCardBinding itemView) {
             super(itemView.getRoot());
             progressAdapterBinding = itemView;
         }
     }
 
 
-    public boolean loadFragment(Fragment fragment) {
-        FragmentManager fragmentManager = ((FragmentActivity) activity)
-                .getSupportFragmentManager();
 
-        if (fragment != null) {
-            fragmentManager.beginTransaction()
-                    .addToBackStack("Home")
-                    .replace(R.id.fragment_homeContainer, fragment)
-                    .commit();
-            return true;
-        }
-        return false;
-    }
 }
 

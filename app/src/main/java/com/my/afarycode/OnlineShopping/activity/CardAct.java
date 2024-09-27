@@ -4,6 +4,7 @@ import static com.my.afarycode.OnlineShopping.CheckOutScreen.subTotal;
 import static com.my.afarycode.OnlineShopping.CheckOutScreen.totalPriceToToPay1;
 import static com.my.afarycode.OnlineShopping.CheckOutScreen.total_price_to_to_pay;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -72,14 +73,15 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
                     .putExtra("sellerId",get_result.get(0).getShopId()));
         });
 
-        setAdapter();
     }
 
     private void SetupUI() {
         get_result = new ArrayList<>();
+
+        binding.recycler.setHasFixedSize(true);
         adapter = new CardAdapter(CardAct.this, get_result,CardAct.this);
         binding.recycler.setAdapter(adapter);
-        GetCartItem();
+
     }
 
     private void GetCartItem() {
@@ -99,6 +101,7 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
 
         loginCall.enqueue(new Callback<CartModal>() {
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(Call<CartModal> call, Response<CartModal> response) {
 
@@ -146,30 +149,11 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
     }
 
 
-    private void setAdapter() {
-
-       /* modelList.add(new HomeShopeProductModel("Reliance Fresh", R.drawable.shert));
-        modelList.add(new HomeShopeProductModel("Reliance Fresh", R.drawable.img3));
-
-        mAdapter = new CardAdapter(CardAct.this, modelList);
-        binding.recycler.setHasFixedSize(true);
-        // use a linear layout manager
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(CardAct.this);
-        binding.recycler.setLayoutManager(linearLayoutManager);
-        binding.recycler.setAdapter(mAdapter);
-
-        mAdapter.SetOnItemClickListener(new CardAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, HomeShopeProductModel model) {
-
-            }
-        });*/
-    }
 
     @Override
     public void onResume() {
-        GetCartItem();
         super.onResume();
+        GetCartItem();
     }
 
 /*

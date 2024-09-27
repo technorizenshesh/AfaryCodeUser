@@ -1067,7 +1067,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         OutputStream os;
         try {
             os = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, os);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, os);
             os.flush();
             os.close();
         } catch (Exception e) {

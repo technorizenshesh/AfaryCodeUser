@@ -585,11 +585,17 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                     if (object.optString("status").equals("1")) {
                          // JSONObject jsonObject = object.getJSONObject("result");
                         sendToServer = object.toString();
-                        sendTaxToServer(object.toString());
+                       // sendTaxToServer(object.toString());
                         mainTotalPay = Double.parseDouble(object.getString("sub_total"));
                         taxN1 = Double.parseDouble(object.getString("taxes_first"));
                         taxN2 = Double.parseDouble(object.getString("taxes_second"));
-                        platFormsFees = Double.parseDouble(object.getString("platform_fees"));
+                      if(!object.getString("platform_fees").equalsIgnoreCase(""))
+                      {
+                          platFormsFees = Double.parseDouble(object.getString("platform_fees"));
+                      }
+                      else {
+                          platFormsFees =0.00;
+                      }
                         deliveryFees = Double.parseDouble(object.getString("total_delivery_fees"));
                         totalPriceToToPay = Double.parseDouble(object.getString("total_payable_amount"));
 

@@ -11,10 +11,13 @@ import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +32,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -50,12 +55,15 @@ import com.my.afarycode.ratrofit.ApiClient;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -77,6 +85,8 @@ public class UpdateProfile extends Fragment {
     private static final int SELECT_FILE = 2;
     private static final int MY_PERMISSION_CONSTANT = 5;
     Fragment fragment;
+    private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    Bitmap oneBitmap = null;
 
     @Nullable
     @Override
@@ -149,7 +159,7 @@ public class UpdateProfile extends Fragment {
 
     private void UpDateAPi() {
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         MultipartBody.Part filePart;
 
         Map<String,String> headerMap = new HashMap<>();
@@ -158,7 +168,8 @@ public class UpdateProfile extends Fragment {
 
         if (!str_image_path.equalsIgnoreCase("")) {
 
-            File file = DataManager.getInstance().saveBitmapToFile(new File((str_image_path)));
+          //  File file = DataManager.getInstance().saveBitmapToFile(new File((str_image_path)));
+            File file =  persistImage(oneBitmap, generateString(12),requireActivity());  //DataManager.saveBitmapToFile(requireActivity(), oneBitmap, "image.jpg");
 
             filePart = MultipartBody.Part.createFormData("image", "image",
                     RequestBody.create(MediaType.parse("image/*"), file));
@@ -353,10 +364,13 @@ public class UpdateProfile extends Fragment {
     }
 
     private void getPhotoFromGallary() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+      /*  Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Select Image"), SELECT_FILE);*/
+
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Select Image"), SELECT_FILE);
-
     }
 
     private void openCamera() {
@@ -506,34 +520,58 @@ public class UpdateProfile extends Fragment {
 
             }
 */
-             if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
+            } else if (requestCode == SELECT_FILE) {
+                str_image_path = DataManager.getInstance().getRealPathFromURI(getActivity(), data.getData());
+
+                try {
+                    oneBitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), data.getData());
+                       /* if(oneBitmap!=null) {
+                            oneBitmap = resizeBitmap(oneBitmap, 3000, 3000);
+                        }*/
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Log.e("bitmap===", oneBitmap + "");
+                Glide.with(getActivity())
+                        .load(str_image_path)
+                        .centerCrop()
+                        .into(binding.imgUser);
+            } else if (requestCode == REQUEST_CAMERA) {
+                Glide.with(getActivity())
+                        .load(str_image_path)
+                        .centerCrop()
+                        .into(binding.imgUser);
+
+
+                Glide.with(requireActivity())
+                        .asBitmap()
+                        .load(str_image_path)  // URL or file path
+                        .centerCrop()
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                // Bitmap is now ready to use
+                                // Do something with the Bitmap
+                                oneBitmap = resource;
+                                binding.imgUser.setImageBitmap(resource);
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                                // Handle cleanup if necessary
+                            }
+                        });
+
+
             }
 
-               else if (requestCode == SELECT_FILE) {
-                    str_image_path = DataManager.getInstance()
-                            .getRealPathFromURI(getActivity(), data.getData());
-                    Glide.with(getActivity())
-                            .load(str_image_path)
-                            .centerCrop()
-                            .into(binding.imgUser);
-
-
-                } else if (requestCode == REQUEST_CAMERA) {
-                    Glide.with(getActivity())
-                            .load(str_image_path)
-                            .centerCrop()
-                            .into(binding.imgUser);
-
-                }
-
-
-
         }
-
-
     }
+
 
     public boolean loadFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -550,5 +588,35 @@ public class UpdateProfile extends Fragment {
         return false;
     }
 
+    private File persistImage(Bitmap bitmap, String name, Context context) {
+        File filesDir = context.getFilesDir();
+        File imageFile = new File(filesDir, name + ".jpg");
+
+        Log.e("image name===", name);
+        OutputStream os;
+        try {
+            os = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e("TAG", "persistImage: " + e.getMessage());
+        }
+
+        return imageFile;
+
+    }
+
+
+    public String generateString(int length) {
+        Random random = new Random();
+        StringBuilder builder = new StringBuilder(length);
+
+        for (int i = 0; i < length; i++) {
+            builder.append(ALPHABET.charAt(random.nextInt(ALPHABET.length())));
+        }
+
+        return builder.toString();
+    }
 
 }

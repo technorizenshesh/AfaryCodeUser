@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.AllShopOnlineActivity;
 import com.my.afarycode.OnlineShopping.CardActivity;
 import com.my.afarycode.OnlineShopping.Model.CartModal;
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyViewHolder> {
 
     private ArrayList<CartModal.Result> all_category_subcategory;
-    private final Activity activity;
+    private final Context activity;
     private AllShopOnlineActivity fragment;
     private CardActivity fragment1;
     OnPositionListener listener;
@@ -52,7 +54,9 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         if(all_category_subcategory.get(position)!=null) {
             holder.progressAdapterBinding.productName.setText(all_category_subcategory.get(position).productName);
-            Picasso.get().load(all_category_subcategory.get(position).productImage).into(holder.progressAdapterBinding.img1);
+          //  Picasso.get().load(all_category_subcategory.get(position).productImage).into(holder.progressAdapterBinding.img1);
+            Glide.with(activity).load(all_category_subcategory.get(position).productImage).into(holder.progressAdapterBinding.img1);
+
             holder.progressAdapterBinding.itemQuantity.setText(all_category_subcategory.get(position).quantity);
             //   holder.progressAdapterBinding.price.setText("Rs. " + all_category_subcategory.get(position).productPrice);
 
