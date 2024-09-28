@@ -567,11 +567,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("delivery_partner",deliveryAgencyId);
         map.put("self_collect",deliveryYesNo);
         map.put("type",deliveryMethod);
-        map.put("address_id",addressId);
+        if(addressId!=null) map.put("address_id",addressId);
+        else  map.put("address_id","");
         map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Get AllTax Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
+
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

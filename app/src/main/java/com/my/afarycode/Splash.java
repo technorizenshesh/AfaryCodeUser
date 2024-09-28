@@ -72,7 +72,7 @@ public class Splash extends AppCompatActivity {
                 if (checkPermissions()) {
                     if (isLocationEnabled()) {  finds();}
                     else {
-                        Toast.makeText(Splash.this, "Turn on location", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Splash.this, getString(R.string.turn_on_location), Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                         startActivity(intent);
 
@@ -87,7 +87,7 @@ public class Splash extends AppCompatActivity {
             if (checkPermissions()) {
                 if (isLocationEnabled()) {  finds();}
                 else {
-                    Toast.makeText(Splash.this, "Turn on location", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Splash.this, getString(R.string.turn_on_location), Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(intent);
 
@@ -224,7 +224,7 @@ public class Splash extends AppCompatActivity {
                         if (checkPermissions()) {
                             if (isLocationEnabled()) {  finds();}
                             else {
-                                Toast.makeText(Splash.this, "Turn on location", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Splash.this, getString(R.string.turn_on_location), Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                                 startActivity(intent);
 
