@@ -58,6 +58,7 @@ import com.my.afarycode.OnlineShopping.Model.GetRestorentsModalCopy;
 import com.my.afarycode.OnlineShopping.Model.GetShopingCategoryModal;
 import com.my.afarycode.OnlineShopping.Model.HomeOfferModel;
 import com.my.afarycode.OnlineShopping.Model.ProductItemModel;
+import com.my.afarycode.OnlineShopping.Model.ShopModel;
 import com.my.afarycode.OnlineShopping.Model.UpdateProfileModal;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
@@ -107,7 +108,9 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
     ActivityHomeShoppingNavBinding binding;
     private ArrayList<HomeOfferModel> modelList = new ArrayList<>();
     private ArrayList<GetShopingCategoryModal.Result> get_result = new ArrayList<>();
-    private ArrayList<GetRestorentsModalCopy.Result> get_result1 = new ArrayList<>();
+    private List<ShopModel.Result> get_result1 = new ArrayList<>();
+    private List<ShopModel.Result> allShops = new ArrayList<>();
+
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     private ArrayList<ProductItemModel.Result> arrayList = new ArrayList<>();
@@ -196,9 +199,17 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         });
 
         binding.dashboard.tvViewAll.setOnClickListener(v -> {
-            adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1, get_result1.size());
-            binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-            binding.dashboard.recyclerShop.setAdapter(adapter1);
+         //   adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1, get_result1.size());
+         //   binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+         //   binding.dashboard.recyclerShop.setAdapter(adapter1);
+           if(allShops.size()>4) {
+               get_result1.clear();
+               get_result1 = allShops;
+               adapter1 = new HomeShoppingNearsetRestorents(getActivity(), allShops, allShops.size());
+               binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+               binding.dashboard.recyclerShop.setAdapter(adapter1);
+               binding.dashboard.tvViewAll.setVisibility(View.GONE);
+           }
         });
 
         binding.dashboard.tvViewAllProduct.setOnClickListener(v -> {
@@ -275,9 +286,10 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         binding.dashboard.rvProduct.setAdapter(adapterSearch);
 
 
-        adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1, 4);
-        binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        binding.dashboard.recyclerShop.setAdapter(adapter1);
+       // adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1, 4);
+     //   adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1.subList(0,Math.min(4,get_result1.size())), get_result1.size());
+     //   binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+     //   binding.dashboard.recyclerShop.setAdapter(adapter1);
     }
 
     @Override
@@ -397,8 +409,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
-        map.put("latitute", "" + lat);
-        map.put("longitute", "" + lon);
+        map.put("latitute",  lat+"");
+        map.put("longitute",  lon+"");
         map.put("category_id", "" + cat_id);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
         map.put("country_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
@@ -418,12 +430,20 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                     getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
 
                     if (jsonObject.getString("status").equals("1")) {
-                        GetRestorentsModalCopy mainCateModel = new Gson().fromJson(stringResponse, GetRestorentsModalCopy.class);
+                        ShopModel mainCateModel = new Gson().fromJson(stringResponse, ShopModel.class);
                         binding.dashboard.rlShops.setVisibility(View.VISIBLE);
+                        allShops = new ArrayList<>();
                         get_result1.clear();
+
                         get_result1.addAll(mainCateModel.getResult());
-                        adapter1.notifyDataSetChanged();
-                        if (get_result1.size() > 1)
+                        allShops.addAll(mainCateModel.getResult());
+
+                        adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1.subList(0,Math.min(4,get_result1.size())), get_result1.size());
+                        binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                        binding.dashboard.recyclerShop.setAdapter(adapter1);
+
+                     //   adapter1.notifyDataSetChanged();
+                        if (get_result1.size() > 4)
                             binding.dashboard.tvViewAll.setVisibility(View.VISIBLE);
                         else binding.dashboard.tvViewAll.setVisibility(View.GONE);
 
@@ -441,6 +461,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                   // Log.e("error in near shop====",e,);
                 }
             }
 
@@ -483,6 +504,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         get_result.clear();
                         get_result.addAll(data.getResult());
 
+                        get_result.get(0).setClickOn(true);
                         adapter = new SubCategoryAdapter(getActivity(), get_result, HomeShoppingOnlineScreen.this);
 
                         // binding.dashboard.categoryList.setHasFixedSize(true);
@@ -600,6 +622,14 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
     @Override
     public void onItem(int position) {
         categoryId = get_result.get(position).getId();
+
+        for (int i =0;i<get_result.size();i++){
+            get_result.get(i).setClickOn(false);
+        }
+
+        get_result.get(position).setClickOn(true);
+
+        adapter.notifyDataSetChanged();
         GetNearestRestorentsAPI(categoryId);
         //  getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId,""),categoryId);
 
@@ -635,9 +665,9 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         arrayList.addAll(model.getResult());
                         adapterSearch.notifyDataSetChanged();
                         //  binding.tvNotFound.setVisibility(View.GONE);
-                        if (arrayList.size() > 1)
-                            binding.dashboard.tvViewAllProduct.setVisibility(View.VISIBLE);
-                        else binding.dashboard.tvViewAllProduct.setVisibility(View.GONE);
+                     //   if (arrayList.size() > 1)
+                       //     binding.dashboard.tvViewAllProduct.setVisibility(View.VISIBLE);
+                      //  else binding.dashboard.tvViewAllProduct.setVisibility(View.GONE);
                     } else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));

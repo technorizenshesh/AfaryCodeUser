@@ -179,6 +179,20 @@ public class ShoppingProductModal {
         @Expose
         private List<review> review;
 
+
+
+        @SerializedName("number_of_sold")
+        @Expose
+        public String numberOfSold;
+
+        public String getNumberOfSold() {
+            return numberOfSold;
+        }
+
+        public void setNumberOfSold(String numberOfSold) {
+            this.numberOfSold = numberOfSold;
+        }
+
         public List<Result.review> getReview() {
             return review;
         }

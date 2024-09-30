@@ -224,7 +224,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
     private void GetProductDetailsAPI(String product_id, String restaurant_id) {
 
-        DataManager.getInstance().showProgressMessage(ProductDetailAct.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(ProductDetailAct.this, getString(R.string.please_wait));
         Map<String, String> headerMap = new HashMap<>();
         headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(ProductDetailAct.this, PreferenceConnector.access_token, ""));
         headerMap.put("Accept", "application/json");
@@ -301,6 +301,18 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                             binding.tvBrand.setVisibility(View.GONE);
 
                         }
+
+                        if (!get_result1.get(0).getNumberOfSold().equalsIgnoreCase("")) {
+                            binding.tvSold.setVisibility(View.VISIBLE);
+                            binding.tvSold.setText(get_result1.get(0).getNumberOfSold() + " " + getString(R.string.has_been_sold));
+
+                        } else {
+                            binding.tvSold.setVisibility(View.GONE);
+
+                        }
+
+
+
 
 
                       /*  if(validateNameArrayList.size()==1){

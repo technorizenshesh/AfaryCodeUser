@@ -326,9 +326,10 @@
     <string name="add_to_cart_successfully">Ajouter le panier avec succès</string>
     <string name="low_wallet_balance">Solde de portefeuille faible, veuillez recharger votre portefeuille.</string>
     <string name="please_enter_number">Veuillez entrer le numéro</string>
-    <string name="full_name">الاسم الكامل</string>
-    <string name="please_enter_full_name">الرجاء إدخال الاسم الكامل</string>
-    <string name="turn_on_location">تشغيل الموقع</string>
+    <string name="full_name">Nom complet</string>
+    <string name="please_enter_full_name">Veuillez entrer votre nom complet</string>
+    <string name="turn_on_location">Activer la localisation</string>
+    <string name="has_been_sold">a été vendu</string>
 
 </resources>
 

@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.adapter;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -12,26 +13,29 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.AllShopOnlineActivity;
 import com.my.afarycode.OnlineShopping.Model.GetRestorentsModal;
 import com.my.afarycode.OnlineShopping.Model.GetRestorentsModalCopy;
+import com.my.afarycode.OnlineShopping.Model.ShopModel;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.NearMyHomeBinding;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class HomeShoppingNearsetRestorents extends
         RecyclerView.Adapter<HomeShoppingNearsetRestorents.MyViewHolder> {
 
-    private ArrayList<GetRestorentsModalCopy.Result> all_category_subcategory;
-    ArrayList<GetRestorentsModalCopy.Result> searchcategoryArrayList;
+    private List<ShopModel.Result> all_category_subcategory;
+    List<ShopModel.Result> searchcategoryArrayList;
     private final Context activity;
     private AllShopOnlineActivity fragment;
     private int limit = 0;
 
-    public HomeShoppingNearsetRestorents(Context a, ArrayList<GetRestorentsModalCopy.Result> all_category_subcategory, int limit) {
+    public HomeShoppingNearsetRestorents(Context a, List<ShopModel.Result> all_category_subcategory, int limit) {
         this.activity = a;
         this.all_category_subcategory = all_category_subcategory;
         this.limit = limit;
@@ -53,9 +57,24 @@ public class HomeShoppingNearsetRestorents extends
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
         holder.progressAdapterBinding.categoryName.setText(all_category_subcategory.get(position).getName());
-        Picasso.get().load(all_category_subcategory.get(position).getImage1()).into(holder.progressAdapterBinding.img);
-        if(!all_category_subcategory.get(position).getCityName().equals("")) holder.progressAdapterBinding.address.setText(all_category_subcategory.get(position).getCityName() + ", " + all_category_subcategory.get(position).getCountryName());
-        else  holder.progressAdapterBinding.address.setText( all_category_subcategory.get(position).getCountryName());
+        Glide.with(activity).load(all_category_subcategory.get(position).getImage1()).into(holder.progressAdapterBinding.img);
+        holder.progressAdapterBinding.address.setText( all_category_subcategory.get(position).getAddress());
+
+
+        if(!all_category_subcategory.get(position).getRating().equalsIgnoreCase(""))
+        {
+            holder.progressAdapterBinding.cardRate.setVisibility(View.VISIBLE);
+            holder.progressAdapterBinding.tvRating.setText(all_category_subcategory.get(position).getRating());
+
+        }
+        else {
+            holder.progressAdapterBinding.cardRate.setVisibility(View.GONE);
+
+        }
+
+
+
+
 
         holder.progressAdapterBinding.categoryItem.setOnClickListener(v -> {
 
@@ -66,11 +85,7 @@ public class HomeShoppingNearsetRestorents extends
             fragment.setArguments(bundle);
             loadFragment(fragment);
 
-            //Toast.makeText(activity, "" + all_category_subcategory.get(position).id, Toast.LENGTH_SHORT).show();
-        /*    if(all_category_subcategory.get(position).id.equals("1")) {
-                fragment = new AllShopOnlineActivity();
-                loadFragment(fragment);
-            }*/
+
         });
     }
 
@@ -88,7 +103,7 @@ public class HomeShoppingNearsetRestorents extends
 
                 charText = charText.toLowerCase(Locale.getDefault());
 
-                for (GetRestorentsModalCopy.Result wp : searchcategoryArrayList) {
+                for (ShopModel.Result wp : searchcategoryArrayList) {
 
                     try {
 
@@ -112,8 +127,10 @@ public class HomeShoppingNearsetRestorents extends
 
     @Override
     public int getItemCount() {
-        if(all_category_subcategory.size()>limit) return limit;
-        else return all_category_subcategory.size();
+      //  if(all_category_subcategory.size()>limit) return limit;
+     //   else return all_category_subcategory.size();
+
+        return all_category_subcategory.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

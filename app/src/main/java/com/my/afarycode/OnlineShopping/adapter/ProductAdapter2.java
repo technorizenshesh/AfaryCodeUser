@@ -74,9 +74,10 @@ public class ProductAdapter2 extends RecyclerView.Adapter<ProductAdapter2.MyView
 
     @Override
     public int getItemCount() {
-        if(arrayList.size()>limit) return limit;
-        else return arrayList.size();
+       // if(arrayList.size()>limit) return limit;
+     //   else return arrayList.size();
 
+        return arrayList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

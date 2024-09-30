@@ -2,6 +2,7 @@ package com.my.afarycode.OnlineShopping.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.HomeShoppingOnlineScreen;
 import com.my.afarycode.OnlineShopping.Model.CategoryModal;
 import com.my.afarycode.OnlineShopping.Model.GetShopingCategoryModal;
@@ -51,23 +53,21 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
         holder.progressAdapterBinding.name.setText(all_category_subcategory.get(position).subCatName);
-        Picasso.get().load(all_category_subcategory.get(position).icon).into(holder.progressAdapterBinding.imageIcon);
+        Glide.with(activity).load(all_category_subcategory.get(position).getIcon()).into(holder.progressAdapterBinding.imageIcon);
 
-      /*  holder.progressAdapterBinding.LLShopOnline.setOnClickListener(v -> {
 
-            Toast.makeText(activity, ""+all_category_subcategory.get(position).id, Toast.LENGTH_SHORT).show();
+        if(all_category_subcategory.get(position).isClickOn()){
+            holder.progressAdapterBinding.name.setTypeface(null, Typeface.BOLD);
+        }
+        else {
+            holder.progressAdapterBinding.name.setTypeface(null, Typeface.NORMAL);
+        }
 
-            if (all_category_subcategory.get(position).id.equals("1")) {
-                fragment = new HomeShoppingOnlineScreen();
-                loadFragment(fragment);
-            }
-        });*/
 
         holder.progressAdapterBinding.llMain.setOnClickListener(v -> {
-          //  activity.startActivity(new Intent(activity, ProductListAct.class)
-             //       .putExtra("title",all_category_subcategory.get(position).getSubCatName())
-              //      .putExtra("byCatId",all_category_subcategory.get(position).id)
-              //      .putExtra("by_screen","Shopping"));
+
+
+           // notifyDataSetChanged();
 
             listener.onItem(position);
         });

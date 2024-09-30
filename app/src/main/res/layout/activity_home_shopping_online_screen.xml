@@ -54,7 +54,8 @@
                     android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:src="@drawable/search" />
+                    android:src="@drawable/search"
+                    android:visibility="gone"/>
 
                 <RelativeLayout
                     android:layout_width="@dimen/_40sdp"
@@ -327,6 +328,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:text="@string/view_all"
+                        android:visibility="gone"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold"/>
@@ -387,7 +389,8 @@
                             android:text="@string/view_all"
                             android:textColor="@color/purple_200"
                             android:textSize="@dimen/_14sdp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:visibility="gone"/>
 
                     </RelativeLayout>
 

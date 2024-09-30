@@ -125,7 +125,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
     private void GetCartItem() {
 
-        DataManager.getInstance().showProgressMessage(this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -218,7 +218,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
     private void AddToWIshListAPI(String cartId, String chk) {
 
-        DataManager.getInstance().showProgressMessage(CheckOutScreen.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(CheckOutScreen.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -273,7 +273,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
     private void DeleteAPI(String cartId, String id) {
 
-        DataManager.getInstance().showProgressMessage(CheckOutScreen.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(CheckOutScreen.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -338,7 +338,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
     private void UpdateQuanityAPI(String cart_id, String proId, String id, int count) {
 
-        DataManager.getInstance().showProgressMessage(CheckOutScreen.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(CheckOutScreen.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

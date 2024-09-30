@@ -58,6 +58,16 @@ public class GetShopingCategoryModal {
             return icon;
         }
 
+        public boolean clickOn=false;
+
+        public boolean isClickOn() {
+            return clickOn;
+        }
+
+        public void setClickOn(boolean clickOn) {
+            this.clickOn = clickOn;
+        }
+
         public void setIcon(String icon) {
             this.icon = icon;
         }

@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.AllShopOnlineActivity;
 import com.my.afarycode.OnlineShopping.HomeShoppingOnlineScreen;
 import com.my.afarycode.OnlineShopping.Model.GetRestorentsModal;
@@ -55,7 +56,9 @@ public class ShoppingStoreAdapter extends
 
 
         if (!all_category_subcategory.get(position).image.equals("")) {
-            Picasso.get().load(all_category_subcategory.get(position).image).into(holder.progressAdapterBinding.img);
+           // Picasso.get().load(all_category_subcategory.get(position).image).into(holder.progressAdapterBinding.img);
+            Glide.with(activity).load(all_category_subcategory.get(position).image).into(holder.progressAdapterBinding.img);
+
         }
 
         holder.progressAdapterBinding.txtPrice.setText("Rs. " + all_category_subcategory.get(position).productPrice);

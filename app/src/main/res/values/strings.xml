@@ -330,4 +330,5 @@
     <string name="full_name">Full Name</string>
     <string name="please_enter_full_name">Please enter full name</string>
     <string name="turn_on_location">Turn on location</string>
+    <string name="has_been_sold">has been sold</string>
 </resources>
