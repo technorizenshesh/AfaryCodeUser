@@ -202,14 +202,16 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
          //   adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1, get_result1.size());
          //   binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
          //   binding.dashboard.recyclerShop.setAdapter(adapter1);
-           if(allShops.size()>4) {
+          /* if(allShops.size()>4) {
                get_result1.clear();
                get_result1 = allShops;
                adapter1 = new HomeShoppingNearsetRestorents(getActivity(), allShops, allShops.size());
                binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                binding.dashboard.recyclerShop.setAdapter(adapter1);
                binding.dashboard.tvViewAll.setVisibility(View.GONE);
-           }
+           }*/
+            GetNearestRestorentsAPI("view all");
+
         });
 
         binding.dashboard.tvViewAllProduct.setOnClickListener(v -> {
@@ -427,7 +429,14 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     Log.e("MapMap", "near_List" + stringResponse);
-                    getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
+                    if(cat_id.isEmpty()) {
+                        getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
+                    }
+                    else if(cat_id.contentEquals("view all")){
+                    }
+                    else {
+                        getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
+                    }
 
                     if (jsonObject.getString("status").equals("1")) {
                         ShopModel mainCateModel = new Gson().fromJson(stringResponse, ShopModel.class);
@@ -438,14 +447,27 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         get_result1.addAll(mainCateModel.getResult());
                         allShops.addAll(mainCateModel.getResult());
 
-                        adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1.subList(0,Math.min(4,get_result1.size())), get_result1.size());
-                        binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                        binding.dashboard.recyclerShop.setAdapter(adapter1);
+                        if(cat_id.isEmpty()) {
+                            adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
+                            binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                            binding.dashboard.recyclerShop.setAdapter(adapter1);
+                        }
+                        else if(cat_id.equals("view all")){
+                            Log.e("chala=====","view all==="+ allShops.size());
+                            adapter1 = new HomeShoppingNearsetRestorents(getActivity(), allShops, allShops.size());
+                            binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                            binding.dashboard.recyclerShop.setAdapter(adapter1);
+                        }
+                        else {
+                                adapter1 = new HomeShoppingNearsetRestorents(getActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
+                                binding.dashboard.recyclerShop.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                                binding.dashboard.recyclerShop.setAdapter(adapter1);
 
+                        }
                      //   adapter1.notifyDataSetChanged();
-                        if (get_result1.size() > 4)
+                       /* if (get_result1.size() > 4)
                             binding.dashboard.tvViewAll.setVisibility(View.VISIBLE);
-                        else binding.dashboard.tvViewAll.setVisibility(View.GONE);
+                        else binding.dashboard.tvViewAll.setVisibility(View.GONE);*/
 
                     } else if (jsonObject.getString("status").equals("0")) {
                         binding.dashboard.rlShops.setVisibility(View.GONE);
@@ -504,7 +526,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         get_result.clear();
                         get_result.addAll(data.getResult());
 
-                        get_result.get(0).setClickOn(true);
+                       // get_result.get(0).setClickOn(true);
                         adapter = new SubCategoryAdapter(getActivity(), get_result, HomeShoppingOnlineScreen.this);
 
                         // binding.dashboard.categoryList.setHasFixedSize(true);
@@ -513,7 +535,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
                         binding.dashboard.categoryList.setAdapter(adapter);
                         binding.dashboard.tvCountryProduct.setText(getString(R.string.latest_product_in) + " " + PreferenceConnector.readString(getActivity(), PreferenceConnector.countryName, ""));
-                        GetNearestRestorentsAPI(get_result.get(0).getId());
+                       // GetNearestRestorentsAPI(get_result.get(0).getId());
+                        GetNearestRestorentsAPI("");
 
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();

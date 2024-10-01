@@ -27,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MyService extends Service {
+public class  MyService extends Service {
     public static String TAG ="MyService";
     FusedLocationProviderClient mFusedLocationClient;
     public static final int notify = 5000;  // interval between two services(Here Service run every 1 Minute)

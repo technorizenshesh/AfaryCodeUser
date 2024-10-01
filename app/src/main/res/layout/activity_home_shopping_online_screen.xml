@@ -328,7 +328,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:text="@string/view_all"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:textColor="@color/purple_200"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold"/>

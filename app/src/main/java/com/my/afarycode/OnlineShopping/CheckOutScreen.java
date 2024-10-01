@@ -599,8 +599,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                           platFormsFees =0.00;
                       }
                         deliveryFees = Double.parseDouble(object.getString("total_delivery_fees"));
-                        totalPriceToToPay = Double.parseDouble(object.getString("total_payable_amount"));
-
+                        totalPriceToToPay = Double.parseDouble(String.format("%.2f", Double.parseDouble(object.getString("total_payable_amount"))));
                         binding.tvTaxOne.setText(Html.fromHtml("Tax 1 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_first_percentage") + "%" + "</font>"));
                         binding.tvTaxTwo.setText(Html.fromHtml("Tax 2 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_second_percentage") + "%" + "</font>"));
 
