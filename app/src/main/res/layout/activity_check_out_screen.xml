@@ -203,14 +203,15 @@
                             android:layout_centerVertical="true"
                             android:text="@string/delivery_charge"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_14sdp"
+                            android:layout_toStartOf="@+id/tvDelivery"/>
 
 
                         <TextView
                             android:id="@+id/tvDelivery"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
                             android:text=""
                             android:textColor="@color/black"

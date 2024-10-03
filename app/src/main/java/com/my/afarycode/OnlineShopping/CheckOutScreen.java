@@ -36,9 +36,11 @@ import com.my.afarycode.ratrofit.ApiClient;
 
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -162,11 +164,11 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         int currentValue = 0;
                         int lastValue = 0;
 
-                        for (int i = 0; i < get_result.size(); i++) {
+                    /*    for (int i = 0; i < get_result.size(); i++) {
                           //  get_cart_id = get_result.get(0).getCartId();
                             get_cart_id = get_result.get(0).getId();
 
-                            get_cart_id_list.add(get_cart_id);
+                          //  get_cart_id_list.add(get_cart_id);
                             mainTotalPay = Double.parseDouble(get_result.get(i).getProductPrice()) * Integer.parseInt(get_result.get(i).getQuantity());
 
                             currentValue = i;
@@ -182,8 +184,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                                 // Log.e("Zero Position==",get_result.get(0).getShopId());
                                 Log.e(" Position==", +i + " " + "Value " + get_result.get(i).getShopId());
                             }
-                        }
-                        Log.e("check log====", Chkkkk);
+                        }*/
+                     //   Log.e("check log====", Chkkkk);
                       //  AllTax(get_result.get(0).cartId, mainTotalPay + "", Chkkkk);
                         getAllTax();
 
@@ -204,6 +206,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                 } catch (Exception e) {
                     e.printStackTrace();
+
                 }
             }
 
@@ -588,7 +591,28 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                          // JSONObject jsonObject = object.getJSONObject("result");
                         sendToServer = object.toString();
                        // sendTaxToServer(object.toString());
-                        mainTotalPay = Double.parseDouble(object.getString("sub_total"));
+                        Locale currentLocale = Locale.getDefault();
+                        NumberFormat numberFormat = NumberFormat.getInstance(currentLocale);
+
+                       // Parse values using NumberFormat
+                        mainTotalPay = numberFormat.parse(object.getString("sub_total")).doubleValue();
+                        taxN1 = numberFormat.parse(object.getString("taxes_first")).doubleValue();
+                        taxN2 = numberFormat.parse(object.getString("taxes_second")).doubleValue();
+
+                        // Handle platform fees
+                        if (!object.getString("platform_fees").equalsIgnoreCase("")) {
+                            platFormsFees = numberFormat.parse(object.getString("platform_fees")).doubleValue();
+                        } else {
+                            platFormsFees = 0.00;
+                        }
+
+                        deliveryFees = numberFormat.parse(object.getString("total_delivery_fees")).doubleValue();
+                        totalPriceToToPay =  numberFormat.parse(object.getString("total_payable_amount")).doubleValue();
+
+
+
+
+                      /*  mainTotalPay = Double.parseDouble(object.getString("sub_total"));
                         taxN1 = Double.parseDouble(object.getString("taxes_first"));
                         taxN2 = Double.parseDouble(object.getString("taxes_second"));
                       if(!object.getString("platform_fees").equalsIgnoreCase(""))
@@ -599,7 +623,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                           platFormsFees =0.00;
                       }
                         deliveryFees = Double.parseDouble(object.getString("total_delivery_fees"));
-                        totalPriceToToPay = Double.parseDouble(String.format("%.2f", Double.parseDouble(object.getString("total_payable_amount"))));
+                    //    totalPriceToToPay = Double.parseDouble(String.format("%.2f", Double.parseDouble(object.getString("total_payable_amount"))));
+
+                        totalPriceToToPay =  Double.parseDouble(object.getString("total_payable_amount"));
+*/
                         binding.tvTaxOne.setText(Html.fromHtml("Tax 1 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_first_percentage") + "%" + "</font>"));
                         binding.tvTaxTwo.setText(Html.fromHtml("Tax 2 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_second_percentage") + "%" + "</font>"));
 

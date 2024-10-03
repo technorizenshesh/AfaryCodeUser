@@ -169,7 +169,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         initViews();
         // GetProfileAPI();
         //GetDemo();
-        GetCartItem();
+
 
 
         return binding.getRoot();
@@ -298,7 +298,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
     public void onResume() {
         GetCategoryAPi();
         GetProfileAPI();
-
+        GetCartItem();
         super.onResume();
     }
 
@@ -1142,6 +1142,9 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
         return builder.toString();
     }
+
+
+
 
 
 }

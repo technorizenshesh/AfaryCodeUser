@@ -302,7 +302,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
                         }
 
-                        if (!get_result1.get(0).getNumberOfSold().equalsIgnoreCase("")) {
+                        if (!get_result1.get(0).getNumberOfSold().equalsIgnoreCase("0") ) {
                             binding.tvSold.setVisibility(View.VISIBLE);
                             binding.tvSold.setText(get_result1.get(0).getNumberOfSold() + " " + getString(R.string.has_been_sold));
 
