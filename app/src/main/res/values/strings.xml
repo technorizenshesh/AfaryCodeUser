@@ -331,4 +331,8 @@
     <string name="please_enter_full_name">Please enter full name</string>
     <string name="turn_on_location">Turn on location</string>
     <string name="has_been_sold">has been sold</string>
+    <string name="send_another_to_payment">Payment by sending an invoice to another person</string>
+    <string name="invoice_send_sucessfully">Invoice send successfully.</string>
+    <string name="alert">Alert</string>
+    <string name="please_login">You are not authrized to access this please login</string>
 </resources>

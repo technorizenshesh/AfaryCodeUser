@@ -303,6 +303,33 @@
 
 
 
+<!--
+        <activity android:name=".OnlineShopping.deeplink.PaymentByAnotherAct"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                &lt;!&ndash; Define the URI scheme and host &ndash;&gt;
+                <data
+                    android:scheme="https"
+                    android:host="www.afaycode.com"
+                    android:pathPrefix="/payment" />
+            </intent-filter>
+        </activity>
+-->
+
+
+
+        <activity android:name=".OnlineShopping.deeplink.PaymentByAnotherAct"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.my.afarycode.fileprovider"

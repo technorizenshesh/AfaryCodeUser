@@ -57,8 +57,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     public static TextView subTotal;
     public static TextView tax2, total_price_to_to_pay, tax1, plateform_fees;
     public static double totalPriceToToPay1;
-    private double totalPriceToToPay = 0, platFormsFees = 0.0, taxN1 = 0.0, taxN2 = 0.0, deliveryFees, mainTotalPay = 0.0;
-    private String get_cart_id = "",deliveryMethod="";
+   // private double totalPriceToToPay = 0, platFormsFees = 0.0, taxN1 = 0.0, taxN2 = 0.0, deliveryFees, mainTotalPay = 0.0;
+    private String totalPriceToToPay = "0.00", platFormsFees = "0.00", taxN1 = "0.00", taxN2 = "0.00", deliveryFees="0.00", mainTotalPay = "0.00";
+
+    private String get_cart_id = "",deliveryMethod="",insertDeliveryId="";
     private ArrayList<String> get_cart_id_list = new ArrayList<>();
     private String itemAmount = "0";
     private ArrayList<DeliveryModel.Result> arrayList;
@@ -91,7 +93,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                     .putExtra("taxN1", "" + taxN1)
                     .putExtra("taxN2", "" + taxN2)
                     .putExtra("sendToServer",sendToServer)
-                    .putExtra("selfCollect",deliveryYesNo));
+                    .putExtra("selfCollect",deliveryYesNo)
+                    .putExtra("insertDeliveryId",insertDeliveryId));
 
         });
 
@@ -425,6 +428,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         }
     }
 
+/*
     public void AllTax(String cartId, String totalAmount, String ShopComp) {
         DataManager.getInstance().showProgressMessage(CheckOutScreen.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
@@ -490,6 +494,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                      //       differentShops();
                     //    }
 
+
                         differentShops();
 
                     } else if (object.optString("status").equals("0")) {
@@ -517,6 +522,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             }
         });
     }
+*/
 
     private void differentShops() {
         DeliveryModel.Result max =  Collections.max(arrayList);
@@ -590,14 +596,19 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                     if (object.optString("status").equals("1")) {
                          // JSONObject jsonObject = object.getJSONObject("result");
                         sendToServer = object.toString();
+                     insertDeliveryId = String.valueOf(object.getInt("insert_id_delivery"));
                        // sendTaxToServer(object.toString());
-                        Locale currentLocale = Locale.getDefault();
+                     /*   Locale currentLocale = Locale.getDefault();
                         NumberFormat numberFormat = NumberFormat.getInstance(currentLocale);
+                        numberFormat.setMinimumFractionDigits(2); // Ensure two decimal places
 
-                       // Parse values using NumberFormat
+
+                        // Parse values using NumberFormat
                         mainTotalPay = numberFormat.parse(object.getString("sub_total")).doubleValue();
                         taxN1 = numberFormat.parse(object.getString("taxes_first")).doubleValue();
                         taxN2 = numberFormat.parse(object.getString("taxes_second")).doubleValue();
+
+
 
                         // Handle platform fees
                         if (!object.getString("platform_fees").equalsIgnoreCase("")) {
@@ -607,12 +618,28 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         }
 
                         deliveryFees = numberFormat.parse(object.getString("total_delivery_fees")).doubleValue();
-                        totalPriceToToPay =  numberFormat.parse(object.getString("total_payable_amount")).doubleValue();
+                        totalPriceToToPay =  numberFormat.parse(object.getString("total_payable_amount")).doubleValue();*/
+
+
+                        mainTotalPay = object.getString("sub_total");
+                        taxN1 = object.getString("taxes_first");
+                        taxN2 = object.getString("taxes_second");
+                        if(!object.getString("platform_fees").equalsIgnoreCase(""))
+                        {
+                            platFormsFees = object.getString("platform_fees");
+                        }
+                        else {
+                            platFormsFees ="0.00";
+                        }
+
+                        deliveryFees = object.getString("total_delivery_fees");
+                        //    totalPriceToToPay = Double.parseDouble(String.format("%.2f", Double.parseDouble(object.getString("total_payable_amount"))));
+
+                        totalPriceToToPay =  object.getString("total_payable_amount");
 
 
 
-
-                      /*  mainTotalPay = Double.parseDouble(object.getString("sub_total"));
+                    /*   mainTotalPay = Double.parseDouble(object.getString("sub_total"));
                         taxN1 = Double.parseDouble(object.getString("taxes_first"));
                         taxN2 = Double.parseDouble(object.getString("taxes_second"));
                       if(!object.getString("platform_fees").equalsIgnoreCase(""))
@@ -625,8 +652,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         deliveryFees = Double.parseDouble(object.getString("total_delivery_fees"));
                     //    totalPriceToToPay = Double.parseDouble(String.format("%.2f", Double.parseDouble(object.getString("total_payable_amount"))));
 
-                        totalPriceToToPay =  Double.parseDouble(object.getString("total_payable_amount"));
-*/
+                        totalPriceToToPay =  Double.parseDouble(object.getString("total_payable_amount"));*/
+
+
+
+
+
+
                         binding.tvTaxOne.setText(Html.fromHtml("Tax 1 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_first_percentage") + "%" + "</font>"));
                         binding.tvTaxTwo.setText(Html.fromHtml("Tax 2 "+ "   " + "<font color='#EE0000'>" + object.getString("taxes_second_percentage") + "%" + "</font>"));
 
@@ -634,11 +666,20 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
 
+
+
+
+
                         if(deliveryMethod.equalsIgnoreCase("Vehicle"))
                           binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
                       else if(deliveryMethod.equalsIgnoreCase("Partner"))
                           binding.tvDeliveryCharge.setText(Html.fromHtml("Shipping agency fees " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
-                      else binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                      else {
+                            if(deliveryYesNo.equalsIgnoreCase("Yes"))
+                                binding.tvDeliveryCharge.setText(getString(R.string.delivery_charge));
+                         else binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                        }
+
 
 
 
@@ -657,12 +698,21 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                                 + taxN2
                                 + deliveryFees;*/
 
-                        binding.plateformFees.setText("Rs. " + String.format("%.2f", platFormsFees));
+                      /*  binding.plateformFees.setText("Rs. " + String.format("%.2f", platFormsFees));
                         binding.tvTax1.setText("Rs. " + String.format("%.2f", taxN1));
                         binding.tvtax2.setText("Rs. " + String.format("%.2f", taxN2));
                         binding.tvDelivery.setText("Rs. " + String.format("%.2f", deliveryFees));
                         binding.totalPriceToToPay.setText("Rs. " + String.format("%.2f", totalPriceToToPay));
-                        binding.subTotal.setText("Rs. " + String.format("%.2f", mainTotalPay));
+                        binding.subTotal.setText("Rs. " + String.format("%.2f", mainTotalPay));*/
+
+
+
+                        binding.plateformFees.setText("Rs. " + platFormsFees);
+                        binding.tvTax1.setText("Rs. " +  taxN1);
+                        binding.tvtax2.setText("Rs. " + taxN2);
+                        binding.tvDelivery.setText("Rs. " +  deliveryFees);
+                        binding.totalPriceToToPay.setText("Rs. " +  totalPriceToToPay);
+                        binding.subTotal.setText("Rs. " +  mainTotalPay);
 
 
 
@@ -692,10 +742,6 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             }
         });
     }
-
-
-
-
 
 
     public void  sendTaxToServer(String sendData){

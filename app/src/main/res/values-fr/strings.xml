@@ -330,6 +330,7 @@
     <string name="please_enter_full_name">Veuillez entrer votre nom complet</string>
     <string name="turn_on_location">Activer la localisation</string>
     <string name="has_been_sold">a été vendu</string>
+    <string name="send_another_to_payment">Paiement par envoi d\'une facture à une autre personne</string>
 
 </resources>
 

@@ -21,6 +21,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.my.afarycode.OnlineShopping.chat.ChatAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.deeplink.PaymentByAnotherAct;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 
@@ -106,10 +107,22 @@ public class MyFirebaseMessagingService extends
                } else if (type.equals("Accepted") || type.equals("reject")) {
                    intent = new Intent(getApplicationContext(), HomeActivity.class)
                            .putExtra("status", type);
-               } else if (msg.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait")
+               }
+               else if (type.equals("InvoiceToOtherUser")) {
+                   intent = new Intent(getApplicationContext(), PaymentByAnotherAct.class)
+                           .putExtra("paymentInsertId", remoteMessage.getString("invoice_id"));
+               }
+
+               else if (type.equals("InvoiceToUser")) {
+                   intent = new Intent(getApplicationContext(), HomeActivity.class)
+                           .putExtra("status", "")
+                           .putExtra("msg", "");
+               }
+
+               else if (msg.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait")
                        || msg.equalsIgnoreCase("Dear customer,Your refund request has been successfully transmitted. Within 4 working hours, the refund will only be made on the method used to pay. Note that the refund will be made on the method used for payment.Thank you for your comprehension")
                        || msg.equalsIgnoreCase("Your request has been sent to your correspondent")
-                       || msg.contains("product now available")
+                      /* || msg.contains("product now available")*/
                        || msg.contains("product out of stock")
                        || msg.contains("Dear customer, Your order has not been accepted by the seller.Reason: However, your Wallet has been credited with the amount of the order. You can place another order at any time and pay with your wallet.  For more information on using the wallet,")
                ) {
@@ -124,8 +137,12 @@ public class MyFirebaseMessagingService extends
                            .putExtra("order_id", remoteMessage.getString("order_id"))
                            .putExtra("msg", msg);
 
+               } else if (msg.contains("product now available")) {
+                   intent = new Intent(getApplicationContext(), ProductDetailAct.class)
+                           .putExtra("product_id",  remoteMessage.getString("product_id"))
+                           .putExtra("restaurant_id",  remoteMessage.getString("shop_id"))
+                           .putExtra("productPrice",  remoteMessage.getString("product_price"));
                }
-
                else if (msg.contains("You have been logged out because you have logged in on another device")){
                    PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.LoginStatus, "false");
                    intent = new Intent(getApplicationContext(), Splash.class);

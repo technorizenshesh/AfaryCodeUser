@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/checkout_delivery"
+                android:text="@string/payment"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16sdp"
                 android:textStyle="bold">
@@ -118,6 +118,35 @@
 
                 </RelativeLayout>
 
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_12sdp"
+                    android:padding="@dimen/_3sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/total_price_to_pay"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp" />
+
+
+                    <TextView
+                        android:id="@+id/totalPriceToToPay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_15sdp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -177,79 +206,8 @@
                     android:id="@+id/rl11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp">
-
-                    <LinearLayout
-                        android:id="@+id/llTransfer"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginTop="10sp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="@dimen/_100sdp"
-                            android:layout_height="@dimen/_60sdp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_transfer"/>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:gravity="center"
-                            android:text="Airtel Money"
-                            android:visibility="gone"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14sdp"
-                            android:textStyle="bold"/>
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llCod"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="10sp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <ImageView
-                            android:layout_width="@dimen/_100sdp"
-                            android:layout_height="@dimen/_60sdp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_cod"/>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:gravity="center"
-                            android:text="Paypal"
-                            android:visibility="gone"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14sdp"
-                            android:textStyle="bold"/>
-
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-
-
-                <RelativeLayout
-                    android:id="@+id/rl22"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_10sdp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:id="@+id/llTransfer11"
@@ -304,109 +262,6 @@
 
                 </RelativeLayout>
 
-
-
-
-                <RelativeLayout
-                    android:id="@+id/rl33"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_10sdp">
-
-                    <LinearLayout
-                        android:id="@+id/llWallet"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginTop="10sp"
-                        android:orientation="vertical"
-                        android:visibility="visible">
-
-                        <ImageView
-                            android:layout_width="@dimen/_100sdp"
-                            android:layout_height="@dimen/_60sdp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_afary"/>
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:gravity="center"
-                            android:text="Mobi Cash"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14sdp"
-                            android:visibility="gone"
-                            android:textStyle="bold"/>
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="10sp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="@dimen/_100sdp"
-                            android:layout_height="@dimen/_60sdp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/credit">
-
-                        </ImageView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_10sdp"
-                            android:gravity="center"
-                            android:text="AfaryCode Credit"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_14sdp"
-                            android:textStyle="bold"/>
-
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnSendAnother"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-
-                    android:background="@drawable/border_btn"
-                    android:gravity="center"
-                    android:text="@string/send_my_invoice_to_another_person"
-                    android:textAllCaps="false"
-                    android:textSize="@dimen/_12sdp"
-                    android:textColor="@color/white" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/llDone"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:background="@drawable/border_btn"
-                    android:gravity="center"
-                    android:text="@string/done"
-                    android:visibility="gone"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
 
             </LinearLayout>
 

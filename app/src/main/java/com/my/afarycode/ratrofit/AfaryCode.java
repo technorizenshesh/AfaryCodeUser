@@ -448,4 +448,19 @@ public interface AfaryCode {
   Call<ResponseBody> sendNumberOnServerApi(@FieldMap Map<String, String> params);
 
 
+  @FormUrlEncoded
+  @POST("check_user_exist_or_not")
+  Call<ResponseBody> checkUserExitApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("generate_invoice")
+  Call<ResponseBody> sendInvoiceAnotherApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("invoice_details")
+  Call<ResponseBody> getInvoiceDataApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
 }
