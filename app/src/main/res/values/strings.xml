@@ -335,4 +335,13 @@
     <string name="invoice_send_sucessfully">Invoice send successfully.</string>
     <string name="alert">Alert</string>
     <string name="please_login">You are not authrized to access this please login</string>
+    <string name="invoice_share_by">Invoice share by</string>
+    <string name="shop_name">Shop name</string>
+    <string name="order_number">Order Number : </string>
+    <string name="order_time">Order Time : </string>
+    <string name="product_name1">Product Name : </string>
+    <string name="total_price">Total Price : </string>
+    <string name="person_to_be_delivered">Person to be delivered : </string>
+    <string name="delivery_address11">Delivery Address : </string>
+
 </resources>

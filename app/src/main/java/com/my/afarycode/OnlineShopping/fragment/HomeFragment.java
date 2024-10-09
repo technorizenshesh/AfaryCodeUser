@@ -534,6 +534,7 @@ public class HomeFragment extends Fragment implements SearchListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("type","Home1");
 
         if(!lastCountryName.equalsIgnoreCase("")){
             map.put("country_id",countryNames);
@@ -622,6 +623,7 @@ public class HomeFragment extends Fragment implements SearchListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("type","Home2");
 
         if(!countryNames.equalsIgnoreCase("")) map.put("country_id", countryNames);
         else map.put("country_id", addresses.get(0).getCountryName()+"");

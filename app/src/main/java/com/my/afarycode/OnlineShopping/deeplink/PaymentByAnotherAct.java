@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.CheckOutPayment;
 import com.my.afarycode.OnlineShopping.CheckOutScreen;
 import com.my.afarycode.OnlineShopping.CheckPaymentStatusAct;
+import com.my.afarycode.OnlineShopping.HomeActivity;
+import com.my.afarycode.OnlineShopping.LoginActivity;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.PaymentWebViewAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
@@ -33,9 +35,11 @@ import com.my.afarycode.databinding.ActivityPaymentAnotherBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +56,9 @@ public class PaymentByAnotherAct extends AppCompatActivity {
     GetProfileModal data;
     private AfaryCode apiInterface;
     private String deliveryYesNo="", totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="",sendToServer="",mainTotalPay="",insertDeliveryId="";
-    private String strList = "",cart_id_string="",paymentInsertId="";
+    private String strList = "",cart_id_string="",paymentInsertId="",userId="";
+    private ArrayList<CartListModel> arrayList;
+    CartListAdapter adapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +84,11 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-
+                        startActivity(new Intent(PaymentByAnotherAct.this, LoginActivity.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
                     }
+
                 })
                 /*.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
@@ -97,8 +106,16 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
     private void initViews() {
 
+         arrayList = new ArrayList<>();
+
+        adapter = new CartListAdapter(PaymentByAnotherAct.this,arrayList);
+         binding.rvCart.setAdapter(adapter);
+
+
         if(getIntent()!=null){
             paymentInsertId = getIntent().getStringExtra("paymentInsertId");
+            userId = getIntent().getStringExtra("user_id");
+
             getInvoiceData();
         }
 
@@ -118,19 +135,26 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
 
         binding.llMoov.setOnClickListener(v -> {
-          //  dialogMoov("MC",strList);
+            dialogMoov("MC",strList);
 
         });
 
+        binding.RRback.setOnClickListener(v -> {
+            startActivity(new Intent(PaymentByAnotherAct.this, MyOrderScreen.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
+        });
+
+
         binding.llAirtel.setOnClickListener(v -> {
-          //  dialogAirtel("AM",strList);
+           dialogAirtel("AM",strList);
         });
 
 
         binding.llWallet11.setOnClickListener(v -> {
-          /*  if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
+           if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
                 PaymentAPI("","",data.getResult().getMobile(),"Wallet");
-            else Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();*/
+            else Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -208,7 +232,7 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
 
         Map<String, String> map = new HashMap<>();
-        map.put("user_id", PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.User_id, ""));
+        map.put("user_id", userId/*PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.User_id, "")*/);
         map.put("amount", /*"105"*/totalPriceToToPay);
 
         map.put("delivery_charge", deliveryCharge);
@@ -247,15 +271,16 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                         // binding.loader.setVisibility(View.GONE);
                         if(paymentType.equals("Wallet") /*|| paymentType.equals("Cash")*/) {
                             Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(PaymentByAnotherAct.this, MyOrderScreen.class)
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            startActivity(new Intent(PaymentByAnotherAct.this, HomeActivity.class).putExtra("status","")
+                                    .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
                         }
                         else {
                             PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
                             PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
 
-                            startActivity(new Intent(PaymentByAnotherAct.this, CheckPaymentStatusAct.class));
+                            startActivity(new Intent(PaymentByAnotherAct.this, CheckPaymentStatusAct.class)
+                                    .putExtra("paymentBy","anotherUser"));
 
                         }
                     } else if (object.optString("status").equals("0")) {
@@ -417,12 +442,50 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                         deliveryCharge = object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("total_delivery_fees");
                         totalPriceToToPay =  object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("total_payable_amount");
                         binding.totalPriceToToPay.setText("Rs. " +  totalPriceToToPay);
+                        binding.tvShareBy.setText(getString(R.string.invoice_share_by)+ " "+object.getJSONObject("data").getJSONObject("cart_data").getJSONObject("cart_user_info").getString("user_name"));
+                        arrayList.clear();
+
+                        JSONArray array = object.getJSONObject("data").getJSONObject("cart_data").getJSONArray("cdi_json_cart_data");
+                        for (int i =0; i<array.length();i++){
+                            JSONObject objectInner = array.getJSONObject(i);
+                            JSONObject productInfoObj = array.getJSONObject(i).getJSONObject("product_info");
+
+                            CartListModel cartListModel = new CartListModel(productInfoObj.getString("product_name"),
+                                    productInfoObj.getString("image_1"),productInfoObj.getString("product_price"),
+                                    objectInner.getString("quantity"));
+                            arrayList.add(cartListModel);
+                        }
+
+                        adapter.notifyDataSetChanged();
+
 
                     } else if (object.optString("status").equals("0")) {
                         Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
 
 
                     }
+
+
+                    else if (object.optString("status").equals("2")) {
+                        Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PaymentByAnotherAct.this, HomeActivity.class)
+                                .putExtra("status","")
+                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
+                    else if (object.optString("status").equals("3")) {
+                        Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PaymentByAnotherAct.this, HomeActivity.class)
+                                .putExtra("status","")
+                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
                     else if (object.getString("status").equals("5")) {
                         PreferenceConnector.writeString(PaymentByAnotherAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(PaymentByAnotherAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));

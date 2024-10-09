@@ -63,7 +63,7 @@ public class MyOrderScreen extends AppCompatActivity implements OrderListener{
     }
 
     private void GetOrderHistoryAPI() {
-        DataManager.getInstance().showProgressMessage(this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(MyOrderScreen.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

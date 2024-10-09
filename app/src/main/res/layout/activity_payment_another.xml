@@ -53,70 +53,33 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_20sdp"
-                    android:layout_marginRight="@dimen/_20sdp">
+                    android:layout_margin="@dimen/_12sdp"
+                    android:padding="@dimen/_3sdp">
 
-                    <ImageView
-                        android:id="@+id/img1"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
+                    <TextView
+                        android:id="@+id/tvShareBy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:src="@drawable/process_done">
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="@dimen/_12sdp" />
 
-                    </ImageView>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1sp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:layout_toLeftOf="@+id/img2"
-                        android:layout_toRightOf="@+id/img1"
-                        android:background="@color/natural_gray">
-
-                    </View>
-
-                    <ImageView
-                        android:id="@+id/img2"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:src="@drawable/process">
-
-                    </ImageView>
 
                 </RelativeLayout>
 
-                <RelativeLayout
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_20sdp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/delivery_"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:text="@string/payments_"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/_12sdp"/>
-
-                </RelativeLayout>
+                    android:layout_margin="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
                 <RelativeLayout

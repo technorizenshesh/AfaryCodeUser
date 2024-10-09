@@ -79,6 +79,17 @@ public class GetNotificationModal {
         @Expose
         public String dateTime;
 
+        @SerializedName("type")
+        @Expose
+        public String type;
+
+        @SerializedName("json_decode")
+        @Expose
+        public jsonDecode jsonDecode;
+
+
+
+
         public String getId() {
             return id;
         }
@@ -126,6 +137,49 @@ public class GetNotificationModal {
         public void setDateTime(String dateTime) {
             this.dateTime = dateTime;
         }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public jsonDecode getJsonDecode() {
+            return jsonDecode;
+        }
+
+        public void setJsonDecode(jsonDecode jsonDecode) {
+            this.jsonDecode = jsonDecode;
+        }
+
+        public class jsonDecode {
+            @SerializedName("invoice_id")
+            @Expose
+            public String invoiceId;
+
+            @SerializedName("userid")
+            @Expose
+            public String userId;
+
+            public String getUserId() {
+                return userId;
+            }
+
+            public void setUserId(String userId) {
+                this.userId = userId;
+            }
+
+            public String getInvoiceId() {
+                return invoiceId;
+            }
+
+            public void setInvoiceId(String invoiceId) {
+                this.invoiceId = invoiceId;
+            }
+        }
+
 
     }
 }

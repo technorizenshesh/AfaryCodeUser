@@ -286,8 +286,11 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                                 binding.btnAccept.setVisibility(View.GONE);
 
                             }
+                            binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                    " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
 
-                            binding.tvDeliveryPerson.setText(Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+
+
                             binding.btnAccept.setText(getString(R.string.track_order));
 
                             //  }

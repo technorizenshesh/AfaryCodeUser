@@ -331,7 +331,17 @@
     <string name="turn_on_location">Activer la localisation</string>
     <string name="has_been_sold">a été vendu</string>
     <string name="send_another_to_payment">Paiement par envoi d\'une facture à une autre personne</string>
-
+    <string name="invoice_send_sucessfully">Facture envoyée avec succès.</string>
+    <string name="alert">Alerte</string>
+    <string name="please_login">Vous n\'êtes pas autorisé à y accéder, veuillez vous connecter</string>
+    <string name="invoice_share_by">Partage de facture par</string>
+    <string name="shop_name">Nom de la boutique</string>
+    <string name="order_number">Numéro de commande : </string>
+    <string name="order_time">Heure de la commande : </string>
+    <string name="product_name1">Nom du produit : </string>
+    <string name="total_price">Prix total : </string>
+    <string name="person_to_be_delivered">Personne à livrer : </string>
+    <string name="delivery_address11">Adresse de livraison : </string>
 </resources>
 
 

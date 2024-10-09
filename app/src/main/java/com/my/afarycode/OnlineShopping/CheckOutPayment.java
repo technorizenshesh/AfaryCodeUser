@@ -348,7 +348,8 @@ public class CheckOutPayment extends AppCompatActivity {
                              PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
                              PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
 
-                             startActivity(new Intent(CheckOutPayment.this, CheckPaymentStatusAct.class));
+                             startActivity(new Intent(CheckOutPayment.this, CheckPaymentStatusAct.class)
+                                     .putExtra("paymentBy","User"));
 
                          }
                     } else if (object.optString("status").equals("0")) {
@@ -498,6 +499,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
 
 
+/*
         edNumber.addTextChangedListener(new TextWatcher() {
                                             @Override
                                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -506,7 +508,9 @@ public class CheckOutPayment extends AppCompatActivity {
                                             @Override
                                             public void onTextChanged(CharSequence s, int start, int before, int count) {
                                                 // Check if the input is numeric
-                                                if (s.length()==8 /*|| s.length()==10*/) {
+                                                if (s.length()==8 */
+/*|| s.length()==10*//*
+) {
                                                     checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
                                                 }
 
@@ -516,6 +520,7 @@ public class CheckOutPayment extends AppCompatActivity {
                                             public void afterTextChanged(Editable s) {
                                             }
                                         });
+*/
 
 
         btnCancel.setOnClickListener(v -> {
@@ -529,7 +534,9 @@ public class CheckOutPayment extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-               if(!anotherPersonId.equalsIgnoreCase("")) sendLinkAnotherPerson(anotherPersonId);
+             //  if(!anotherPersonId.equalsIgnoreCase(""))
+                checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
+
             }
 
         });
@@ -563,6 +570,7 @@ public class CheckOutPayment extends AppCompatActivity {
                     Log.e(TAG, "Check user Exit RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         anotherPersonId =  object.getJSONObject("data").getString("id");
+                        sendLinkAnotherPerson(anotherPersonId);
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
                         Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();                    }

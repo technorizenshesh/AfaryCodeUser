@@ -449,7 +449,7 @@ public interface AfaryCode {
 
 
   @FormUrlEncoded
-  @POST("check_user_exist_or_not")
+  @POST("check_user_exist_or_not_to_send_invoice")
   Call<ResponseBody> checkUserExitApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
@@ -461,6 +461,11 @@ public interface AfaryCode {
   @FormUrlEncoded
   @POST("invoice_details")
   Call<ResponseBody> getInvoiceDataApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("send_message_to_admin")
+  Call<ResponseBody> sendAdminMsg( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
 }
