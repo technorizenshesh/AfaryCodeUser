@@ -615,7 +615,7 @@
                         android:layout_marginTop="@dimen/_15sdp"
                         android:padding="@dimen/_3sdp"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -647,8 +647,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_details"
-                        android:visibility="gone"/>
+                        tools:listitem="@layout/item_delivery_status"
+                        android:visibility="visible"/>
 
 
 

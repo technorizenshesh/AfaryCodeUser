@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.chat.ChatAct;
@@ -95,14 +96,26 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
         binding.btnAccept.setOnClickListener(v ->
         {
-            if(model!=null){
-                if(model.getResult().getStatus().equals("Accepted") || model.getResult().getStatus().equalsIgnoreCase("PickedUp")){
-                    PreferenceConnector.writeString(OrderDetailsAct.this,"afaryCode",model.getResult().getAfaryCode());
-                    PreferenceConnector.writeString(OrderDetailsAct.this,"orderId",model.getResult().getDeliveryPerson().getOrderId());
-                    startActivity(new Intent(OrderDetailsAct.this,OrderTrackAct.class)
-                            .putExtra("orderDetails",model.getResult()));
-                }
+           /* if(binding.btnAccept.getText().equals(getString(R.string.re_order))){
+                startActivity(new Intent(OrderDetailsAct.this, HomeActivity.class)
+                        .putExtra("status","")
+                        .putExtra("msg","")
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                                Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
+
             }
+
+            else {*/
+                if (model != null) {
+                    if (model.getResult().getStatus().equals("Accepted") || model.getResult().getStatus().equalsIgnoreCase("PickedUp")) {
+                        PreferenceConnector.writeString(OrderDetailsAct.this, "afaryCode", model.getResult().getAfaryCode());
+                        PreferenceConnector.writeString(OrderDetailsAct.this, "orderId", model.getResult().getDeliveryPerson().getOrderId());
+                        startActivity(new Intent(OrderDetailsAct.this, OrderTrackAct.class)
+                                .putExtra("orderDetails", model.getResult()));
+                    }
+                }
+         //   }
 
         });
 
@@ -215,10 +228,12 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                           // binding.tvAfaryCode.setText(model.getResult().getAfaryCode());
+
                             binding.btnDecline.setVisibility(View.GONE);
                             binding.btnChat.setVisibility(View.GONE);
-
                             binding.btnAccept.setText(getString(R.string.track_order));
+                         //   binding.btnAccept.setText(getString(R.string.re_order));
                             binding.rlDeliveryPerson.setVisibility(View.GONE);
                             binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
                         }
@@ -270,8 +285,27 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         arrayList.addAll(model.getResult().getProductList());
                         itemsAdapter.notifyDataSetChanged();
 
+                        if(!jsonObject.getJSONObject("result").getString("address").isEmpty()){
+                            binding.llDeliveryAddress.setVisibility(View.VISIBLE);
+                            binding.tvDeliveryAddress.setText(jsonObject.getJSONObject("result").getString("address"));
 
-                        if(jsonObject.getJSONObject("result").getJSONObject("delivery_person")==null)  { //    model.getResult().getDeliveryPerson()==null){
+                        }
+                        else {
+                            binding.llDeliveryAddress.setVisibility(View.GONE);
+
+                        }
+
+                        if(!jsonObject.getJSONObject("result").isNull("delivery_progress")){
+                            binding.rvOrderStatus.setVisibility(View.VISIBLE);
+                            binding.rvOrderStatus.setAdapter(new OrderStatusAdapter(OrderDetailsAct.this, (ArrayList<OrderDetailsModel.Result.DeliveryProgress>) model.getResult().getDeliveryProgress()));
+                        }
+                        else {
+                            binding.rvOrderStatus.setVisibility(View.GONE);
+                        }
+
+
+
+                        if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
                             binding.rlDeliveryPerson.setVisibility(View.GONE);
                         }
                         else {
@@ -288,9 +322,6 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             }
                             binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
                                     " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
-
-
-
                             binding.btnAccept.setText(getString(R.string.track_order));
 
                             //  }

@@ -1770,9 +1770,94 @@ public class OrderDetailsModel implements Serializable {
         }
 
 
+        @SerializedName("delivery_progress")
+        @Expose
+
+        private List<DeliveryProgress> deliveryProgress;
 
 
-        public class Product implements Serializable{
+        public List<DeliveryProgress> getDeliveryProgress() {
+            return deliveryProgress;
+        }
+
+        public void setDeliveryProgress(List<DeliveryProgress> deliveryProgress) {
+            this.deliveryProgress = deliveryProgress;
+        }
+
+        public class DeliveryProgress implements Serializable {
+
+            @SerializedName("obst_id")
+            @Expose
+            private String obst_id;
+            @SerializedName("obst_order_id")
+            @Expose
+            private String obst_order_id;
+            @SerializedName("obst_created_at")
+            @Expose
+            private String obst_created_at;
+            @SerializedName("obst_updated_at")
+            @Expose
+            private String obst_updated_at;
+            @SerializedName("obst_status")
+            @Expose
+            private String obst_status;
+            @SerializedName("obst_message")
+            @Expose
+            private String obst_message;
+
+
+            public String getObst_id() {
+                return obst_id;
+            }
+
+            public void setObst_id(String obst_id) {
+                this.obst_id = obst_id;
+            }
+
+            public String getObst_order_id() {
+                return obst_order_id;
+            }
+
+            public void setObst_order_id(String obst_order_id) {
+                this.obst_order_id = obst_order_id;
+            }
+
+            public String getObst_created_at() {
+                return obst_created_at;
+            }
+
+            public void setObst_created_at(String obst_created_at) {
+                this.obst_created_at = obst_created_at;
+            }
+
+            public String getObst_updated_at() {
+                return obst_updated_at;
+            }
+
+            public void setObst_updated_at(String obst_updated_at) {
+                this.obst_updated_at = obst_updated_at;
+            }
+
+            public String getObst_status() {
+                return obst_status;
+            }
+
+            public void setObst_status(String obst_status) {
+                this.obst_status = obst_status;
+            }
+
+            public String getObst_message() {
+                return obst_message;
+            }
+
+            public void setObst_message(String obst_message) {
+                this.obst_message = obst_message;
+            }
+        }
+
+
+
+            public class Product implements Serializable{
 
             @SerializedName("id")
             @Expose
