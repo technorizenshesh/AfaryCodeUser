@@ -468,4 +468,8 @@ public interface AfaryCode {
   Call<ResponseBody> sendAdminMsg( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 
+  @FormUrlEncoded
+  @POST("reorder")
+  Call<ResponseBody> reOrder( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
 }

@@ -18,6 +18,8 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
+import com.my.afarycode.OnlineShopping.ProductDetailAct;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.chat.ChatAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
@@ -96,17 +98,11 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
         binding.btnAccept.setOnClickListener(v ->
         {
-           /* if(binding.btnAccept.getText().equals(getString(R.string.re_order))){
-                startActivity(new Intent(OrderDetailsAct.this, HomeActivity.class)
-                        .putExtra("status","")
-                        .putExtra("msg","")
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                                Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-
+            if(binding.btnAccept.getText().equals(getString(R.string.re_order))){
+                addReOrder(orderId);
             }
 
-            else {*/
+            else {
                 if (model != null) {
                     if (model.getResult().getStatus().equals("Accepted") || model.getResult().getStatus().equalsIgnoreCase("PickedUp")) {
                         PreferenceConnector.writeString(OrderDetailsAct.this, "afaryCode", model.getResult().getAfaryCode());
@@ -115,7 +111,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                                 .putExtra("orderDetails", model.getResult()));
                     }
                 }
-         //   }
+           }
 
         });
 
@@ -225,18 +221,47 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         }
 
                         else if(model.getResult().getStatus().equals("PickedUp")) {
+                            binding.llButtons.setVisibility(View.GONE);
+                            binding.btnAccept.setVisibility(View.GONE);
+                            binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                            binding.btnDecline.setVisibility(View.GONE);
+                            binding.btnChat.setVisibility(View.GONE);
+                            //binding.btnAccept.setText(getString(R.string.track_order));
+                         //   binding.btnAccept.setText(getString(R.string.re_order));
+                            binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
+
+                            if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            }
+                            else {
+                                    binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
+                                    binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                        " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+                            }
+                        }
+
+                        else if(model.getResult().getStatus().equals("Completed")) {
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.VISIBLE);
-                           // binding.tvAfaryCode.setText(model.getResult().getAfaryCode());
-
                             binding.btnDecline.setVisibility(View.GONE);
                             binding.btnChat.setVisibility(View.GONE);
-                            binding.btnAccept.setText(getString(R.string.track_order));
-                         //   binding.btnAccept.setText(getString(R.string.re_order));
-                            binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            binding.btnAccept.setText(getString(R.string.re_order));
                             binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
+
+                            if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            }
+                            else {
+                                binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
+                                binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                        " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+
+                                //  }
+                            }
+
                         }
+
 
 
 
@@ -302,32 +327,6 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         else {
                             binding.rvOrderStatus.setVisibility(View.GONE);
                         }
-
-
-
-                        if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
-                            binding.rlDeliveryPerson.setVisibility(View.GONE);
-                        }
-                        else {
-                            //  if(jsonObject.getJSONObject("result").getJSONObject("delivery_person").has("")) {
-                            if(model.getResult().getStatus().equalsIgnoreCase("PickedUp")) {
-                                binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
-                                binding.btnAccept.setVisibility(View.VISIBLE);
-
-                            }
-                            else  {
-                                binding.rlDeliveryPerson.setVisibility(View.GONE);
-                                binding.btnAccept.setVisibility(View.GONE);
-
-                            }
-                            binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
-                                    " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
-                            binding.btnAccept.setText(getString(R.string.track_order));
-
-                            //  }
-                        }
-
-
                     }
 
                     else if (jsonObject.getString("status").equals("5")) {
@@ -613,4 +612,59 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
     public void onItem(int position, OrderDetailsModel.Result.Product product) {
         alertDeleteItem(product.getOrderId());
     }
+
+
+
+    private void addReOrder(String orderId) {
+
+
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("order_id", orderId);
+        Log.e("MapMap", "re-order" + map);
+
+        Call<ResponseBody> reviewModalCall = apiInterface.reOrder(headerMap, map);
+
+        reviewModalCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Re- Order RESPONSE" + object);
+                    if (object.getString("status").equals("1")) {
+                         startActivity(new Intent(OrderDetailsAct.this, CardAct.class)
+                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                         finish();
+                    } else if (object.getString("status").equals("0")) {
+                        Toast.makeText(OrderDetailsAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+
 }
