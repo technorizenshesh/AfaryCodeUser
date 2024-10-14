@@ -1589,6 +1589,33 @@ public class OrderDetailsModel implements Serializable {
         @Expose
         private String deliverLon;
 
+
+        @SerializedName("self_collect")
+        @Expose
+        private String selfCollect;
+
+
+        @SerializedName("zero_index_customer_afray_code")
+        @Expose
+        private String cutomer_afary_code;
+
+        public String getCutomer_afary_code() {
+            return cutomer_afary_code;
+        }
+
+        public void setCutomer_afary_code(String cutomer_afary_code) {
+            this.cutomer_afary_code = cutomer_afary_code;
+        }
+
+        public String getSelfCollect() {
+            return selfCollect;
+        }
+
+        public void setSelfCollect(String selfCollect) {
+            this.selfCollect = selfCollect;
+        }
+
+
         public String getDeliverLat() {
             return deliverLat;
         }

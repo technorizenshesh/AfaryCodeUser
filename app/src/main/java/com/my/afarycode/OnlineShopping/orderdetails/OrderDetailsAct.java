@@ -211,12 +211,21 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
                         }
                         else if(model.getResult().getStatus().equals("Accepted")){
-                            binding.llButtons.setVisibility(View.VISIBLE);
-                            binding.btnAccept.setVisibility(View.GONE);
-                            binding.tvAfaryCode.setVisibility(View.GONE);
-                            binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            if(model.getResult().getSelfCollect().equals("Yes")){
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setText(model.getResult().getCutomer_afary_code());
 
-                           // binding.btnAccept.setText(getString(R.string.assign));
+                            }
+                            else {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            }
+
 
                         }
 
@@ -249,15 +258,21 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.btnAccept.setText(getString(R.string.re_order));
                             binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
 
-                            if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
+                            if(model.getResult().getSelfCollect().equals("Yes")) {
                                 binding.rlDeliveryPerson.setVisibility(View.GONE);
+
                             }
                             else {
-                                binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
-                                binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
-                                        " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+                                if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
+                                    binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                }
+                                else {
+                                    binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
+                                    binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                            " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
 
-                                //  }
+                                    //  }
+                                }
                             }
 
                         }
@@ -311,9 +326,13 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         itemsAdapter.notifyDataSetChanged();
 
                         if(!jsonObject.getJSONObject("result").getString("address").isEmpty()){
-                            binding.llDeliveryAddress.setVisibility(View.VISIBLE);
-                            binding.tvDeliveryAddress.setText(jsonObject.getJSONObject("result").getString("address"));
-
+                            if(model.getResult().getSelfCollect().equals("Yes")) {
+                                binding.llDeliveryAddress.setVisibility(View.GONE);
+                            }else
+                            {
+                                binding.llDeliveryAddress.setVisibility(View.VISIBLE);
+                                binding.tvDeliveryAddress.setText(jsonObject.getJSONObject("result").getString("address"));
+                            }
                         }
                         else {
                             binding.llDeliveryAddress.setVisibility(View.GONE);

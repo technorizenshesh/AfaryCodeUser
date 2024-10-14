@@ -322,6 +322,7 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("payment_type",paymentType);
         map.put("sub_orderdata",sendToServer);
         map.put("datetime",DataManager.getCurrent());
+        map.put("self_collect",deliveryYesNo);
 
         Log.e("MapMap", "payment_params" + map);
 
