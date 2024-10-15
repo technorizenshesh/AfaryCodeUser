@@ -2,6 +2,7 @@ package com.my.afarycode.OnlineShopping.myorder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
         holder.binding.tvProductName.setText(context.getString(R.string.product_name1)+" "+arrayList.get(position).getProductList().get(0).getProductName());
         holder.binding.tvDateTime.setText(context.getString(R.string.order_time)+" "+arrayList.get(position).getDateTime());
 
-
+        Log.e("order status====",arrayList.get(position).getStatus());
 
         if(arrayList.get(position).getProductList().size() == 1){
             holder.binding.llOne.setVisibility(View.VISIBLE);
@@ -100,7 +101,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.blue_circle));
             holder.binding.btnCancel.setVisibility(View.VISIBLE);
-
+            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
 
         }
 
@@ -111,6 +112,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.colorGreen));
             holder.binding.btnCancel.setVisibility(View.VISIBLE);
+            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
 
         }
 
@@ -121,6 +123,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.red));
             holder.binding.btnCancel.setVisibility(View.GONE);
+            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.colorGray));
 
         }
 
@@ -130,6 +133,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setText("Cancelled");
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.red));
             holder.binding.btnCancel.setVisibility(View.GONE);
+            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
 
         }
 

@@ -14,7 +14,7 @@ public class OrderFragmentAdapter extends FragmentPagerAdapter {
     private Context myContext;
     int totalTabs;
 
-    public OrderFragmentAdapter(Context context, FragmentManager fm, int totalTabs) {
+    public OrderFragmentAdapter(Context context, FragmentManager fm) {
         super(fm);
         myContext = context;
         this.totalTabs = totalTabs;
@@ -25,12 +25,10 @@ public class OrderFragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                OrderCompleteFragment orderCompleteFragment = new OrderCompleteFragment();
-                return orderCompleteFragment;
+                return new OrderCompleteFragment();
 
             case 1:
-                OrderCancelFragment orderCancelFragment = new OrderCancelFragment();
-                return orderCancelFragment;
+                return new OrderCancelFragment();
 
 
 
@@ -40,6 +38,6 @@ public class OrderFragmentAdapter extends FragmentPagerAdapter {
     }
     @Override
     public int getCount() {
-        return totalTabs;
+        return 2;
     }
 }

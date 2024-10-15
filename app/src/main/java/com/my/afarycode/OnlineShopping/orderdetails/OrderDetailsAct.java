@@ -208,9 +208,12 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.btnAccept.setVisibility(View.GONE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
                             binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            binding.btnDecline.setVisibility(View.VISIBLE);
+
 
                         }
                         else if(model.getResult().getStatus().equals("Accepted")){
+                            binding.btnDecline.setVisibility(View.GONE);
                             if(model.getResult().getSelfCollect().equals("Yes")){
                                 binding.llButtons.setVisibility(View.VISIBLE);
                                 binding.btnAccept.setVisibility(View.GONE);

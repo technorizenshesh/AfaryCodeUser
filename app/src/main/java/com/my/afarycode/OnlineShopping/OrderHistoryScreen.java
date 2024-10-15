@@ -67,13 +67,16 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
         });
 
 
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Complete"));
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Cancel"));
-        binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        adapter = new OrderFragmentAdapter(OrderHistoryScreen.this,getSupportFragmentManager(), binding.tabLayout.getTabCount());
-
+       // binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Complete"));
+       // binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Cancel"));
+      //  binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        adapter = new OrderFragmentAdapter(OrderHistoryScreen.this,getSupportFragmentManager());
         binding.viewPager.setAdapter(adapter);
-        binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
+        binding.tabLayout.setupWithViewPager(binding.viewPager);
+        binding.tabLayout.getTabAt(0).setText("Complete");
+        binding.tabLayout.getTabAt(1).setText("Cancel");
+
+       // binding.viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout));
 
 
 
