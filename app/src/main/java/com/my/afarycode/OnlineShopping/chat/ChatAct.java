@@ -191,12 +191,12 @@ public class ChatAct extends AppCompatActivity {
         String other_user = pid;
         if (Double.parseDouble(self_user) > Double.parseDouble(other_user)) {
             reference1 = FirebaseDatabase.getInstance()
-                    .getReferenceFromUrl("https://quizup-2fe26.firebaseio.com/" + "messages" + "_" + self_user + "_" + other_user);
+                    .getReferenceFromUrl("https://decoded-reducer-294611.firebaseio.com/" + "messages" + "_" + self_user + "_" + other_user);
 
                  //   .getReferenceFromUrl("https://afarycodeseller-default-rtdb.firebaseio.com/" + "messages" + "_" + self_user + "_" + other_user);
         } else {
             reference1 = FirebaseDatabase.getInstance()
-                    .getReferenceFromUrl("https://quizup-2fe26.firebaseio.com/" + "messages" + "_" + other_user + "_" + self_user);
+                    .getReferenceFromUrl("https://decoded-reducer-294611.firebaseio.com/" + "messages" + "_" + other_user + "_" + self_user);
 
                   //  .getReferenceFromUrl("https://afarycodeseller-default-rtdb.firebaseio.com/" + "messages" + "_" + other_user + "_" + self_user);
         }

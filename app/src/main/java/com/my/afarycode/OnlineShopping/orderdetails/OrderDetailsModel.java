@@ -1590,6 +1590,7 @@ public class OrderDetailsModel implements Serializable {
         private String deliverLon;
 
 
+
         @SerializedName("self_collect")
         @Expose
         private String selfCollect;

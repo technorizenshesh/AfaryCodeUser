@@ -64,7 +64,7 @@ public class CheckOutPayment extends AppCompatActivity {
     GetProfileModal data;
     CountryCodePicker ccp;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-
+    String orderType="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +89,8 @@ public class CheckOutPayment extends AppCompatActivity {
                 sendToServer = extras.getString("sendToServer");
                 deliveryYesNo = extras.getString("selfCollect");
                 insertDeliveryId = extras.getString("insertDeliveryId");
+                orderType = extras.getString("orderType");
+
 
                 if(deliveryYesNo.equalsIgnoreCase("Yes")){
                     binding.rl33.setVisibility(View.GONE);
@@ -96,12 +98,25 @@ public class CheckOutPayment extends AppCompatActivity {
                     binding.rl11.setVisibility(View.GONE);
 
                 }
+
+
                 else {
                     binding.rl33.setVisibility(View.VISIBLE);
                     binding.rl22.setVisibility(View.GONE);
                     binding.rl11.setVisibility(View.VISIBLE);
 
                 }
+
+                if(orderType.equalsIgnoreCase("INTERNATIONAL")){
+                    binding.rl33.setVisibility(View.GONE);
+                    binding.rl22.setVisibility(View.VISIBLE);
+                    binding.rl11.setVisibility(View.GONE);
+
+                }
+
+
+
+
             }
 
         } else {

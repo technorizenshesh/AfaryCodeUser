@@ -34,6 +34,7 @@ import com.my.afarycode.listener.OnPositionListener;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.NumberFormat;
@@ -65,7 +66,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     private String itemAmount = "0";
     private ArrayList<DeliveryModel.Result> arrayList;
     String Chkkkk;
-
+    String aa="";
 
     String deliveryAgencyType="",deliveryYesNo="",addressId="";
     String deliveryCharge="0.0";
@@ -94,7 +95,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                     .putExtra("taxN2", "" + taxN2)
                     .putExtra("sendToServer",sendToServer)
                     .putExtra("selfCollect",deliveryYesNo)
-                    .putExtra("insertDeliveryId",insertDeliveryId));
+                    .putExtra("insertDeliveryId",insertDeliveryId)
+                    .putExtra("orderType",aa));
 
         });
 
@@ -595,6 +597,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                     if (object.optString("status").equals("1")) {
                          // JSONObject jsonObject = object.getJSONObject("result");
+                         aa = object.getJSONArray("result").getJSONObject(0).getString("delivery_calculation");
                         sendToServer = object.toString();
                      insertDeliveryId = String.valueOf(object.getInt("insert_id_delivery"));
                        // sendTaxToServer(object.toString());

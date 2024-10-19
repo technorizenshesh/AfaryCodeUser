@@ -68,14 +68,14 @@ public class RateReviewAct extends AppCompatActivity {
     }
 
     private void giveRate() {
-            DataManager.getInstance().showProgressMessage(this, "Please wait...");
+            DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
             Map<String,String> headerMap = new HashMap<>();
             headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(RateReviewAct.this, PreferenceConnector.access_token,""));
             headerMap.put("Accept","application/json");
 
             Map<String, String> map = new HashMap<>();
             map.put("user_id", PreferenceConnector.readString(RateReviewAct.this, PreferenceConnector.User_id, ""));
-            map.put("product_id", model.getResult().getProductList().get(0).getId());
+            map.put("product_id", model.getResult().getItemId());
             map.put("product_rating", String.valueOf(binding.productRating.getRating()));
             map.put("product_review", binding.edProductReview.getText().toString());
             map.put("delivery_person_name", model.getResult().getDeliveryPerson().getDeliveryPersonName());
@@ -98,7 +98,10 @@ public class RateReviewAct extends AppCompatActivity {
                         Log.e("response===", response.body().string());
                         if (jsonObject.getString("status").toString().equals("1")) {
                             Toast.makeText(RateReviewAct.this, "Rated successfully..", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RateReviewAct.this, HomeActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            startActivity(new Intent(RateReviewAct.this, HomeActivity.class)
+                                    .putExtra("status","")
+                                    .putExtra("msg","")
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
                         }
 

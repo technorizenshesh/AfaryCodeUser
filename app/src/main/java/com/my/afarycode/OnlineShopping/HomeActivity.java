@@ -118,9 +118,13 @@ public class HomeActivity extends AppCompatActivity {
            if(getIntent()!=null) {
                status = getIntent().getStringExtra("status");
                msg = getIntent().getStringExtra("msg");
-                 if(status.equals("openPaymentDialog")) createAndShowDialog(HomeActivity.this,msg);
+               Log.e("order complete HomeScreen===","========"+status);
+
+               if(status.equals("openPaymentDialog")) createAndShowDialog(HomeActivity.this,msg);
                  else if(status.equals("orderCompleteDialog")){
-                     orderId = getIntent().getStringExtra("order_id");
+                   Log.e("order complete HomeScreen Inner===","========"+status);
+
+                   orderId = getIntent().getStringExtra("order_id");
                      createAndShowDialog(HomeActivity.this,msg);
                  }
 /*
@@ -250,7 +254,7 @@ public class HomeActivity extends AppCompatActivity {
 
         tv.setText(msg);
         btnOk.setOnClickListener(view -> {
-            if(status.equals("")){
+            if(status.equals("orderCompleteDialog")){
                 startActivity(new Intent(HomeActivity.this, RateReviewAct.class)
                         .putExtra("order_id",orderId));
             }
