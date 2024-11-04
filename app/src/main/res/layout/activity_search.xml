@@ -4,76 +4,213 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Activity.SearchActivity">
 
-
-
-    <RelativeLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/white">
+        android:scrollbars="none">
 
-
-
-
-
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginStart="@dimen/_5sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:background="@drawable/border_search"
-            android:iconifiedByDefault="false"
-            android:layoutDirection="rtl"
-            android:padding="@dimen/_5sdp"
-            android:queryHint="@string/search_here"
-            app:defaultQueryHint="@string/search_here" />
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
 
-
-
-
-
-
-
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swiperRefresh"
-            android:layout_below="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.recyclerview.widget.RecyclerView
+            <LinearLayout
+                android:id="@+id/llMain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_below="@+id/rlSearch"
                 android:orientation="vertical"
-                android:id="@+id/recy_list"
-                android:scrollbars="none" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:visibility="gone"
+                >
+
+
+                <RelativeLayout
+                    android:id="@+id/rlShops"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/shops_near_me"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"/>
 
 
 
 
-        <TextView
-            android:id="@+id/tvNotFound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/not_available"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_14sdp"
-            android:visibility="gone"/>
+                </RelativeLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerShop"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:scrollbars="vertical"
+                    android:visibility="visible" />
 
 
 
 
+                <RelativeLayout
+                    android:id="@+id/rlProduct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_7sdp"
+                    android:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tvCountryProduct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/products"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"/>
 
 
-    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/tvViewAllProduct"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/view_all"
+                        android:textColor="@color/purple_200"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="2"
+                    tools:listitem="@layout/item_products"
+                    android:visibility="visible"/>
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tvNotFound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/not_available"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp"
+                android:visibility="gone" />
+
+
+
+
+            <RelativeLayout
+                android:id="@+id/rlSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <AutoCompleteTextView
+                    android:id="@+id/search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:background="@drawable/border_search"
+                    android:hint="@string/search_here"
+                    android:padding="@dimen/_10sdp"
+                    android:layout_toStartOf="@+id/btnSearch"/>
+
+
+                <ImageView
+                    android:id="@+id/btnSearch"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:text="@string/search"
+                    android:padding="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:background="@drawable/search_icon"
+                    />
+
+            </RelativeLayout>
+
+
+
+           <!-- <androidx.appcompat.widget.SearchView
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:background="@drawable/border_search"
+                android:iconifiedByDefault="false"
+                android:layoutDirection="rtl"
+                android:padding="@dimen/_5sdp"
+                android:queryHint="@string/search_here"
+                app:defaultQueryHint="@string/search_here" />-->
+
+
+            <!--
+                        <androidx.appcompat.widget.SearchView
+                            android:id="@+id/search"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:background="@drawable/border_search"
+                            android:iconifiedByDefault="false"
+                            android:layoutDirection="rtl"
+                            android:padding="@dimen/_5sdp"
+                            android:queryHint="@string/search_here"
+                            app:defaultQueryHint="@string/search_here" />
+
+             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                            android:id="@+id/swiperRefresh"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/search">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recy_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:scrollbars="none"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            -->
+        </RelativeLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
 </layout>

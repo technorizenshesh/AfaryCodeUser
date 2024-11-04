@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,12 +15,16 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
@@ -30,6 +35,7 @@ import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityPaymentStatusBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
+import com.rilixtech.widget.countrycodepicker.CountryCodePicker;
 
 import org.json.JSONObject;
 
@@ -67,6 +73,7 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                            finish();
                        }
+                      // else if()
                        else {
                            Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                            startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class)
@@ -86,6 +93,7 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
 
                     else if (object.getString("status").equals("9")) {
                         Log.e("Payment has not been completed ====",intent.getStringExtra("object")+"");
+                        stopService(new Intent(CheckPaymentStatusAct.this, MyService.class));
                         showAlertDialog();
 
                     }
@@ -114,40 +122,52 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
     };
 
 
+
     private void showAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Transaction Status")
                 .setMessage("Your transaction has not been completed. Please try again or choose another method of payment.\n\nIf on the contrary this message appears while you have been debited, please contact the administrator here (link).")
-                .setPositiveButton("Ok", null)
-                .setNegativeButton("Cancel", null);
+        ;
+                /*.setPositiveButton("Ok", null) // Uncomment if you want the OK button
+                .setNegativeButton("Cancel", null); // Uncomment if you want the Cancel button*/
 
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
             TextView messageTextView = dialog.findViewById(android.R.id.message);
             if (messageTextView != null) {
-                String message = "Your transaction has not been completed. Please try again or choose another method of payment.<br><br>" +
-                        "If on the contrary this message appears while you have been debited, please contact the administrator <a href='#'>here</a>.";
+                String message = "Your transaction has not been completed. Please try again or choose another method of payment.\n\nIf on the contrary this message appears while you have been debited, please contact the administrator here (link).";
 
+                // Set the HTML text
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     messageTextView.setText(Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY));
+                } else {
+                    messageTextView.setText(Html.fromHtml(message));
                 }
-                messageTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
+                Log.e("message length====",message.length()+"");
                 // Highlight the "here" text in red
                 SpannableString spannableString = new SpannableString(messageTextView.getText());
-                int start = message.indexOf("here");
-                int end = start + "here".length();
-                spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red)), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                int start = message.indexOf("here (link).")-1;
 
+                Log.e("start length===",start+"");
+                if (start != -1) {
+                    int end = start + "here (link).".length();
+                    Log.e("end length===",end+"");
+
+                    spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red)), start, end-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
                 messageTextView.setText(spannableString);
+
+                // Set the movement method for clickable links
+                messageTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
                 // Handle the click on the link
                 messageTextView.setOnClickListener(v -> {
+                    dialog.show();
                     showDialog();
                 });
             }
         });
-
         dialog.show();
     }
 
@@ -168,11 +188,23 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                         // For example, send the message to the administrator or log the issue
                         sendToAdminMsg(message);
                     }
-                })
-                .setNegativeButton("Cancel", null);
+                });
+               /* .setNegativeButton("Cancel", null)*/;
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
+        // Disable buttons
+       /* dialog.setOnShowListener(dialogInterface -> {
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            *//*if (positiveButton != null) {
+                positiveButton.setEnabled(false); // Disable positive button
+            }*//*
+            if (negativeButton != null) {
+                negativeButton.setEnabled(false); // Disable negative button
+            }
+        });*/
+
         dialog.show();
     }
 
@@ -204,7 +236,13 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"),Context.RECEIVER_EXPORTED);
+        }
+        else {
+            registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"));
+        }
         startService(new Intent(CheckPaymentStatusAct.this, MyService.class));
 
     }

@@ -113,7 +113,9 @@ public class  MyService extends Service {
 
         Log.e("transactionId===","transactionId = " + PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.transId,""));
         Map<String,String> map = new HashMap<>();
-        map.put("user_id",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.User_id,""));
+        if(PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.PaymentType,"").equals("InvoiceWallet"))
+            map.put("user_id",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.ShareUserId,""));
+        else map.put("user_id",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.User_id,""));
         map.put("reference",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.transId,""));
         map.put("type",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.serviceType,""));
         map.put("register_id", PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.Register_id, ""));

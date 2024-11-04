@@ -48,7 +48,7 @@ import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
 import com.my.afarycode.OnlineShopping.Model.ProductItemModel;
 import com.my.afarycode.OnlineShopping.NotificationScreen;
 import com.my.afarycode.OnlineShopping.ProductListAct;
-import com.my.afarycode.OnlineShopping.SearchAct;
+import com.my.afarycode.OnlineShopping.SearchSuggestionAct;
 import com.my.afarycode.OnlineShopping.SignUpActivity;
 import com.my.afarycode.OnlineShopping.WellcomeScreen;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
@@ -156,11 +156,15 @@ public class HomeFragment extends Fragment implements SearchListener {
         binding.searchEtHome.setOnClickListener(v -> {
             if(!countryId.equalsIgnoreCase("")){
                 PreferenceConnector.writeString(getActivity(),PreferenceConnector.filterType,"");
-                startActivity(new Intent(getActivity(), ProductListAct.class)
-                        .putExtra("title","")
-                        .putExtra("countryId",countryId));
+             //   startActivity(new Intent(getActivity(), ProductListAct.class)
+              //          .putExtra("title","")
+              //          .putExtra("countryId",countryId));
+
+                   //startActivity(new Intent(getActivity(), SearchSuggestionAct.class));
+                fragment = new SearchSuggestionAct();
+                loadFragment(fragment);
             }
-            else Toast.makeText(getActivity(), getString(R.string.please_add_country), Toast.LENGTH_SHORT).show();
+           // else Toast.makeText(getActivity(), getString(R.string.please_add_country), Toast.LENGTH_SHORT).show();
 
 
         });

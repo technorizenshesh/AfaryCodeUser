@@ -222,7 +222,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
 
         binding.dashboard.searchEtHome.setOnClickListener(v -> {
-            startActivity(new Intent(getActivity(), SearchAct.class));
+          //  startActivity(new Intent(getActivity(), SearchAct.class));
         });
 
         binding.dashboard.searchEtHome.addTextChangedListener(new TextWatcher() {
@@ -262,7 +262,7 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
             if (Build.VERSION.SDK_INT >= 33) {
                 if (checkPermissionFor12Above()) showImageSelection();
             } else {
-                if (checkPermisssionForReadStorage()) showImageSelection();
+                if (checkPermissionForReadStorage11()) showImageSelection();
             }
 
         });

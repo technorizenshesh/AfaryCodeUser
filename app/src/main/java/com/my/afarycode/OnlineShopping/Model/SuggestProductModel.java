@@ -1,12 +1,14 @@
-
 package com.my.afarycode.OnlineShopping.Model;
+
+
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ProductItemModel {
+
+public class SuggestProductModel {
 
     @SerializedName("result")
     @Expose
@@ -42,15 +44,33 @@ public class ProductItemModel {
         this.status = status;
     }
 
+
     public class Result {
 
         @SerializedName("pro_id")
         @Expose
         private String proId;
-
+        @SerializedName("approval")
+        @Expose
+        private String approval;
+        @SerializedName("delete_status")
+        @Expose
+        private String deleteStatus;
+        @SerializedName("status")
+        @Expose
+        private String status;
+        @SerializedName("status_block")
+        @Expose
+        private String statusBlock;
+        @SerializedName("country_id")
+        @Expose
+        private String countryId;
+        @SerializedName("seller_id")
+        @Expose
+        private String sellerId;
         @SerializedName("cat_id")
         @Expose
-        private  String catId;
+        private String catId;
         @SerializedName("category_id")
         @Expose
         private String categoryId;
@@ -60,9 +80,6 @@ public class ProductItemModel {
         @SerializedName("restaurant_id")
         @Expose
         private String restaurantId;
-        @SerializedName("seller_id")
-        @Expose
-        private String sellerId;
         @SerializedName("product_name")
         @Expose
         private String productName;
@@ -87,6 +104,9 @@ public class ProductItemModel {
         @SerializedName("Product_brand")
         @Expose
         private String productBrand;
+        @SerializedName("in_stock")
+        @Expose
+        private String inStock;
         @SerializedName("product_qut")
         @Expose
         private String productQut;
@@ -108,9 +128,9 @@ public class ProductItemModel {
         @SerializedName("size")
         @Expose
         private String size;
-        @SerializedName("stock")
+        @SerializedName("block_resion")
         @Expose
-        private String stock;
+        private String blockResion;
         @SerializedName("tax_n1")
         @Expose
         private String taxN1;
@@ -120,9 +140,6 @@ public class ProductItemModel {
         @SerializedName("product_color")
         @Expose
         private String productColor;
-        @SerializedName("status")
-        @Expose
-        private String status;
         @SerializedName("national_international")
         @Expose
         private String nationalInternational;
@@ -135,27 +152,57 @@ public class ProductItemModel {
         @SerializedName("cat_new")
         @Expose
         private String catNew;
-
+        @SerializedName("new_qut")
+        @Expose
+        private String newQut;
+        @SerializedName("notif")
+        @Expose
+        private String notif;
+        @SerializedName("number_of_sold")
+        @Expose
+        private String numberOfSold;
         @SerializedName("image")
         @Expose
         private String image;
 
-        @SerializedName("country_id")
-        @Expose
-        private String countryId;
-
-
-        @SerializedName("currency")
-        @Expose
-        private String currency;
-
-
-        public String getCurrency() {
-            return currency;
+        public String getProId() {
+            return proId;
         }
 
-        public void setCurrency(String currency) {
-            this.currency = currency;
+        public void setProId(String proId) {
+            this.proId = proId;
+        }
+
+        public String getApproval() {
+            return approval;
+        }
+
+        public void setApproval(String approval) {
+            this.approval = approval;
+        }
+
+        public String getDeleteStatus() {
+            return deleteStatus;
+        }
+
+        public void setDeleteStatus(String deleteStatus) {
+            this.deleteStatus = deleteStatus;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void setStatus(String status) {
+            this.status = status;
+        }
+
+        public String getStatusBlock() {
+            return statusBlock;
+        }
+
+        public void setStatusBlock(String statusBlock) {
+            this.statusBlock = statusBlock;
         }
 
         public String getCountryId() {
@@ -166,28 +213,20 @@ public class ProductItemModel {
             this.countryId = countryId;
         }
 
+        public String getSellerId() {
+            return sellerId;
+        }
+
+        public void setSellerId(String sellerId) {
+            this.sellerId = sellerId;
+        }
+
         public String getCatId() {
             return catId;
         }
 
         public void setCatId(String catId) {
             this.catId = catId;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
-        public String getProId() {
-            return proId;
-        }
-
-        public void setProId(String proId) {
-            this.proId = proId;
         }
 
         public String getCategoryId() {
@@ -212,14 +251,6 @@ public class ProductItemModel {
 
         public void setRestaurantId(String restaurantId) {
             this.restaurantId = restaurantId;
-        }
-
-        public String getSellerId() {
-            return sellerId;
-        }
-
-        public void setSellerId(String sellerId) {
-            this.sellerId = sellerId;
         }
 
         public String getProductName() {
@@ -286,6 +317,14 @@ public class ProductItemModel {
             this.productBrand = productBrand;
         }
 
+        public String getInStock() {
+            return inStock;
+        }
+
+        public void setInStock(String inStock) {
+            this.inStock = inStock;
+        }
+
         public String getProductQut() {
             return productQut;
         }
@@ -342,12 +381,12 @@ public class ProductItemModel {
             this.size = size;
         }
 
-        public String getStock() {
-            return stock;
+        public String getBlockResion() {
+            return blockResion;
         }
 
-        public void setStock(String stock) {
-            this.stock = stock;
+        public void setBlockResion(String blockResion) {
+            this.blockResion = blockResion;
         }
 
         public String getTaxN1() {
@@ -372,14 +411,6 @@ public class ProductItemModel {
 
         public void setProductColor(String productColor) {
             this.productColor = productColor;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
         }
 
         public String getNationalInternational() {
@@ -414,7 +445,41 @@ public class ProductItemModel {
             this.catNew = catNew;
         }
 
+        public String getNewQut() {
+            return newQut;
+        }
+
+        public void setNewQut(String newQut) {
+            this.newQut = newQut;
+        }
+
+        public String getNotif() {
+            return notif;
+        }
+
+        public void setNotif(String notif) {
+            this.notif = notif;
+        }
+
+        public String getNumberOfSold() {
+            return numberOfSold;
+        }
+
+        public void setNumberOfSold(String numberOfSold) {
+            this.numberOfSold = numberOfSold;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+
+
     }
 
-}
 
+}

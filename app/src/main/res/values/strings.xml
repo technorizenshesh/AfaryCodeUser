@@ -257,7 +257,7 @@
     <string name="fess">Fees</string>
     <string name="your_request_has_been_sent_to_your_correspondent">Your request has been sent to your correspondent.</string>
     <string name="transfer_money_request">Transfer Money Request</string>
-    <string name="please_indicate_the_number_that_will_receive_your_transfer_and_enter_the_amount">Please indicate the number that will receive your transfer and enter the amount.</string>
+    <string name="please_indicate_the_number_that_will_receive_your_transfer_and_enter_the_amount">Please indicate the email/number that will receive your transfer and enter the amount.</string>
     <string name="number">Number</string>
     <string name="reason">Reason</string>
     <string name="enter_here">enter here</string>
@@ -343,5 +343,13 @@
     <string name="total_price">Total Price : </string>
     <string name="person_to_be_delivered">Person to be delivered : </string>
     <string name="delivery_address11">Delivery Address : </string>
+    <string name="email_number">Email/Number</string>
+    <string name="choose_payment_type">Choose payment type</string>
+    <string name="your_amount_will_be_debited_for">Your amount will be debited for</string>
+    <string name="please_indicate_the_moov_money_number_by_which_you_wish_to_debit_the_payment">Please indicate the Moov money number by which you wish to debit the payment</string>
+    <string name="please_indicate_the_airtel_money_number_by_which_you_wish_to_debit_the_payment">Please indicate the Airtel money number by which you wish to debit the payment</string>
+    <string name="enter_email_number">Enter email/number</string>
+    <string name="enter_amount">enter amount</string>
+    <string name="please_enter_transaction_id">Please enter transaction id</string>
 
 </resources>

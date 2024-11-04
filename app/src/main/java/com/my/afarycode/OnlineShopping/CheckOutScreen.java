@@ -59,7 +59,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     public static TextView tax2, total_price_to_to_pay, tax1, plateform_fees;
     public static double totalPriceToToPay1;
    // private double totalPriceToToPay = 0, platFormsFees = 0.0, taxN1 = 0.0, taxN2 = 0.0, deliveryFees, mainTotalPay = 0.0;
-    private String totalPriceToToPay = "0.00", platFormsFees = "0.00", taxN1 = "0.00", taxN2 = "0.00", deliveryFees="0.00", mainTotalPay = "0.00";
+    private String totalPriceToToPay = "0.00",currency="", platFormsFees = "0.00", taxN1 = "0.00", taxN2 = "0.00", deliveryFees="0.00", mainTotalPay = "0.00";
 
     private String get_cart_id = "",deliveryMethod="",insertDeliveryId="";
     private ArrayList<String> get_cart_id_list = new ArrayList<>();
@@ -627,6 +627,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         mainTotalPay = object.getString("sub_total");
                         taxN1 = object.getString("taxes_first");
                         taxN2 = object.getString("taxes_second");
+                        currency = object.getString("currency");
                         if(!object.getString("platform_fees").equalsIgnoreCase(""))
                         {
                             platFormsFees = object.getString("platform_fees");
@@ -710,12 +711,12 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
 
-                        binding.plateformFees.setText("Rs. " + platFormsFees);
-                        binding.tvTax1.setText("Rs. " +  taxN1);
-                        binding.tvtax2.setText("Rs. " + taxN2);
-                        binding.tvDelivery.setText("Rs. " +  deliveryFees);
-                        binding.totalPriceToToPay.setText("Rs. " +  totalPriceToToPay);
-                        binding.subTotal.setText("Rs. " +  mainTotalPay);
+                        binding.plateformFees.setText(currency + platFormsFees);
+                        binding.tvTax1.setText(currency +  taxN1);
+                        binding.tvtax2.setText(currency + taxN2);
+                        binding.tvDelivery.setText(currency +  deliveryFees);
+                        binding.totalPriceToToPay.setText(currency +  totalPriceToToPay);
+                        binding.subTotal.setText(currency +  mainTotalPay);
 
 
 

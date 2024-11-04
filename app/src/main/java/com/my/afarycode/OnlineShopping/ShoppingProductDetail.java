@@ -252,8 +252,8 @@ public class ShoppingProductDetail extends Fragment {
                         binding.tvTitle.setText(get_result1.get(0).productName);
                         binding.shopName.setText(get_result1.get(0).productName);
                         binding.productDetails.setText(get_result1.get(0).productDetails);
-                        binding.productPrice.setText("Rs. " + get_result1.get(0).productPrice);
-                        binding.productPrice1.setText("Rs. " + get_result1.get(0).productPrice);
+                        binding.productPrice.setText(get_result1.get(0).getCurrency() + get_result1.get(0).productPrice);
+                        binding.productPrice1.setText(get_result1.get(0).getCurrency() + get_result1.get(0).productPrice);
                         if(get_result1.get(0).getDeliveryCharges().equals("0")) binding.switchDelivery.setChecked(false);
                          else  binding.switchDelivery.setChecked(true);
                     } else if (data.status.equals("0")) {

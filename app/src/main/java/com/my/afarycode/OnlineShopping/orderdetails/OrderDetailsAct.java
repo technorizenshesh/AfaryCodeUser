@@ -316,12 +316,12 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
 
 
-                        binding.plateformFees.setText("Rs. " + String.format("%.2f", platFormsFees));
-                        binding.tvTax1.setText("Rs. " + String.format("%.2f", taxN1));
-                        binding.tvtax2.setText("Rs. " + String.format("%.2f", taxN2));
-                        binding.tvDelivery.setText("Rs. " + String.format("%.2f", deliveryFees));
-                        binding.tvTotalAmt.setText("Rs. " + String.format("%.2f", totalPriceToToPay));
-                        binding.subTotal.setText("Rs. " + String.format("%.2f", subTotal));
+                        binding.plateformFees.setText("XAF" + String.format("%.2f", platFormsFees));
+                        binding.tvTax1.setText("XAF" + String.format("%.2f", taxN1));
+                        binding.tvtax2.setText("XAF" + String.format("%.2f", taxN2));
+                        binding.tvDelivery.setText("XAF" + String.format("%.2f", deliveryFees));
+                        binding.tvTotalAmt.setText("XAF" + String.format("%.2f", totalPriceToToPay));
+                        binding.subTotal.setText("XAF" + String.format("%.2f", subTotal));
 
 
                         arrayList.clear();

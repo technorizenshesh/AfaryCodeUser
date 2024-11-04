@@ -39,9 +39,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.MyView
             holder.binding.tvProductName.setText(arrayList.get(position).getName());
             Glide.with(context).load(arrayList.get(position).getImage()).into(holder.binding.img1);
             holder.binding.tvProductQty.setText(arrayList.get(position).getQty());
-               holder.binding.tvProductPrice.setText("Rs. " + arrayList.get(position).getPrice());
+               holder.binding.tvProductPrice.setText(arrayList.get(position).getCurrency() + arrayList.get(position).getPrice());
 
-            holder.binding.tvProductTotal.setText("Rs. " + Integer.valueOf(arrayList.get(position).getPrice())
+            holder.binding.tvProductTotal.setText(arrayList.get(position).getCurrency() + Integer.valueOf(arrayList.get(position).getPrice())
                     * Integer.valueOf(arrayList.get(position).getQty()));
 
     }

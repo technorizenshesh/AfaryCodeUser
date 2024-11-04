@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:text="@string/number"
+                android:text="@string/email_number"
                 android:textColor="@color/natural_gray"
                 android:textSize="@dimen/_14sdp" />
 
@@ -66,9 +66,9 @@
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/ccp"
                         android:background="@null"
-                        android:hint="258741239"
+                        android:hint="@string/email_number"
                         android:imeOptions="actionNext"
-                        android:inputType="number"
+                        android:inputType="text"
                         android:maxLength="30"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"

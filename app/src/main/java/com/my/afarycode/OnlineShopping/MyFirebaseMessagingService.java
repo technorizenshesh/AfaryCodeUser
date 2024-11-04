@@ -105,21 +105,52 @@ public class MyFirebaseMessagingService extends
             } else if (type.equals("Accepted") || type.equals("reject")) {
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
                         .putExtra("status", type);
-            } else if (type.equals("InvoiceToOtherUser")) {
+            }
+
+
+            else if (type.equals("InvoiceToOtherUser")) {
               //  if (!remoteMessage.getString("other_user_id").equals(PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.User_id, ""))) {
                     intent = new Intent(getApplicationContext(), PaymentByAnotherAct.class)
                             .putExtra("paymentInsertId", remoteMessage.getString("invoice_id"))
-                            .putExtra("user_id",remoteMessage.getString("userid"));
+                            .putExtra("user_id",remoteMessage.getString("userid"))
+                            .putExtra("type","InvoiceToOtherUser");
               //  }
               //  else {
 
               //  }
 
-            } else if (type.equals("InvoiceToUser")) {
+            }
+
+            else if (type.equals("InvoiceToOtherUserForWallet")) {
+                //  if (!remoteMessage.getString("other_user_id").equals(PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.User_id, ""))) {
+                intent = new Intent(getApplicationContext(), PaymentByAnotherAct.class)
+                        .putExtra("paymentInsertId", remoteMessage.getString("invoice_id"))
+                        .putExtra("user_id",remoteMessage.getString("userid"))
+                        .putExtra("type","InvoiceToOtherUserForWallet");
+                //  }
+                //  else {
+
+                //  }
+
+            }
+
+
+
+
+            else if (type.equals("InvoiceToUser")) {
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
                         .putExtra("status", "")
                         .putExtra("msg", "");
-            } else if (msg.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait")
+            }
+
+            else if (type.equals("InvoiceToUserForWallet")) {
+                intent = new Intent(getApplicationContext(), HomeActivity.class)
+                        .putExtra("status", "")
+                        .putExtra("msg", "");
+            }
+
+
+            else if (msg.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait")
                     || msg.equalsIgnoreCase("Dear customer,Your refund request has been successfully transmitted. Within 4 working hours, the refund will only be made on the method used to pay. Note that the refund will be made on the method used for payment.Thank you for your comprehension")
                     || msg.equalsIgnoreCase("Your request has been sent to your correspondent")
                     /* || msg.contains("product now available")*/

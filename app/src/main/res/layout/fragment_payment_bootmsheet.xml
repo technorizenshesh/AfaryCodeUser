@@ -158,7 +158,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="10sp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="@dimen/_100sdp"
@@ -252,6 +253,7 @@
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnSendAnother"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_45sdp"
                     android:layout_gravity="center"
@@ -266,24 +268,8 @@
                     android:textAllCaps="false"
                     android:textSize="@dimen/_12sdp"
                     android:textColor="@color/white"
-                    android:visibility="gone"/>
+                    android:visibility="visible"/>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/llDone"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_20sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_20sdp"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    android:background="@drawable/border_btn"
-                    android:gravity="center"
-                    android:text="@string/done"
-                    android:visibility="gone"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    />
 
             </LinearLayout>
 

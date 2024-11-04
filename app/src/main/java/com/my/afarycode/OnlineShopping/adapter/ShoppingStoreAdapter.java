@@ -61,7 +61,7 @@ public class ShoppingStoreAdapter extends
 
         }
 
-        holder.progressAdapterBinding.txtPrice.setText("Rs. " + all_category_subcategory.get(position).productPrice);
+        holder.progressAdapterBinding.txtPrice.setText(all_category_subcategory.get(position).getCurrency() + all_category_subcategory.get(position).productPrice);
 
         holder.progressAdapterBinding.categoryItem.setOnClickListener(v -> {
 

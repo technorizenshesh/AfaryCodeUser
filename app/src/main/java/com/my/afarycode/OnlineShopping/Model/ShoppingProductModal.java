@@ -185,6 +185,19 @@ public class ShoppingProductModal {
         @Expose
         public String numberOfSold;
 
+
+        @SerializedName("currency")
+        @Expose
+        public String currency;
+
+        public String getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
+
         public String getNumberOfSold() {
             return numberOfSold;
         }

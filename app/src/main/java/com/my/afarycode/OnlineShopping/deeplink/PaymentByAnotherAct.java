@@ -55,7 +55,7 @@ public class PaymentByAnotherAct extends AppCompatActivity {
     ActivityPaymentAnotherBinding binding;
     GetProfileModal data;
     private AfaryCode apiInterface;
-    private String deliveryYesNo="", totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="",sendToServer="",mainTotalPay="",insertDeliveryId="";
+    private String type="", transferNumber="",countryCode="", totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="",sendToServer="",mainTotalPay="",insertDeliveryId="";
     private String strList = "",cart_id_string="",paymentInsertId="",userId="";
     private ArrayList<CartListModel> arrayList;
     CartListAdapter adapter;
@@ -115,8 +115,10 @@ public class PaymentByAnotherAct extends AppCompatActivity {
         if(getIntent()!=null){
             paymentInsertId = getIntent().getStringExtra("paymentInsertId");
             userId = getIntent().getStringExtra("user_id");
+            type = getIntent().getStringExtra("type");
 
-            getInvoiceData();
+            if(type.equals("InvoiceToOtherUser")) getInvoiceData("1");
+            else getWalletInvoiceData("2");
         }
 
         // Handle the incoming deep link
@@ -278,7 +280,8 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                         else {
                             PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
                             PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
-
+                            PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.ShareUserId,userId);
+                            PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.PaymentType,"Invoice");
                             startActivity(new Intent(PaymentByAnotherAct.this, CheckPaymentStatusAct.class)
                                     .putExtra("paymentBy","anotherUser"));
 
@@ -318,6 +321,90 @@ public class PaymentByAnotherAct extends AppCompatActivity {
         });
     }
 
+
+    private void PaymentWalletAPI(String operateur, String strList,String number,String paymentType) {
+        DataManager.getInstance().showProgressMessage(PaymentByAnotherAct.this, getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("amount",totalPriceToToPay );
+        map.put("creditCountryCode", countryCode);
+        map.put("operator", operateur);
+        if(operateur.equals("MC"))  map.put("num_marchand", "060110217");
+        else if(operateur.equals("AM")) map.put("num_marchand", "074272732");
+        map.put("fee", "0.00");
+        map.put("numberCredit",transferNumber);
+        map.put("numberDebit",number);
+        map.put("paymentType",paymentType);
+        map.put("transaction_by","Other");
+        map.put("transaction_type","TransferMoneyInvoice");
+
+
+        //  map.put("datetime",DataManager.getCurrent());
+        Log.e("MapMap", "payment transfer params" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.transferNumberMoney(headerMap,map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Payment transfer RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        //  PaymentModal data = new Gson().fromJson(responseData, PaymentModal.class);
+                        // binding.loader.setVisibility(View.GONE);
+
+                        PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
+                        PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
+                        PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.ShareUserId,userId);
+                        PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.PaymentType,"InvoiceWallet");
+
+
+                        startActivity(new Intent(PaymentByAnotherAct.this, CheckPaymentStatusAct.class)
+                                .putExtra("paymentBy","Transfer"));
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();                    }
+
+
+                    else if (object.optString("status").equals("5")) {
+
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(PaymentByAnotherAct.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
     public void dialogAirtel(String operator,String strList){
         Dialog mDialog = new Dialog(PaymentByAnotherAct.this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -340,7 +427,8 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+              if(type.equals("InvoiceToOtherUser"))  PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+               else PaymentWalletAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
             }
 
         });
@@ -370,7 +458,10 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+              //  if(type.equals(""))PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+
+                if(type.equals("InvoiceToOtherUser"))  PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+                else PaymentWalletAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
             }
 
         });
@@ -403,7 +494,9 @@ public class PaymentByAnotherAct extends AppCompatActivity {
     }
 
 
-    public void  getInvoiceData(){
+
+
+    public void  getInvoiceData(String apiType){
         DataManager.getInstance().showProgressMessage(PaymentByAnotherAct.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.access_token,""));
@@ -413,8 +506,7 @@ public class PaymentByAnotherAct extends AppCompatActivity {
         map.put("invoice_id", paymentInsertId);
 
         Log.e(TAG, "Get Invoice Request :" + map);
-        Call<ResponseBody> loginCall = apiInterface.getInvoiceDataApi(headerMap,map);
-
+        Call<ResponseBody> loginCall     = apiInterface.getInvoiceDataApi(headerMap,map);
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -441,7 +533,7 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
                         deliveryCharge = object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("total_delivery_fees");
                         totalPriceToToPay =  object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("total_payable_amount");
-                        binding.totalPriceToToPay.setText("Rs. " +  totalPriceToToPay);
+                        binding.totalPriceToToPay.setText("XAF" +  totalPriceToToPay);
                         binding.tvShareBy.setText(getString(R.string.invoice_share_by)+ " "+object.getJSONObject("data").getJSONObject("cart_data").getJSONObject("cart_user_info").getString("user_name"));
                         arrayList.clear();
 
@@ -452,7 +544,8 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
                             CartListModel cartListModel = new CartListModel(productInfoObj.getString("product_name"),
                                     productInfoObj.getString("image_1"),productInfoObj.getString("product_price"),
-                                    objectInner.getString("quantity"));
+                                    objectInner.getString("quantity")
+                            , objectInner.getString("currency"));
                             arrayList.add(cartListModel);
                         }
 
@@ -508,6 +601,99 @@ public class PaymentByAnotherAct extends AppCompatActivity {
     }
 
 
+    public void  getWalletInvoiceData(String apiType){
+        DataManager.getInstance().showProgressMessage(PaymentByAnotherAct.this, getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("invoice_id", paymentInsertId);
+
+        Log.e(TAG, "Get Invoice Request :" + map);
+        Call<ResponseBody>loginCall     = apiInterface.getWalletInvoiceDataApi(headerMap,map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get Invoice RESPONSE" + object);
+                    GetProfile();
+                    if (object.optString("status").equals("1")) {
+                        // JSONObject jsonObject = object.getJSONObject("result");
+                      //  sendToServer = object.getJSONObject("data").getJSONObject("delivery_data").toString();
+                      //  mainTotalPay = object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("sub_total");
+                       // taxN1 = object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("taxes_first");
+                       // taxN2 = object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("taxes_second");
+                        /*if(!object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("platform_fees").equalsIgnoreCase(""))
+                        {
+                            platFormsFees = object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("platform_fees");
+                        }
+                        else {
+                            platFormsFees ="0.00";
+                        }*/
+
+                       // deliveryCharge = object.getJSONObject("data").getString("swi_amount");
+                        totalPriceToToPay =  object.getJSONObject("data").getString("swi_amount");
+                        binding.totalPriceToToPay.setText("XAF" +  totalPriceToToPay);
+                        binding.tvShareBy.setText(getString(R.string.invoice_share_by)+ " "+object.getJSONObject("data").getJSONObject("user_data").getString("user_name"));
+                      //  arrayList.clear();
+                        countryCode = object.getJSONObject("data").getJSONObject("user_data").getString("country_code");
+                        transferNumber = object.getJSONObject("data").getJSONObject("user_data").getString("mobile");
+
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+
+                    else if (object.optString("status").equals("2")) {
+                        Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PaymentByAnotherAct.this, HomeActivity.class)
+                                .putExtra("status","")
+                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
+                    else if (object.optString("status").equals("3")) {
+                        Toast.makeText(PaymentByAnotherAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(PaymentByAnotherAct.this, HomeActivity.class)
+                                .putExtra("status","")
+                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    }
+
+
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(PaymentByAnotherAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(PaymentByAnotherAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
 
 
 

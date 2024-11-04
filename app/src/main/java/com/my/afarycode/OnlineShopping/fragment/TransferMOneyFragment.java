@@ -27,14 +27,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.CheckOutPayment;
 import com.my.afarycode.OnlineShopping.CheckOutScreen;
+import com.my.afarycode.OnlineShopping.CheckPaymentStatusAct;
 import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.AddWalletModal;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.TransferMoneyModal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.deeplink.PaymentByAnotherAct;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
+import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -53,7 +56,7 @@ import retrofit2.Response;
 
 
 public class TransferMOneyFragment extends BottomSheetDialogFragment {
-
+    public String TAG ="TransferMoneyFragment";
     Context context;
     private EditText mobile_no_et;
     private AfaryCode apiInterface;
@@ -89,9 +92,16 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         payment_done.setOnClickListener(v -> {
             code = ccp.getSelectedCountryCode();
             Log.e("code>>>", code);
+            if(mobile_no_et.getText().toString().equals(""))
+                Toast.makeText(getActivity(),getString(R.string.enter_email_number),Toast.LENGTH_LONG).show();
+            else if (et_money.getText().toString().equals("")) {
+                Toast.makeText(getActivity(),getString(R.string.enter_amount),Toast.LENGTH_LONG).show();
 
-            TransferMoneyAPI( code, mobile_no_et.getText().toString()
-                    , et_money.getText().toString());
+            }
+            else {
+                TransferMoneyAPI(code, mobile_no_et.getText().toString()
+                        , et_money.getText().toString());
+            }
         });
 
         dialog.setContentView(contentView);
@@ -128,8 +138,8 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
                     JSONObject object = new JSONObject(responseData);
                     Log.e("MapMap", "TransferMoney RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
-                        dialogNumberExit(object.getString("amount"),object.getString("total_amount"),object.getString("wallet_fees"),mobile_no_et , countryCode);
-
+                       // dialogNumberExit(object.getString("amount"),object.getString("total_amount"),object.getString("wallet_fees"),mobile_no_et , countryCode);
+                        dialogChoosePaymentType(object.getString("amount"),object.getString("total_amount"),object.getString("wallet_fees"),mobile_no_et , countryCode);
                         } else if (object.optString("status").equals("0")) {
                         AlertNumberNotExit();
 
@@ -156,8 +166,48 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         });
     }
 
+    private void dialogChoosePaymentType(String amount, String totalAmount, String walletFees, String mobileNoEt, String countryCode) {
+        Dialog mDialog = new Dialog(getActivity());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_choose_payment_type);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
 
-    public void dialogNumberExit(String Amount,String totalAmount,String fee,String number,String countryCode){
+        LinearLayout llMoov = mDialog.findViewById(R.id.llMoov);
+        LinearLayout llAirtel = mDialog.findViewById(R.id.llAirtel);
+        LinearLayout llCard = mDialog.findViewById(R.id.llCard);
+        LinearLayout llWallet = mDialog.findViewById(R.id.llWallet);
+
+
+
+        llMoov.setOnClickListener(v -> {
+            mDialog.dismiss();
+            dialogNumberExit(amount,totalAmount,walletFees,mobileNoEt,countryCode,"MC");
+
+
+        });
+
+        llAirtel.setOnClickListener(v -> {
+            mDialog.dismiss();
+            dialogNumberExit(amount,totalAmount,walletFees,mobileNoEt,countryCode,"AM");
+
+        });
+
+        llCard.setOnClickListener(v -> {
+        });
+
+        llWallet.setOnClickListener(v -> {
+            mDialog.dismiss();
+            dialogNumberExit(amount,totalAmount,walletFees,mobileNoEt,countryCode,"wallet");
+        });
+
+
+
+        mDialog.show();
+    }
+
+
+    public void dialogNumberExit(String Amount,String totalAmount,String fee,String number,String countryCode,String payType){
         Dialog mDialog = new Dialog(getActivity());
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_transfer_money);
@@ -165,19 +215,38 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         mDialog.setCanceledOnTouchOutside(false);
 
         TextView tvAmount = mDialog.findViewById(R.id.tvAmount);
+
         TextView tvFee = mDialog.findViewById(R.id.tvFee);
         TextView tvTotalAmount = mDialog.findViewById(R.id.tvTotalAmount);
 
         LinearLayout btnOk = mDialog.findViewById(R.id.btnOk);
+        TextView tvNote = mDialog.findViewById(R.id.tvNote);
 
-        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.amount)+" : " + "</b>" + "$" +Amount + "</font>"  ));
-        tvFee.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.fess)+" : " + "</b>" + "$" +fee + "</font>"  ));
-        tvTotalAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.total_amount)+" : " + "</b>" + "$" + totalAmount + "</font>"  ));
+        if(payType.equals("wallet")){
+            tvNote.setText(getString(R.string.your_wallet_will_be_debited_for));
+        }
+        else {
+            tvNote.setText(getString(R.string.your_amount_will_be_debited_for));
+
+        }
+
+        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.amount)+" : " + "</b>" + "XAF" +Amount + "</font>"  ));
+        tvFee.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.fess)+" : " + "</b>" + "XAF" +fee + "</font>"  ));
+        tvTotalAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.total_amount)+" : " + "</b>" + "XAF" + totalAmount + "</font>"  ));
 
         btnOk.setOnClickListener(v -> {
             mDialog.dismiss();
-            TransferMoneyFirstAPI(countryCode,number,Amount,totalAmount,fee);
 
+            if(payType.equals("MC")){
+                dialogMoov("MC",totalAmount,number,fee);
+            }
+            else if(payType.equals("AM")){
+                dialogAirtel("AM",totalAmount,number,fee);
+
+            }
+            else {
+                TransferMoneyFirstAPI(countryCode, number, Amount, totalAmount, fee);
+            }
 
         });
         mDialog.show();
@@ -192,7 +261,7 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
 
 
     private void TransferMoneyFirstAPI(String countryCode,String number, String amount,String totalAmount, String fee) {
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -272,6 +341,161 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
 
 
 
+    }
+
+
+    public void dialogAirtel(String operator,String totalAmount,String toTransferNumber,String walletFee){
+        Dialog mDialog = new Dialog(getActivity());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_airtel_transfer);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+
+        EditText edNumber = mDialog.findViewById(R.id.edNumber);
+        AppCompatButton btnBack = mDialog.findViewById(R.id.btnBack);
+        AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
+        TextView tvNote = mDialog.findViewById(R.id.tvNote);
+        CountryCodePicker countryCodePicker = mDialog.findViewById(R.id.ccp);
+        String codeCountry = countryCodePicker.getSelectedCountryCode();
+
+
+        tvNote.setText(getString(R.string.please_indicate_the_airtel_money_number_by_which_you_wish_to_debit_the_payment));
+
+        btnBack.setOnClickListener(v -> {
+            mDialog.dismiss();
+
+        });
+
+        btnPayNow.setOnClickListener(v -> {
+            if(edNumber.getText().toString().equals(""))
+                Toast.makeText(getActivity(), getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
+
+            else {
+                mDialog.dismiss();
+                TransferOnlineAPI(toTransferNumber,operator,edNumber.getText().toString(),totalAmount,"Online",walletFee, codeCountry);
+            }
+
+        });
+        mDialog.show();
+
+    }
+
+    public void dialogMoov(String operator,String totalAmount,String toTransferNumber,String walletFee){
+        Dialog mDialog = new Dialog(getActivity());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_moov_transfer);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+
+
+        TextView tvNote = mDialog.findViewById(R.id.tvNote);
+        EditText edNumber = mDialog.findViewById(R.id.edNumber);
+        AppCompatButton btnBack = mDialog.findViewById(R.id.btnBack);
+        AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
+        CountryCodePicker countryCodePicker = mDialog.findViewById(R.id.ccp);
+        String codeCountry = countryCodePicker.getSelectedCountryCode();
+
+        tvNote.setText(getString(R.string.please_indicate_the_moov_money_number_by_which_you_wish_to_make_the_payment));
+
+
+        btnBack.setOnClickListener(v -> {
+            mDialog.dismiss();
+
+        });
+
+        btnPayNow.setOnClickListener(v -> {
+            if(edNumber.getText().toString().equals(""))
+                Toast.makeText(getActivity(), getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
+
+            else {
+                mDialog.dismiss();
+                TransferOnlineAPI(toTransferNumber,operator,edNumber.getText().toString(),totalAmount,"Online",walletFee,codeCountry);
+            }
+
+        });
+
+        mDialog.show();
+    }
+
+
+    private void TransferOnlineAPI(String transferNumber,String operateur,String DebitNumber,String totalAmount,String paymentType,String walletFee,String countryCode) {
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("amount", totalAmount);
+        map.put("creditCountryCode", countryCode);
+        map.put("operator", operateur);
+        if(operateur.equals("MC"))  map.put("num_marchand", "060110217");
+        else if(operateur.equals("AM")) map.put("num_marchand", "074272732");
+        map.put("fee", walletFee);
+        map.put("numberCredit",transferNumber);
+        map.put("numberDebit",DebitNumber);
+        map.put("paymentType",paymentType);
+        map.put("transaction_by","Other");
+        map.put("transaction_type","TransferMoney");
+
+        //  map.put("datetime",DataManager.getCurrent());
+        Log.e("MapMap", "payment transfer params" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.transferNumberMoney(headerMap,map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Payment transfer RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        //  PaymentModal data = new Gson().fromJson(responseData, PaymentModal.class);
+                        // binding.loader.setVisibility(View.GONE);
+
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.serviceType,PreferenceConnector.Booking);
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.ShareUserId,"");
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.PaymentType,"Transfer");
+                            startActivity(new Intent(getActivity(), CheckPaymentStatusAct.class)
+                                    .putExtra("paymentBy","Transfer"));
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();                    }
+
+
+                    else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(getActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
     }
 
 

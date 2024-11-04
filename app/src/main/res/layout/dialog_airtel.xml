@@ -23,6 +23,7 @@
         android:orientation="vertical"
         android:padding="@dimen/_10sdp">
     <TextView
+        android:id="@+id/tvNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/please_indicate_the_airtel_money_number_by_which_you_wish_to_make_the_payment"

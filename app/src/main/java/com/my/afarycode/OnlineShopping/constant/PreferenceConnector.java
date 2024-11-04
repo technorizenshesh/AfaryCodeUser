@@ -56,6 +56,12 @@ public class PreferenceConnector {
 
     public static String Wallet ="Wallet";
 
+    public static String ShareUserId ="ShareUserId";
+
+    public static String PaymentType ="PaymentType";
+
+
+
 
 
     public static String writeString(Context context, String key, String value) {

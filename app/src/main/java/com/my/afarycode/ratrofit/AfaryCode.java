@@ -86,6 +86,11 @@ public interface AfaryCode {
     Call<ResponseBody> payment(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
+  @FormUrlEncoded
+  @POST("runPvit_transfer_money")
+  Call<ResponseBody> transferNumberMoney(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
     @FormUrlEncoded
     @POST("change_password")
     Call<LoginModel> change_password(@FieldMap Map<String, String> params);
@@ -263,6 +268,14 @@ public interface AfaryCode {
     @FormUrlEncoded
     @POST("get_item_search")
     Call<ResponseBody> searchProduct( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("get_search_suggestions")
+  Call<ResponseBody> searchSuggestionProduct( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+
 
     @FormUrlEncoded
     @POST("get_product_users")
@@ -471,5 +484,19 @@ public interface AfaryCode {
   @FormUrlEncoded
   @POST("reorder")
   Call<ResponseBody> reOrder( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("generate_invoice_recharge_wallet")
+  Call<ResponseBody> sendWalletRechargeInvoiceAnotherApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+  @FormUrlEncoded
+  @POST("invoice_details_recharge_wallet")
+  Call<ResponseBody> getWalletInvoiceDataApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+
+
+  @FormUrlEncoded
+  @POST("get_check_delivery_availability")
+  Call<ResponseBody> getDeliveryAvailabilityApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
 }

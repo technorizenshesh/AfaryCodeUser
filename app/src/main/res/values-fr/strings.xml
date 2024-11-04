@@ -257,7 +257,10 @@
     <string name="fess">Frais</string>
     <string name="your_request_has_been_sent_to_your_correspondent">Votre demande a été transmise à votre correspondant.</string>
     <string name="transfer_money_request">Demande de transfert d\'argent</string>
+<!--
     <string name="please_indicate_the_number_that_will_receive_your_transfer_and_enter_the_amount">Veuillez indiquer le numéro qui recevra votre virement et saisir le montant.</string>
+-->
+    <string name="please_indicate_the_number_that_will_receive_your_transfer_and_enter_the_amount">Veuillez indiquer l\'e-mail/le numéro qui recevra votre transfert et saisir le montant.</string>
     <string name="number">Nombre</string>
     <string name="reason">Raison</string>
     <string name="enter_here">entrez ici</string>
@@ -342,6 +345,15 @@
     <string name="total_price">Prix total : </string>
     <string name="person_to_be_delivered">Personne à livrer : </string>
     <string name="delivery_address11">Adresse de livraison : </string>
+    <string name="email_number">E-mail/Numéro</string>
+
+    <string name="choose_payment_type">Choisissez le type de paiement</string>
+    <string name="your_amount_will_be_debited_for">Votre montant sera débité de</string>
+    <string name="please_indicate_the_moov_money_number_by_which_you_wish_to_debit_the_payment">Veuillez indiquer le numéro Moov money par lequel vous souhaitez débiter le paiement</string>
+    <string name="please_indicate_the_airtel_money_number_by_which_you_wish_to_debit_the_payment">Veuillez indiquer le numéro Airtel money par lequel vous souhaitez débiter le paiement</string>
+    <string name="enter_email_number">Entrez l\'e-mail/le numéro</string>
+    <string name="enter_amount">entrez le montant</string>
+    <string name="please_enter_transaction_id">Veuillez saisir l\'identifiant de la transaction</string>
 </resources>
 
 

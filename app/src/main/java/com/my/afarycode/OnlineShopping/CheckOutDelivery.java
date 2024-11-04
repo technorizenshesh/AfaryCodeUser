@@ -873,6 +873,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                 try {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
+                    getDeliveryAvailability(addressId);
                     Log.e(TAG, "Delivery Agency RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
@@ -893,6 +894,55 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         getActivity().finish();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+    private void getDeliveryAvailability(String addressId) {
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("address_id", addressId);
+
+        Log.e(TAG, "Delivery Availability Request :" + map);
+
+        Call<ResponseBody> chatCount = apiInterface.getDeliveryAvailabilityApi(headerMap,map);
+        chatCount.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Delivery Availability RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
+
+
+                    } else if (object.optString("status").equals("0")) {
+
+
+                    }
+
+                    else if (object.getString("status").equals("5")) {
+
                     }
 
 

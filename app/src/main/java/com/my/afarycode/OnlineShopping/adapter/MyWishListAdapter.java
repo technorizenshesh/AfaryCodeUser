@@ -77,7 +77,7 @@ public class MyWishListAdapter extends
 
         holder.progressAdapterBinding.productName.setText(all_category_subcategory.get(position).getProductDetails().getProductName());
         Picasso.get().load(all_category_subcategory.get(position).getProductDetails().getProductImages()).into(holder.progressAdapterBinding.imgeProduct);
-        holder.progressAdapterBinding.txtPrice.setText("Rs. " + all_category_subcategory.get(position).getProductDetails().getProductPrice());
+        holder.progressAdapterBinding.txtPrice.setText(all_category_subcategory.get(position).getProductDetails().getCurrency() + all_category_subcategory.get(position).getProductDetails().getProductPrice());
 
         holder.progressAdapterBinding.addToCart.setOnClickListener(v -> {
             AddCartToWishListAPI(all_category_subcategory.get(position).getId());
@@ -86,7 +86,7 @@ public class MyWishListAdapter extends
 
     private void AddCartToWishListAPI(String wis_id) {
 
-        DataManager.getInstance().showProgressMessage((Activity) activity, "Please wait...");
+        DataManager.getInstance().showProgressMessage((Activity) activity,activity.getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(activity, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

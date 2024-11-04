@@ -78,7 +78,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
               holder.progressAdapterBinding.itemQuantity.setText(all_category_subcategory.get(position).quantity);
               //   holder.progressAdapterBinding.price.setText("Rs. " + all_category_subcategory.get(position).productPrice);
 
-              holder.progressAdapterBinding.price.setText("Rs. " + Double.parseDouble(all_category_subcategory.get(position).getItemAmount())
+              holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getCurrency() + Double.parseDouble(all_category_subcategory.get(position).getItemAmount())
                       * Integer.valueOf(all_category_subcategory.get(position).quantity));
 
               if(all_category_subcategory.get(position).getDeliveryCharges().equalsIgnoreCase("1"))
@@ -90,7 +90,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
             int count = Integer.parseInt(String.valueOf(holder.progressAdapterBinding.itemQuantity.getText()));
             count++;
             holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
-            holder.progressAdapterBinding.price.setText("Rs. " + Double.parseDouble(all_category_subcategory.get(position).getItemAmount())
+            holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getCurrency() + Double.parseDouble(all_category_subcategory.get(position).getItemAmount())
                     * Integer.valueOf(count));
             listener.onPos(position,"Update",count+"");
 
@@ -106,7 +106,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.MyViewHolder> 
             if (count > 1) {
                 count--;
                 holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
-                holder.progressAdapterBinding.price.setText("Rs. " +
+                holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getCurrency() +
                         Double.parseDouble(all_category_subcategory.get(position).getItemAmount())
                                 * Integer.valueOf(count));
                 listener.onPos(position,"Update",count+"");

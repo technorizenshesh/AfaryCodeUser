@@ -1,10 +1,15 @@
 package com.my.afarycode.OnlineShopping.bottomsheet;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
@@ -17,18 +22,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
+import com.hbb20.CountryCodePicker;
 import com.my.afarycode.OnlineShopping.CheckOutPayment;
 import com.my.afarycode.OnlineShopping.CheckPaymentStatusAct;
 import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.AddWalletModal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.helper.CountryCodes;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.helper.MyService;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
@@ -40,7 +50,10 @@ import com.my.afarycode.ratrofit.ApiClient;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -54,9 +67,10 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
     FragmentPaymentBootmsheetBinding binding;
     private BottomSheetBehavior<View> mBehavior;
     public AskListener listener;
-    String money="";
+    String money="",anotherPersonId="";
     private AfaryCode apiInterface;
-
+    CountryCodePicker ccp;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
 
     BroadcastReceiver PaymentStatusReceiver = new BroadcastReceiver() {
@@ -145,6 +159,10 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         binding.llAirtel.setOnClickListener(view -> {
             dialogAirtel("AM","074272732");
         });
+
+        binding.btnSendAnother.setOnClickListener(v->{
+            dialogSendAnotherPerson();
+        });
     }
 
 
@@ -161,7 +179,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
 
 
-        btnPayNow.setText("$"+money + " " +getString(R.string.pay_now));
+        btnPayNow.setText("XAF"+money + " " +getString(R.string.pay_now));
 
         btnBack.setOnClickListener(v -> {
             mDialog.dismiss();
@@ -194,7 +212,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
 
 
-        btnPayNow.setText("$"+money + " " +getString(R.string.pay_now));
+        btnPayNow.setText("XAF"+money + " " +getString(R.string.pay_now));
         btnBack.setOnClickListener(v -> {
             mDialog.dismiss();
 
@@ -202,7 +220,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
 
         btnPayNow.setOnClickListener(v -> {
             if(edNumber.getText().toString().equals(""))
-                Toast.makeText(getActivity(), "Please enter number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();
@@ -253,6 +271,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
                         binding.rlPaymentStatus.setVisibility(View.VISIBLE);
                         PreferenceConnector.writeString(getActivity(),PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
                         PreferenceConnector.writeString(getActivity(),PreferenceConnector.serviceType,"AddMoney");
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.PaymentType,"AddMoney");
                         getActivity().startService(new Intent(getActivity(), MyService.class));
 
 
@@ -287,8 +306,14 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getActivity().registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"),Context.RECEIVER_EXPORTED);
+
+        }
+        else {
+            getActivity().registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"));
+        }
     }
 
     @Override
@@ -298,4 +323,259 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         getActivity().unregisterReceiver(PaymentStatusReceiver);
 
     }
+
+
+    public void dialogSendAnotherPerson(){
+        Dialog mDialog = new Dialog(getActivity());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_send_another_person);
+        mDialog.setCancelable(false);
+        mDialog.setCanceledOnTouchOutside(false);
+
+        EditText edNumber = mDialog.findViewById(R.id.edNumber);
+        AppCompatButton btnCancel = mDialog.findViewById(R.id.btnCancel);
+        AppCompatButton btnSend = mDialog.findViewById(R.id.btnSend);
+        ccp = mDialog.findViewById(R.id.ccp);
+
+        setCountryCodeFromLocation(ccp);
+
+
+
+/*
+        edNumber.addTextChangedListener(new TextWatcher() {
+                                            @Override
+                                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                            }
+
+                                            @Override
+                                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                                // Check if the input is numeric
+                                                if (s.length()==8 */
+        /*|| s.length()==10*//*
+) {
+                                                    checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void afterTextChanged(Editable s) {
+                                            }
+                                        });
+*/
+
+
+        btnCancel.setOnClickListener(v -> {
+            mDialog.dismiss();
+
+        });
+
+        btnSend.setOnClickListener(v -> {
+            if(edNumber.getText().toString().equals(""))
+                Toast.makeText(getActivity(), getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
+
+            else {
+                mDialog.dismiss();
+                //  if(!anotherPersonId.equalsIgnoreCase(""))
+                checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
+
+            }
+
+        });
+        mDialog.show();
+
+    }
+
+    private void checkUserExit(String number) {
+        //binding.loader.setVisibility(View.VISIBLE);
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("identity", number);
+
+        Log.e("MapMap", "Check user Exit Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.checkUserExitApi(headerMap,map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Check user Exit RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        anotherPersonId =  object.getJSONObject("data").getString("id");
+                        sendLinkAnotherPerson(anotherPersonId);
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();                    }
+
+
+                    else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    binding.loader.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(getActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+    public String createDeepLink(String paymentId) {
+        return "https://www.afaycode.com/payment?paymentId="; /*+ paymentId;*/
+    }
+
+
+
+/*
+    private void sharePaymentLink(String paymentId) {
+        String link = createDeepLink(paymentId);
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, link);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Share payment link"));
+    }
+*/
+
+
+    private void sendLinkAnotherPerson(String anotherPersonId) {
+        //binding.loader.setVisibility(View.VISIBLE);
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("other_user_id", anotherPersonId);
+        map.put("amount",money);
+        Log.e("MapMap", "Send Invoice anotherPerson Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.sendWalletRechargeInvoiceAnotherApi(headerMap,map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Send Invoice anotherPerson RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        Toast.makeText(getActivity(), getString(R.string.invoice_send_sucessfully), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getActivity(),HomeActivity.class)
+                                .putExtra("status","")
+                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();                    }
+
+
+                    else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    binding.loader.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(getActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
+
+    private void setCountryCodeFromLocation(CountryCodePicker ccp) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        } else {
+            try {
+                FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+                fusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), location -> {
+                    if (location != null) {
+                        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                            if (addresses != null && !addresses.isEmpty()) {
+                                String countryCode = addresses.get(0).getCountryCode();
+                                if (countryCode != null && !countryCode.isEmpty()) {
+                                    Log.e("country code===", CountryCodes.getPhoneCode(countryCode) + "");
+                                    ccp.setCountryForPhoneCode(/*getCountryPhoneCode(countryCode)*/
+                                            CountryCodes.getPhoneCode(countryCode));
+                                }
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getActivity(), "Error determining location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setCountryCodeFromLocation(ccp);
+            }
+        }
+    }
+
 }

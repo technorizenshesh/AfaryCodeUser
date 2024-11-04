@@ -166,6 +166,17 @@ public class ShoppingStoreDetailsModal {
         @Expose
         public String description;
 
+        @SerializedName("currency")
+        @Expose
+        public String currency;
+
+        public String getCurrency() {
+            return currency;
+        }
+
+        public void setCurrency(String currency) {
+            this.currency = currency;
+        }
 
         public String getDescription() {
             return description;

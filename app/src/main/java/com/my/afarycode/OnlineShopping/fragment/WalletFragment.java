@@ -2,14 +2,22 @@ package com.my.afarycode.OnlineShopping.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -92,6 +100,7 @@ public class WalletFragment extends Fragment implements AskListener {
 
         });
 
+
         return binding.getRoot();
     }
 
@@ -119,7 +128,7 @@ public class WalletFragment extends Fragment implements AskListener {
                     Log.e("MapMap", "GET RESPONSE" + dataResponse);
 
                     if (data.status.equals("1")) {
-                        binding.textAmount.setText("$ " + data.result.getWallet());
+                        binding.textAmount.setText("XAF" + data.result.getWallet());
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }

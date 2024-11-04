@@ -84,9 +84,16 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
         payment_done.setOnClickListener(v -> {
             code = ccp.getSelectedCountryCode();
             Log.e("code>>>", code);
+            if(mobile_no_et.getText().toString().equals(""))
+                Toast.makeText(getActivity(),getString(R.string.enter_email_number),Toast.LENGTH_LONG).show();
+            else if (et_money.getText().toString().equals("")) {
+                Toast.makeText(getActivity(),getString(R.string.enter_amount),Toast.LENGTH_LONG).show();
 
-            sendRequestTransferMoney( code, mobile_no_et.getText().toString()
-                    , et_money.getText().toString(),etReason.getText().toString());
+            }
+            else {
+                sendRequestTransferMoney(code, mobile_no_et.getText().toString()
+                        , et_money.getText().toString(), etReason.getText().toString());
+            }
         });
 
         dialog.setContentView(contentView);
@@ -161,7 +168,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
         TextView tvAmount = mDialog.findViewById(R.id.tvAmount);
 
         LinearLayout btnOk = mDialog.findViewById(R.id.btnOk);
-        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "you received an amount of "+ "<b>"+ "$" + Amount + "</b>" +  " From " + senderName + "</font>"  ));
+        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "you received an amount of "+ "<b>"+ "XAF" + Amount + "</b>" +  " From " + senderName + "</font>"  ));
 
         btnOk.setOnClickListener(v -> {
             mDialog.dismiss();
@@ -216,7 +223,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
                     if (object.optString("status").equals("1")) {
                         listener.ask("","transfer");
                         dismiss();
-                        Toast.makeText(getContext(), "Your Money Transfer Request send SuccessFully ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Your request has been sent to your correspondent.", Toast.LENGTH_SHORT).show();
 
                     } else if (object.optString("status").equals("0")) {
 

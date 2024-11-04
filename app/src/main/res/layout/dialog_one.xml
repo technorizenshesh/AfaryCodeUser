@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@color/gray_btn_bg_color"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:text="@string/more_information"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10sdp">
+        <TextView
+            android:id="@+id/tvNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your transaction has not been completed. Please try again or choose another method of payment.\n\nIf on the contrary this message appears while you have been debited, please contact the administrator "
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14sdp"
+            android:padding="@dimen/_10sdp"/>
+
+
+        <TextView
+            android:id="@+id/tvLink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(link)."
+            android:textColor="@color/red"
+            android:textSize="@dimen/_14sdp"
+            android:padding="@dimen/_10sdp"/>
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

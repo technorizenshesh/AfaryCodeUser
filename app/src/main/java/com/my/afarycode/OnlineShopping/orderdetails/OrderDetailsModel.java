@@ -1972,7 +1972,20 @@ public class OrderDetailsModel implements Serializable {
             @Expose
             private String shopLon;
 
-            public String getShopLat() {
+
+                @SerializedName("currency")
+                @Expose
+                private String currency;
+
+                public String getCurrency() {
+                    return currency;
+                }
+
+                public void setCurrency(String currency) {
+                    this.currency = currency;
+                }
+
+                public String getShopLat() {
                 return shopLat;
             }
 

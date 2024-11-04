@@ -86,7 +86,7 @@ public class WithDrawFragment extends BottomSheetDialogFragment implements AskLi
 
         done_withdraw.setOnClickListener(v -> {
            if(!withdrawal_money.getText().toString().equalsIgnoreCase("")) WithDrawalAPI();
-            else Toast.makeText(context, "Please enter transaction id", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(context, getString(R.string.please_enter_transaction_id), Toast.LENGTH_SHORT).show();
         });
 
         dialog.setContentView(contentView);
