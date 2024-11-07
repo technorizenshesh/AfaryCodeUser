@@ -236,7 +236,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
     private void PaymentAPI(String operator,String number,String  operatorNumber) {
        // binding.loader.setVisibility(View.VISIBLE);
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -251,8 +251,8 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         map.put("datetime", DataManager.getCurrent());
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
-
         Log.e("MapMap", "WALLET RECHARGE REQUEST" + map);
+
 
         Call<ResponseBody> SignupCall = apiInterface.add_money(headerMap,map);
 

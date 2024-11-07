@@ -1493,8 +1493,7 @@ public class OrderDetailsModel implements Serializable {
     }
 
 
-
-    public class Result implements Serializable{
+    public class Result implements Serializable {
 
         @SerializedName("id")
         @Expose
@@ -1588,7 +1587,6 @@ public class OrderDetailsModel implements Serializable {
         @SerializedName("delivery_lon")
         @Expose
         private String deliverLon;
-
 
 
         @SerializedName("self_collect")
@@ -1884,8 +1882,7 @@ public class OrderDetailsModel implements Serializable {
         }
 
 
-
-            public class Product implements Serializable{
+        public class Product implements Serializable {
 
             @SerializedName("id")
             @Expose
@@ -1972,20 +1969,44 @@ public class OrderDetailsModel implements Serializable {
             @Expose
             private String shopLon;
 
+            @SerializedName("currency")
+            @Expose
+            private String currency;
 
-                @SerializedName("currency")
-                @Expose
-                private String currency;
+            @SerializedName("local_currency")
+            @Expose
+            public String localCurrency;
 
-                public String getCurrency() {
-                    return currency;
-                }
+            @SerializedName("local_price")
+            @Expose
+            public String localPrice;
 
-                public void setCurrency(String currency) {
-                    this.currency = currency;
-                }
+            public String getLocalCurrency() {
+                return localCurrency;
+            }
 
-                public String getShopLat() {
+            public void setLocalCurrency(String localCurrency) {
+                this.localCurrency = localCurrency;
+            }
+
+            public String getLocalPrice() {
+                return localPrice;
+            }
+
+            public void setLocalPrice(String localPrice) {
+                this.localPrice = localPrice;
+            }
+
+
+            public String getCurrency() {
+                return currency;
+            }
+
+            public void setCurrency(String currency) {
+                this.currency = currency;
+            }
+
+            public String getShopLat() {
                 return shopLat;
             }
 
@@ -2202,7 +2223,6 @@ public class OrderDetailsModel implements Serializable {
             }
 
         }
-
 
 
         public String getId() {

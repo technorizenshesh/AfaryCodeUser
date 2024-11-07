@@ -48,7 +48,7 @@ public class ProductAdapter2 extends RecyclerView.Adapter<ProductAdapter2.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.tvProductName.setText(arrayList.get(position).getProductName());
         holder.binding.tvBrandNAme.setText(arrayList.get(position).getProductBrand());
-        holder.binding.tvProductPrice.setText(arrayList.get(position).getCurrency()+arrayList.get(position).getProductPrice());
+        holder.binding.tvProductPrice.setText(arrayList.get(position).getLocalCurrency()+arrayList.get(position).getLocalPrice());
         if(!arrayList.get(position).getProductImages().contains("/")) Glide.with(context).load("http://technorizen.com/afarycodewebsite/uploads/product/"+arrayList.get(position).getProductImages()).into(holder.binding.img);
          else Glide.with(context).load(arrayList.get(position).getProductImages()).into(holder.binding.img);
         holder.binding.img.setOnClickListener(v -> {
@@ -56,7 +56,7 @@ public class ProductAdapter2 extends RecyclerView.Adapter<ProductAdapter2.MyView
             context.startActivity(new Intent(context, ProductDetailAct.class)
                     .putExtra("product_id",arrayList.get(position).getProId())
                     .putExtra("restaurant_id",arrayList.get(position).getRestaurantId())
-                    .putExtra("productPrice",arrayList.get(position).getProductPrice()));
+                    .putExtra("productPrice",arrayList.get(position).getLocalPrice()));
         });
 
 

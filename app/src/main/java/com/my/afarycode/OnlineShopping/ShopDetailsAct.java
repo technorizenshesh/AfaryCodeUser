@@ -86,6 +86,7 @@ public class ShopDetailsAct extends AppCompatActivity {
 
         map.put("shop_id", shopId);
         map.put("register_id", PreferenceConnector.readString(ShopDetailsAct.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(ShopDetailsAct.this, PreferenceConnector.countryId, ""));
 
         Log.e("MapMap", "Shop Details====" + map);
 
@@ -129,11 +130,11 @@ public class ShopDetailsAct extends AppCompatActivity {
 
 
 
-                        if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("Dollars")) currency = "USD";
+                      /*  if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("Dollars")) currency = "USD";
                         else if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("Euro")) currency = "EUR";
                         else if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("Franc CFA")) currency = "XAF";
                         else if(shopDetailModel.getResult().getCurrency().equalsIgnoreCase("INDIA RUPEE")) currency = "INR";
-                        else  currency = "";
+                        else  currency = "";*/
 
                         if(shopDetailModel.getResult().getProduct().size()!=0){
                             productArrayList.clear();

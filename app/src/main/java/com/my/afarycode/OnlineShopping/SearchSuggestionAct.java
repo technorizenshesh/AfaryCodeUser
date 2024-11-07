@@ -270,8 +270,8 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
         HashMap<String,String> param = new HashMap<>();
         param.put("title",queryString);
         param.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
-
         param.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
+        param.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
 
         Call<ResponseBody> call = apiInterface.searchSuggestionProduct(headerMap,param);
         call.enqueue(new Callback<ResponseBody>() {

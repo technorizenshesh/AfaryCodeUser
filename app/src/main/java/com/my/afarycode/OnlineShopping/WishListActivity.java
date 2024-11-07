@@ -92,6 +92,7 @@ public class WishListActivity extends Fragment {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 

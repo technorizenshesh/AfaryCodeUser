@@ -262,6 +262,30 @@ public class GetWishListModal {
             @Expose
             private String currency;
 
+            @SerializedName("local_currency")
+            @Expose
+            private String localCurrency;
+
+            @SerializedName("local_price")
+            @Expose
+            private String localPrice;
+
+            public String getLocalCurrency() {
+                return localCurrency;
+            }
+
+            public void setLocalCurrency(String localCurrency) {
+                this.localCurrency = localCurrency;
+            }
+
+            public String getLocalPrice() {
+                return localPrice;
+            }
+
+            public void setLocalPrice(String localPrice) {
+                this.localPrice = localPrice;
+            }
+
             public String getCurrency() {
                 return currency;
             }

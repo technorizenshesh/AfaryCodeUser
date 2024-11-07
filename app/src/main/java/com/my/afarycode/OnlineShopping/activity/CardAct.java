@@ -94,6 +94,7 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(CardAct.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(CardAct.this, PreferenceConnector.countryId, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 

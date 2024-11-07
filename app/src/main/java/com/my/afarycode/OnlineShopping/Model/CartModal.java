@@ -137,9 +137,9 @@ public class CartModal {
         @SerializedName("date")
         @Expose
         public String date;
-        @SerializedName("total_amount")
+      /*  @SerializedName("total_amount")
         @Expose
-        public Integer totalAmount;
+        public Integer totalAmount;*/
         @SerializedName("quantity")
         @Expose
         public String quantity;
@@ -183,6 +183,31 @@ public class CartModal {
         @SerializedName("currency")
         @Expose
         private String currency;
+
+
+        @SerializedName("local_currency")
+        @Expose
+        private String localCurrency;
+
+        @SerializedName("local_price")
+        @Expose
+        private String localPrice;
+
+        public String getLocalCurrency() {
+            return localCurrency;
+        }
+
+        public void setLocalCurrency(String localCurrency) {
+            this.localCurrency = localCurrency;
+        }
+
+        public String getLocalPrice() {
+            return localPrice;
+        }
+
+        public void setLocalPrice(String localPrice) {
+            this.localPrice = localPrice;
+        }
 
         public String getCurrency() {
             return currency;
@@ -324,13 +349,13 @@ public class CartModal {
             this.date = date;
         }
 
-        public Integer getTotalAmount() {
+      /*  public Integer getTotalAmount() {
             return totalAmount;
         }
 
         public void setTotalAmount(Integer totalAmount) {
             this.totalAmount = totalAmount;
-        }
+        }*/
 
         public String getQuantity() {
             return quantity;

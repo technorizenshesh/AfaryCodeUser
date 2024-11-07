@@ -36,7 +36,7 @@ public class ShopProductAdapter extends RecyclerView.Adapter<ShopProductAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.tvProduct.setText(arrayList.get(position).getProductName());
-        holder.binding.tvProductPrice.setText(currency+arrayList.get(position).getProductPrice());
+        holder.binding.tvProductPrice.setText(arrayList.get(position).getLocalCurrency()+arrayList.get(position).getLocalPrice());
         Glide.with(context).load(arrayList.get(position).getImage1())
                 .override(250,250).into(holder.binding.ivImg);
 

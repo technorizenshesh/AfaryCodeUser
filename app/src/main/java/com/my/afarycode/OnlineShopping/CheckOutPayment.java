@@ -147,20 +147,34 @@ public class CheckOutPayment extends AppCompatActivity {
 
         binding.llTransfer.setOnClickListener(v -> {
            // PaymentAPI("VM", strList);
-            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=" + totalPriceToToPay + "&ref=" + generateReferenceNumber() + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
+            String refNumber = generateReferenceNumber();
+            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=" + totalPriceToToPay + "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
                     + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
 
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,refNumber);
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.ShareUserId,"");
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.PaymentType,"Booking");
+
            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
-                   .putExtra("url",ll));
+                   .putExtra("url",ll)
+                   .putExtra("ref",refNumber));
         });
 
         binding.llTransfer11.setOnClickListener(v -> {
             // PaymentAPI("VM", strList);
-            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=" + totalPriceToToPay + "&ref=" + generateReferenceNumber() + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
+            String refNumber = generateReferenceNumber();
+            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=" + totalPriceToToPay + "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
                     + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
 
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,refNumber);
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.ShareUserId,"");
+            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.PaymentType,"Booking");
+
             startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
-                    .putExtra("url",ll));
+                    .putExtra("url",ll)
+                    .putExtra("ref",refNumber));
         });
 
 
@@ -251,6 +265,14 @@ public class CheckOutPayment extends AppCompatActivity {
                     Log.e("MapMap", "GET RESPONSE" + dataResponse);
 
                     if (data.status.equals("1")) {
+
+                        if(data.getResult().getCountry().equals("79")){
+                            binding.rlMblMoney.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            binding.rlMblMoney.setVisibility(View.GONE);
+
+                        }
 
                     } else if (data.status.equals("0")) {
                     }

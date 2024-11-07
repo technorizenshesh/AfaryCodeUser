@@ -136,6 +136,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         map.put("order_id", orderId);
         map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
         map.put("user_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.User_id, ""));
+        map.put("country_id",PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
 
 
         Log.e(TAG, "My OrderDetails Request" + map);

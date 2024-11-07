@@ -127,11 +127,26 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
         binding.llTransfer11.setOnClickListener(v -> {
             // PaymentAPI("VM", strList);
-         /*   String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732" + "&montant=" + totalPriceToToPay + "&ref=" + generateReferenceNumber() + "&user_id=" + PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.User_id, "")
+            String refNumber = generateReferenceNumber();
+            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732" + "&montant=" + totalPriceToToPay + "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.User_id, "")
                     + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
+          if(type.equals("InvoiceToOtherUser")) {
+              PreferenceConnector.writeString(PaymentByAnotherAct.this, PreferenceConnector.transId, refNumber);
+              PreferenceConnector.writeString(PaymentByAnotherAct.this, PreferenceConnector.serviceType, PreferenceConnector.Booking);
+              PreferenceConnector.writeString(PaymentByAnotherAct.this, PreferenceConnector.ShareUserId, userId);
+              PreferenceConnector.writeString(PaymentByAnotherAct.this, PreferenceConnector.PaymentType, "Invoice");
+          }
 
+          else {
+              PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.transId,refNumber);
+              PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
+              PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.ShareUserId,userId);
+              PreferenceConnector.writeString(PaymentByAnotherAct.this,PreferenceConnector.PaymentType,"InvoiceWallet");
+
+          }
             startActivity(new Intent(PaymentByAnotherAct.this, PaymentWebViewAct.class)
-                    .putExtra("url",ll));*/
+                    .putExtra("url",ll)
+                    .putExtra("ref",refNumber));
         });
 
 
@@ -200,7 +215,13 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                     Log.e("MapMap", "GET RESPONSE" + dataResponse);
 
                     if (data.status.equals("1")) {
+                        if(data.getResult().getCountry().equals("79")){
+                            binding.rlMblMoney.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            binding.rlMblMoney.setVisibility(View.GONE);
 
+                        }
                     } else if (data.status.equals("0")) {
                     }
 

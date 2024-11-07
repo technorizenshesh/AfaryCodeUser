@@ -208,6 +208,7 @@ public class ShoppingProductDetail extends Fragment {
         map.put("restaurant_id", restaurant_id);
         map.put("pro_id", product_id);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
 
         Log.e("MapMap", "EXERSICE LIST" + map);
 
@@ -252,8 +253,8 @@ public class ShoppingProductDetail extends Fragment {
                         binding.tvTitle.setText(get_result1.get(0).productName);
                         binding.shopName.setText(get_result1.get(0).productName);
                         binding.productDetails.setText(get_result1.get(0).productDetails);
-                        binding.productPrice.setText(get_result1.get(0).getCurrency() + get_result1.get(0).productPrice);
-                        binding.productPrice1.setText(get_result1.get(0).getCurrency() + get_result1.get(0).productPrice);
+                        binding.productPrice.setText(get_result1.get(0).getLocalCurrency() + get_result1.get(0).getLocalPrice());
+                        binding.productPrice1.setText(get_result1.get(0).getLocalCurrency() + get_result1.get(0).getLocalPrice());
                         if(get_result1.get(0).getDeliveryCharges().equals("0")) binding.switchDelivery.setChecked(false);
                          else  binding.switchDelivery.setChecked(true);
                     } else if (data.status.equals("0")) {

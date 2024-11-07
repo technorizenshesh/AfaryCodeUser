@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -69,6 +71,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -406,7 +409,11 @@ public String TAG ="MyProfileFragment";
                         binding.tvMobile.setText(data.getResult().mobile);
                         Log.e("image>>>", data.getResult().image);
 
-                        Picasso.get().load(data.getResult().image).error(R.drawable.user_default)
+                        Glide.with(requireActivity())
+                                .load(data.getResult().image)
+                                .error(R.drawable.user_default)
+                                .placeholder(R.drawable.user_default)
+                                .override(80,80)
                                 .into(binding.imgUser);
 
                     /*    if (!data.getResult().image.equalsIgnoreCase("http://technorizen.com/afarycode/uploads/images/")) {
@@ -726,10 +733,19 @@ public String TAG ="MyProfileFragment";
 
 
             } else if (requestCode == REQUEST_CAMERA) {
-                Glide.with(getActivity())
+               /* Glide.with(getActivity())
                         .load(str_image_path)
                         .centerCrop()
-                        .into(binding.imgUser);
+                        .into(binding.imgUser);*/
+
+
+
+              /*  Uri imageUri = Uri.parse(str_image_path);
+                ContentResolver contentResolver = requireActivity().getContentResolver(); // Get the content resolver from your activity
+
+                oneBitmap = getBitmapFromUri(imageUri, contentResolver);
+                binding.imgUser.setImageBitmap(oneBitmap);*/
+
 
 
                 Glide.with(requireActivity())
@@ -743,6 +759,7 @@ public String TAG ="MyProfileFragment";
                                 // Do something with the Bitmap
                                 oneBitmap = resource;
                                 binding.imgUser.setImageBitmap(resource);
+                                UpDateAPi();
                             }
 
                             @Override
@@ -752,7 +769,7 @@ public String TAG ="MyProfileFragment";
                         });
 
 
-                UpDateAPi();
+
 
             }
 
@@ -761,6 +778,33 @@ public String TAG ="MyProfileFragment";
 
 
     }
+
+
+
+        public  Bitmap getBitmapFromUri(Uri imageUri, ContentResolver contentResolver) {
+            Bitmap bitmap = null;
+            try {
+                // Open an input stream to the image URI
+                InputStream inputStream = contentResolver.openInputStream(imageUri);
+
+                // Decode the input stream into a Bitmap
+                bitmap = BitmapFactory.decodeStream(inputStream);
+
+                // Close the InputStream
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                Log.e("ImageUtils", "Error converting URI to Bitmap", e);
+            }
+
+            return bitmap;
+        }
+
+
+
+
+
 
     private void UpDateAPi() {
 

@@ -170,6 +170,31 @@ public class ShoppingStoreDetailsModal {
         @Expose
         public String currency;
 
+
+        @SerializedName("local_currency")
+        @Expose
+        public String localCurrency;
+
+        @SerializedName("local_price")
+        @Expose
+        public String localPrice;
+
+        public String getLocalCurrency() {
+            return localCurrency;
+        }
+
+        public void setLocalCurrency(String localCurrency) {
+            this.localCurrency = localCurrency;
+        }
+
+        public String getLocalPrice() {
+            return localPrice;
+        }
+
+        public void setLocalPrice(String localPrice) {
+            this.localPrice = localPrice;
+        }
+
         public String getCurrency() {
             return currency;
         }

@@ -79,6 +79,7 @@ public class OrderCompleteFragment extends Fragment implements OrderListener {
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("status", "Completed");
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
 
         Log.e(TAG, "EXERSICE LIST" + map);
         Call<ResponseBody> loginCall = apiInterface.getHistoryOnlineOrderApi(headerMap,map);

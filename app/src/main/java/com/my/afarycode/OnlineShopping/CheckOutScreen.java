@@ -139,6 +139,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(this, PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(this, PreferenceConnector.countryId, ""));
 
         Log.e("MapMap", "FINAL CART  LIST" + map);
 
