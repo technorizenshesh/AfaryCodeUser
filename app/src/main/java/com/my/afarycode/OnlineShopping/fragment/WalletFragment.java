@@ -107,10 +107,11 @@ public class WalletFragment extends Fragment implements AskListener {
 
     private void GetProfile() {
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
 
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
@@ -128,7 +129,7 @@ public class WalletFragment extends Fragment implements AskListener {
                     Log.e("MapMap", "GET RESPONSE" + dataResponse);
 
                     if (data.status.equals("1")) {
-                        binding.textAmount.setText("XAF" + data.result.getWallet());
+                        binding.textAmount.setText(data.result.getLocalCurrency() + data.result.getLocalPrice());
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
@@ -217,7 +218,7 @@ public class WalletFragment extends Fragment implements AskListener {
 
     private void GetTransactionAPI() {
 
-        DataManager.getInstance().showProgressMessage((Activity) getContext(), "Please wait...");
+        DataManager.getInstance().showProgressMessage((Activity) getContext(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -225,6 +226,7 @@ public class WalletFragment extends Fragment implements AskListener {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
 
         map.put("type","All");
         Log.e("MapMap", "" + map);

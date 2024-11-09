@@ -147,34 +147,31 @@ public class CheckOutPayment extends AppCompatActivity {
 
         binding.llTransfer.setOnClickListener(v -> {
            // PaymentAPI("VM", strList);
-            String refNumber = generateReferenceNumber();
-            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=" + totalPriceToToPay + "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
-                    + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
+           /* String refNumber = generateReferenceNumber();
+            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=105" +*//* totalPriceToToPay+*//*  "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
+                    + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";*/
 
-            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,refNumber);
+         /*   PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,refNumber);
             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.ShareUserId,"");
             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.PaymentType,"Booking");
-
+            Log.e("url===",ll);
            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
                    .putExtra("url",ll)
-                   .putExtra("ref",refNumber));
+                   .putExtra("ref",refNumber));*/
+            callCardPayment("",data.getResult().getMobile(),"Card");
         });
 
         binding.llTransfer11.setOnClickListener(v -> {
-            // PaymentAPI("VM", strList);
+          /*  // PaymentAPI("VM", strList);
             String refNumber = generateReferenceNumber();
-            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=" + totalPriceToToPay + "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
+            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=105" + *//*totalPriceToToPay +*//* "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
                     + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
+            Log.e("url===",ll);*/
 
-            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,refNumber);
-            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
-            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.ShareUserId,"");
-            PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.PaymentType,"Booking");
 
-            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
-                    .putExtra("url",ll)
-                    .putExtra("ref",refNumber));
+
+            callCardPayment("",data.getResult().getMobile(),"Card");
         });
 
 
@@ -215,6 +212,92 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
+        private void callCardPayment( String strList,String number,String paymentType) {
+            //binding.loader.setVisibility(View.VISIBLE);
+            DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
+            Map<String,String> headerMap = new HashMap<>();
+            headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token,""));
+            headerMap.put("Accept","application/json");
+
+
+            Map<String, String> map = new HashMap<>();
+            map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
+            map.put("amount", /*"105"*/totalPriceToToPay);
+
+            map.put("delivery_charge", deliveryCharge);
+            map.put("platFormsFees", platFormsFees);
+            map.put("taxN1", taxN1);
+            map.put("taxN2", taxN2);
+            map.put("operateur", "");
+            map.put("cart_id", strList);
+            map.put("num_marchand", "");
+            map.put("type", "USER");
+            map.put("user_number",number);
+            map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
+            map.put("address_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.ADDRESS_ID, ""));
+            map.put("payment_type",paymentType);
+            map.put("sub_orderdata",sendToServer);
+            map.put("datetime",DataManager.getCurrent());
+            map.put("self_collect",deliveryYesNo);
+
+            Log.e("MapMap", "payment_params" + map);
+
+            Call<ResponseBody> loginCall = apiInterface.cardPaymentApi(headerMap,map);
+            loginCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    DataManager.getInstance().hideProgressMessage();
+                    // binding.loader.setVisibility(View.GONE);
+                    try {
+                        String responseData = response.body() != null ? response.body().string() : "";
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e(TAG, "Card Payment RESPONSE" + object);
+                        if (object.optString("status").equals("1")) {
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.transId, object.getJSONObject("ressult").getString("reference"));
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.serviceType, PreferenceConnector.Booking);
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.ShareUserId, "");
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentType, "Booking");
+                            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
+                                    .putExtra("url",object.getJSONObject("ressult").getString("webviewurl"))
+                                    .putExtra("ref",object.getJSONObject("ressult").getString("reference")));
+                        } else if (object.optString("status").equals("0")) {
+                            //binding.loader.setVisibility(View.GONE);
+                             Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+
+                        }
+                        else if (object.optString("status").equals("5")) {
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
+                            startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
+                        }
+
+
+                    } catch (Exception e) {
+                        Log.e("error>>>>", "" + e);
+                        binding.loader.setVisibility(View.GONE);
+                        e.printStackTrace();
+                    }
+
+
+
+
+
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
+                    Toast.makeText(CheckOutPayment.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                    //  binding.loader.setVisibility(View.GONE);
+                    DataManager.getInstance().hideProgressMessage();
+                }
+            });
+        }
+
+
+
+
 
     public static String generateReferenceNumber() {
         // Get current date in DDMMYYYY format
@@ -247,6 +330,7 @@ public class CheckOutPayment extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.countryId, ""));
 
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 

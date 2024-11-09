@@ -55,40 +55,53 @@ public interface AfaryCode {
 
     @FormUrlEncoded
     @POST("add_address")
-    Call<Add_Address_Modal> add_address( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<Add_Address_Modal> add_address(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("add_money")
-    Call<ResponseBody> add_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> add_money(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("add_money_card")
+    Call<ResponseBody> addMoneyToWalletFromCard(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("transfer_money_wllet_to_wallet")
-    Call<ResponseBody> transfer_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> transfer_money(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("submit_withdrawal_request")
-    Call<ResponseBody> withdraw_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> withdraw_money(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
-  //  login
-  @FormUrlEncoded
-  @POST("user_login")
-  Call<ResponseBody> login(@FieldMap Map<String, String> params);
+    //  login
+    @FormUrlEncoded
+    @POST("user_login")
+    Call<ResponseBody> login(@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("check_otp")
     Call<CheckOtp> check_otp(@FieldMap Map<String, String> params);
 
 
-
     @FormUrlEncoded
     @POST("runPvit")
     Call<ResponseBody> payment(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
+    @FormUrlEncoded
+    @POST("runPvitWebView")
+    Call<ResponseBody> cardPaymentApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
-  @FormUrlEncoded
-  @POST("runPvit_transfer_money")
-  Call<ResponseBody> transferNumberMoney(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("runPvit_transfer_money")
+    Call<ResponseBody> transferNumberMoney(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("runPvit_transfer_money")
+    Call<ResponseBody> transferMoneyToWalletFromCard(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
@@ -110,25 +123,23 @@ public interface AfaryCode {
 
 */
 
-  @FormUrlEncoded
-  @POST("send_otp_before_signup")
-  Call<ResponseBody> sendOtpApi(@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("send_otp_before_signup")
+    Call<ResponseBody> sendOtpApi(@FieldMap Map<String, String> params);
 
-  @FormUrlEncoded
-  @POST("send_otp_before_signup_whatsup")
-  Call<ResponseBody> sendWhatsAppOtpApi(@FieldMap Map<String, String> params);
-
-
-
-  @FormUrlEncoded
-  @POST("verify_mobile_otp_before_signup")
-  Call<ResponseBody> verifyOtpApi(@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("send_otp_before_signup_whatsup")
+    Call<ResponseBody> sendWhatsAppOtpApi(@FieldMap Map<String, String> params);
 
 
+    @FormUrlEncoded
+    @POST("verify_mobile_otp_before_signup")
+    Call<ResponseBody> verifyOtpApi(@FieldMap Map<String, String> params);
 
-  @FormUrlEncoded
-  @POST("forgot_password")
-  Call<ResponseBody> forgot_passwordNew(@FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("forgot_password")
+    Call<ResponseBody> forgot_passwordNew(@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_profile")
@@ -138,49 +149,49 @@ public interface AfaryCode {
     @POST("get_skills_client")
     Call<CategoryModal> get_category( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);*/
 
-  @FormUrlEncoded
-  @POST("get_home_category")
-  Call<CategoryModal> get_category( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("get_home_category")
+    Call<CategoryModal> get_category(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("get_subcat_users")
-    Call<GetShopingCategoryModal> get_shopping_category( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<GetShopingCategoryModal> get_shopping_category(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 /*    @POST("Login")
     Call<Object> logggg(@HeaderMap Map<String,String> header, @Body RequestBody body);*/
 
     @FormUrlEncoded
     @POST("get_shop_by_product")
-    Call<ResponseBody> get_restaurant( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> get_restaurant(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("add_rating")
-    Call<ReviewModal> add_rating( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ReviewModal> add_rating(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_restaurant_detail")
-    Call<ShoppingStoreDetailsModal> get_restaurant_detail( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ShoppingStoreDetailsModal> get_restaurant_detail(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("get_wishlist")
-    Call<ResponseBody> get_wish_list( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> get_wish_list(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("get_notification_user")
-    Call<ResponseBody> notifi_list( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> notifi_list(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("notifi_count_view")
-    Call<GetViewModal> notifi_count_view( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<GetViewModal> notifi_count_view(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("get_cart")
-    Call<CartModal> get_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<CartModal> get_cart(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
@@ -190,50 +201,50 @@ public interface AfaryCode {
 
     @FormUrlEncoded
     @POST("get_order_users")
-    Call<ResponseBody> getAllOnlineOrderApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> getAllOnlineOrderApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_order_detial_users")
-    Call<ResponseBody> getDetailOnlineOrderApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> getDetailOnlineOrderApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_history_users")
-    Call<ResponseBody> getHistoryOnlineOrderApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> getHistoryOnlineOrderApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("update_cart")
-    Call<UpdateCartModal> update_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<UpdateCartModal> update_cart(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("delete_cart_data")
-    Call<DeleteCartModal> delete_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<DeleteCartModal> delete_cart(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("wishlist_to_cart")
-    Call<ResponseBody> wishlist_to_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> wishlist_to_cart(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("get_wallet_history")
-    Call<ResponseBody> get_transfer_money( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> get_transfer_money(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("available_balance")
-    Call<AddAvailable> get_available( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<AddAvailable> get_available(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("add_to_cart")
-    Call<ResponseBody> add_to_cart( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> add_to_cart(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_product_detail")
-    Call<ShoppingProductModal> get_product_detail( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ShoppingProductModal> get_product_detail(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_slider")
-    Call<BannerModal1> get_slider( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<BannerModal1> get_slider(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @Multipart
@@ -251,89 +262,84 @@ public interface AfaryCode {
             @Part MultipartBody.Part file);
 
 
+    @FormUrlEncoded
+    @POST("get_item_search")
+    Call<ResponseBody> getProductSearch(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
-  @FormUrlEncoded
-  @POST("get_item_search")
-  Call<ResponseBody> getProductSearch( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
-  @FormUrlEncoded
-    @POST("get_item")
-    Call<ResponseBody> getProductItem( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_item")
-    Call<ResponseBody> getProductBySearchIdItem( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> getProductItem(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("get_item")
+    Call<ResponseBody> getProductBySearchIdItem(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_item_search")
-    Call<ResponseBody> searchProduct( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> searchProduct(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("get_search_suggestions")
-  Call<ResponseBody> searchSuggestionProduct( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
+    @FormUrlEncoded
+    @POST("get_search_suggestions")
+    Call<ResponseBody> searchSuggestionProduct(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("get_product_users")
-    Call<ResponseBody> getAllProduct( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> getAllProduct(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
-  @FormUrlEncoded
-  @POST("get_product_by_category_location")
-  Call<ResponseBody> getAllProductCatCountry( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("get_product_by_category_location")
+    Call<ResponseBody> getAllProductCatCountry(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  //////////////
-  @FormUrlEncoded
-  @POST("get_home_title")
-    Call<ResponseBody> getHomeTitle( @HeaderMap Map<String, String> auth,@FieldMap Map<String,String> param);
+    //////////////
+    @FormUrlEncoded
+    @POST("get_home_title")
+    Call<ResponseBody> getHomeTitle(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> param);
 
     @POST("get_country")
-    Call<ResponseBody> getAllCountry( @HeaderMap Map<String, String> auth);
+    Call<ResponseBody> getAllCountry(@HeaderMap Map<String, String> auth);
 
 
     @FormUrlEncoded
     @POST("add_address")
-    Call<ResponseBody> addAddress( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> addAddress(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("get_address")
-    Call<ResponseBody> getAddress( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> getAddress(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("update_address")
-    Call<ResponseBody> updateAddress( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
+    Call<ResponseBody> updateAddress(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("delete_address")
-    Call<ResponseBody> deleteAddres( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> deleteAddres(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("get_tax_km")
-    Call<ResponseBody> getAllTax( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> getAllTax(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("get_tax_delivery_chareges")
-  Call<ResponseBody> getAllTaxNew( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("get_tax_delivery_chareges")
+    Call<ResponseBody> getAllTaxNew(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("insert_chat")
-    Call<ResponseBody> sendNotification( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> sendNotification(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @FormUrlEncoded
     @POST("update_country")
-    Call<ResponseBody> updateCountryApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    Call<ResponseBody> updateCountryApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
     @GET("privacy_policy")
@@ -346,157 +352,151 @@ public interface AfaryCode {
     Call<ResponseBody> getUseConditions();
 
 
+    @GET("get_address_category")
+    Call<ResponseBody> getDelivery(@HeaderMap Map<String, String> auth, @Query("register_id") String registerId, @Query("user_id") String user_id);
 
-  @GET("get_address_category")
-  Call<ResponseBody> getDelivery(@HeaderMap Map<String, String> auth, @Query("register_id") String registerId,@Query("user_id") String user_id);
-
-  @FormUrlEncoded
-  @POST("get_seller_shop_detail") // get_product
-  Call<ResponseBody> get_shop_detail( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
-
-  @FormUrlEncoded
-  @POST("add_to_wishlist")
-  Call<ResponseBody> addToFavApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("get_seller_shop_detail")
+        // get_product
+    Call<ResponseBody> get_shop_detail(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("get_delivery_partner")
-  Call<ResponseBody> getDeliveryAgencyApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-  @FormUrlEncoded
-  @POST("payment_processing")
-  Call<ResponseBody> checkPaymentStatusApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("add_to_wishlist")
+    Call<ResponseBody> addToFavApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-@FormUrlEncoded
-  @POST("order_cancel_by_user")
-  Call<ResponseBody>cancelOrderByUserApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
+    @FormUrlEncoded
+    @POST("get_delivery_partner")
+    Call<ResponseBody> getDeliveryAgencyApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("payment_processing")
+    Call<ResponseBody> checkPaymentStatusApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("logout")
-  Call<ResponseBody>logoutApi(@FieldMap Map<String,String>params);
-
-  @FormUrlEncoded
-  @POST("insert_tax_delivery_chareges")
-  Call<ResponseBody>sendTaxTServerApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
+    @FormUrlEncoded
+    @POST("order_cancel_by_user")
+    Call<ResponseBody> cancelOrderByUserApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
+    @FormUrlEncoded
+    @POST("logout")
+    Call<ResponseBody> logoutApi(@FieldMap Map<String, String> params);
 
-  @FormUrlEncoded
-  @POST("update_withdrawal_request")
-  Call<ResponseBody> withdraw_money_update( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-  @FormUrlEncoded
-  @POST("yes_transfer_money_wllet_to_wallet")
-  Call<ResponseBody> transfer_moneyFirstApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
-  @FormUrlEncoded
-  @POST("money_transfer_request")
-  Call<ResponseBody> transfer_money_request( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("insert_tax_delivery_chareges")
+    Call<ResponseBody> sendTaxTServerApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
+    @FormUrlEncoded
+    @POST("update_withdrawal_request")
+    Call<ResponseBody> withdraw_money_update(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
-  @FormUrlEncoded
-  @POST("send_money_transfer_request")
-  Call<ResponseBody> transferMoneyRequestSend( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
-
-  @FormUrlEncoded
-  @POST("get_driver_location")
-  Call<ResponseBody> getDriverLocationApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String,String> paramHashMap);
+    @FormUrlEncoded
+    @POST("yes_transfer_money_wllet_to_wallet")
+    Call<ResponseBody> transfer_moneyFirstApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-
-  @FormUrlEncoded
-  @POST("add_product_review_rating")
-  Call<ResponseBody> giveRateReviewApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
-  @FormUrlEncoded
-  @POST("check_product_availability")
-  Call<ResponseBody> checkProductAvailabilityApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("money_transfer_request")
+    Call<ResponseBody> transfer_money_request(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("delete_user_order")
-  Call<ResponseBody>deleteItemByUserApi(@HeaderMap Map<String,String> auth,@FieldMap Map<String,String>params);
+    @FormUrlEncoded
+    @POST("send_money_transfer_request")
+    Call<ResponseBody> transferMoneyRequestSend(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("get_sellers")
-  Call<ResponseBody> getSellerChatListApi( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("get_driver_location")
+    Call<ResponseBody> getDriverLocationApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> paramHashMap);
 
 
-  @FormUrlEncoded
-  @POST("password_reset")
-  Call<ResponseBody> sendAdminRequest(@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("add_product_review_rating")
+    Call<ResponseBody> giveRateReviewApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("change_password_user")
-  Call<ResponseBody> changePasswordRepo(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("check_product_availability")
+    Call<ResponseBody> checkProductAvailabilityApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("update_language")
-  Call<ResponseBody> updateLanguageApi(@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("delete_user_order")
+    Call<ResponseBody> deleteItemByUserApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
-  @GET("get_register_description")
+
+    @FormUrlEncoded
+    @POST("get_sellers")
+    Call<ResponseBody> getSellerChatListApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("password_reset")
+    Call<ResponseBody> sendAdminRequest(@FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("change_password_user")
+    Call<ResponseBody> changePasswordRepo(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("update_language")
+    Call<ResponseBody> updateLanguageApi(@FieldMap Map<String, String> params);
+
+    @GET("get_register_description")
     Call<ResponseBody> getTitleDes();
 
 
-
-  @FormUrlEncoded
-  @POST("get_notification_count_user")
-  Call<ResponseBody> getNotificationCounterApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-
-  @FormUrlEncoded
-  @POST("")
-  Call<ResponseBody> sendNumberOnServerApi(@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("get_notification_count_user")
+    Call<ResponseBody> getNotificationCounterApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("check_user_exist_or_not_to_send_invoice")
-  Call<ResponseBody> checkUserExitApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("")
+    Call<ResponseBody> sendNumberOnServerApi(@FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("generate_invoice")
-  Call<ResponseBody> sendInvoiceAnotherApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("check_user_exist_or_not_to_send_invoice")
+    Call<ResponseBody> checkUserExitApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("invoice_details")
-  Call<ResponseBody> getInvoiceDataApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("generate_invoice")
+    Call<ResponseBody> sendInvoiceAnotherApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("send_message_to_admin")
-  Call<ResponseBody> sendAdminMsg( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("invoice_details")
+    Call<ResponseBody> getInvoiceDataApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("reorder")
-  Call<ResponseBody> reOrder( @HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("send_message_to_admin")
+    Call<ResponseBody> sendAdminMsg(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("generate_invoice_recharge_wallet")
-  Call<ResponseBody> sendWalletRechargeInvoiceAnotherApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
-
-  @FormUrlEncoded
-  @POST("invoice_details_recharge_wallet")
-  Call<ResponseBody> getWalletInvoiceDataApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("reorder")
+    Call<ResponseBody> reOrder(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
-  @FormUrlEncoded
-  @POST("get_check_delivery_availability")
-  Call<ResponseBody> getDeliveryAvailabilityApi(@HeaderMap Map<String, String> auth,@FieldMap Map<String, String> params);
+    @FormUrlEncoded
+    @POST("generate_invoice_recharge_wallet")
+    Call<ResponseBody> sendWalletRechargeInvoiceAnotherApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("invoice_details_recharge_wallet")
+    Call<ResponseBody> getWalletInvoiceDataApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("get_check_delivery_availability")
+    Call<ResponseBody> getDeliveryAvailabilityApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 }

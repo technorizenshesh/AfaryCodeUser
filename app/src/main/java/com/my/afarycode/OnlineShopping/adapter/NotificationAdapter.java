@@ -64,8 +64,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             if(all_category_subcategory.get(position).getType().equalsIgnoreCase("InvoiceToOtherUser")){
                 activity.startActivity(new Intent(activity, PaymentByAnotherAct.class)
                         .putExtra("paymentInsertId", all_category_subcategory.get(position).getJsonDecode().getInvoiceId())
-                        .putExtra("user_id",all_category_subcategory.get(position).getJsonDecode().getUserId()));
+                        .putExtra("user_id",all_category_subcategory.get(position).getJsonDecode().getUserId())
+                        .putExtra("type",all_category_subcategory.get(position).getType()));
             }
+
+
+
         });
 
 

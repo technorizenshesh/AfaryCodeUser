@@ -136,6 +136,7 @@ public class ChatListAct extends AppCompatActivity implements ChatOnListener{
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(ChatListAct.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(ChatListAct.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(ChatListAct.this, PreferenceConnector.countryId, ""));
 
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 

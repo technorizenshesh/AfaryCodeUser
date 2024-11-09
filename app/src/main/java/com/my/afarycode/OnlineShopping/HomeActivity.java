@@ -276,6 +276,8 @@ public class HomeActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(HomeActivity.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(HomeActivity.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(HomeActivity.this, PreferenceConnector.countryId, ""));
+
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {

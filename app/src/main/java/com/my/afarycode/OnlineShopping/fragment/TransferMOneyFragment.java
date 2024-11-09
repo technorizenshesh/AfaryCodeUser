@@ -31,7 +31,9 @@ import com.my.afarycode.OnlineShopping.CheckPaymentStatusAct;
 import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.AddWalletModal;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
+import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.Model.TransferMoneyModal;
+import com.my.afarycode.OnlineShopping.PaymentWebViewAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.deeplink.PaymentByAnotherAct;
@@ -65,6 +67,8 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
     private CountryCodePicker ccp;
     private String code;
     AskListener listener;
+    GetProfileModal data;
+
     public TransferMOneyFragment(Context context) {
         this.context = context;
     }
@@ -88,6 +92,8 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         payment_done = contentView.findViewById(R.id.payment_done);
         et_money = contentView.findViewById(R.id.et_money);
         ccp = contentView.findViewById(R.id.ccp);
+
+        GetProfile();
 
         payment_done.setOnClickListener(v -> {
             code = ccp.getSelectedCountryCode();
@@ -177,6 +183,15 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         LinearLayout llAirtel = mDialog.findViewById(R.id.llAirtel);
         LinearLayout llCard = mDialog.findViewById(R.id.llCard);
         LinearLayout llWallet = mDialog.findViewById(R.id.llWallet);
+        RelativeLayout rlMblMoney = mDialog.findViewById(R.id.rlMblMoney1);
+
+        if(data.getResult().getCountry().equals("79")){
+            rlMblMoney.setVisibility(View.VISIBLE);
+        }
+        else {
+            rlMblMoney.setVisibility(View.GONE);
+
+        }
 
 
 
@@ -194,6 +209,8 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         });
 
         llCard.setOnClickListener(v -> {
+            mDialog.dismiss();
+            dialogNumberExit(amount,totalAmount,walletFees,mobileNoEt,countryCode,"Card");
         });
 
         llWallet.setOnClickListener(v -> {
@@ -244,6 +261,12 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
                 dialogAirtel("AM",totalAmount,number,fee);
 
             }
+
+            else if(payType.equals("Card")){
+                monetTransferByCard(countryCode,totalAmount,number,fee,mDialog);
+            }
+
+
             else {
                 TransferMoneyFirstAPI(countryCode, number, Amount, totalAmount, fee);
             }
@@ -494,6 +517,135 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
                 Toast.makeText(getActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
                 //  binding.loader.setVisibility(View.GONE);
                 DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+    private void   GetProfile() {
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
+
+        Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
+
+        loginCall.enqueue(new Callback<GetProfileModal>() {
+            @Override
+            public void onResponse(Call<GetProfileModal> call,
+                                   Response<GetProfileModal> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+
+                    data = response.body();
+                    String dataResponse = new Gson().toJson(response.body());
+
+                    Log.e("MapMap", "GET RESPONSE" + dataResponse);
+
+                    if (data.status.equals("1")) {
+
+                    } else if (data.status.equals("0")) {
+                    }
+
+                    else if (data.status.equals("5")) {
+                        // PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        //  startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        //  finish();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetProfileModal> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+
+
+
+    private void monetTransferByCard(String countryCode,String money,String creditMoneyNumber,String adminFee,Dialog dialog) {
+        // binding.loader.setVisibility(View.VISIBLE);
+
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("amount", money);
+        map.put("creditCountryCode", countryCode);
+        map.put("operator", "VM");
+          map.put("num_marchand", "");
+        map.put("fee", adminFee);
+        map.put("numberCredit",creditMoneyNumber);
+        map.put("numberDebit","");
+        map.put("paymentType","Card");
+        map.put("transaction_by","Other");
+        map.put("transaction_type","TransferMoney");
+
+        Log.e("MapMap", "WALLET RECHARGE REQUEST" + map);
+
+
+        Call<ResponseBody> SignupCall = apiInterface.transferMoneyToWalletFromCard(headerMap,map);
+
+        SignupCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                //   binding.loader.setVisibility(View.GONE);
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "TransferMoney By Card RESPONSE" + object);
+                    if (object.getString("status").equals("1")) {
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.serviceType,"Transfer");
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.ShareUserId,"");
+                        PreferenceConnector.writeString(getActivity(),PreferenceConnector.PaymentType,"Transfer");
+                        Log.e("url=====",object.getJSONObject("ressult").getString("webviewurl"));
+
+                    //   dialog.dismiss();
+                        startActivity(new Intent(getActivity(), PaymentWebViewAct.class)
+                                .putExtra("url",object.getJSONObject("ressult").getString("webviewurl"))
+                                .putExtra("ref",object.getJSONObject("ressult").getString("reference")));
+
+
+                    } else if (object.getString("status").equals("0")) {
+                        dismiss();
+                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
+                    }
+
+                    else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        getActivity().finish();
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+
             }
         });
     }

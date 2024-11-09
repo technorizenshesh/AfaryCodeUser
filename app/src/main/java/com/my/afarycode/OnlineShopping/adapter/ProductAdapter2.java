@@ -56,7 +56,7 @@ public class ProductAdapter2 extends RecyclerView.Adapter<ProductAdapter2.MyView
             context.startActivity(new Intent(context, ProductDetailAct.class)
                     .putExtra("product_id",arrayList.get(position).getProId())
                     .putExtra("restaurant_id",arrayList.get(position).getRestaurantId())
-                    .putExtra("productPrice",arrayList.get(position).getLocalPrice()));
+                    .putExtra("productPrice",arrayList.get(position).getProductPrice()));
         });
 
 

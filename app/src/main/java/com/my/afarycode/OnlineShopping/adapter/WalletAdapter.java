@@ -57,14 +57,14 @@ public class WalletAdapter extends
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
 
         holder.progressAdapterBinding.userName.setText(all_category_subcategory.get(position).getDatetime());
-        holder.progressAdapterBinding.amount.setText("XAF" + String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getAmount())));
-        holder.progressAdapterBinding.tvWalletBal.setText("XAF" + String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getWalletBalance())));
+        holder.progressAdapterBinding.amount.setText(all_category_subcategory.get(position).getLocalCurrency() + String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getLocalPrice())));
+        holder.progressAdapterBinding.tvWalletBal.setText(all_category_subcategory.get(position).getWalletLocalCurrency()+ String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getWalletLocalPrice())));
 
 
         holder.progressAdapterBinding.tvTransId.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Transaction ID :" + "</b>" + all_category_subcategory.get(position).getTransactionId()   +"</font>")  );
         holder.progressAdapterBinding.tvRefInfo.setText(Html.fromHtml("<font color='#000'>"+ "<b>"+"Reference Info :"+ "</b>"+  all_category_subcategory.get(position).getReferenceInfo()    +"</font>")  );
         holder.progressAdapterBinding.tvTemps.setText(Html.fromHtml("<font color='#000'>"+"<b>"+"Temps :" + "</b>" + all_category_subcategory.get(position).getDatetime() +"</font>"));
-        holder.progressAdapterBinding.tvAmount.setText(Html.fromHtml("<font color='#000'>" +  "<b>" +"Amount : "+ "</b>"  + "XAF"+String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getAmount()))  + "</font>"));
+        holder.progressAdapterBinding.tvAmount.setText(Html.fromHtml("<font color='#000'>" +  "<b>" +"Amount : "+ "</b>"  + all_category_subcategory.get(position).getLocalCurrency()+String.format("%.2f",Double.parseDouble(all_category_subcategory.get(position).getLocalPrice()))  + "</font>"));
 
 
 

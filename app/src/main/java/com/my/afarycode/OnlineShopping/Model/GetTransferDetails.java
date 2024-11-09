@@ -113,6 +113,54 @@ public class GetTransferDetails {
         @Expose
         private String walletBalance;
 
+        @SerializedName("local_currency")
+        @Expose
+        public String localCurrency;
+
+        @SerializedName("local_price")
+        @Expose
+        public String localPrice;
+
+        @SerializedName("wallet_local_currency")
+        @Expose
+        public String walletLocalCurrency;
+
+        @SerializedName("wallet_local_price")
+        @Expose
+        public String walletLocalPrice;
+
+
+        public String getWalletLocalCurrency() {
+            return walletLocalCurrency;
+        }
+
+        public void setWalletLocalCurrency(String walletLocalCurrency) {
+            this.walletLocalCurrency = walletLocalCurrency;
+        }
+
+        public String getWalletLocalPrice() {
+            return walletLocalPrice;
+        }
+
+        public void setWalletLocalPrice(String walletLocalPrice) {
+            this.walletLocalPrice = walletLocalPrice;
+        }
+
+        public String getLocalCurrency() {
+            return localCurrency;
+        }
+
+        public void setLocalCurrency(String localCurrency) {
+            this.localCurrency = localCurrency;
+        }
+
+        public String getLocalPrice() {
+            return localPrice;
+        }
+
+        public void setLocalPrice(String localPrice) {
+            this.localPrice = localPrice;
+        }
 
         public String getWalletBalance() {
             return walletBalance;

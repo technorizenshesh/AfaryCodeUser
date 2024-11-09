@@ -386,6 +386,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
 
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
@@ -438,6 +439,8 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
     private void GetSellerProfileAPI(String id) {
         Map<String, String> map = new HashMap<>();
         map.put("user_id",id);
+        map.put("country_id",PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
+
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
         loginCall.enqueue(new Callback<GetProfileModal>() {

@@ -36,6 +36,8 @@ import com.my.afarycode.OnlineShopping.CheckOutPayment;
 import com.my.afarycode.OnlineShopping.CheckPaymentStatusAct;
 import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.AddWalletModal;
+import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
+import com.my.afarycode.OnlineShopping.PaymentWebViewAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.CountryCodes;
@@ -51,10 +53,13 @@ import com.my.afarycode.ratrofit.ApiClient;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -71,6 +76,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
     private AfaryCode apiInterface;
     CountryCodePicker ccp;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    GetProfileModal data;
 
 
     BroadcastReceiver PaymentStatusReceiver = new BroadcastReceiver() {
@@ -163,7 +169,96 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         binding.btnSendAnother.setOnClickListener(v->{
             dialogSendAnotherPerson();
         });
+
+
+        binding.llTransfer.setOnClickListener(v -> {
+            // PaymentAPI("VM", strList);
+      /*      String refNumber = generateReferenceNumber();
+            String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=" + money + "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, "")
+                    + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";*/
+
+
+
+
+            walletRechargeByCard();
+
+        });
+
+        GetProfile();
     }
+
+
+        private void walletRechargeByCard() {
+            // binding.loader.setVisibility(View.VISIBLE);
+
+            DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+            Map<String,String> headerMap = new HashMap<>();
+            headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+            headerMap.put("Accept","application/json");
+
+            Map<String, String> map = new HashMap<>();
+            map.put("user_id", PreferenceConnector.readString(getContext(), PreferenceConnector.User_id, ""));
+            map.put("amount", money);
+            map.put("operateur", "VM");
+           map.put("num_marchand", "");
+           map.put("user_number", "");
+            map.put("datetime", DataManager.getCurrent());
+            map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
+            Log.e("MapMap", "WALLET RECHARGE REQUEST" + map);
+
+
+            Call<ResponseBody> SignupCall = apiInterface.addMoneyToWalletFromCard(headerMap,map);
+
+            SignupCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    DataManager.getInstance().hideProgressMessage();
+                    //   binding.loader.setVisibility(View.GONE);
+
+                    try {
+                        String responseData = response.body() != null ? response.body().string() : "";
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e(TAG, "WALLET Card RECHARGE RESPONSE" + object);
+                        if (object.getString("status").equals("1")) {
+                            PreferenceConnector.writeString(getActivity(),PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
+                            PreferenceConnector.writeString(getActivity(),PreferenceConnector.serviceType,"AddMoney");
+                            PreferenceConnector.writeString(getActivity(),PreferenceConnector.ShareUserId,"");
+                            PreferenceConnector.writeString(getActivity(),PreferenceConnector.PaymentType,"AddMoney");
+                            dialog.dismiss();
+                            startActivity(new Intent(getActivity(), PaymentWebViewAct.class)
+                                    .putExtra("url",object.getJSONObject("ressult").getString("webviewurl"))
+                                    .putExtra("ref",object.getJSONObject("ressult").getString("reference")));
+
+
+                        } else if (object.getString("status").equals("0")) {
+                            binding.rlPayment.setVisibility(View.VISIBLE);
+                            binding.rlPaymentStatus.setVisibility(View.GONE);
+                            dismiss();
+                            Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
+                        }
+
+                        else if (object.optString("status").equals("5")) {
+                            PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                            startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            getActivity().finish();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
+                    DataManager.getInstance().hideProgressMessage();
+                    // binding.loader.setVisibility(View.GONE);
+
+                }
+            });
+        }
+
 
 
 
@@ -188,7 +283,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
 
         btnPayNow.setOnClickListener(v -> {
             if(edNumber.getText().toString().equals(""))
-                Toast.makeText(getActivity(), "Please enter number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();
@@ -576,6 +671,88 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
                 setCountryCodeFromLocation(ccp);
             }
         }
+    }
+
+
+
+    private void GetProfile() {
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id",PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
+
+        Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
+
+        loginCall.enqueue(new Callback<GetProfileModal>() {
+            @Override
+            public void onResponse(Call<GetProfileModal> call,
+                                   Response<GetProfileModal> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+
+                    data = response.body();
+                    String dataResponse = new Gson().toJson(response.body());
+
+                    Log.e("MapMap", "GET RESPONSE" + dataResponse);
+
+                    if (data.status.equals("1")) {
+
+                        if(data.getResult().getCountry().equals("79")){
+                            binding.rlMblMoney.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            binding.rlMblMoney.setVisibility(View.GONE);
+
+                        }
+
+                    } else if (data.status.equals("0")) {
+                    }
+
+                    else if (data.status.equals("5")) {
+                       // PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
+                      //  startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                      //  finish();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetProfileModal> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+    public static String generateReferenceNumber() {
+        // Get current date in DDMMYYYY format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyy");
+        String datePart = dateFormat.format(new Date());
+
+        // Generate two random letters
+        String lettersPart = generateRandomLetters(2);
+
+        // Combine parts to create the reference number
+        return "Ref" + datePart + lettersPart;
+    }
+
+    private static String generateRandomLetters(int length) {
+        StringBuilder letters = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            // Generate a random letter between 'a' and 'z'
+            char randomChar = (char) ('a' + random.nextInt(26));
+            letters.append(randomChar);
+        }
+        return letters.toString();
     }
 
 }

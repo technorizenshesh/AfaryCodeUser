@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
-import com.my.afarycode.OnlineShopping.deeplink.PaymentByAnotherAct;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityPaymentViewBinding;
 
@@ -52,7 +51,7 @@ public class PaymentWebViewAct extends AppCompatActivity {
                 // Check for success or failure URL patterns
                 String url = request.getUrl().toString();
                 Log.e("url===",url);
-                if (url.contains("payment_success")) {
+                 if (url.contains("process-card?")) {
                     // Handle payment success
 
                  if(PreferenceConnector.readString(PaymentWebViewAct.this,PreferenceConnector.PaymentType,"").equals("Booking")) {
@@ -62,7 +61,27 @@ public class PaymentWebViewAct extends AppCompatActivity {
                  }
                  else if(PreferenceConnector.readString(PaymentWebViewAct.this,PreferenceConnector.PaymentType,"").equals("InvoiceWallet")){
                      startActivity(new Intent(PaymentWebViewAct.this, CheckPaymentStatusAct.class)
+                             .putExtra("paymentBy", "InvoiceWallet"));
+                     finish();
+                 }
+
+                 else if(PreferenceConnector.readString(PaymentWebViewAct.this,PreferenceConnector.PaymentType,"").equals("Invoice")){
+                     startActivity(new Intent(PaymentWebViewAct.this, CheckPaymentStatusAct.class)
+                             .putExtra("paymentBy", "Invoice"));
+                     finish();
+                 }
+
+                   // transfer money by card wallet
+                 else if(PreferenceConnector.readString(PaymentWebViewAct.this,PreferenceConnector.PaymentType,"").equals("Transfer")){
+                     startActivity(new Intent(PaymentWebViewAct.this, CheckPaymentStatusAct.class)
                              .putExtra("paymentBy", "Transfer"));
+                     finish();
+                 }
+
+
+                 else if(PreferenceConnector.readString(PaymentWebViewAct.this,PreferenceConnector.PaymentType,"").equals("AddMoney")){
+                     startActivity(new Intent(PaymentWebViewAct.this, CheckPaymentStatusAct.class)
+                             .putExtra("paymentBy", "AddMoney"));
                      finish();
                  }
 
@@ -72,14 +91,14 @@ public class PaymentWebViewAct extends AppCompatActivity {
                      finish();
                  }
                     return true; // Don't load the URL
-                } else if (url.contains("payment_failure")) {
+                }/* else {
                     // Handle payment failure
                     Toast.makeText(PaymentWebViewAct.this, "Payment Failed!", Toast.LENGTH_SHORT).show();
                     finish();
                     return true;
-                }
+                }*/
 
-                return false; // Let the WebView handle other URLs
+               return false; // Let the WebView handle other URLs
             }
         });
 
