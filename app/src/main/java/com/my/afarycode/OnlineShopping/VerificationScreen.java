@@ -44,7 +44,7 @@ public class VerificationScreen extends AppCompatActivity {
     SmsBroadcastReceiver smsBroadcastReceiver;
     private static final long TIMER_DURATION = 60000; // 1 minute in milliseconds
     private static final long TIMER_INTERVAL = 1000;  // 1 second interval
-
+    private int resendButtonCount=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +94,7 @@ public class VerificationScreen extends AppCompatActivity {
         });
 
         binding.resendOtp.setOnClickListener(v -> {
+           resendButtonCount++;
             binding.Otp.setOTP("");
             startSmartUserConsent();
             sendVerificationCode(mobile,countryCode);
@@ -197,9 +198,17 @@ public class VerificationScreen extends AppCompatActivity {
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     if (jsonObject.getString("status").equals("1")) {
-                        binding.tvTimer.setVisibility(View.VISIBLE);
-                        binding.resendOtp.setVisibility(View.GONE);
-                        startTimer();
+                        if(resendButtonCount>=2){
+                            binding.rlResendOtp.setVisibility(View.GONE);
+                        }
+                        else {
+                            binding.rlResendOtp.setVisibility(View.VISIBLE);
+                            binding.tvTimer.setVisibility(View.VISIBLE);
+                            binding.resendOtp.setVisibility(View.GONE);
+                            startTimer();
+                        }
+
+
                     Toast.makeText(VerificationScreen.this,getString(R.string.otp_successfully_send),Toast.LENGTH_LONG).show();
 
                     } else if (jsonObject.getString("status").equals("0")) {
