@@ -289,13 +289,18 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         else if(model.getResult().getStatus().equals("Cancelled")){
                             binding.llButtons.setVisibility(View.GONE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
+                          //  binding.btnAccept.setVisibility(View.VISIBLE);
+                          ///  binding.btnAccept.setText(getString(R.string.re_order));
 
                         }
 
                         else if(model.getResult().getStatus().equals("Cancelled_by_user")){
-                            binding.llButtons.setVisibility(View.GONE);
+                            binding.llButtons.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
-
+                            binding.btnAccept.setVisibility(View.VISIBLE);
+                            binding.btnDecline.setVisibility(View.GONE);
+                            binding.btnChat.setVisibility(View.GONE);
+                            binding.btnAccept.setText(getString(R.string.re_order));
                         }
 
 
