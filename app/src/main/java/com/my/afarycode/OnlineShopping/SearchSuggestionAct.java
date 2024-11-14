@@ -218,6 +218,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
         GetNearestRestaurantAPI("");
 
 
+
     }
 
 
