@@ -167,6 +167,12 @@ public interface AfaryCode {
 
 
     @FormUrlEncoded
+    @POST("get_shop_by_product_name")
+    Call<ResponseBody> get_shop_by_product_name(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+
+    @FormUrlEncoded
     @POST("add_rating")
     Call<ReviewModal> add_rating(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 

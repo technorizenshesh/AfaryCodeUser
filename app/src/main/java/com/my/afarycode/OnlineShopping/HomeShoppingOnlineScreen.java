@@ -223,6 +223,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
         binding.dashboard.searchEtHome.setOnClickListener(v -> {
           //  startActivity(new Intent(getActivity(), SearchAct.class));
+            fragment = new SearchSuggestionAct();
+            loadFragment(fragment);
         });
 
         binding.dashboard.searchEtHome.addTextChangedListener(new TextWatcher() {

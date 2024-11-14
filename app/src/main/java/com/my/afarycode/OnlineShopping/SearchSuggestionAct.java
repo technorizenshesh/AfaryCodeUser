@@ -118,7 +118,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                 e.printStackTrace();
             }
         }
-        binding.llMain.setVisibility(View.GONE);
+        binding.llMain.setVisibility(View.VISIBLE);
         binding.search.setThreshold(3);
         adapter = new SuggestionAdapter(requireActivity(), suggestions);
         binding.search.setAdapter(adapter);
@@ -132,10 +132,10 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                     binding.search.setText(selectedPlace.getProductName());
                     Log.e("Selected Data", "Selected position out of bounds: " + selectedPlace.getProductName().toString());
 
-                    startActivity(new Intent(requireActivity(), ProductDetailAct.class)
-                            .putExtra("product_id", selectedPlace.getProId())
-                            .putExtra("restaurant_id", selectedPlace.getRestaurantId())
-                            .putExtra("productPrice", selectedPlace.getProductPrice()));
+                  //  startActivity(new Intent(requireActivity(), ProductDetailAct.class)
+                  //          .putExtra("product_id", selectedPlace.getProId())
+                  //          .putExtra("restaurant_id", selectedPlace.getRestaurantId())
+                   //         .putExtra("productPrice", selectedPlace.getProductPrice()));
                 }
           //  } else {
            //     Log.e("Error", "Selected position out of bounds: " + position);
@@ -146,7 +146,8 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
         binding.btnSearch.setOnClickListener(v -> {
             binding.llMain.setVisibility(View.VISIBLE);
-
+            getSearchBtnProduct();
+            GetShopByProductName("");
         });
 
         binding.search.addTextChangedListener(new TextWatcher() {
@@ -159,12 +160,16 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                 //adapter.getFilter().filter(s);
 
                 if (s.length() > 0) {
-                    binding.llMain.setVisibility(View.GONE);
+                  // binding.llMain.setVisibility(View.GONE);
                     queryString = s.toString();
-                    getProductss(); // Call to fetch suggestions
+                    getSearchProduct(); // Call to fetch suggestions
                 } else {
                     suggestions.clear(); // Clear suggestions if input is empty
                     adapter.notifyDataSetChanged();
+                  //  arrayList.clear();
+                  //  adapterSearch.notifyDataSetChanged();
+                    GetNearestRestaurantAPI("");
+
                    // binding.llMain.setVisibility(View.VISIBLE);
                 }
 
@@ -206,7 +211,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
             }
         });*/
 
-        adapterSearch = new ProductAdapter2(requireActivity(), (ArrayList<ProductItemModel.Result>) suggestions, 4);
+        adapterSearch = new ProductAdapter2(requireActivity(), (ArrayList<ProductItemModel.Result>) arrayList, 4);
         binding.rvProduct.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
         binding.rvProduct.setAdapter(adapterSearch);
 
@@ -261,7 +266,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
 
 
-    private void getProductss() {
+    private void getSearchProduct() {
         //binding.swiperRefresh.setRefreshing(true);
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token,""));
@@ -290,7 +295,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                         adapter = new SuggestionAdapter(requireActivity(), suggestions);
                         binding.search.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
-                        adapterSearch.notifyDataSetChanged();
+                     //   adapterSearch.notifyDataSetChanged();
                         binding.tvNotFound.setVisibility(View.GONE);
                        // View v = new View(getActivity());
                      //   showDropDownProductSuggestion(v,arrayList);
@@ -309,8 +314,8 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                     else {
                         suggestions.clear();
                         adapter.notifyDataSetChanged();
-                        adapterSearch.notifyDataSetChanged();
-                        binding.tvNotFound.setVisibility(View.VISIBLE);
+                     //   adapterSearch.notifyDataSetChanged();
+                     //   binding.tvNotFound.setVisibility(View.VISIBLE);
 
                     }
 
@@ -327,6 +332,76 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
             }
         });
     }
+
+    private void getSearchBtnProduct() {
+        //binding.swiperRefresh.setRefreshing(true);
+        DataManager.getInstance().showProgressMessage(getActivity(),getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        HashMap<String,String> param = new HashMap<>();
+        param.put("title",queryString);
+        param.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
+        param.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
+        param.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
+
+        Call<ResponseBody> call = apiInterface.searchSuggestionProduct(headerMap,param);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // binding.swiperRefresh.setRefreshing(false);
+                 DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseString = response.body().string();
+                    JSONObject jsonObject = new JSONObject(responseString);
+                    Log.e(TAG,"getProduct  btn Search Response = " + responseString);
+                    if(jsonObject.getString("status").equals("1")) {
+                        ProductItemModel model = new Gson().fromJson(responseString, ProductItemModel.class);
+                        arrayList.clear();
+                        arrayList.addAll(model.getResult());
+                        adapterSearch.notifyDataSetChanged();
+                        binding.tvNotFound.setVisibility(View.GONE);
+                        // View v = new View(getActivity());
+                        //   showDropDownProductSuggestion(v,arrayList);
+
+                    }
+
+                    else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(requireActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        requireActivity().finish();
+
+                    }
+
+
+
+                    else {
+                        arrayList.clear();
+                        adapterSearch.notifyDataSetChanged();
+                        binding.tvNotFound.setVisibility(View.VISIBLE);
+
+                    }
+
+                } catch (Exception e) {
+                    // Toast.makeText(mContext, "Exception = " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.e("Exception","Exception = " + e.getMessage());
+                    DataManager.getInstance().hideProgressMessage();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //binding.swiperRefresh.setRefreshing(false);
+                DataManager.getInstance().hideProgressMessage();
+
+            }
+        });
+    }
+
+
 
 
 
@@ -405,7 +480,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
                     } else {
                         binding.rlProduct.setVisibility(View.GONE);
-                        arrayList.clear();
+                        suggestions.clear();
                         adapterSearch.notifyDataSetChanged();
                         // binding.tvNotFound.setVisibility(View.VISIBLE);
 
@@ -453,14 +528,14 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     Log.e("MapMap", "near_List" + stringResponse);
-                   /* if(cat_id.isEmpty()) {
+                    if(cat_id.isEmpty()) {
                         getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
                     }
                     else if(cat_id.contentEquals("view all")){
                     }
                     else {
                         getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
-                    }*/
+                    }
 
                     if (jsonObject.getString("status").equals("1")) {
                         ShopModel mainCateModel = new Gson().fromJson(stringResponse, ShopModel.class);
@@ -518,6 +593,97 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
             }
         });
     }
+
+    private void GetShopByProductName(String cat_id) {
+
+        DataManager.getInstance().showProgressMessage(requireActivity(), getString(R.string.please_wait));
+
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
+      //  map.put("latitute",  lat+"");
+     //   map.put("longitute",  lon+"");
+     //   map.put("category_id", "" + cat_id);
+     //   map.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
+        map.put("stirng",queryString);
+
+
+        Log.e("MapMap", "Search Shop by Product Name" + map);
+        Call<ResponseBody> loginCall = apiInterface.get_shop_by_product_name(headerMap, map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    Log.e("MapMap", "Search Shop by Product Name" + stringResponse);
+                    if (jsonObject.getString("status").equals("1")) {
+                        ShopModel mainCateModel = new Gson().fromJson(stringResponse, ShopModel.class);
+                        binding.rlShops.setVisibility(View.VISIBLE);
+                        allShops = new ArrayList<>();
+                        get_result1.clear();
+
+                        get_result1.addAll(mainCateModel.getResult());
+                        allShops.addAll(mainCateModel.getResult());
+
+                        if(cat_id.isEmpty()) {
+                            adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
+                            binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
+                            binding.recyclerShop.setAdapter(adapter1);
+                        }
+                        else if(cat_id.equals("view all")){
+                            Log.e("chala=====","view all==="+ allShops.size());
+                            adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), allShops, allShops.size());
+                            binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
+                            binding.recyclerShop.setAdapter(adapter1);
+                        }
+                        else {
+                            adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
+                            binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
+                            binding.recyclerShop.setAdapter(adapter1);
+
+                        }
+                        //   adapter1.notifyDataSetChanged();
+                       /* if (get_result1.size() > 4)
+                            binding.dashboard.tvViewAll.setVisibility(View.VISIBLE);
+                        else binding.dashboard.tvViewAll.setVisibility(View.GONE);*/
+
+                    } else if (jsonObject.getString("status").equals("0")) {
+                        binding.rlShops.setVisibility(View.GONE);
+                        get_result1.clear();
+                        adapter1.notifyDataSetChanged();
+                        Toast.makeText(requireActivity(), jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (jsonObject.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(requireActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        requireActivity().finish();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    // Log.e("error in near shop====",e,);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
+
 
 
 }
