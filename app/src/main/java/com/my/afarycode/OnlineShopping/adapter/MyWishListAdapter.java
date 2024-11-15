@@ -77,7 +77,7 @@ public class MyWishListAdapter extends
 
         holder.progressAdapterBinding.productName.setText(all_category_subcategory.get(position).getProductDetails().getProductName());
         Picasso.get().load(all_category_subcategory.get(position).getProductDetails().getProductImages()).into(holder.progressAdapterBinding.imgeProduct);
-        holder.progressAdapterBinding.txtPrice.setText(all_category_subcategory.get(position).getProductDetails().getLocalCurrency() + all_category_subcategory.get(position).getProductDetails().getLocalPrice());
+        holder.progressAdapterBinding.txtPrice.setText(all_category_subcategory.get(position).getProductDetails().getShowCurrencyCode() + all_category_subcategory.get(position).getProductDetails().getLocalPrice());
 
         holder.progressAdapterBinding.addToCart.setOnClickListener(v -> {
             AddCartToWishListAPI(all_category_subcategory.get(position).getId());

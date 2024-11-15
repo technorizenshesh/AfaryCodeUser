@@ -351,5 +351,6 @@
     <string name="enter_email_number">Enter email/number</string>
     <string name="enter_amount">enter amount</string>
     <string name="please_enter_transaction_id">Please enter transaction id</string>
+    <string name="please_enter_amount">Please enter amount</string>
 
 </resources>

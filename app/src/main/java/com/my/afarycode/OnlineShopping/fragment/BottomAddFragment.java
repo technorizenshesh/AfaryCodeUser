@@ -67,7 +67,7 @@ public class BottomAddFragment extends BottomSheetDialogFragment implements AskL
         done_text.setOnClickListener(v -> {
            // AddWalletAPI(money_et.getText().toString());
             if(money_et.getText().toString().equalsIgnoreCase(""))
-                Toast.makeText(context, "Please enter amount", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.please_enter_amount), Toast.LENGTH_SHORT).show();
             else {
                 new PaymentBottomSheet(money_et.getText().toString()).callBack(this::ask).show(getActivity().getSupportFragmentManager(), "ModalBottomSheet");
 

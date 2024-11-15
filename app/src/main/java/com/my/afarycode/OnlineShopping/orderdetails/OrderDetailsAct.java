@@ -35,8 +35,10 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -53,8 +55,8 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
     private AfaryCode apiInterface;
     ItemsAdapter itemsAdapter;
     ArrayList<OrderDetailsModel.Result.Product>arrayList;
-    double totalPriceToToPay=0.0,taxN1=0.0,taxN2=0.0,platFormsFees=0.0,deliveryFees=0.0,subTotal=0.0;
-
+   // double totalPriceToToPay=0.0,taxN1=0.0,taxN2=0.0,platFormsFees=0.0,deliveryFees=0.0,subTotal=0.0;
+    String totalPriceToToPay= "0",subTotal="0",taxN1="0",taxN2="0",platFormsFees="0",deliveryFees="0";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -305,11 +307,11 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
 
 
-                        taxN1 = Double.parseDouble(model.getResult().getTaxN1());
-                        taxN2 = Double.parseDouble(model.getResult().getTaxN2());
-                        platFormsFees = Double.parseDouble(model.getResult().getPlatFormsFees());
-                        deliveryFees = Double.parseDouble(model.getResult().getDeliveryCharges());
-                        totalPriceToToPay = Double.parseDouble(model.getResult().getTotalAmount());
+                        taxN1 = model.getResult().getTaxN1();
+                        taxN2 = model.getResult().getTaxN2();
+                        platFormsFees = model.getResult().getPlatFormsFees();
+                        deliveryFees = model.getResult().getDeliveryCharges();
+                        totalPriceToToPay = parseFrenchNumber( model.getResult().getTotalAmount())+"";
                         subTotal =   totalPriceToToPay;//totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
 
                      //   subTotal =  Double.parseDouble(model.getResult().getPrice());  // - deliveryFees;
@@ -322,12 +324,12 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
 
 
-                        binding.plateformFees.setText("XAF" + String.format("%.2f", platFormsFees));
-                        binding.tvTax1.setText("XAF" + String.format("%.2f", taxN1));
-                        binding.tvtax2.setText("XAF" + String.format("%.2f", taxN2));
-                        binding.tvDelivery.setText("XAF" + String.format("%.2f", deliveryFees));
-                        binding.tvTotalAmt.setText("XAF" + String.format("%.2f", totalPriceToToPay));
-                        binding.subTotal.setText("XAF" + String.format("%.2f", subTotal));
+                        binding.plateformFees.setText("FCFA" +  platFormsFees);
+                        binding.tvTax1.setText("FCFA" +  taxN1);
+                        binding.tvtax2.setText("FCFA" +  taxN2);
+                        binding.tvDelivery.setText("FCFA" +  deliveryFees);
+                        binding.tvTotalAmt.setText("FCFA" + totalPriceToToPay);
+                        binding.subTotal.setText("FCFA" + subTotal);
 
 
                         arrayList.clear();
@@ -696,6 +698,17 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
     }
 
+    private int parseFrenchNumber(String number) {
+        // Remove the commas and parse to an integer
+        String cleanedNumber = number.replace(",", "");
+        return Integer.parseInt(cleanedNumber);
+    }
 
+    // Function to format number in French style (with commas)
+    private String formatToFrenchStyle(int number) {
+        // Use the NumberFormat for the French locale
+        NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
+        return numberFormat.format(number);
+    }
 
 }

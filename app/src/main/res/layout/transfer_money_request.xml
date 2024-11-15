@@ -103,7 +103,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@null"
-                    android:hint="$ 20.00"
+                    android:hint="FCFA20.00"
                     android:imeOptions="actionNext"
                     android:inputType="number"
                     android:maxLength="30"

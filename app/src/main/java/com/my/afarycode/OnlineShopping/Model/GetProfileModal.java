@@ -112,9 +112,26 @@ public class GetProfileModal {
         @Expose
         public String localPrice;
 
+
+        @SerializedName("show_currency_code")
+        @Expose
+        public String showCurrencyCode;
+
+        public String getShowCurrencyCode() {
+            return showCurrencyCode;
+        }
+
+        public void setShowCurrencyCode(String showCurrencyCode) {
+            this.showCurrencyCode = showCurrencyCode;
+        }
+
         public String getLocalCurrency() {
             return localCurrency;
         }
+
+
+
+
 
         public void setLocalCurrency(String localCurrency) {
             this.localCurrency = localCurrency;

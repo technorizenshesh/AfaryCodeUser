@@ -48,7 +48,14 @@ public class ProductAdapter2 extends RecyclerView.Adapter<ProductAdapter2.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.binding.tvProductName.setText(arrayList.get(position).getProductName());
         holder.binding.tvBrandNAme.setText(arrayList.get(position).getProductBrand());
-        holder.binding.tvProductPrice.setText(arrayList.get(position).getLocalCurrency()+arrayList.get(position).getLocalPrice());
+        String price = arrayList.get(position).getLocalPrice();
+        if(price.contains(".00")){
+            price = price.split("\\.")[0];
+            holder.binding.tvProductPrice.setText(arrayList.get(position).getShowCurrencyCode()+price);
+
+        }
+        else holder.binding.tvProductPrice.setText(arrayList.get(position).getShowCurrencyCode()+arrayList.get(position).getLocalPrice());
+
         if(!arrayList.get(position).getProductImages().contains("/")) Glide.with(context).load("http://technorizen.com/afarycodewebsite/uploads/product/"+arrayList.get(position).getProductImages()).into(holder.binding.img);
          else Glide.with(context).load(arrayList.get(position).getProductImages()).into(holder.binding.img);
         holder.binding.img.setOnClickListener(v -> {

@@ -247,9 +247,9 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
 
         }
 
-        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.amount)+" : " + "</b>" + "XAF" +Amount + "</font>"  ));
-        tvFee.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.fess)+" : " + "</b>" + "XAF" +fee + "</font>"  ));
-        tvTotalAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.total_amount)+" : " + "</b>" + "XAF" + totalAmount + "</font>"  ));
+        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.amount)+" : " + "</b>" + "FCFA" +Amount + "</font>"  ));
+        tvFee.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.fess)+" : " + "</b>" + "FCFA" +fee + "</font>"  ));
+        tvTotalAmount.setText(Html.fromHtml("<font color='#000'>" + "<b>" + getString(R.string.total_amount)+" : " + "</b>" + "FCFA" + totalAmount + "</font>"  ));
 
         btnOk.setOnClickListener(v -> {
             mDialog.dismiss();

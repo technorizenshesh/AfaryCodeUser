@@ -629,12 +629,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         taxN1 = object.getString("taxes_first");
                         taxN2 = object.getString("taxes_second");
                         currency = object.getString("currency");
+                        if(currency.equals("XAF") || currency.equals("XOF")) currency = "FCFA";
                         if(!object.getString("platform_fees").equalsIgnoreCase(""))
                         {
                             platFormsFees = object.getString("platform_fees");
                         }
                         else {
-                            platFormsFees ="0.00";
+                            platFormsFees ="0";
                         }
 
                         deliveryFees = object.getString("total_delivery_fees");

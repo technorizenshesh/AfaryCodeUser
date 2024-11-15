@@ -103,7 +103,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void sendRequestTransferMoney(String countryCode,String mobile_no_et, String add_money,String reason) {
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");
@@ -168,7 +168,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
         TextView tvAmount = mDialog.findViewById(R.id.tvAmount);
 
         LinearLayout btnOk = mDialog.findViewById(R.id.btnOk);
-        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "you received an amount of "+ "<b>"+ "XAF" + Amount + "</b>" +  " From " + senderName + "</font>"  ));
+        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "you received an amount of "+ "<b>"+ "FCFA" + Amount + "</b>" +  " From " + senderName + "</font>"  ));
 
         btnOk.setOnClickListener(v -> {
             mDialog.dismiss();
@@ -188,7 +188,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
 
 
     private void TransferMoneyRequestAPI(String countryCode,String number, String amount,String reason) {
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

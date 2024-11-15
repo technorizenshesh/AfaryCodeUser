@@ -94,7 +94,7 @@ public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
                     resultObj.getString("transaction_id")+"</font>"));
 
             tvAmount.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Amounts:" + "</b>" + "</font>"+ "<font color='#9098B1'>" +
-                  "XAF"+  resultObj.getString("amount")+"</font>"));
+                  "FCFA"+  resultObj.getString("amount")+"</font>"));
 
             tvNewBalance.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "New Balance:" + "</b>" + "</font>"+ "<font color='#9098B1'>" +
                     String.format("%.2f",Double.parseDouble(walletBal) - Double.parseDouble(resultObj.getString("amount")))+"</font>"));

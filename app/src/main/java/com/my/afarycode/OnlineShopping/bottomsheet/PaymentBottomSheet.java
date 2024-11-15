@@ -274,7 +274,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
 
 
-        btnPayNow.setText("XAF"+money + " " +getString(R.string.pay_now));
+        btnPayNow.setText("FCFA"+money + " " +getString(R.string.pay_now));
 
         btnBack.setOnClickListener(v -> {
             mDialog.dismiss();
@@ -307,7 +307,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
         AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
 
 
-        btnPayNow.setText("XAF"+money + " " +getString(R.string.pay_now));
+        btnPayNow.setText("FCFA"+money + " " +getString(R.string.pay_now));
         btnBack.setOnClickListener(v -> {
             mDialog.dismiss();
 

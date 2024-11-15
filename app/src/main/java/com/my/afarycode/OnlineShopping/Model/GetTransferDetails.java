@@ -130,6 +130,19 @@ public class GetTransferDetails {
         public String walletLocalPrice;
 
 
+        @SerializedName("show_currency_code")
+        @Expose
+        private String showCurrencyCode;
+
+        public String getShowCurrencyCode() {
+            return showCurrencyCode;
+        }
+
+        public void setShowCurrencyCode(String showCurrencyCode) {
+            this.showCurrencyCode = showCurrencyCode;
+        }
+
+
         public String getWalletLocalCurrency() {
             return walletLocalCurrency;
         }

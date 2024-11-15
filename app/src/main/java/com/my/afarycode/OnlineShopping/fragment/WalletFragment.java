@@ -129,7 +129,7 @@ public class WalletFragment extends Fragment implements AskListener {
                     Log.e("MapMap", "GET RESPONSE" + dataResponse);
 
                     if (data.status.equals("1")) {
-                        binding.textAmount.setText(data.result.getLocalCurrency() + data.result.getLocalPrice());
+                        binding.textAmount.setText(data.result.getShowCurrencyCode() + data.result.getLocalPrice());
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getActivity(), data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }

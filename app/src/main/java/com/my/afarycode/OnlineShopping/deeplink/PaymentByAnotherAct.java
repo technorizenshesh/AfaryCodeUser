@@ -654,7 +654,7 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
                        // deliveryCharge = object.getJSONObject("data").getString("swi_amount");
                         totalPriceToToPay =  object.getJSONObject("data").getString("swi_amount");
-                        binding.totalPriceToToPay.setText("XAF" +  totalPriceToToPay);
+                        binding.totalPriceToToPay.setText("FCFA" +  totalPriceToToPay);
                         binding.tvShareBy.setText(getString(R.string.invoice_share_by)+ " "+object.getJSONObject("data").getJSONObject("user_data").getString("user_name"));
                       //  arrayList.clear();
                         countryCode = object.getJSONObject("data").getJSONObject("user_data").getString("country_code");

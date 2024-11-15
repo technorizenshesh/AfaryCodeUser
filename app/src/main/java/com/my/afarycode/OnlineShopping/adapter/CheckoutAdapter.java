@@ -60,7 +60,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
             holder.progressAdapterBinding.itemQuantity.setText(all_category_subcategory.get(position).quantity);
             //   holder.progressAdapterBinding.price.setText("Rs. " + all_category_subcategory.get(position).productPrice);
 
-            holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getLocalCurrency() + Double.parseDouble(all_category_subcategory.get(position).getLocalPrice())
+            holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getShowCurrencyCode() + Integer.parseInt(all_category_subcategory.get(position).getLocalPrice())
                     * Integer.valueOf(all_category_subcategory.get(position).quantity));
 
 
@@ -84,7 +84,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
             int count = Integer.parseInt(String.valueOf(holder.progressAdapterBinding.itemQuantity.getText()));
             count++;
             holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
-            holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getLocalCurrency()+ Double.parseDouble(all_category_subcategory.get(position).getLocalPrice())
+            holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getShowCurrencyCode()+ Integer.parseInt(all_category_subcategory.get(position).getLocalPrice())
                     * Integer.valueOf(count));
 
             //  UpdateQuanityAPI(all_category_subcategory.get(position).cartId
@@ -108,8 +108,8 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
             if (count > 1) {
                 count--;
                 holder.progressAdapterBinding.itemQuantity.setText(String.valueOf(count));
-                holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getLocalCurrency() +
-                        Double.parseDouble(all_category_subcategory.get(position).getLocalPrice())
+                holder.progressAdapterBinding.price.setText(all_category_subcategory.get(position).getShowCurrencyCode() +
+                        Integer.parseInt(all_category_subcategory.get(position).getLocalPrice())
                                 * Integer.valueOf(count));
 
                 //UpdateQuanityAPI(all_category_subcategory.get(position).cartId,

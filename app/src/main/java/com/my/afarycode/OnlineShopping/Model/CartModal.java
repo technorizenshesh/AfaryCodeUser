@@ -193,6 +193,19 @@ public class CartModal {
         @Expose
         private String localPrice;
 
+
+        @SerializedName("show_currency_code")
+        @Expose
+        private String showCurrencyCode;
+
+        public String getShowCurrencyCode() {
+            return showCurrencyCode;
+        }
+
+        public void setShowCurrencyCode(String showCurrencyCode) {
+            this.showCurrencyCode = showCurrencyCode;
+        }
+
         public String getLocalCurrency() {
             return localCurrency;
         }
