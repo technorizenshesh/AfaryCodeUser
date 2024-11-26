@@ -60,6 +60,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (getIntent() != null) {
             lang = getIntent().getStringExtra("lang");
+            Log.e("selected lang====",lang);
         }
 
 

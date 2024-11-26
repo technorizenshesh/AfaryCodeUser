@@ -73,6 +73,7 @@ public class VerificationScreen extends AppCompatActivity {
             type = getIntent().getStringExtra("type");
             registerId = getIntent().getStringExtra("register_id");
 
+            Log.e("selected lang====",language);
 
 
             binding.description.setText(getString(R.string.otp_text1) + " "+ "+" +countryCode +mobile +" " + getString(R.string.otp_text2));

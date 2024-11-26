@@ -90,7 +90,7 @@ public class WellcomeScreen extends AppCompatActivity {
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
         PreferenceConnector.writeString(WellcomeScreen.this, PreferenceConnector.LANGUAGE, en);
         adapter1.notifyDataSetChanged();
-        Log.e("changalalal","=====");
+        Log.e("changalalal","=====" + "  " + en);
     }
 
 

@@ -505,4 +505,11 @@ public interface AfaryCode {
     @POST("get_check_delivery_availability")
     Call<ResponseBody> getDeliveryAvailabilityApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
+
+    @FormUrlEncoded
+    @POST("get_item_search_new")
+    Call<ResponseBody> getProductSearchNew(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+
 }

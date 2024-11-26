@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
@@ -64,9 +66,9 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
     public String TAG = "SearchAct";
     AfaryCode apiInterface;
     private ArrayList<ProductItemModel.Result> arrayList = new ArrayList<>();
-   // private AdapterSearch adapter;
+    // private AdapterSearch adapter;
     private ActivitySearchBinding binding;
-    private String queryString = "",subCatId="",catId="";
+    private String queryString = "", subCatId = "", catId = "";
 
     private List<ShopModel.Result> get_result1 = new ArrayList<>();
     private List<ShopModel.Result> allShops = new ArrayList<>();
@@ -76,11 +78,13 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
     private double lon;
     private static final int MY_PERMISSION_CONSTANT = 5;
     ProductAdapter2 adapterSearch;
+    ArrayList<String> filterList = new ArrayList<>();
+    String filterType = "All Country";
 
 
     private SuggestionAdapter adapter;
-   // private List<SuggestProductModel.Result> suggestions=new ArrayList<>();
-    private List<ProductItemModel.Result> suggestions=new ArrayList<>();
+    // private List<SuggestProductModel.Result> suggestions=new ArrayList<>();
+    private List<ProductItemModel.Result> suggestions = new ArrayList<>();
 
 
     @Override
@@ -118,6 +122,14 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                 e.printStackTrace();
             }
         }
+
+
+        filterList.clear();
+        filterList.add("All Country");
+        filterList.add("Domestic");
+        filterList.add("International");
+
+
         binding.llMain.setVisibility(View.VISIBLE);
         binding.search.setThreshold(3);
         adapter = new SuggestionAdapter(requireActivity(), suggestions);
@@ -126,20 +138,20 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
         // Set the item click listener
         binding.search.setOnItemClickListener((parent, view, position, id) -> {
 
-          //  if (position >= 0 && position < arrayList.size()) {
+            //  if (position >= 0 && position < arrayList.size()) {
             ProductItemModel.Result selectedPlace = (ProductItemModel.Result) parent.getItemAtPosition(position);
-                if (selectedPlace != null) {
-                    binding.search.setText(selectedPlace.getProductName());
-                    Log.e("Selected Data", "Selected position out of bounds: " + selectedPlace.getProductName().toString());
+            if (selectedPlace != null) {
+                binding.search.setText(selectedPlace.getProductName());
+                Log.e("Selected Data", "Selected position out of bounds: " + selectedPlace.getProductName().toString());
 
-                  //  startActivity(new Intent(requireActivity(), ProductDetailAct.class)
-                  //          .putExtra("product_id", selectedPlace.getProId())
-                  //          .putExtra("restaurant_id", selectedPlace.getRestaurantId())
-                   //         .putExtra("productPrice", selectedPlace.getProductPrice()));
-                }
-          //  } else {
-           //     Log.e("Error", "Selected position out of bounds: " + position);
-          //  }
+                //  startActivity(new Intent(requireActivity(), ProductDetailAct.class)
+                //          .putExtra("product_id", selectedPlace.getProId())
+                //          .putExtra("restaurant_id", selectedPlace.getRestaurantId())
+                //         .putExtra("productPrice", selectedPlace.getProductPrice()));
+            }
+            //  } else {
+            //     Log.e("Error", "Selected position out of bounds: " + position);
+            //  }
 
         });
 
@@ -152,7 +164,8 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
         binding.search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -160,25 +173,29 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                 //adapter.getFilter().filter(s);
 
                 if (s.length() > 0) {
-                  // binding.llMain.setVisibility(View.GONE);
+                    // binding.llMain.setVisibility(View.GONE);
                     queryString = s.toString();
                     getSearchProduct(); // Call to fetch suggestions
                 } else {
                     suggestions.clear(); // Clear suggestions if input is empty
                     adapter.notifyDataSetChanged();
-                  //  arrayList.clear();
-                  //  adapterSearch.notifyDataSetChanged();
+                    //  arrayList.clear();
+                    //  adapterSearch.notifyDataSetChanged();
                     GetNearestRestaurantAPI("");
+                    filterType = "All Country";
+                    binding.tvFilter.setText(filterType);
 
-                   // binding.llMain.setVisibility(View.VISIBLE);
+                    // binding.llMain.setVisibility(View.VISIBLE);
                 }
 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
 
+        binding.tvFilter.setOnClickListener(view -> showDropDownFilterList(view, binding.tvFilter, filterList));
 
 
 
@@ -216,7 +233,6 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
         binding.rvProduct.setAdapter(adapterSearch);
 
         GetNearestRestaurantAPI("");
-
 
 
     }
@@ -265,64 +281,58 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
     }
 
 
-
-
     private void getSearchProduct() {
         //binding.swiperRefresh.setRefreshing(true);
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
-        HashMap<String,String> param = new HashMap<>();
-        param.put("title",queryString);
+        HashMap<String, String> param = new HashMap<>();
+        param.put("title", queryString);
         param.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
         param.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
         param.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
+        param.put("product_type", filterType);
 
-        Call<ResponseBody> call = apiInterface.searchSuggestionProduct(headerMap,param);
+
+        Call<ResponseBody> call = apiInterface.searchSuggestionProduct(headerMap, param);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-               // binding.swiperRefresh.setRefreshing(false);
+                // binding.swiperRefresh.setRefreshing(false);
 
                 try {
                     String responseString = response.body().string();
                     JSONObject jsonObject = new JSONObject(responseString);
-                    Log.e(TAG,"getProduct Search Response = " + responseString);
-                    if(jsonObject.getString("status").equals("1")) {
+                    Log.e(TAG, "getProduct Search Response = " + responseString);
+                    if (jsonObject.getString("status").equals("1")) {
                         ProductItemModel model = new Gson().fromJson(responseString, ProductItemModel.class);
                         suggestions.clear();
                         suggestions.addAll(model.getResult());
                         adapter = new SuggestionAdapter(requireActivity(), suggestions);
                         binding.search.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
-                     //   adapterSearch.notifyDataSetChanged();
+                        //   adapterSearch.notifyDataSetChanged();
                         binding.tvNotFound.setVisibility(View.GONE);
-                       // View v = new View(getActivity());
-                     //   showDropDownProductSuggestion(v,arrayList);
+                        // View v = new View(getActivity());
+                        //   showDropDownProductSuggestion(v,arrayList);
 
-                    }
-
-                    else if (jsonObject.getString("status").equals("5")) {
+                    } else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(requireActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         requireActivity().finish();
 
-                    }
-
-
-
-                    else {
+                    } else {
                         suggestions.clear();
                         adapter.notifyDataSetChanged();
-                     //   adapterSearch.notifyDataSetChanged();
-                     //   binding.tvNotFound.setVisibility(View.VISIBLE);
+                        //   adapterSearch.notifyDataSetChanged();
+                        //   binding.tvNotFound.setVisibility(View.VISIBLE);
 
                     }
 
                 } catch (Exception e) {
                     // Toast.makeText(mContext, "Exception = " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("Exception","Exception = " + e.getMessage());
+                    Log.e("Exception", "Exception = " + e.getMessage());
                 }
 
             }
@@ -336,57 +346,57 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
     private void getSearchBtnProduct() {
         //binding.swiperRefresh.setRefreshing(true);
-        DataManager.getInstance().showProgressMessage(getActivity(),getString(R.string.please_wait));
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
-        HashMap<String,String> param = new HashMap<>();
-        param.put("title",queryString);
+        HashMap<String, String> param = new HashMap<>();
+        param.put("title", queryString);
         param.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
         param.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
         param.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
+        param.put("product_type", filterType);
 
-        Call<ResponseBody> call = apiInterface.searchSuggestionProduct(headerMap,param);
+        Call<ResponseBody> call = apiInterface.searchSuggestionProduct(headerMap, param);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 // binding.swiperRefresh.setRefreshing(false);
-                 DataManager.getInstance().hideProgressMessage();
+                DataManager.getInstance().hideProgressMessage();
                 try {
                     String responseString = response.body().string();
                     JSONObject jsonObject = new JSONObject(responseString);
-                    Log.e(TAG,"getProduct  btn Search Response = " + responseString);
-                    if(jsonObject.getString("status").equals("1")) {
+                    Log.e(TAG, "getProduct  btn Search Response = " + responseString);
+                    if (jsonObject.getString("status").equals("1")) {
                         ProductItemModel model = new Gson().fromJson(responseString, ProductItemModel.class);
                         arrayList.clear();
                         arrayList.addAll(model.getResult());
                         adapterSearch.notifyDataSetChanged();
                         binding.tvNotFound.setVisibility(View.GONE);
+                        binding.tvResult.setVisibility(View.VISIBLE);
+                        binding.tvResult.setText(arrayList.size() + " " + getString(R.string.result));
+
+
                         // View v = new View(getActivity());
                         //   showDropDownProductSuggestion(v,arrayList);
 
-                    }
-
-                    else if (jsonObject.getString("status").equals("5")) {
+                    } else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(requireActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         requireActivity().finish();
 
-                    }
-
-
-
-                    else {
+                    } else {
                         arrayList.clear();
                         adapterSearch.notifyDataSetChanged();
                         binding.tvNotFound.setVisibility(View.VISIBLE);
+                        binding.tvResult.setVisibility(View.GONE);
 
                     }
 
                 } catch (Exception e) {
                     // Toast.makeText(mContext, "Exception = " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("Exception","Exception = " + e.getMessage());
+                    Log.e("Exception", "Exception = " + e.getMessage());
                     DataManager.getInstance().hideProgressMessage();
 
                 }
@@ -403,9 +413,6 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
     }
 
 
-
-
-
     private void showDropDownProductSuggestion(View v, List<ProductItemModel.Result> stringList) {
         PopupMenu popupMenu = new PopupMenu(requireActivity(), v);
         for (int i = 0; i < stringList.size(); i++) {
@@ -413,12 +420,12 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
         }
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             for (int i = 0; i < stringList.size(); i++) {
-                if(stringList.get(i).getProductName().equalsIgnoreCase(menuItem.getTitle().toString())) {
+                if (stringList.get(i).getProductName().equalsIgnoreCase(menuItem.getTitle().toString())) {
                     //countryId = stringList.get(i).getId();
                     startActivity(new Intent(requireActivity(), ProductDetailAct.class)
-                            .putExtra("product_id",arrayList.get(i).getProId())
-                            .putExtra("restaurant_id",arrayList.get(i).getRestaurantId())
-                            .putExtra("productPrice",arrayList.get(i).getProductPrice()));
+                            .putExtra("product_id", arrayList.get(i).getProId())
+                            .putExtra("restaurant_id", arrayList.get(i).getRestaurantId())
+                            .putExtra("productPrice", arrayList.get(i).getProductPrice()));
                 }
             }
             return true;
@@ -427,18 +434,18 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
     }
 
 
-
     @Override
     public void onItem(int position) {
 
-        if(arrayList.get(position).getCountryId().equalsIgnoreCase(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId,"")))
-            PreferenceConnector.writeString(requireActivity(),PreferenceConnector.filterType,"Domestic");
-        else PreferenceConnector.writeString(requireActivity(),PreferenceConnector.filterType,"International");
+        if (arrayList.get(position).getCountryId().equalsIgnoreCase(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, "")))
+            PreferenceConnector.writeString(requireActivity(), PreferenceConnector.filterType, "Domestic");
+        else
+            PreferenceConnector.writeString(requireActivity(), PreferenceConnector.filterType, "International");
 
         startActivity(new Intent(requireActivity(), ProductListAct.class)
-                .putExtra("title",arrayList.get(position).getProductName())
-                .putExtra("countryId",arrayList.get(position).getCountryId())
-                .putExtra("by_screen","Search"));
+                .putExtra("title", arrayList.get(position).getProductName())
+                .putExtra("countryId", arrayList.get(position).getCountryId())
+                .putExtra("by_screen", "Search"));
     }
 
 
@@ -470,6 +477,8 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                         arrayList.clear();
                         arrayList.addAll(model.getResult());
                         adapterSearch.notifyDataSetChanged();
+                        binding.tvResult.setVisibility(View.VISIBLE);
+                        binding.tvResult.setText(arrayList.size() + " " + getString(R.string.result));
                         //  binding.tvNotFound.setVisibility(View.GONE);
                         //   if (arrayList.size() > 1)
                         //     binding.dashboard.tvViewAllProduct.setVisibility(View.VISIBLE);
@@ -483,6 +492,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                         binding.rlProduct.setVisibility(View.GONE);
                         suggestions.clear();
                         adapterSearch.notifyDataSetChanged();
+                        binding.tvResult.setVisibility(View.GONE);
                         // binding.tvNotFound.setVisibility(View.VISIBLE);
 
                     }
@@ -511,8 +521,8 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
-        map.put("latitute",  lat+"");
-        map.put("longitute",  lon+"");
+        map.put("latitute", lat + "");
+        map.put("longitute", lon + "");
         map.put("category_id", "" + cat_id);
         map.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
         map.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
@@ -529,12 +539,10 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     Log.e("MapMap", "near_List" + stringResponse);
-                    if(cat_id.isEmpty()) {
+                    if (cat_id.isEmpty()) {
                         getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
-                    }
-                    else if(cat_id.contentEquals("view all")){
-                    }
-                    else {
+                    } else if (cat_id.contentEquals("view all")) {
+                    } else {
                         getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
                     }
 
@@ -547,18 +555,16 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                         get_result1.addAll(mainCateModel.getResult());
                         allShops.addAll(mainCateModel.getResult());
 
-                        if(cat_id.isEmpty()) {
+                        if (cat_id.isEmpty()) {
                             adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
                             binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
                             binding.recyclerShop.setAdapter(adapter1);
-                        }
-                        else if(cat_id.equals("view all")){
-                            Log.e("chala=====","view all==="+ allShops.size());
+                        } else if (cat_id.equals("view all")) {
+                            Log.e("chala=====", "view all===" + allShops.size());
                             adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), allShops, allShops.size());
                             binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
                             binding.recyclerShop.setAdapter(adapter1);
-                        }
-                        else {
+                        } else {
                             adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
                             binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
                             binding.recyclerShop.setAdapter(adapter1);
@@ -605,12 +611,12 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
-      //  map.put("latitute",  lat+"");
-     //   map.put("longitute",  lon+"");
-     //   map.put("category_id", "" + cat_id);
-     //   map.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
+        //  map.put("latitute",  lat+"");
+        //   map.put("longitute",  lon+"");
+        //   map.put("category_id", "" + cat_id);
+        //   map.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
         map.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
-        map.put("stirng",queryString);
+        map.put("stirng", queryString);
 
 
         Log.e("MapMap", "Search Shop by Product Name" + map);
@@ -634,18 +640,16 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                         get_result1.addAll(mainCateModel.getResult());
                         allShops.addAll(mainCateModel.getResult());
 
-                        if(cat_id.isEmpty()) {
+                        if (cat_id.isEmpty()) {
                             adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
                             binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
                             binding.recyclerShop.setAdapter(adapter1);
-                        }
-                        else if(cat_id.equals("view all")){
-                            Log.e("chala=====","view all==="+ allShops.size());
+                        } else if (cat_id.equals("view all")) {
+                            Log.e("chala=====", "view all===" + allShops.size());
                             adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), allShops, allShops.size());
                             binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
                             binding.recyclerShop.setAdapter(adapter1);
-                        }
-                        else {
+                        } else {
                             adapter1 = new HomeShoppingNearsetRestorents(requireActivity(), get_result1.subList(0, Math.min(4, get_result1.size())), get_result1.size());
                             binding.recyclerShop.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
                             binding.recyclerShop.setAdapter(adapter1);
@@ -682,7 +686,35 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+    private void showDropDownFilterList(View v, TextView textView, List<String> stringList) {
+        PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+        for (int i = 0; i < stringList.size(); i++) {
+            popupMenu.getMenu().add(stringList.get(i));
+        }
 
+        //popupMenu.getMenu().add(0,stringList.size()+1,0,R.string.add_new_category ).setIcon(R.drawable.ic_added);
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+
+            for (int i = 0; i < stringList.size(); i++) {
+                if (stringList.get(i).equalsIgnoreCase(menuItem.getTitle().toString())) {
+                    filterType = stringList.get(i);
+                    textView.setText(menuItem.getTitle());
+                    //  listener.onExpense(filterText);
+
+
+                }
+            }
+
+        //    if (filterType.equals("International")) filterType = "international";
+         //   else if (filterType.equals("Domestic")) filterType = "national";
+        //    else filterType = "all";
+          // getProductBySearchId(filterType, PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
+            getSearchBtnProduct();
+            return true;
+        });
+        popupMenu.show();
+    }
 
 
 

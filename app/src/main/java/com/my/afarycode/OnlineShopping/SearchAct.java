@@ -57,8 +57,7 @@ public class SearchAct extends AppCompatActivity implements onItemClickListener 
         //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-     */
-/*   binding.search.setIconified(false);
+   binding.search.setIconified(false);
         binding.search.setQueryHint(getString(R.string.search_here));
         adapter = new AdapterSearch(this, arrayList, this);
         binding.recyList.setAdapter(adapter);
@@ -84,7 +83,7 @@ public class SearchAct extends AppCompatActivity implements onItemClickListener 
                 getProduct();
                 return false;
             }
-        });*//*
+        });
 
 
 

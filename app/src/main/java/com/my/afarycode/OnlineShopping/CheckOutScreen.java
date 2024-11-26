@@ -21,6 +21,7 @@ import com.my.afarycode.OnlineShopping.Model.Get_Transaction_Modal;
 import com.my.afarycode.OnlineShopping.Model.HomeShopeProductModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
 import com.my.afarycode.OnlineShopping.Model.UpdateCartModal;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.adapter.CardAdapter;
 import com.my.afarycode.OnlineShopping.adapter.CheckoutAdapter;
@@ -139,7 +140,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(this, PreferenceConnector.Register_id, ""));
-        map.put("country_id",PreferenceConnector.readString(this, PreferenceConnector.countryId, ""));
+        map.put("country_id",PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.countryId, ""));
+      //  map.put("country_id",PreferenceConnector.readString(this, PreferenceConnector.COUNTRY_ID, ""));
 
         Log.e("MapMap", "FINAL CART  LIST" + map);
 

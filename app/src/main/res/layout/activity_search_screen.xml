@@ -92,67 +92,60 @@
                 >
 
                 <RelativeLayout
-                    android:layout_marginTop="@dimen/_10sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    >
+                    android:layout_marginTop="@dimen/_10sdp">
 
                     <RelativeLayout
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/_5sdp"
                         android:layout_width="@dimen/_80sdp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        >
+                        android:layout_gravity="center"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:layout_weight="1">
 
                         <TextView
-                            android:textStyle="bold"
-                            android:layout_centerVertical="true"
-                            android:textColor="@color/black"
-                            android:layout_gravity="center"
-                            android:textSize="@dimen/_14sdp"
-                            android:text="@string/count"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:text="@string/count"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp"
+                            android:textStyle="bold">
 
                         </TextView>
 
                         <ImageView
-                            android:src="@drawable/dropdown"
-                            android:layout_marginRight="@dimen/_10sdp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
                             android:layout_width="@dimen/_8sdp"
                             android:layout_height="@dimen/_8sdp"
-                            >
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/_10sdp"
+                            android:src="@drawable/dropdown">
 
                         </ImageView>
 
                     </RelativeLayout>
 
                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:textStyle="bold"
+                        android:text=""
                         android:textColor="@color/purple_500"
                         android:textSize="@dimen/_14sdp"
-                        android:text=""
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        >
-                    </TextView>
+                        android:textStyle="bold"></TextView>
 
                     <TextView
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:textStyle="bold"
-                        android:textColor="@color/purple_500"
-                        android:textSize="@dimen/_14sdp"
-                        android:text="@string/man_shoes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        >
-                    </TextView>
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/man_shoes"
+                        android:textColor="@color/purple_500"
+                        android:textSize="@dimen/_14sdp"
+                        android:textStyle="bold"></TextView>
 
                 </RelativeLayout>
 

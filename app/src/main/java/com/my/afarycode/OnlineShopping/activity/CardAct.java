@@ -60,7 +60,6 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_card);
         apiInterface = ApiClient.getClient(CardAct.this).create(AfaryCode.class);
-
         SetupUI();
 
         binding.RRback.setOnClickListener(v -> {onBackPressed();

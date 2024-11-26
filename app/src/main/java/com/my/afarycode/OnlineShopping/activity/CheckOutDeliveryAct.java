@@ -158,6 +158,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("addressId",addressId));
                 deliveryMethod = "";
                 addressId ="";
+                Log.e("country id=====", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.countryId, ""));
+
             }
 
             //else startActivity(new Intent(getActivity(), CheckOutScreen.class));

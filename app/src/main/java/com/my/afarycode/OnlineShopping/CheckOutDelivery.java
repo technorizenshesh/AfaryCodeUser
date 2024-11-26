@@ -182,6 +182,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         .putExtra("deliveryYesNo",deliveryYesNo)
                         .putExtra("deliveryMethod",deliveryMethod));
                 deliveryMethod = "";
+                Log.e("country id=====", PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
 
             }
 

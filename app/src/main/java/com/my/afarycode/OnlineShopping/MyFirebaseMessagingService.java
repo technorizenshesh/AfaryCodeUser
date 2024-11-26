@@ -39,7 +39,7 @@ public class MyFirebaseMessagingService extends
     private static final String TAG = "";
     private static final String CHANNEL_ID = "my_channel_id";
     JSONObject notificationObj;
-    String result = "", key = "", message = "", type = "";
+    String result = "", key = "", message = "", type = "",msg="",keyEng="";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -54,9 +54,30 @@ public class MyFirebaseMessagingService extends
 
                 notificationObj = new JSONObject(data.get("data"));
                 result = notificationObj.getString("result");
-                key = notificationObj.getString("key");
+                keyEng = notificationObj.getString("key");
+                msg = notificationObj.getString("message");
                 type = notificationObj.getString("type");
-                message = notificationObj.getString("message");
+
+                if(PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.LANGUAGE, "").equals("en")
+                        || PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.LANGUAGE, "").equals("")){
+                    key = notificationObj.getString("key");
+                    message = notificationObj.getString("message");
+               }
+                else {
+                    if(notificationObj.has("key_fr") && notificationObj.has("message_fr")){
+                        key = notificationObj.getString("key_fr");
+                        message = notificationObj.getString("message_fr");
+                        Log.e("French ka param=====","======");
+                    }
+                    else{
+                        key = notificationObj.getString("key");
+                        message = notificationObj.getString("message");
+                        Log.e("French ka param not available=====","======");
+
+                    }
+                }
+
+
                 Log.d("FCMService", "data====: " + notificationObj.toString());
 
                 // Process the data as needed
@@ -70,12 +91,12 @@ public class MyFirebaseMessagingService extends
                 //  Log.e("check notification type=====",remoteMessage.getData().get("type"));
 
                 sendNotification(key
-                        , result, message, type, notificationObj);
+                        , result, message, type, notificationObj,msg,keyEng);
             }
 
 
-            if (key.equalsIgnoreCase("Order Accepted") || key.equalsIgnoreCase("Order Rejected")
-                    || key.equals("You have been logged out because you have logged in on another device")) {
+            if (keyEng.equalsIgnoreCase("Order Accepted") || keyEng.equalsIgnoreCase("Order Rejected")
+                    || keyEng.equals("You have been logged out because you have logged in on another device")) {
                 Intent intent1 = new Intent("check_status");
                 Log.e("SendData=====", type);
                 intent1.putExtra("status", key);
@@ -90,7 +111,7 @@ public class MyFirebaseMessagingService extends
 
     }
 
-    private void sendNotification(String title, String messageBody, String msg, String type, JSONObject remoteMessage) {
+    private void sendNotification(String title, String messageBody, String msg, String type, JSONObject remoteMessage,String msgEng,String keyEng) {
         try {
             Intent intent = null;
 
@@ -150,31 +171,31 @@ public class MyFirebaseMessagingService extends
             }
 
 
-            else if (msg.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait")
-                    || msg.equalsIgnoreCase("Dear customer,Your refund request has been successfully transmitted. Within 4 working hours, the refund will only be made on the method used to pay. Note that the refund will be made on the method used for payment.Thank you for your comprehension")
-                    || msg.equalsIgnoreCase("Your request has been sent to your correspondent")
+            else if (msgEng.equalsIgnoreCase("Dear customer Your payment is successful, your order is sent to the seller for acceptance Please wait")
+                    || msgEng.equalsIgnoreCase("Dear customer,Your refund request has been successfully transmitted. Within 4 working hours, the refund will only be made on the method used to pay. Note that the refund will be made on the method used for payment.Thank you for your comprehension")
+                    || msgEng.equalsIgnoreCase("Your request has been sent to your correspondent")
                     /* || msg.contains("product now available")*/
-                    || msg.contains("product out of stock")
-                    || msg.contains("Dear customer, Your order has not been accepted by the seller.Reason: However, your Wallet has been credited with the amount of the order. You can place another order at any time and pay with your wallet.  For more information on using the wallet,")
+                    || msgEng.contains("product out of stock")
+                    || msgEng.contains("Dear customer, Your order has not been accepted by the seller.Reason: However, your Wallet has been credited with the amount of the order. You can place another order at any time and pay with your wallet.  For more information on using the wallet,")
             ) {
 
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
                         .putExtra("status", "openPaymentDialog")
                         .putExtra("msg", msg);
 
-            } else if (msg.contains("Dear Customer your order has just been delivered by")) {
+            } else if (msgEng.contains("Dear Customer your order has just been delivered by")) {
               Log.e("order complete firebase Noti===","========");
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
                         .putExtra("status", "orderCompleteDialog")
                         .putExtra("order_id", remoteMessage.getString("order_id"))
                         .putExtra("msg", msg);
 
-            } else if (msg.contains("product now available")) {
+            } else if (msgEng.contains("product now available")) {
                 intent = new Intent(getApplicationContext(), ProductDetailAct.class)
                         .putExtra("product_id", remoteMessage.getString("product_id"))
                         .putExtra("restaurant_id", remoteMessage.getString("shop_id"))
                         .putExtra("productPrice", remoteMessage.getString("product_price"));
-            } else if (msg.contains("You have been logged out because you have logged in on another device")) {
+            } else if (msgEng.contains("You have been logged out because you have logged in on another device")) {
                 PreferenceConnector.writeString(getApplicationContext(), PreferenceConnector.LoginStatus, "false");
                 intent = new Intent(getApplicationContext(), Splash.class);
             } else if (type.contains("Statuschange")) {

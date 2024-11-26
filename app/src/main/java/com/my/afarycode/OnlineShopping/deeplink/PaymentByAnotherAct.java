@@ -519,6 +519,16 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
         Map<String, String> map = new HashMap<>();
         map.put("invoice_id", paymentInsertId);
+        if(PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.countryId, "") == null || !PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.countryId, "").equals("")){
+           map.put("country_id",PreferenceConnector.readString(PaymentByAnotherAct.this, PreferenceConnector.countryId, ""));
+
+       }
+       else {
+           map.put("country_id",data.getResult().getCountry());
+
+       }
+
+
 
         Log.e(TAG, "Get Invoice Request :" + map);
         Call<ResponseBody> loginCall     = apiInterface.getInvoiceDataApi(headerMap,map);
@@ -548,7 +558,7 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
                         deliveryCharge = object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("total_delivery_fees");
                         totalPriceToToPay =  object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("total_payable_amount");
-                        binding.totalPriceToToPay.setText("XAF" +  totalPriceToToPay);
+                        binding.totalPriceToToPay.setText("FCFA" +  totalPriceToToPay);
                         binding.tvShareBy.setText(getString(R.string.invoice_share_by)+ " "+object.getJSONObject("data").getJSONObject("cart_data").getJSONObject("cart_user_info").getString("user_name"));
                         arrayList.clear();
 
@@ -558,9 +568,9 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                             JSONObject productInfoObj = array.getJSONObject(i).getJSONObject("product_info");
 
                             CartListModel cartListModel = new CartListModel(productInfoObj.getString("product_name"),
-                                    productInfoObj.getString("image_1"),productInfoObj.getString("product_price"),
+                                    productInfoObj.getString("image_1"),productInfoObj.getString("local_price"),
                                     objectInner.getString("quantity")
-                            , objectInner.getString("currency"));
+                            , productInfoObj.getString("show_currency_code"));
                             arrayList.add(cartListModel);
                         }
 
