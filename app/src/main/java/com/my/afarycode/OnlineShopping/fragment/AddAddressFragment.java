@@ -392,10 +392,16 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                     Log.e(TAG, "Get All Country RESPONSE" + object);
 
                     if (object.optString("status").equals("1")) {
+
                         CountryModel data = new Gson().fromJson(responseData, CountryModel.class);
                         countryArrayList.clear();
-                        countryArrayList.addAll(data.getResult());
-
+                        for(int i=0;i<=data.getResult().size();i++) {
+                            if (data.getResult().get(i).getAvailability().equals("1")){
+                                countryArrayList.add(data.getResult().get(i));
+                            }
+                        }
+                      //  countryArrayList.addAll(data.getResult());
+                       Log.e("available country list===",countryArrayList.size()+"");
 
                     } else if (object.optString("status").equals("0")) {
                         countryArrayList.clear();

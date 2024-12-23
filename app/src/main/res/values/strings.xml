@@ -353,5 +353,9 @@
     <string name="please_enter_transaction_id">Please enter transaction id</string>
     <string name="please_enter_amount">Please enter amount</string>
     <string name="result">Results</string>
+    <string name="does_not_benificiary_account">Your beneficiary does not have a wallet to receive the funds. send him this link to download our app. show link</string>
+    <string name="we_do_not_available_on_this_country">We don\'t deliver on this country</string>
+    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">We available on this country but you will be collect your package your self. Please select CLICK AND COLLECT</string>
+    <string name="we_do_not_deliver_on_this_country">We don\'t deliver on this country</string>
 
 </resources>

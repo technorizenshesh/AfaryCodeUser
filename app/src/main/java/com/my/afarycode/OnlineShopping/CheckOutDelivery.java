@@ -340,7 +340,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
     private void SetAddressAPI() {
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
 
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
@@ -933,17 +933,29 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
-                    if (object.optString("status").equals("1")) {
-                        Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
-
-
-                    } else if (object.optString("status").equals("0")) {
-
+                   if (object.optString("status").equals("1")) {
+                       binding.rvDeliveryAgency.setVisibility(View.GONE);
+                       uncheckAddressList();
+                       ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_available_on_this_country),object.getString("status"));
 
                     }
 
-                    else if (object.getString("status").equals("5")) {
+                    else if (object.getString("status").equals("2")) {
+                       binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                    }
 
+
+                    else if (object.getString("status").equals("3")) {
+                       binding.rvDeliveryAgency.setVisibility(View.GONE);
+                       uncheckAddressList();
+                       ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select),object.getString("status"));
+
+                    }
+
+                    else if (object.getString("status").equals("4")) {
+                       binding.rvDeliveryAgency.setVisibility(View.GONE);
+                       uncheckAddressList();
+                       ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_deliver_on_this_country),object.getString("status"));
                     }
 
 
@@ -962,6 +974,39 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
     }
 
+    private void uncheckAddressList() {
+        deliveryType = "";
+        for (int i=0;i<deliverArrayList.size();i++){
+            deliverArrayList.get(i).setChk(false);
+        }
+        deliveryTypeAdapter.notifyDataSetChanged();
+
+
+        for (int i=0;i<arrayList.size();i++){
+            arrayList.get(i).setChk(false);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+
+    private void ShowAvailableResultDialog(String title,String msg,String status){
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }) .show();
+              /*  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })*/
+                // Show the dialog
+    }
 
 
 }

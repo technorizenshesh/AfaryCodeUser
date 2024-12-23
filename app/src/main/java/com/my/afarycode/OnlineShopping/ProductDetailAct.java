@@ -120,7 +120,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             if (get_result1.get(0).getInStock().equalsIgnoreCase("Yes")) dialogContinue();
             else {
                 //Toast.makeText(this, getString(R.string.out_of_stock), Toast.LENGTH_SHORT).show();
-                Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+              //  Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+                checkProductAvailability(product_id);
+
 
             }
 

@@ -350,7 +350,7 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
     private void AlertNumberNotExit() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Your beneficiary does not have a wallet to receive the funds. send him this link to download our app. show link")
+        builder.setMessage(getString(R.string.does_not_benificiary_account))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override

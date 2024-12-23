@@ -141,7 +141,7 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"            android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/color_grey_two"/>
+                        android:textColor="@color/black"/>
 
 
                     <EditText
@@ -157,7 +157,8 @@
                         android:textDirection="locale"
                         android:textAlignment="viewStart"            android:inputType="text"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"/>
+                        android:maxLines="2"
+                       />
 
 
                     <TextView
@@ -168,7 +169,7 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"            android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/color_grey_two"/>
+                        android:textColor="@color/black"/>
 
 
                     <EditText
@@ -225,7 +226,7 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"            android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/color_grey_two"/>
+                        android:textColor="@color/black"/>
 
 
                     <EditText
@@ -255,7 +256,7 @@
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/color_grey_two"/>
+                        android:textColor="@color/black"/>
 
 
                     <EditText
@@ -296,7 +297,7 @@
                             android:fontFamily="@font/poppins_regular"
                             android:text="@string/address"
                             android:textAlignment="viewStart"
-                            android:textColor="@color/color_grey_two"
+                            android:textColor="@color/black"
                             android:textDirection="locale"
                             android:textSize="@dimen/_11sdp" />
 
@@ -349,7 +350,7 @@
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/color_grey_two"/>
+                        android:textColor="@color/black"/>
 
 
                     <TextView
@@ -386,7 +387,7 @@
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/color_grey_two"/>
+                        android:textColor="@color/black"/>
 
 
                     <EditText
@@ -416,7 +417,7 @@
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/color_grey_two"/>
+                        android:textColor="@color/black"/>
 
 
                     <EditText

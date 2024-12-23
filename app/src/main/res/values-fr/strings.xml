@@ -354,6 +354,12 @@
     <string name="enter_email_number">Entrez l\'e-mail/le numéro</string>
     <string name="enter_amount">entrez le montant</string>
     <string name="please_enter_transaction_id">Veuillez saisir l\'identifiant de la transaction</string>
+    <string name="please_enter_amount">Veuillez saisir le montant</string>
+    <string name="result">Résultats</string>
+    <string name="does_not_benificiary_account">Votre bénéficiaire ne dispose pas de portefeuille pour recevoir les fonds. envoyez-lui ce lien pour télécharger notre application. afficher le lien</string>
+    <string name="we_do_not_available_on_this_country">Nous ne livrons pas dans ce pays</string>
+    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">Nous sommes disponibles dans ce pays mais vous récupérerez votre colis vous-même. Veuillez sélectionner CLIQUER et COLLECTER</string>
+    <string name="we_do_not_deliver_on_this_country">Nous ne livrons pas dans ce pays</string>
 </resources>
 
 

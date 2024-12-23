@@ -70,6 +70,18 @@ public class CountryModel {
         @Expose
         private String status;
 
+        @SerializedName("availability")
+        @Expose
+        private String availability;
+
+        public String getAvailability() {
+            return availability;
+        }
+
+        public void setAvailability(String availability) {
+            this.availability = availability;
+        }
+
         public String getId() {
             return id;
         }

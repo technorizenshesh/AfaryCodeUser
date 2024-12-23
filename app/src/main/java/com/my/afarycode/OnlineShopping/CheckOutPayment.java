@@ -58,14 +58,15 @@ import retrofit2.Response;
 public class CheckOutPayment extends AppCompatActivity {
     public String TAG = "CheckOutPayment";
     ActivityCheckOutPaymentBinding binding;
-   // private ArrayList<String> cart_id_string = new ArrayList<>();
-    private String strList = "",cart_id_string="";
-    private String deliveryYesNo="", totalPriceToToPay = "",deliveryCharge="",platFormsFees="",taxN1="",taxN2="",sendToServer="",anotherPersonId="",insertDeliveryId="";
+    // private ArrayList<String> cart_id_string = new ArrayList<>();
+    private String strList = "", cart_id_string = "";
+    private String deliveryYesNo = "", totalPriceToToPay = "", deliveryCharge = "", platFormsFees = "", taxN1 = "", taxN2 = "", sendToServer = "", anotherPersonId = "", insertDeliveryId = "";
     private AfaryCode apiInterface;
     GetProfileModal data;
     CountryCodePicker ccp;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    String orderType="";
+    String orderType = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,29 +94,24 @@ public class CheckOutPayment extends AppCompatActivity {
                 orderType = extras.getString("orderType");
 
 
-                if(deliveryYesNo.equalsIgnoreCase("Yes")){
+                if (deliveryYesNo.equalsIgnoreCase("Yes")) {
                     binding.rl33.setVisibility(View.GONE);
                     binding.rl22.setVisibility(View.VISIBLE);
                     binding.rl11.setVisibility(View.GONE);
 
-                }
-
-
-                else {
+                } else {
                     binding.rl33.setVisibility(View.VISIBLE);
                     binding.rl22.setVisibility(View.GONE);
                     binding.rl11.setVisibility(View.VISIBLE);
 
                 }
 
-                if(orderType.equalsIgnoreCase("INTERNATIONAL")){
+                if (orderType.equalsIgnoreCase("INTERNATIONAL")) {
                     binding.rl33.setVisibility(View.GONE);
                     binding.rl22.setVisibility(View.VISIBLE);
                     binding.rl11.setVisibility(View.GONE);
 
                 }
-
-
 
 
             }
@@ -129,8 +125,8 @@ public class CheckOutPayment extends AppCompatActivity {
         //strList = cart_id_string.toString();
 
         //strList = strList.replace("[", "")
-         //       .replace("]", "")
-         //       .replace(" ", "");
+        //       .replace("]", "")
+        //       .replace(" ", "");
 
         Log.e("strList>>>", strList);
 
@@ -146,7 +142,7 @@ public class CheckOutPayment extends AppCompatActivity {
         });
 
         binding.llTransfer.setOnClickListener(v -> {
-           // PaymentAPI("VM", strList);
+            // PaymentAPI("VM", strList);
            /* String refNumber = generateReferenceNumber();
             String ll =   "https://technorizen.com/afarycodewebsite/home/redirectwebpvit?tel_marchand=074272732&operateur=VM" + "&montant=105" +*//* totalPriceToToPay+*//*  "&ref=" + refNumber + "&user_id=" + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, "")
                     + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";*/
@@ -159,7 +155,7 @@ public class CheckOutPayment extends AppCompatActivity {
            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
                    .putExtra("url",ll)
                    .putExtra("ref",refNumber));*/
-            callCardPayment("",data.getResult().getMobile(),"Card");
+            callCardPayment("", data.getResult().getMobile(), "Card");
         });
 
         binding.llTransfer11.setOnClickListener(v -> {
@@ -170,41 +166,41 @@ public class CheckOutPayment extends AppCompatActivity {
             Log.e("url===",ll);*/
 
 
-
-            callCardPayment("",data.getResult().getMobile(),"Card");
+            callCardPayment("", data.getResult().getMobile(), "Card");
         });
 
 
-
         binding.llMoov.setOnClickListener(v -> {
-            dialogMoov("MC",strList);
+            dialogMoov("MC", strList);
 
         });
 
         binding.llAirtel.setOnClickListener(v -> {
-            dialogAirtel("AM",strList);
+            dialogAirtel("AM", strList);
         });
 
         binding.llCod.setOnClickListener(v -> {
-           dialogAlert();
+            dialogAlert();
         });
 
         binding.llWallet.setOnClickListener(v -> {
-           if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
-            PaymentAPI("","",data.getResult().getMobile(),"Wallet");
-           else Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
+            if (Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
+                PaymentAPI("", "", data.getResult().getMobile(), "Wallet");
+            else
+                Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
         });
 
 
         binding.llWallet11.setOnClickListener(v -> {
-            if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
-                PaymentAPI("","",data.getResult().getMobile(),"Wallet");
-            else Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
+            if (Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
+                PaymentAPI("", "", data.getResult().getMobile(), "Wallet");
+            else
+                Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
         });
 
 
-        binding.btnSendAnother.setOnClickListener(v->{
-           dialogSendAnotherPerson();
+        binding.btnSendAnother.setOnClickListener(v -> {
+            dialogSendAnotherPerson();
         });
 
 
@@ -212,92 +208,83 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
-        private void callCardPayment( String strList,String number,String paymentType) {
-            //binding.loader.setVisibility(View.VISIBLE);
-            DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
-            Map<String,String> headerMap = new HashMap<>();
-            headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token,""));
-            headerMap.put("Accept","application/json");
+    private void callCardPayment(String strList, String number, String paymentType) {
+        //binding.loader.setVisibility(View.VISIBLE);
+        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
 
-            Map<String, String> map = new HashMap<>();
-            map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
-            map.put("amount", /*"105"*/totalPriceToToPay);
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
+        map.put("amount", /*"105"*/totalPriceToToPay);
 
-            map.put("delivery_charge", deliveryCharge);
-            map.put("platFormsFees", platFormsFees);
-            map.put("taxN1", taxN1);
-            map.put("taxN2", taxN2);
-            map.put("operateur", "");
-            map.put("cart_id", strList);
-            map.put("num_marchand", "");
-            map.put("type", "USER");
-            map.put("user_number",number);
-            map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
-            map.put("address_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.ADDRESS_ID, ""));
-            map.put("payment_type",paymentType);
-            map.put("sub_orderdata",sendToServer);
-            map.put("datetime",DataManager.getCurrent());
-            map.put("self_collect",deliveryYesNo);
+        map.put("delivery_charge", deliveryCharge);
+        map.put("platFormsFees", platFormsFees);
+        map.put("taxN1", taxN1);
+        map.put("taxN2", taxN2);
+        map.put("operateur", "");
+        map.put("cart_id", strList);
+        map.put("num_marchand", "");
+        map.put("type", "USER");
+        map.put("user_number", number);
+        map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
+        map.put("address_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.ADDRESS_ID, ""));
+        map.put("payment_type", paymentType);
+        map.put("sub_orderdata", sendToServer);
+        map.put("datetime", DataManager.getCurrent());
+        map.put("self_collect", deliveryYesNo);
 
-            Log.e("MapMap", "payment_params" + map);
+        Log.e("MapMap", "payment_params" + map);
 
-            Call<ResponseBody> loginCall = apiInterface.cardPaymentApi(headerMap,map);
-            loginCall.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    DataManager.getInstance().hideProgressMessage();
-                    // binding.loader.setVisibility(View.GONE);
-                    try {
-                        String responseData = response.body() != null ? response.body().string() : "";
-                        JSONObject object = new JSONObject(responseData);
-                        Log.e(TAG, "Card Payment RESPONSE" + object);
-                        if (object.optString("status").equals("1")) {
-                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.transId, object.getJSONObject("ressult").getString("reference"));
-                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.serviceType, PreferenceConnector.Booking);
-                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.ShareUserId, "");
-                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentType, "Booking");
-                            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
-                                    .putExtra("url",object.getJSONObject("ressult").getString("webviewurl"))
-                                    .putExtra("ref",object.getJSONObject("ressult").getString("reference")));
-                        } else if (object.optString("status").equals("0")) {
-                            //binding.loader.setVisibility(View.GONE);
-                             Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+        Call<ResponseBody> loginCall = apiInterface.cardPaymentApi(headerMap, map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Card Payment RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.transId, object.getJSONObject("ressult").getString("reference"));
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.serviceType, PreferenceConnector.Booking);
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.ShareUserId, "");
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentType, "Booking");
+                        startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
+                                .putExtra("url", object.getJSONObject("ressult").getString("webviewurl"))
+                                .putExtra("ref", object.getJSONObject("ressult").getString("reference")));
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
 
-                        }
-                        else if (object.optString("status").equals("5")) {
-                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
-                            startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                            finish();
-                        }
-
-
-                    } catch (Exception e) {
-                        Log.e("error>>>>", "" + e);
-                        binding.loader.setVisibility(View.GONE);
-                        e.printStackTrace();
+                    } else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
                     }
 
 
-
-
-
-
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    binding.loader.setVisibility(View.GONE);
+                    e.printStackTrace();
                 }
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    call.cancel();
-                    Toast.makeText(CheckOutPayment.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
-                    //  binding.loader.setVisibility(View.GONE);
-                    DataManager.getInstance().hideProgressMessage();
-                }
-            });
-        }
 
+            }
 
-
-
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(CheckOutPayment.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
 
     public static String generateReferenceNumber() {
         // Get current date in DDMMYYYY format
@@ -323,14 +310,12 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
-
-
     private void GetProfile() {
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
-        map.put("country_id",PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.countryId, ""));
+        map.put("country_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.countryId, ""));
 
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
@@ -343,25 +328,22 @@ public class CheckOutPayment extends AppCompatActivity {
 
                 try {
 
-                     data = response.body();
+                    data = response.body();
                     String dataResponse = new Gson().toJson(response.body());
 
                     Log.e("MapMap", "GET RESPONSE" + dataResponse);
 
                     if (data.status.equals("1")) {
 
-                        if(data.getResult().getCountry().equals("79")){
+                        if (data.getResult().getCountry().equals("79")) {
                             binding.rlMblMoney.setVisibility(View.VISIBLE);
-                        }
-                        else {
+                        } else {
                             binding.rlMblMoney.setVisibility(View.GONE);
 
                         }
 
                     } else if (data.status.equals("0")) {
-                    }
-
-                    else if (data.status.equals("5")) {
+                    } else if (data.status.equals("5")) {
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -383,28 +365,25 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
-
-
-
     private void dialogAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(CheckOutPayment.this);
         builder.setMessage("Dear Customer,\n" +
                         "You have requested delivery with cash on delivery. One of our \n" +
                         "salespeople may call you.\n" +
-                        "Do you confirm this number…" + data.getResult().mobile )
+                        "Do you confirm this number…" + data.getResult().mobile)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        PaymentAPI("VM", strList,data.getResult().mobile,"Cash");
+                        PaymentAPI("VM", strList, data.getResult().mobile, "Cash");
 
                     }
                 }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        dialogNumber("VM","");
+                        dialogNumber("VM", "");
                     }
                 });
 
@@ -413,13 +392,12 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
-
-    private void PaymentAPI(String operateur, String strList,String number,String paymentType) {
+    private void PaymentAPI(String operateur, String strList, String number, String paymentType) {
         //binding.loader.setVisibility(View.VISIBLE);
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
 
         Map<String, String> map = new HashMap<>();
@@ -432,56 +410,53 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("taxN2", taxN2);
         map.put("operateur", operateur);
         map.put("cart_id", strList);
-        if(operateur.equals("MC"))  map.put("num_marchand", "060110217");
-        else if(operateur.equals("AM")) map.put("num_marchand", "074272732");
-        else if(operateur.equals("VM")) map.put("num_marchand", "074272732");
-        else if(operateur.equals(""))map.put("num_marchand", "");
+        if (operateur.equals("MC")) map.put("num_marchand", "060110217");
+        else if (operateur.equals("AM")) map.put("num_marchand", "074272732");
+        else if (operateur.equals("VM")) map.put("num_marchand", "074272732");
+        else if (operateur.equals("")) map.put("num_marchand", "");
         map.put("type", "USER");
-        map.put("user_number",number);
+        map.put("user_number", number);
         map.put("register_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.Register_id, ""));
         map.put("address_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.ADDRESS_ID, ""));
 
-        map.put("payment_type",paymentType);
-        map.put("sub_orderdata",sendToServer);
-        map.put("datetime",DataManager.getCurrent());
-        map.put("self_collect",deliveryYesNo);
+        map.put("payment_type", paymentType);
+        map.put("sub_orderdata", sendToServer);
+        map.put("datetime", DataManager.getCurrent());
+        map.put("self_collect", deliveryYesNo);
 
         Log.e("MapMap", "payment_params" + map);
 
-        Call<ResponseBody> loginCall = apiInterface.payment(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.payment(headerMap, map);
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 DataManager.getInstance().hideProgressMessage();
-               // binding.loader.setVisibility(View.GONE);
+                // binding.loader.setVisibility(View.GONE);
                 try {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Payment RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
-                      //  PaymentModal data = new Gson().fromJson(responseData, PaymentModal.class);
-                       // binding.loader.setVisibility(View.GONE);
-                         if(paymentType.equals("Wallet") || paymentType.equals("Cash")) {
-                             Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                             startActivity(new Intent(CheckOutPayment.this, MyOrderScreen.class)
-                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                             finish();
-                         }
-                         else {
-                             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.transId,object.getJSONObject("ressult").getString("reference"));
-                             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.serviceType,PreferenceConnector.Booking);
-                             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.ShareUserId,"");
-                             PreferenceConnector.writeString(CheckOutPayment.this,PreferenceConnector.PaymentType,"Booking");
-                             startActivity(new Intent(CheckOutPayment.this, CheckPaymentStatusAct.class)
-                                     .putExtra("paymentBy","User"));
+                        //  PaymentModal data = new Gson().fromJson(responseData, PaymentModal.class);
+                        // binding.loader.setVisibility(View.GONE);
+                        if (paymentType.equals("Wallet") || paymentType.equals("Cash")) {
+                            Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(CheckOutPayment.this, MyOrderScreen.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
+                        } else {
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.transId, object.getJSONObject("ressult").getString("reference"));
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.serviceType, PreferenceConnector.Booking);
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.ShareUserId, "");
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentType, "Booking");
+                            startActivity(new Intent(CheckOutPayment.this, CheckPaymentStatusAct.class)
+                                    .putExtra("paymentBy", "User"));
 
-                         }
+                        }
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
-                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();                    }
-
-
-                    else if (object.optString("status").equals("5")) {
+                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (object.optString("status").equals("5")) {
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -495,25 +470,20 @@ public class CheckOutPayment extends AppCompatActivity {
                 }
 
 
-
-
-
-
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 call.cancel();
                 Toast.makeText(CheckOutPayment.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
-              //  binding.loader.setVisibility(View.GONE);
+                //  binding.loader.setVisibility(View.GONE);
                 DataManager.getInstance().hideProgressMessage();
             }
         });
     }
 
 
-
-    public void dialogNumber(String operator,String strList){
+    public void dialogNumber(String operator, String strList) {
         Dialog mDialog = new Dialog(CheckOutPayment.this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_number);
@@ -530,12 +500,12 @@ public class CheckOutPayment extends AppCompatActivity {
         });
 
         btnPayNow.setOnClickListener(v -> {
-            if(edNumber.getText().toString().equals(""))
+            if (edNumber.getText().toString().equals(""))
                 Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Cash");
+                PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Cash");
             }
 
         });
@@ -544,9 +514,7 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
-
-
-    public void dialogAirtel(String operator,String strList){
+    public void dialogAirtel(String operator, String strList) {
         Dialog mDialog = new Dialog(CheckOutPayment.this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_airtel);
@@ -563,20 +531,20 @@ public class CheckOutPayment extends AppCompatActivity {
         });
 
         btnPayNow.setOnClickListener(v -> {
-           if(edNumber.getText().toString().equals(""))
-               Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
+            if (edNumber.getText().toString().equals(""))
+                Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
-         else {
-               mDialog.dismiss();
-               PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
-           }
+            else {
+                mDialog.dismiss();
+                PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Online");
+            }
 
         });
         mDialog.show();
 
     }
 
-    public void dialogMoov(String operator,String strList){
+    public void dialogMoov(String operator, String strList) {
         Dialog mDialog = new Dialog(CheckOutPayment.this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_moov);
@@ -593,12 +561,12 @@ public class CheckOutPayment extends AppCompatActivity {
         });
 
         btnPayNow.setOnClickListener(v -> {
-            if(edNumber.getText().toString().equals(""))
+            if (edNumber.getText().toString().equals(""))
                 Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+                PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Online");
             }
 
         });
@@ -607,7 +575,7 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
-    public void dialogSendAnotherPerson(){
+    public void dialogSendAnotherPerson() {
         Dialog mDialog = new Dialog(CheckOutPayment.this);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_send_another_person);
@@ -633,7 +601,7 @@ public class CheckOutPayment extends AppCompatActivity {
                                             public void onTextChanged(CharSequence s, int start, int before, int count) {
                                                 // Check if the input is numeric
                                                 if (s.length()==8 */
-/*|| s.length()==10*//*
+        /*|| s.length()==10*//*
 ) {
                                                     checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
                                                 }
@@ -653,13 +621,13 @@ public class CheckOutPayment extends AppCompatActivity {
         });
 
         btnSend.setOnClickListener(v -> {
-            if(edNumber.getText().toString().equals(""))
+            if (edNumber.getText().toString().equals(""))
                 Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();
-             //  if(!anotherPersonId.equalsIgnoreCase(""))
-                checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
+                //  if(!anotherPersonId.equalsIgnoreCase(""))
+                checkUserExit(ccp.getSelectedCountryCode() + "-" + edNumber.getText().toString());
 
             }
 
@@ -671,9 +639,9 @@ public class CheckOutPayment extends AppCompatActivity {
     private void checkUserExit(String number) {
         //binding.loader.setVisibility(View.VISIBLE);
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
 
         Map<String, String> map = new HashMap<>();
@@ -682,7 +650,7 @@ public class CheckOutPayment extends AppCompatActivity {
 
         Log.e("MapMap", "Check user Exit Request" + map);
 
-        Call<ResponseBody> loginCall = apiInterface.checkUserExitApi(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.checkUserExitApi(headerMap, map);
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -693,14 +661,12 @@ public class CheckOutPayment extends AppCompatActivity {
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Check user Exit RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
-                        anotherPersonId =  object.getJSONObject("data").getString("id");
+                        anotherPersonId = object.getJSONObject("data").getString("id");
                         sendLinkAnotherPerson(anotherPersonId);
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
-                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();                    }
-
-
-                    else if (object.optString("status").equals("5")) {
+                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (object.optString("status").equals("5")) {
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -712,10 +678,6 @@ public class CheckOutPayment extends AppCompatActivity {
                     binding.loader.setVisibility(View.GONE);
                     e.printStackTrace();
                 }
-
-
-
-
 
 
             }
@@ -752,19 +714,19 @@ public class CheckOutPayment extends AppCompatActivity {
     private void sendLinkAnotherPerson(String anotherPersonId) {
         //binding.loader.setVisibility(View.VISIBLE);
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
         map.put("other_user_id", anotherPersonId);
-        map.put("delivery_calculation",insertDeliveryId);
-        map.put("payment_link",createDeepLink(""));
+        map.put("delivery_calculation", insertDeliveryId);
+        map.put("payment_link", createDeepLink(""));
         Log.e("MapMap", "Send Invoice anotherPerson Request" + map);
 
-        Call<ResponseBody> loginCall = apiInterface.sendInvoiceAnotherApi(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.sendInvoiceAnotherApi(headerMap, map);
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -776,17 +738,15 @@ public class CheckOutPayment extends AppCompatActivity {
                     Log.e(TAG, "Send Invoice anotherPerson RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         Toast.makeText(CheckOutPayment.this, getString(R.string.invoice_send_sucessfully), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(CheckOutPayment.this,HomeActivity.class)
-                                .putExtra("status","")
-                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity(new Intent(CheckOutPayment.this, HomeActivity.class)
+                                .putExtra("status", "")
+                                .putExtra("msg", "").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
 
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
-                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();                    }
-
-
-                    else if (object.optString("status").equals("5")) {
+                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (object.optString("status").equals("5")) {
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -800,10 +760,6 @@ public class CheckOutPayment extends AppCompatActivity {
                 }
 
 
-
-
-
-
             }
 
             @Override
@@ -815,8 +771,6 @@ public class CheckOutPayment extends AppCompatActivity {
             }
         });
     }
-
-
 
 
     private void setCountryCodeFromLocation(CountryCodePicker ccp) {
@@ -844,7 +798,7 @@ public class CheckOutPayment extends AppCompatActivity {
                         }
                     }
                 });
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

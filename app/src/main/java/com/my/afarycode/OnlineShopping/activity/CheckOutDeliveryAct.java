@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.gson.Gson;
-import com.my.afarycode.OnlineShopping.CheckOutDelivery;
-import com.my.afarycode.OnlineShopping.CheckOutPayment;
 import com.my.afarycode.OnlineShopping.CheckOutScreen;
-import com.my.afarycode.OnlineShopping.LoginActivity;
 import com.my.afarycode.OnlineShopping.Model.Add_Address_Modal;
-import com.my.afarycode.OnlineShopping.Model.CountryModel;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.DeliveryTypeModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
@@ -35,7 +30,6 @@ import com.my.afarycode.OnlineShopping.bottomsheet.EditAddressFragment;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.fragment.AddAddressFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
-import com.my.afarycode.OnlineShopping.helper.GooglePlacesAutocompleteActivity;
 import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.addAddressListener;
 import com.my.afarycode.OnlineShopping.listener.onPosListener;
@@ -694,7 +688,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                 try {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
-                   // getDeliveryAvailability(addressId);
+                    getDeliveryAvailability(addressId);
                     Log.e(TAG, "Delivery Agency RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
@@ -735,6 +729,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
 
 
+
+
     private void getDeliveryAvailability(String addressId) {
         DataManager.getInstance().showProgressMessage(CheckOutDeliveryAct.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
@@ -756,16 +752,28 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
-                        Toast.makeText(CheckOutDeliveryAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-
-
-                    } else if (object.optString("status").equals("0")) {
-
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_available_on_this_country),object.getString("status"));
 
                     }
 
-                    else if (object.getString("status").equals("5")) {
+                    else if (object.getString("status").equals("2")) {
+                        binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                    }
 
+
+                    else if (object.getString("status").equals("3")) {
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select),object.getString("status"));
+
+                    }
+
+                    else if (object.getString("status").equals("4")) {
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_deliver_on_this_country),object.getString("status"));
                     }
 
 
@@ -782,6 +790,41 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             }
         });
 
+    }
+
+    private void uncheckAddressList() {
+        deliveryType = "";
+        for (int i=0;i<deliverArrayList.size();i++){
+            deliverArrayList.get(i).setChk(false);
+        }
+        deliveryTypeAdapter.notifyDataSetChanged();
+
+
+        for (int i=0;i<arrayList.size();i++){
+            arrayList.get(i).setChk(false);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+
+
+    private void ShowAvailableResultDialog(String title,String msg,String status){
+        AlertDialog.Builder builder = new AlertDialog.Builder(CheckOutDeliveryAct.this);
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }) .show();
+              /*  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })*/
+        // Show the dialog
     }
 
 
