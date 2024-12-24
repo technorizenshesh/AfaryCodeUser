@@ -360,6 +360,12 @@
     <string name="we_do_not_available_on_this_country">Nous ne livrons pas dans ce pays</string>
     <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">Nous sommes disponibles dans ce pays mais vous récupérerez votre colis vous-même. Veuillez sélectionner CLIQUER et COLLECTER</string>
     <string name="we_do_not_deliver_on_this_country">Nous ne livrons pas dans ce pays</string>
+    <string name="dear_customer">Cher client,</string>
+    <string name="you_have_requested_delivery_with_cash_on_delivery_one_of_our">Vous avez demandé la livraison avec paiement à la livraison. Un de nos</string>
+    <string name="salespeople_may_call_you">les vendeurs peuvent vous appeler.</string>
+    <string name="do_you_confirm_this_number">Confirmez-vous ce numéro…</string>
+    <string name="close">Fermer</string>
+    <string name="your_request_send_to_admin">votre demande est envoyée à l\'administrateur, un commercial vous contactera dans les plus brefs délais, Merci de votre patience</string>
 </resources>
 
 

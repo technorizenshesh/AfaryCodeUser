@@ -367,10 +367,10 @@ public class CheckOutPayment extends AppCompatActivity {
 
     private void dialogAlert() {
         AlertDialog.Builder builder = new AlertDialog.Builder(CheckOutPayment.this);
-        builder.setMessage("Dear Customer,\n" +
-                        "You have requested delivery with cash on delivery. One of our \n" +
-                        "salespeople may call you.\n" +
-                        "Do you confirm this number…" + data.getResult().mobile)
+        builder.setMessage(getString(R.string.dear_customer)+"\n"
+                       + getString(R.string.you_have_requested_delivery_with_cash_on_delivery_one_of_our)+ " \n"
+                       + getString(R.string.salespeople_may_call_you) +"\n"
+                       + getString(R.string.do_you_confirm_this_number) + data.getResult().mobile)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
@@ -441,7 +441,9 @@ public class CheckOutPayment extends AppCompatActivity {
                         // binding.loader.setVisibility(View.GONE);
                         if (paymentType.equals("Wallet") || paymentType.equals("Cash")) {
                             Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(CheckOutPayment.this, MyOrderScreen.class)
+                            startActivity(new Intent(CheckOutPayment.this, HomeActivity.class)
+                                    .putExtra("status", "")
+                                    .putExtra("msg", "")
                                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                             finish();
                         } else {

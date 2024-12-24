@@ -69,7 +69,9 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                     if(object.getString("status").equals("1")){
                         Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                        if(paymentBy.equals("user")) {
-                           startActivity(new Intent(CheckPaymentStatusAct.this, MyOrderScreen.class)
+                           startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
+                                   .putExtra("status", "")
+                                   .putExtra("msg", "")
                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                            finish();
                        }
@@ -127,9 +129,15 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Transaction Status")
                 .setMessage("Your transaction has not been completed. Please try again or choose another method of payment.\n\nIf on the contrary this message appears while you have been debited, please contact the administrator here (link).")
-        ;
-                /*.setPositiveButton("Ok", null) // Uncomment if you want the OK button
-                .setNegativeButton("Cancel", null); // Uncomment if you want the Cancel button*/
+
+                .setPositiveButton("Try again payment", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                }); // Uncomment if you want the OK button
+              //  .setNegativeButton("Cancel", null); // Uncomment if you want the Cancel button*/
 
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
@@ -163,7 +171,7 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
 
                 // Handle the click on the link
                 messageTextView.setOnClickListener(v -> {
-                    dialog.show();
+                    dialog.dismiss();
                     showDialog();
                 });
             }
@@ -207,6 +215,43 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
 
         dialog.show();
     }
+
+
+    private void showMsgDialog() {
+        // Get the current date and time
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.alert))
+                .setMessage(getString(R.string.your_request_send_to_admin))
+                .setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                        startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class)
+                                .putExtra("status","")
+                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+                });
+        /* .setNegativeButton("Cancel", null)*/;
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        // Disable buttons
+       /* dialog.setOnShowListener(dialogInterface -> {
+            Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+            *//*if (positiveButton != null) {
+                positiveButton.setEnabled(false); // Disable positive button
+            }*//*
+            if (negativeButton != null) {
+                negativeButton.setEnabled(false); // Disable negative button
+            }
+        });*/
+
+        dialog.show();
+    }
+
+
 
 
 
@@ -284,11 +329,7 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Send Admin Msg Response" + object);
-                    startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class)
-                            .putExtra("status","")
-                            .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                    finish();
-
+                    showMsgDialog();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
