@@ -52,6 +52,19 @@
                 android:visibility="visible" />
 
 
+
+        <TextView
+            android:id="@+id/tvNotFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_not_available"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_regular"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+
     </RelativeLayout>
 
 </layout>

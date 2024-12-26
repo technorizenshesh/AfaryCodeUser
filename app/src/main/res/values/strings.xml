@@ -363,6 +363,11 @@
     <string name="do_you_confirm_this_number">Do you confirm this number…</string>
     <string name="close">Close</string>
     <string name="your_request_send_to_admin">your request is sent to admin, a sales representative will contact you as soon as possible, Thank you for your patience</string>
+    <string name="pending">Pending</string>
+    <string name="cancelled_by_seller">Cancel by seller</string>
+    <string name="are_you_sure_you_want_to_refuse_order">Are you sure you want to refuse this order?</string>
+    <string name="order_not_available">order not available</string>
+    <string name="complete">Complete</string>
 
 
 </resources>

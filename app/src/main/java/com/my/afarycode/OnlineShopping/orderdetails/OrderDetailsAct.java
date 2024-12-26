@@ -120,7 +120,9 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
         binding.btnDecline.setOnClickListener(view -> {
             if(model!=null){
-              if(model.getResult().getStatus().equalsIgnoreCase("Pending") || model.getResult().getStatus().equalsIgnoreCase("Accepted")) alertCancelOrder();
+              if(model.getResult().getStatus().equalsIgnoreCase("Pending") || model.getResult().getStatus().equalsIgnoreCase("Accepted") ||
+                model.getResult().getStatus().equalsIgnoreCase("PickedUp"))
+                alertCancelOrder();
             }
         });
 
@@ -215,8 +217,23 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
 
                         }
+
+                        else if(model.getResult().getStatus().equals("Accepted_by_admin")){
+                            binding.llButtons.setVisibility(View.VISIBLE);
+                            binding.btnAccept.setText(getString(R.string.accept));
+                            binding.btnAccept.setVisibility(View.GONE);
+                            binding.tvAfaryCode.setVisibility(View.GONE);
+                            binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            binding.btnDecline.setVisibility(View.VISIBLE);
+
+                        }
+
+
+
+
+
                         else if(model.getResult().getStatus().equals("Accepted")){
-                            binding.btnDecline.setVisibility(View.GONE);
+                            binding.btnDecline.setVisibility(View.VISIBLE);
                             if(model.getResult().getSelfCollect().equals("Yes")){
                                 binding.llButtons.setVisibility(View.VISIBLE);
                                 binding.btnAccept.setVisibility(View.GONE);
@@ -239,7 +256,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.llButtons.setVisibility(View.GONE);
                             binding.btnAccept.setVisibility(View.GONE);
                             binding.tvAfaryCode.setVisibility(View.VISIBLE);
-                            binding.btnDecline.setVisibility(View.GONE);
+                            binding.btnDecline.setVisibility(View.VISIBLE);
                             binding.btnChat.setVisibility(View.GONE);
                             //binding.btnAccept.setText(getString(R.string.track_order));
                          //   binding.btnAccept.setText(getString(R.string.re_order));
@@ -289,8 +306,14 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
 
                         else if(model.getResult().getStatus().equals("Cancelled")){
-                            binding.llButtons.setVisibility(View.GONE);
+                            binding.llButtons.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
+                            binding.btnAccept.setVisibility(View.VISIBLE);
+                            binding.btnAccept.setText(getString(R.string.re_order));
+                            binding.btnDecline.setVisibility(View.VISIBLE);
+                            binding.btnDecline.setText(getString(R.string.cancelled_by_seller));
+                            binding.btnChat.setVisibility(View.GONE);
+
                           //  binding.btnAccept.setVisibility(View.VISIBLE);
                           ///  binding.btnAccept.setText(getString(R.string.re_order));
 
@@ -300,9 +323,11 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
                             binding.btnAccept.setVisibility(View.VISIBLE);
-                            binding.btnDecline.setVisibility(View.GONE);
-                            binding.btnChat.setVisibility(View.GONE);
                             binding.btnAccept.setText(getString(R.string.re_order));
+                            binding.btnDecline.setVisibility(View.VISIBLE);
+                            binding.btnDecline.setText(getString(R.string.cancelled));                            binding.btnChat.setVisibility(View.GONE);
+                            binding.btnChat.setVisibility(View.GONE);
+
                         }
 
 
@@ -331,9 +356,23 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         binding.tvTotalAmt.setText("FCFA" + totalPriceToToPay);
                         binding.subTotal.setText("FCFA" + subTotal);
 
+                        try {
+                            arrayList.clear();
+                            arrayList.addAll(model.getResult().getProductList());
+                           /* for (int i= 0;i< model.getResult().getProductList().size();i++){
+                                if(model.getResult().getProductList().get(i).getStatus().equals("Cancelled")){
 
-                        arrayList.clear();
-                        arrayList.addAll(model.getResult().getProductList());
+                                }
+                                else {
+                                    arrayList.add(model.getResult().getProductList().get(i));
+                                }*/
+                           // }
+
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+
                         itemsAdapter.notifyDataSetChanged();
 
                         if(!jsonObject.getJSONObject("result").getString("address").isEmpty()){
@@ -595,7 +634,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
     private void alertCancelOrder() {
         AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsAct.this);
-        builder.setMessage("Are you sure you want to refuse this order?")
+        builder.setMessage(getString(R.string.are_you_sure_you_want_to_refuse_order))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override

@@ -100,7 +100,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.blue_circle));
-            holder.binding.btnCancel.setVisibility(View.VISIBLE);
+            holder.binding.btnCancel.setVisibility(View.GONE);
+            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
+
+        }
+
+       else if(arrayList.get(position).getStatus().equals("Accepted_by_admin")){
+            holder.binding.orderStatus.setVisibility(View.VISIBLE);
+            holder.binding.orderStatus.setText(context.getString(R.string.pending));
+            holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.blue_circle));
+            holder.binding.btnCancel.setVisibility(View.GONE);
             holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
 
         }
@@ -111,14 +120,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
 
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.colorGreen));
-            holder.binding.btnCancel.setVisibility(View.VISIBLE);
+            holder.binding.btnCancel.setVisibility(View.GONE);
             holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
 
         }
 
 
         else if(arrayList.get(position).getStatus().equals("Cancelled")){
-
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.red));
@@ -130,19 +138,18 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
         else if(arrayList.get(position).getStatus().equals("Cancelled_by_user")){
 
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
-            holder.binding.orderStatus.setText("Cancelled");
+            holder.binding.orderStatus.setText(context.getString(R.string.cancelled));
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.red));
             holder.binding.btnCancel.setVisibility(View.GONE);
-            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
+            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.colorGray));
 
         }
 
 
         else {
-
+            holder.binding.btnCancel.setVisibility(View.GONE);
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
-
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.colorGreen));
 
         }

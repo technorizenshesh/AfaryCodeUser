@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -90,12 +91,14 @@ public class MyOrderScreen extends AppCompatActivity implements OrderListener{
                     if (jsonObject.getString("status").toString().equals("1")) {
                         // binding.tvNotFount.setVisibility(View.GONE);
                         OrderModel model = new Gson().fromJson(stringResponse,OrderModel.class);
+                        binding.tvNotFound.setVisibility(View.GONE);
                         arrayList.clear();
                         arrayList.addAll(model.getResult());
                         adapter.notifyDataSetChanged();
                     } else if (jsonObject.getString("status").toString().equals("0")) {
                         // binding.tvNotFount.setVisibility(View.VISIBLE);
-                        Toast.makeText(MyOrderScreen.this, jsonObject.getString("message").toString(), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(MyOrderScreen.this, jsonObject.getString("message").toString(), Toast.LENGTH_SHORT).show();
+                        binding.tvNotFound.setVisibility(View.VISIBLE);
                         arrayList.clear();
                         adapter.notifyDataSetChanged();
                     }

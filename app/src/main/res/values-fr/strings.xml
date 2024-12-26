@@ -366,6 +366,9 @@
     <string name="do_you_confirm_this_number">Confirmez-vous ce numéro…</string>
     <string name="close">Fermer</string>
     <string name="your_request_send_to_admin">votre demande est envoyée à l\'administrateur, un commercial vous contactera dans les plus brefs délais, Merci de votre patience</string>
+    <string name="pending">En attente</string>
+    <string name="cancelled_by_seller">Annuler par le vendeur</string>
+    <string name="are_you_sure_you_want_to_refuse_order">Êtes-vous sûr de vouloir refuser cette command?</string>
 </resources>
 
 

@@ -2,6 +2,7 @@ package com.my.afarycode.OnlineShopping.orderdetails;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,28 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
         holder.binding.tvProductPrice.setText(arrayList.get(position).getQuantity() + " X " + arrayList.get(position).getLocalPrice() );
         holder.binding.tvProductTotal.setText(Integer.parseInt(arrayList.get(position).getQuantity()) * Integer.parseInt(arrayList.get(position).getLocalPrice())+"");
+
+
+        if(arrayList.get(position).getStatus().equals("Cancelled")){
+            holder.binding.ivItem.setVisibility(View.GONE);
+        }
+        else  if(arrayList.get(position).getStatus().equals("Completed")){
+            holder.binding.ivItem.setVisibility(View.GONE);
+        }
+
+        else  if(arrayList.get(position).getStatus().equals("Cancelled_by_user")){
+            holder.binding.ivItem.setVisibility(View.GONE);
+        }
+
+        else  if(arrayList.get(position).getStatus().equals("PickedUp")){
+            holder.binding.ivItem.setVisibility(View.GONE);
+        }
+
+
+        else {
+            holder.binding.ivItem.setVisibility(View.VISIBLE);
+
+        }
 
 
     }
