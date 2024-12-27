@@ -27,6 +27,7 @@ import com.my.afarycode.OnlineShopping.adapter.ShoppingStoreAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityAllShopOnlineBinding;
@@ -96,8 +97,9 @@ public class AllShopOnlineActivity extends Fragment {
 
 
 
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetRestorentsDetailsAPI(restorents_id);
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
-        GetRestorentsDetailsAPI(restorents_id);
 
         setAdapter();
 
@@ -154,7 +156,7 @@ public class AllShopOnlineActivity extends Fragment {
                         binding.tvTitleAddress.setText(data.address);
                         binding.storeName.setText(data.name);
                         binding.addressStore.setText(data.address);
-                        binding.time.setText("Opens: " + data.openTime + " | Close: " + data.closeTime);
+                        binding.time.setText(getString(R.string.open)+" " + data.openTime + " |" + getString(R.string.closeto)+" " + data.closeTime);
 
 
                             banner_array_list.add(data.image1);
@@ -179,7 +181,9 @@ public class AllShopOnlineActivity extends Fragment {
                                 (new GridLayoutManager(getActivity(), 2));
 
                         binding.recyclerAllShopStore.setAdapter(adapter);
-                        GetCartItem();
+
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetCartItem();
+                        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
@@ -227,7 +231,8 @@ public class AllShopOnlineActivity extends Fragment {
 
     @Override
     public void onResume() {
-        GetRestorentsDetailsAPI(restorents_id);
+       if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetRestorentsDetailsAPI(restorents_id);
+       else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         super.onResume();
 
     }

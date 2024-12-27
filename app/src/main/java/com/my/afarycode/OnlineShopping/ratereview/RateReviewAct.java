@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.orderdetails.ItemsAdapter;
 import com.my.afarycode.OnlineShopping.orderdetails.OrderDetailsAct;
 import com.my.afarycode.OnlineShopping.orderdetails.OrderDetailsModel;
@@ -61,10 +62,16 @@ public class RateReviewAct extends AppCompatActivity {
 
         binding.llBack.setOnClickListener(v -> finish());
 
-        binding.rlSubmit.setOnClickListener(v -> giveRate());
+        binding.rlSubmit.setOnClickListener(v -> {
+                    if(NetworkAvailablity.checkNetworkStatus(RateReviewAct.this)) giveRate();
+                    else Toast.makeText(RateReviewAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                });
 
 
-        callOrderDetail();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(RateReviewAct.this)) callOrderDetail();
+        else Toast.makeText(RateReviewAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
     private void giveRate() {
@@ -97,7 +104,7 @@ public class RateReviewAct extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(stringResponse);
                         Log.e("response===", response.body().string());
                         if (jsonObject.getString("status").toString().equals("1")) {
-                            Toast.makeText(RateReviewAct.this, "Rated successfully..", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RateReviewAct.this, getString(R.string.rate_sueccessfully), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(RateReviewAct.this, HomeActivity.class)
                                     .putExtra("status","")
                                     .putExtra("msg","")

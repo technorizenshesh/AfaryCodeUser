@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.SignupModel;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.readotp.SmsBroadcastReceiver;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityVerificationScreenBinding;
@@ -89,7 +90,10 @@ public class VerificationScreen extends AppCompatActivity {
                 Toast.makeText(VerificationScreen.this,getString(R.string.enter_otp),Toast.LENGTH_LONG).show();
             }
             else {
-                VerificationAPI();
+
+
+                if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))  VerificationAPI();
+                else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -98,7 +102,9 @@ public class VerificationScreen extends AppCompatActivity {
            resendButtonCount++;
             binding.Otp.setOTP("");
             startSmartUserConsent();
-            sendVerificationCode(mobile,countryCode);
+
+            if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))  sendVerificationCode(mobile,countryCode);
+            else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
 
@@ -111,7 +117,8 @@ public class VerificationScreen extends AppCompatActivity {
 
        // sendOnServerNumber(mobile,countryCode);
 
-        sendVerificationCode(mobile,countryCode);
+        if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))  sendVerificationCode(mobile,countryCode);
+        else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -158,7 +165,10 @@ public class VerificationScreen extends AppCompatActivity {
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     if (jsonObject.getString("status").equals("1")) {
-                        sendVerificationCode(mobile,countryCode);
+
+                        if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))  sendVerificationCode(mobile,countryCode);
+                        else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     } else if (jsonObject.getString("status").equals("0")) {
                         Toast.makeText(VerificationScreen.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     }
@@ -290,12 +300,15 @@ public class VerificationScreen extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     if (jsonObject.getString("status").equals("1")) {
                       //  Toast.makeText(VerificationScreen.this,getString(R.string.),Toast.LENGTH_LONG).show();
-                        SignUpAPi();
+
+
+                        if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))   SignUpAPi();
+                        else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                     } else if (jsonObject.getString("status").equals("0")) {
                         Toast.makeText(VerificationScreen.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                        sendVerificationCode(mobile,countryCode);
-
+                        if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))  sendVerificationCode(mobile,countryCode);
+                        else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {

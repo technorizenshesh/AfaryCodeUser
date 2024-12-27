@@ -16,6 +16,7 @@ import com.my.afarycode.OnlineShopping.adapter.ShopProductAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityShopDetailsBinding;
@@ -64,7 +65,9 @@ public class ShopDetailsAct extends AppCompatActivity {
             sellerId = getIntent().getStringExtra("sellerId");
 
 
-            GetShopDetailsAPI(shopId,sellerId);
+
+           if(NetworkAvailablity.checkNetworkStatus(ShopDetailsAct.this)) GetShopDetailsAPI(shopId,sellerId);
+           else Toast.makeText(this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         }
 
 

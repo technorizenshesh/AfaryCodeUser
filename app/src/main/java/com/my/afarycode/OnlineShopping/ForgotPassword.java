@@ -21,6 +21,7 @@ import com.my.afarycode.OnlineShopping.bottomsheet.SendAdminRequestBottomSheet;
 import com.my.afarycode.OnlineShopping.bottomsheet.WebViewBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityForgotPasswordBinding;
@@ -66,10 +67,11 @@ public class ForgotPassword extends AppCompatActivity implements AskListener {
                 Toast.makeText(ForgotPassword.this, getString(R.string.please_enter_valied_email), Toast.LENGTH_SHORT).show();
 
             } else {
-                ForgotPasswordAPI(binding.edEmail.getText().toString());
+
                 //  startActivity(new Intent(ForgotPassword.this, VerificationScreen.class)
                 //      .putExtra("user_email", binding.edtmobile.getText().toString()));
-
+                if(NetworkAvailablity.checkNetworkStatus(ForgotPassword.this)) ForgotPasswordAPI(binding.edEmail.getText().toString());
+                else Toast.makeText(ForgotPassword.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
             }
         });

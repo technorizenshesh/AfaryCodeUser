@@ -20,8 +20,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -91,8 +93,13 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
 
             }
             else {
-                sendRequestTransferMoney(code, mobile_no_et.getText().toString()
+
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))   sendRequestTransferMoney(code, mobile_no_et.getText().toString()
                         , et_money.getText().toString(), etReason.getText().toString());
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
             }
         });
 
@@ -159,7 +166,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
 
 
     public void dialogNumberExit(String Amount,String reason,String number,String countryCode,String senderName){
-        Dialog mDialog = new Dialog(getActivity());
+        Dialog mDialog = new Dialog(requireActivity());
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_transfer_money_request);
         mDialog.setCancelable(false);
@@ -168,12 +175,12 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
         TextView tvAmount = mDialog.findViewById(R.id.tvAmount);
 
         LinearLayout btnOk = mDialog.findViewById(R.id.btnOk);
-        tvAmount.setText(Html.fromHtml("<font color='#000'>" + "you received an amount of "+ "<b>"+ "FCFA" + Amount + "</b>" +  " From " + senderName + "</font>"  ));
+        tvAmount.setText(Html.fromHtml("<font color='#000'>" +getString(R.string.you_received_an_amount_of)+ " "+ "<b>"+ "FCFA" + Amount + "</b>" +  " From " + senderName + "</font>"  ));
 
         btnOk.setOnClickListener(v -> {
             mDialog.dismiss();
-            TransferMoneyRequestAPI(countryCode,number,Amount,reason);
-
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))   TransferMoneyRequestAPI(countryCode,number,Amount,reason);
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         });
         mDialog.show();
@@ -223,7 +230,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
                     if (object.optString("status").equals("1")) {
                         listener.ask("","transfer");
                         dismiss();
-                        Toast.makeText(getContext(), "Your request has been sent to your correspondent.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.your_request_has_been_sent_to_your_correspondent), Toast.LENGTH_SHORT).show();
 
                     } else if (object.optString("status").equals("0")) {
 
@@ -259,7 +266,7 @@ public class RequestMoneyBottomSheet extends BottomSheetDialogFragment {
     private void AlertNumberNotExit() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Your correspondent does not seem to be affiliated with AfaryCode. We will therefore send him a payment link by SMS. Make sure your wallet has a sufficient balance for sending SMS or please first credit your wallet with a minimum amount of (amount) managed by admin. you can also send this link to your correspondent.  show link")
+        builder.setMessage(getString(R.string.your_corospondent_does_not_affiliated))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override

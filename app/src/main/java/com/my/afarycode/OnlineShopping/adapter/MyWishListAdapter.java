@@ -29,6 +29,7 @@ import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ItemWishListBinding;
@@ -80,7 +81,12 @@ public class MyWishListAdapter extends
         holder.progressAdapterBinding.txtPrice.setText(all_category_subcategory.get(position).getProductDetails().getShowCurrencyCode() + all_category_subcategory.get(position).getProductDetails().getLocalPrice());
 
         holder.progressAdapterBinding.addToCart.setOnClickListener(v -> {
-            AddCartToWishListAPI(all_category_subcategory.get(position).getId());
+
+
+            if(NetworkAvailablity.checkNetworkStatus(activity))  AddCartToWishListAPI(all_category_subcategory.get(position).getId());
+            else Toast.makeText(activity, activity.getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
         });
     }
 

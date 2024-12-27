@@ -14,9 +14,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityPrivacyPolicyBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -107,7 +109,10 @@ public class PrivacyPolicy extends AppCompatActivity {
 
             }
         });
-        getPrivacyPolicy();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(PrivacyPolicy.this)) getPrivacyPolicy();
+        else Toast.makeText(PrivacyPolicy.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
     }
 

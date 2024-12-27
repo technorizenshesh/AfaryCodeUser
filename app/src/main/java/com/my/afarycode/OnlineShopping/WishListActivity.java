@@ -28,6 +28,7 @@ import com.my.afarycode.OnlineShopping.adapter.MyWishListAdapter;
 import com.my.afarycode.OnlineShopping.adapter.ShoppingStoreAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -73,7 +74,10 @@ public class WishListActivity extends Fragment {
         adapter = new MyWishListAdapter(getActivity(), get_result);
         binding.recyclerwishList.setAdapter(adapter);
 
-         GetWishListAPI();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  GetWishListAPI();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         binding.RRback.setOnClickListener(v -> {
             getActivity().onBackPressed();

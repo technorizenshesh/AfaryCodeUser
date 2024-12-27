@@ -54,6 +54,24 @@
                     android:textSize="@dimen/_12sdp"
                     />
 
+
+
+                <TextView
+                    android:id="@+id/tvCancelled"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/red"
+                    android:textSize="@dimen/_9sdp"
+                    android:text="@string/cancelled"
+                    android:visibility="gone"
+                    />
+
+
+
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

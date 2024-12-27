@@ -128,7 +128,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         binding.recyclerCheckout.setAdapter(adapter);
 
 
-        GetCartItem();
+        if(NetworkAvailablity.checkNetworkStatus(CheckOutScreen.this))  GetCartItem();
+        else Toast.makeText(CheckOutScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
     }
 
     private void GetCartItem() {
@@ -195,7 +198,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         }*/
                      //   Log.e("check log====", Chkkkk);
                       //  AllTax(get_result.get(0).cartId, mainTotalPay + "", Chkkkk);
-                        getAllTax();
+                       if(NetworkAvailablity.checkNetworkStatus(CheckOutScreen.this)) getAllTax();
+                       else Toast.makeText(CheckOutScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
 
                     } else if (data.status.equals("0")) {
                         get_result.clear();
@@ -424,12 +430,19 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     @Override
     public void onPos(int position, String type, String value) {
         if (type.equals("Update"))
-            UpdateQuanityAPI(get_result.get(position).id, get_result.get(position).getItemId(), get_result.get(position).getId(), Integer.parseInt(value));
+        {
+            if(NetworkAvailablity.checkNetworkStatus(CheckOutScreen.this)) UpdateQuanityAPI(get_result.get(position).id, get_result.get(position).getItemId(), get_result.get(position).getId(), Integer.parseInt(value));
+            else Toast.makeText(CheckOutScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        }
         else if (type.equals("Delete"))
-            DeleteAPI(get_result.get(position).cartId, get_result.get(position).getId());
+        {
+            if(NetworkAvailablity.checkNetworkStatus(CheckOutScreen.this))   DeleteAPI(get_result.get(position).cartId, get_result.get(position).getId());
+            else Toast.makeText(CheckOutScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        }
         else if (type.equals("Wishlist")) {
-            AddToWIshListAPI(get_result.get(position).getItemId(), value);
 
+            if(NetworkAvailablity.checkNetworkStatus(CheckOutScreen.this))  AddToWIshListAPI(get_result.get(position).getItemId(), value);
+            else Toast.makeText(CheckOutScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -679,13 +692,13 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
                         if(deliveryMethod.equalsIgnoreCase("Vehicle"))
-                          binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                          binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.delivery_charge)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
                       else if(deliveryMethod.equalsIgnoreCase("Partner"))
-                          binding.tvDeliveryCharge.setText(Html.fromHtml("Shipping agency fees " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                          binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.shipping_agency_fees)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
                       else {
                             if(deliveryYesNo.equalsIgnoreCase("Yes"))
                                 binding.tvDeliveryCharge.setText(getString(R.string.delivery_charge));
-                         else binding.tvDeliveryCharge.setText(Html.fromHtml("Delivery Charge " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                         else binding.tvDeliveryCharge.setText(Html.fromHtml( getString(R.string.delivery_charge) +" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
                         }
 
 
@@ -721,9 +734,6 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         binding.tvDelivery.setText(currency +  deliveryFees);
                         binding.totalPriceToToPay.setText(currency +  totalPriceToToPay);
                         binding.subTotal.setText(currency +  mainTotalPay);
-
-
-
 
                     } else if (object.optString("status").equals("0")) {
                         Toast.makeText(CheckOutScreen.this, object.getString("message"), Toast.LENGTH_SHORT).show();

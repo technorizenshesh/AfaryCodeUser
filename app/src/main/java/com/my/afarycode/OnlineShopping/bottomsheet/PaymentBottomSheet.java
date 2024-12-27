@@ -43,6 +43,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.CountryCodes;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.helper.MyService;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -178,13 +179,18 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
                     + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";*/
 
 
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))   walletRechargeByCard();
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
-            walletRechargeByCard();
 
         });
 
-        GetProfile();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))   GetProfile();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
     }
 
 
@@ -287,7 +293,10 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator,edNumber.getText().toString(), operatorNumber);
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))   PaymentAPI(operator,edNumber.getText().toString(), operatorNumber);
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
             }
 
         });
@@ -319,7 +328,9 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator,edNumber.getText().toString(), operatorNumber);
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) PaymentAPI(operator,edNumber.getText().toString(), operatorNumber);
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -472,7 +483,10 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
             else {
                 mDialog.dismiss();
                 //  if(!anotherPersonId.equalsIgnoreCase(""))
-                checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
+
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))   checkUserExit(ccp.getSelectedCountryCode()+"-"+edNumber.getText().toString());
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -507,7 +521,10 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
                     Log.e(TAG, "Check user Exit RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         anotherPersonId =  object.getJSONObject("data").getString("id");
-                        sendLinkAnotherPerson(anotherPersonId);
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  sendLinkAnotherPerson(anotherPersonId);
+                        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();                    }

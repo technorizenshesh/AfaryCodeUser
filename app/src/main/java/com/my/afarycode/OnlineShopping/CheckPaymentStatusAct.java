@@ -30,6 +30,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.MyService;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityPaymentStatusBinding;
@@ -194,7 +195,11 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Handle the send action
                         // For example, send the message to the administrator or log the issue
-                        sendToAdminMsg(message);
+
+                        if(NetworkAvailablity.checkNetworkStatus(CheckPaymentStatusAct.this)) sendToAdminMsg(message);
+                        else Toast.makeText(CheckPaymentStatusAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
                     }
                 });
                /* .setNegativeButton("Cancel", null)*/;

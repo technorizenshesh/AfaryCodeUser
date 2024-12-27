@@ -30,9 +30,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.orderdetails.OrderDetailsAct;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -97,7 +99,10 @@ public class ChatAct extends AppCompatActivity {
                     reference1.push().setValue(map);
 
                   // if (NetworkReceiver.isConnected())
-                       sendPushNotifications(messageText);
+
+                    if(NetworkAvailablity.checkNetworkStatus(ChatAct.this)) sendPushNotifications(messageText);
+                    else Toast.makeText(ChatAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                   //  else
                   //      Toast.makeText(this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();*/
                 }

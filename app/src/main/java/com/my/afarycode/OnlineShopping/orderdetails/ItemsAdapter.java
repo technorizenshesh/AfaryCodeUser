@@ -48,23 +48,27 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
         if(arrayList.get(position).getStatus().equals("Cancelled")){
             holder.binding.ivItem.setVisibility(View.GONE);
+            holder.binding.tvCancelled.setVisibility(View.VISIBLE);
         }
         else  if(arrayList.get(position).getStatus().equals("Completed")){
             holder.binding.ivItem.setVisibility(View.GONE);
+            holder.binding.tvCancelled.setVisibility(View.GONE);
         }
 
         else  if(arrayList.get(position).getStatus().equals("Cancelled_by_user")){
             holder.binding.ivItem.setVisibility(View.GONE);
+            holder.binding.tvCancelled.setVisibility(View.VISIBLE);
         }
 
         else  if(arrayList.get(position).getStatus().equals("PickedUp")){
             holder.binding.ivItem.setVisibility(View.GONE);
+            holder.binding.tvCancelled.setVisibility(View.GONE);
         }
 
 
         else {
             holder.binding.ivItem.setVisibility(View.VISIBLE);
-
+            holder.binding.tvCancelled.setVisibility(View.GONE);
         }
 
 

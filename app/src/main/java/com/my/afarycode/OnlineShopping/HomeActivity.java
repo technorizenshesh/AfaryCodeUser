@@ -32,6 +32,7 @@ import com.my.afarycode.OnlineShopping.fragment.MyBookingFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyProfileFragment;
 import com.my.afarycode.OnlineShopping.fragment.WalletFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.ratereview.RateReviewAct;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -169,7 +170,10 @@ public class HomeActivity extends AppCompatActivity {
 
        // fragment = new HomeFragment();
       //  loadFragment(fragment);
-        GetProfile();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(HomeActivity.this)) GetProfile();
+        else Toast.makeText(HomeActivity.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -214,7 +218,7 @@ public class HomeActivity extends AppCompatActivity {
                 finish();
                 return;
             } else {
-                backToast = Toast.makeText(HomeActivity.this, "Press once again to exit", Toast.LENGTH_SHORT);
+                backToast = Toast.makeText(HomeActivity.this, getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT);
                 backToast.show();
             }
             backPressedTime = System.currentTimeMillis();

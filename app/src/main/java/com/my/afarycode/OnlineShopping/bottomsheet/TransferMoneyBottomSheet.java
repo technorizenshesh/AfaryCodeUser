@@ -41,11 +41,6 @@ import retrofit2.Response;
 
 
 
-
-
-
-
-
 public class TransferMoneyBottomSheet extends BottomSheetDialogFragment implements AskListener{
 
     Context context;

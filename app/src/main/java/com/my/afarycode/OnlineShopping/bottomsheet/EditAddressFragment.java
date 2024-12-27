@@ -205,7 +205,10 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                 showDropDownCountry(v, binding.etCountry, countryArrayList);
         });
 
-        getAllCountry();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getAllCountry();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
     }
 

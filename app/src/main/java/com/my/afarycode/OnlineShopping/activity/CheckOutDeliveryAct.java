@@ -54,8 +54,6 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     public String TAG = "CheckOutDelivery";
     ActivityCheckOutDeliveryBinding binding;
 
-    private View promptsView;
-    private AlertDialog alertDialog;
 
     private View promptsView1;
     private AlertDialog alertDialog1;
@@ -142,7 +140,11 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             else */if(deliveryType.equalsIgnoreCase("")) {
                 Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.please_select_address_type), Toast.LENGTH_SHORT).show();
             }
-            else  {
+            else if ( deliveryAgencyList.size()>1 && agencyId.equals("") ) {
+                Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.please_select_delivery_agency), Toast.LENGTH_SHORT).show();
+            } else {
+                Log.e("agencyList size====",deliveryAgencyList.size()+"");
+                Log.e("delivery agency id====",agencyId);
                 startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)
@@ -152,6 +154,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("addressId",addressId));
                 deliveryMethod = "";
                 addressId ="";
+                agencyId="";
+                deliveryType="";
                 Log.e("country id=====", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.countryId, ""));
 
             }
@@ -324,9 +328,10 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         startActivity(new Intent(CheckOutDeliveryAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
                     }
+                    if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) geDeliveryType();
+                    else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
-                    geDeliveryType();
 
                 }  catch (Exception e) {
                     e.printStackTrace();
@@ -441,7 +446,11 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             addressId=arrayList.get(position).getId();
 
             //  arrayList.get(position).getCountry();
-            getDeliveryAgency(arrayList.get(position).getId(),shopId);
+
+            if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) getDeliveryAgency(arrayList.get(position).getId(),shopId);
+            else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
         }
 
         else if(Type.equals("Edit"))
@@ -688,7 +697,10 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                 try {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
-                    getDeliveryAvailability(addressId);
+
+                    if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this))  getDeliveryAvailability(addressId);
+                    else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     Log.e(TAG, "Delivery Agency RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);

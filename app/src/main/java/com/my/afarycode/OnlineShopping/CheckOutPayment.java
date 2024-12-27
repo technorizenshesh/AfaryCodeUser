@@ -32,6 +32,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.deeplink.PaymentByAnotherAct;
 import com.my.afarycode.OnlineShopping.helper.CountryCodes;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -155,7 +156,8 @@ public class CheckOutPayment extends AppCompatActivity {
            startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
                    .putExtra("url",ll)
                    .putExtra("ref",refNumber));*/
-            callCardPayment("", data.getResult().getMobile(), "Card");
+           if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) callCardPayment("", data.getResult().getMobile(), "Card");
+           else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
         binding.llTransfer11.setOnClickListener(v -> {
@@ -165,8 +167,9 @@ public class CheckOutPayment extends AppCompatActivity {
                     + "&user_number=" + data.getResult().getMobile()+"&redirect=https://technorizen.com/afarycodewebsite/";
             Log.e("url===",ll);*/
 
+            if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) callCardPayment("", data.getResult().getMobile(), "Card");
+            else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
-            callCardPayment("", data.getResult().getMobile(), "Card");
         });
 
 
@@ -185,7 +188,12 @@ public class CheckOutPayment extends AppCompatActivity {
 
         binding.llWallet.setOnClickListener(v -> {
             if (Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
-                PaymentAPI("", "", data.getResult().getMobile(), "Wallet");
+            {
+
+                if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))  PaymentAPI("", "", data.getResult().getMobile(), "Wallet");
+                else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+            }
             else
                 Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
         });
@@ -193,7 +201,10 @@ public class CheckOutPayment extends AppCompatActivity {
 
         binding.llWallet11.setOnClickListener(v -> {
             if (Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
-                PaymentAPI("", "", data.getResult().getMobile(), "Wallet");
+            {
+                if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) PaymentAPI("", "", data.getResult().getMobile(), "Wallet");
+                else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+            }
             else
                 Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
         });
@@ -204,7 +215,10 @@ public class CheckOutPayment extends AppCompatActivity {
         });
 
 
-        GetProfile();
+        if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) GetProfile();
+        else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
     }
 
 
@@ -376,8 +390,8 @@ public class CheckOutPayment extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        PaymentAPI("VM", strList, data.getResult().mobile, "Cash");
-
+                       if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) PaymentAPI("VM", strList, data.getResult().mobile, "Cash");
+                       else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
                 }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
@@ -507,7 +521,10 @@ public class CheckOutPayment extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Cash");
+
+                if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Cash");
+                else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
             }
 
         });
@@ -538,7 +555,9 @@ public class CheckOutPayment extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Online");
+
+                if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Online");
+                else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -568,7 +587,9 @@ public class CheckOutPayment extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-                PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Online");
+
+                if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Online");
+                else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -629,7 +650,9 @@ public class CheckOutPayment extends AppCompatActivity {
             else {
                 mDialog.dismiss();
                 //  if(!anotherPersonId.equalsIgnoreCase(""))
-                checkUserExit(ccp.getSelectedCountryCode() + "-" + edNumber.getText().toString());
+             if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))   checkUserExit(ccp.getSelectedCountryCode() + "-" + edNumber.getText().toString());
+             else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
 
             }
 
@@ -664,7 +687,8 @@ public class CheckOutPayment extends AppCompatActivity {
                     Log.e(TAG, "Check user Exit RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         anotherPersonId = object.getJSONObject("data").getString("id");
-                        sendLinkAnotherPerson(anotherPersonId);
+                        if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))  sendLinkAnotherPerson(anotherPersonId);
+                        else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
                         Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();

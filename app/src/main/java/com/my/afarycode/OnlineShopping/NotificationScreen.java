@@ -21,6 +21,7 @@ import com.my.afarycode.OnlineShopping.adapter.NotificationAdapter;
 import com.my.afarycode.OnlineShopping.adapter.WalletAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityNotificationScreenBinding;
@@ -59,8 +60,8 @@ public class NotificationScreen extends AppCompatActivity {
         });
 
        /// GetNotificationView();
-        GetNotificationList();
-
+       if(NetworkAvailablity.checkNetworkStatus(NotificationScreen.this)) GetNotificationList();
+       else Toast.makeText(NotificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         setAdapter();
 
     }

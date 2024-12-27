@@ -30,9 +30,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.addAddressListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -108,7 +110,13 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         if (!Places.isInitialized()) {
             Places.initialize(getActivity(), getString(R.string.place_api_key));
         }
-        getAllCountry();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllCountry();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
 
         binding.btnAdd.setOnClickListener(v -> validation());
 
@@ -267,8 +275,8 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             Toast.makeText(getActivity(), getString(R.string.please_select_address_type), Toast.LENGTH_SHORT).show();
         }*/
         else {
-       /*     if(NetworkAvailablity.checkNetworkStatus(getActivity()))*/ AddLocation();
-          //  else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+           if(NetworkAvailablity.checkNetworkStatus(requireActivity())) AddLocation();
+            else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         }
 
     }

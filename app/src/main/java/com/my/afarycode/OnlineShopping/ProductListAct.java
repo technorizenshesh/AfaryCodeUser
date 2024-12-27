@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -24,6 +25,7 @@ import com.my.afarycode.OnlineShopping.adapter.ProductAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SearchProductAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityProductListBinding;
@@ -90,14 +92,16 @@ public class ProductListAct extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 queryString = s;
-                getProductBySearchId(queryString,filterType,countryId);
+               if(NetworkAvailablity.checkNetworkStatus(ProductListAct.this)) getProductBySearchId(queryString,filterType,countryId);
+               else Toast.makeText(ProductListAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
                 queryString = s;
-                getProductBySearchId(queryString,filterType,countryId);
+                if(NetworkAvailablity.checkNetworkStatus(ProductListAct.this)) getProductBySearchId(queryString,filterType,countryId);
+                else Toast.makeText(ProductListAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -119,11 +123,13 @@ public class ProductListAct extends AppCompatActivity {
      //  if(byScreen.equalsIgnoreCase("Shopping")) getProductById(byCatId);
      //  else getProductBySearchId(byCatId);
 
-       getProductBySearchId(queryString,filterType,countryId);
+        if(NetworkAvailablity.checkNetworkStatus(ProductListAct.this)) getProductBySearchId(queryString,filterType,countryId);
+        else Toast.makeText(ProductListAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
     private void getProductItems() {
-        getProductBySearchId(queryString,filterType,countryId);
+        if(NetworkAvailablity.checkNetworkStatus(ProductListAct.this)) getProductBySearchId(queryString,filterType,countryId);
+        else Toast.makeText(ProductListAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -307,7 +313,11 @@ public class ProductListAct extends AppCompatActivity {
 
                 }
             }
-            getProductBySearchId(queryString,filterType,countryId);
+
+            if(NetworkAvailablity.checkNetworkStatus(ProductListAct.this)) getProductBySearchId(queryString,filterType,countryId);
+            else Toast.makeText(ProductListAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
 
             return true;
         });

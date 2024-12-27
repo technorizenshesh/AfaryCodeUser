@@ -25,10 +25,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
 import com.my.afarycode.OnlineShopping.Model.SearchModel;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.adapter.CountryAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.SearchListener;
 import com.my.afarycode.OnlineShopping.listener.onPositionClickListener;
 import com.my.afarycode.R;
@@ -103,7 +105,9 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
 
         binding.ivBack.setOnClickListener(v -> dismiss());
 
-        getAllCountry();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllCountry();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
 
 
         binding.edSearch.addTextChangedListener(new TextWatcher() {
@@ -204,7 +208,9 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
 
         tvYes.setOnClickListener(v -> {
             mDialog.dismiss();
-            updateCountry(countryId,countryNameNew);
+
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) updateCountry(countryId,countryNameNew);
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         });
 

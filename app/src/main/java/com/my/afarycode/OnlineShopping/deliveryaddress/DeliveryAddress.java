@@ -31,6 +31,7 @@ import com.my.afarycode.OnlineShopping.adapter.DeliveryTypeAdapter;
 import com.my.afarycode.OnlineShopping.adapter.LocationAdapter;
 import com.my.afarycode.OnlineShopping.bottomsheet.EditAddressFragment;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.deeplink.PaymentByAnotherAct;
 import com.my.afarycode.OnlineShopping.fragment.AddAddressFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.helper.GooglePlacesAutocompleteActivity;
@@ -54,12 +55,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
-
-
-
-
 
 public class DeliveryAddress extends AppCompatActivity implements addAddressListener, onPosListener {
     public String TAG = "DeliveryAddress";
@@ -313,7 +308,10 @@ if(deliveryType.equalsIgnoreCase("")) {
                     }
 
 
-                    geDeliveryType();
+                    if(NetworkAvailablity.checkNetworkStatus(DeliveryAddress.this)) geDeliveryType();
+                    else Toast.makeText(DeliveryAddress.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
 
                 }  catch (Exception e) {
                     e.printStackTrace();
@@ -428,7 +426,10 @@ if(deliveryType.equalsIgnoreCase("")) {
 
 
             //  arrayList.get(position).getCountry();
-            getDeliveryAgency(arrayList.get(position).getId(),shopId);
+
+            if(NetworkAvailablity.checkNetworkStatus(DeliveryAddress.this))   getDeliveryAgency(arrayList.get(position).getId(),shopId);
+            else Toast.makeText(DeliveryAddress.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
         }
 
         else if(Type.equals("Edit"))
@@ -575,7 +576,7 @@ if(deliveryType.equalsIgnoreCase("")) {
         builder1.setCancelable(false);
 
         builder1.setPositiveButton(
-                "Yes",
+                getString(R.string.yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -585,7 +586,7 @@ if(deliveryType.equalsIgnoreCase("")) {
                 });
 
         builder1.setNegativeButton(
-                "No",
+                getString(R.string.no),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();

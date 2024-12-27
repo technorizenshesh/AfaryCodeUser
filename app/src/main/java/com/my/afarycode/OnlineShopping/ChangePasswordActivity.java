@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.LoginModel;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityChangePasswordBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -47,25 +48,27 @@ public class ChangePasswordActivity extends AppCompatActivity {
         binding.changePassword.setOnClickListener(v -> {
 
             if (binding.newPassword.getText().toString().trim().isEmpty()) {
-                binding.newPassword.setError("Field cannot be empty");
-                Toast.makeText(this, "please enter password ", Toast.LENGTH_SHORT).show();
+                binding.newPassword.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(this, getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
             } else if (binding.repeatPassword.getText().toString().trim().isEmpty()) {
-                binding.repeatPassword.setError("Field cannot be empty");
-                Toast.makeText(this, "please enter password ", Toast.LENGTH_SHORT).show();
+                binding.repeatPassword.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(this, getString(R.string.please_enter_confirm_password), Toast.LENGTH_SHORT).show();
             } else if (!binding.repeatPassword.getText().toString()
                     .equals(binding.newPassword.getText().toString().trim().isEmpty())) {
-                binding.repeatPassword.setError("Field cannot be empty");
-                Toast.makeText(this, "Password Shuold Be Same", Toast.LENGTH_SHORT).show();
+                binding.repeatPassword.setError(getString(R.string.can_not_be_empty));
+                Toast.makeText(this, getString(R.string.password_should_be_same), Toast.LENGTH_SHORT).show();
 
             } else {
-                ChangePasswordAPI();
+
+                if(NetworkAvailablity.checkNetworkStatus(ChangePasswordActivity.this)) ChangePasswordAPI();
+                else Toast.makeText(ChangePasswordActivity.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void ChangePasswordAPI() {
 
-        DataManager.getInstance().showProgressMessage(this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(this, PreferenceConnector.User_id, ""));
         map.put("password", binding.newPassword.getText().toString());

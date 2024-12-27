@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.OrderAdapter;
 import com.my.afarycode.OnlineShopping.myorder.OrderListener;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
@@ -72,7 +73,9 @@ public class OrderCancelFragment extends Fragment implements OrderListener {
         adapter = new OrderAdapter(getActivity(), arrayList,OrderCancelFragment.this);
         binding.rvCancel.setAdapter(adapter);
 
-        getOrderHistory();
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getOrderHistory();
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
     private void getOrderHistory() {

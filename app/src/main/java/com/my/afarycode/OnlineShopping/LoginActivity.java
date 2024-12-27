@@ -27,6 +27,7 @@ import com.my.afarycode.OnlineShopping.bottomsheet.WebViewBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.CountryCodes;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityLoginBinding;
@@ -115,7 +116,8 @@ public class LoginActivity extends AppCompatActivity implements AskListener {
                 binding.password.setError(getString(R.string.can_not_be_empty));
                 Toast.makeText(LoginActivity.this, getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
             } else {
-                LoginAPi();
+                 if(NetworkAvailablity.checkNetworkStatus(LoginActivity.this)) LoginAPi();
+                 else Toast.makeText(LoginActivity.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

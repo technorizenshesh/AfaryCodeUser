@@ -16,22 +16,17 @@ import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
-import com.my.afarycode.OnlineShopping.ProductDetailAct;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
-import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.chat.ChatAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
-import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
-import com.my.afarycode.OnlineShopping.myorder.OrderModel;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityOrderDetailsBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -50,7 +45,7 @@ import retrofit2.Response;
 public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListener{
     public String TAG = "OrderDetailsAct";
     ActivityOrderDetailsBinding binding;
-    String orderId ="",orderStatus="",userName="",userId="",userImg="",sellerId="",sellerName,sellerImg="";
+    String orderId ="",userName="",userId="",userImg="",sellerId="",sellerName,sellerImg="";
     OrderDetailsModel model;
     private AfaryCode apiInterface;
     ItemsAdapter itemsAdapter;
@@ -81,7 +76,8 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         binding.rvDetails.setAdapter(itemsAdapter);
 
 
-        callOrderDetail();
+        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) callOrderDetail();
+        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         binding.backNavigation.setOnClickListener(v -> finish());
 
@@ -101,7 +97,8 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         binding.btnAccept.setOnClickListener(v ->
         {
             if(binding.btnAccept.getText().equals(getString(R.string.re_order))){
-                addReOrder(orderId);
+                if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) addReOrder(orderId);
+                else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
             else {
@@ -127,7 +124,10 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         });
 
 
-        GetProfileAPI();
+        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) GetProfileAPI();
+        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
     }
 
     private void callOrderDetail() {
@@ -156,7 +156,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     Log.e("response===", response.body().string());
-                    if (jsonObject.getString("status").toString().equals("1")) {
+                    if (jsonObject.getString("status").equals("1")) {
                         // binding.tvNotFount.setVisibility(View.GONE);
                         model = new Gson().fromJson(stringResponse, OrderDetailsModel.class);
                       //  Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImg);
@@ -164,9 +164,10 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         binding.tvOrderNumber.setText(orderId);
                         binding.tvDate.setText(model.getResult().getProductList().get(0).getDateTime());
 
+                        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) GetSellerProfileAPI(model.getResult().getSellerId());
+                        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
-                        GetSellerProfileAPI(model.getResult().getSellerId());
 
                         if (model.getResult().getProductList().size() == 1) {
                             binding.llOne.setVisibility(View.VISIBLE);
@@ -640,7 +641,9 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        cancelOrderByUser();
+                        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) cancelOrderByUser();
+                        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     }
                 }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
@@ -658,13 +661,15 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
     private void alertDeleteItem(String orderId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsAct.this);
-        builder.setMessage("Are you sure you want to delete this item?")
+        builder.setMessage(getString(R.string.are_you_sure_delete_this_item))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        deleteItemByUser(orderId);
+
+                        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) deleteItemByUser(orderId);
+                        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
                 }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override

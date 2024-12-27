@@ -66,7 +66,6 @@ public class OrderHistoryScreen extends AppCompatActivity implements OrderListen
 
         });
 
-
        // binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Complete"));
        // binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Cancel"));
       //  binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);

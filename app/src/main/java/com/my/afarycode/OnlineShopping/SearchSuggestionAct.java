@@ -40,6 +40,7 @@ import com.my.afarycode.OnlineShopping.adapter.ProductAdapter2;
 import com.my.afarycode.OnlineShopping.adapter.SuggestionAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.onItemClickListener;
 import com.my.afarycode.OnlineShopping.servercommunication.GPSTracker;
 import com.my.afarycode.R;
@@ -158,8 +159,12 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
 
         binding.btnSearch.setOnClickListener(v -> {
             binding.llMain.setVisibility(View.VISIBLE);
-            getSearchBtnProduct();
-            GetShopByProductName("");
+           if(NetworkAvailablity.checkNetworkStatus(requireActivity())) {
+               getSearchBtnProduct();
+               GetShopByProductName("");
+           }
+           else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
         });
 
         binding.search.addTextChangedListener(new TextWatcher() {
@@ -175,13 +180,19 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                 if (s.length() > 0) {
                     // binding.llMain.setVisibility(View.GONE);
                     queryString = s.toString();
-                    getSearchProduct(); // Call to fetch suggestions
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getSearchProduct();
+                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+                     // Call to fetch suggestions
                 } else {
                     suggestions.clear(); // Clear suggestions if input is empty
                     adapter.notifyDataSetChanged();
                     //  arrayList.clear();
                     //  adapterSearch.notifyDataSetChanged();
-                    GetNearestRestaurantAPI("");
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetNearestRestaurantAPI("");
+                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     filterType = "All Country";
                     binding.tvFilter.setText(filterType);
 
@@ -232,8 +243,11 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
         binding.rvProduct.setLayoutManager(new GridLayoutManager(requireActivity(), 2));
         binding.rvProduct.setAdapter(adapterSearch);
 
-        GetNearestRestaurantAPI("");
 
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetNearestRestaurantAPI("");
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -540,10 +554,12 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     Log.e("MapMap", "near_List" + stringResponse);
                     if (cat_id.isEmpty()) {
-                        getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
+                       else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     } else if (cat_id.contentEquals("view all")) {
                     } else {
-                        getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getProduct(PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""), cat_id);
+                        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
                     if (jsonObject.getString("status").equals("1")) {
@@ -710,7 +726,9 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
          //   else if (filterType.equals("Domestic")) filterType = "national";
         //    else filterType = "all";
           // getProductBySearchId(filterType, PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
-            getSearchBtnProduct();
+
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getSearchBtnProduct();
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             return true;
         });
         popupMenu.show();

@@ -27,6 +27,7 @@ import com.my.afarycode.OnlineShopping.ProductDetailAct;
 import com.my.afarycode.OnlineShopping.adapter.CardAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityCardBinding;
@@ -153,7 +154,13 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
     @Override
     public void onResume() {
         super.onResume();
-        GetCartItem();
+
+          if(NetworkAvailablity.checkNetworkStatus(CardAct.this)) GetCartItem();
+          else Toast.makeText(CardAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
+
     }
 
 /*
@@ -264,7 +271,8 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
                     Log.e("MapMap", "Exersice_List" + dataResponse);
 
                     if (data.status.equals("1")) {
-                        GetCartItem();
+                        if(NetworkAvailablity.checkNetworkStatus(CardAct.this)) GetCartItem();
+                        else Toast.makeText(CardAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                        /* fragment1 = new CardActivity();
                         loadFragment(fragment1);*/
 
@@ -272,7 +280,8 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
 
                     } else if (data.status.equals("0")) {
                         Toast.makeText(CardAct.this, data.message, Toast.LENGTH_SHORT).show();
-                        GetCartItem();
+                        if(NetworkAvailablity.checkNetworkStatus(CardAct.this)) GetCartItem();
+                        else Toast.makeText(CardAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
                     else if (data.status.equals("5")) {
@@ -376,8 +385,19 @@ public class CardAct extends AppCompatActivity implements OnPositionListener {
 
     @Override
     public void onPos(int position, String type, String value) {
-        if(type.equals("Update")) UpdateQuanityAPI(get_result.get(position).cartId,get_result.get(position).getItemId(),get_result.get(position).getId(), Integer.parseInt(value));
-        else if(type.equals("Delete")) DeleteAPI(get_result.get(position).cartId,get_result.get(position).getId());
-        else if(type.equals("Wishlist")) AddToWIshListAPI(get_result.get(position).proId);
+        if(type.equals("Update"))
+        {
+            if(NetworkAvailablity.checkNetworkStatus(CardAct.this))  UpdateQuanityAPI(get_result.get(position).cartId,get_result.get(position).getItemId(),get_result.get(position).getId(), Integer.parseInt(value));
+            else Toast.makeText(CardAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        }
+
+        else if(type.equals("Delete")) {
+            if(NetworkAvailablity.checkNetworkStatus(CardAct.this)) DeleteAPI(get_result.get(position).cartId,get_result.get(position).getId());
+            else Toast.makeText(CardAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        }
+        else if(type.equals("Wishlist")) {
+            if(NetworkAvailablity.checkNetworkStatus(CardAct.this)) AddToWIshListAPI(get_result.get(position).proId);
+            else Toast.makeText(CardAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        }
 
     }}

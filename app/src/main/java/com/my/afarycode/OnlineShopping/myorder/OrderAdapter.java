@@ -45,7 +45,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
       //          + Double.parseDouble(arrayList.get(position).getDeliveryCharges())
       //          + Double.parseDouble(arrayList.get(position).getTaxN1())
      //           + Double.parseDouble(arrayList.get(position).getTaxN2());
-        holder.binding.orderPrice.setText(context.getString(R.string.total_price)+ " "+"FCFA"+arrayList.get(position).getTotalAmount());
+        holder.binding.orderPrice.setText(context.getString(R.string.total_price)+ " "+"FCFA"+parseFrenchNumber(arrayList.get(position).getTotalAmount()));
         holder.binding.tvShopName.setText(arrayList.get(position).getProductList().get(0).getShopName());
         holder.binding.tvProductName.setText(context.getString(R.string.product_name1)+" "+arrayList.get(position).getProductList().get(0).getProductName());
         holder.binding.tvDateTime.setText(context.getString(R.string.order_time)+" "+arrayList.get(position).getDateTime());
@@ -181,4 +181,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
         }
     }
+
+    private int parseFrenchNumber(String number) {
+        // Remove the commas and parse to an integer
+        String cleanedNumber = number.replace(",", "");
+        return Integer.parseInt(cleanedNumber);
+    }
+
 }

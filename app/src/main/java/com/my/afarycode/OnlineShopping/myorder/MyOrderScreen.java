@@ -15,6 +15,7 @@ import com.my.afarycode.OnlineShopping.Model.Get_Transaction_Modal;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityMyOrderScreenBinding;
@@ -134,7 +135,12 @@ public class MyOrderScreen extends AppCompatActivity implements OrderListener{
     @Override
     protected void onResume() {
         super.onResume();
-        GetOrderHistoryAPI();
+       if(NetworkAvailablity.checkNetworkStatus(MyOrderScreen.this)) GetOrderHistoryAPI();
+       else Toast.makeText(this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
     }
+
+
+
+
 }

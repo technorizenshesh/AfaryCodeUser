@@ -24,6 +24,7 @@ import com.my.afarycode.OnlineShopping.bottomsheet.PaymentBottomSheet;
 import com.my.afarycode.OnlineShopping.bottomsheet.WithdrawDetailBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -79,13 +80,16 @@ public class WithDrawFragment extends BottomSheetDialogFragment implements AskLi
 
         withdrawal_money = contentView.findViewById(R.id.withdrawal_money);
         tvNote  = contentView.findViewById(R.id.tvNote);
-        tvNote.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Note:" + "</b>" + "</font>"+ "<font color='#01709B'>" +
-                "Go and Click on the transaction that interests you in the list of transactions then copy its ID and paste it here"+"</font>"));
+        tvNote.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + getString(R.string.note) + "</b>" + "</font>"+ "<font color='#01709B'>" +
+                getString(R.string.go_and_click)+"</font>"));
 
 
 
         done_withdraw.setOnClickListener(v -> {
-           if(!withdrawal_money.getText().toString().equalsIgnoreCase("")) WithDrawalAPI();
+           if(!withdrawal_money.getText().toString().equalsIgnoreCase("")) {
+               if(NetworkAvailablity.checkNetworkStatus(requireActivity()))WithDrawalAPI();
+               else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+           }
             else Toast.makeText(context, getString(R.string.please_enter_transaction_id), Toast.LENGTH_SHORT).show();
         });
 

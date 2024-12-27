@@ -369,6 +369,44 @@
     <string name="pending">En attente</string>
     <string name="cancelled_by_seller">Annuler par le vendeur</string>
     <string name="are_you_sure_you_want_to_refuse_order">Êtes-vous sûr de vouloir refuser cette command?</string>
+
+    <string name="order_not_available">commande non disponible</string>
+    <string name="complete">Complet</string>
+    <string name="your_corospondent_does_not_affiliated">Votre correspondant ne semble pas être affilié à AfaryCode. Nous lui enverrons donc un lien de paiement par SMS. Assurez-vous que votre portefeuille dispose d\'un solde suffisant pour envoyer des SMS ou veuillez d\'abord créditer votre portefeuille d\'un montant minimum de (montant) géré par l\'administrateur. vous pouvez également envoyer ce lien à votre correspondant.  afficher le lien</string>
+    <string name="you_received_an_amount_of">vous avez reçu un montant de</string>
+    <string name="transaction_id">ID de transaction:</string>
+    <string name="amounts">Montants:</string>
+    <string name="new_balance">Nouvel équilibre:</string>
+    <string name="note">Remarque:</string>
+    <string name="go_and_click">Allez cliquer sur la transaction qui vous intéresse dans la liste des transactions puis copiez son identifiant et collez-le ici</string>
+    <string name="are_you_sure_delete_this_item">Êtes-vous sûr de vouloir supprimer cet élément?</string>
+    <string name="rate_sueccessfully">Évalué avec succès..</string>
+
+    <string name="open">Ouvre:</string>
+    <string name="closeto">Fermer:</string>
+    <string name="press_again_to_exit">Appuyez à nouveau pour quitter</string>
+    <string name="transaction_id1">ID de transaction</string>
+    <string name="refe_info">Informations de référence</string>
+    <string name="tamps">Temps</string>
+    <string name="purchase">achat</string>
+    <string name="transaction_type">Type de transaction</string>
+    <string name="airtel_money_number">Numéro Airtel money</string>
+    <string name="moov_money_number">Numéro d\'argent Moov</string>
+    <string name="to">À</string>
+    <string name="from">De</string>
+    <string name="recharge">recharger</string>
+    <string name="withdraw">retirer</string>
+    <string name="transfer">transfert</string>
+    <string name="received">Reçu</string>
+    <string name="refund">Remboursement</string>
+    <string name="your_order_cancellation_amount_refund">Transaction de remboursement du montant de votre annulation de commande de</string>
+    <string name="successfully_done_for_order_id">effectué avec succès pour l\'identifiant de la commande</string>
+    <string name="please_enter_address">veuillez saisir l\'adresse</string>
+    <string name="please_add_comment">veuillez ajouter des commentaires !!!!</string>
+    <string name="see_other_products_from">Voir d\'autres produits de</string>
+    <string name="this_shop_click_here">cette boutique en cliquant ici</string>
+    <string name="please_select_delivery_agency">veuillez sélectionner l\'agence de livraison</string>
+    <string name="shipping_agency_fees">Frais d\'agence de livraison</string>
 </resources>
 
 

@@ -174,14 +174,22 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             else*/ if(deliveryType.equalsIgnoreCase("")) {
                 Toast.makeText(getActivity(), getString(R.string.please_select_address_type), Toast.LENGTH_SHORT).show();
             }
-              else {
-                  startActivity(new Intent(getActivity(), CheckOutScreen.class)
+            else if ( deliveryAgencyList.size()>1 && agencyId.equals("") ) {
+                Toast.makeText(getActivity(), getString(R.string.please_select_delivery_agency), Toast.LENGTH_SHORT).show();
+            } else {
+                Log.e("agencyList size====",deliveryAgencyList.size()+"");
+                Log.e("delivery agency id====",agencyId);
+
+                startActivity(new Intent(getActivity(), CheckOutScreen.class)
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
                         .putExtra("deliveryMethod",deliveryMethod));
                 deliveryMethod = "";
+                //addressId ="";
+                agencyId="";
+                deliveryType="";
                 Log.e("country id=====", PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""));
 
             }
@@ -325,7 +333,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             @Override
             public void onClick(View view) {
 
-                SetAddressAPI();
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) SetAddressAPI();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                 alertDialog1.dismiss();
             }
@@ -438,7 +447,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             @Override
             public void onClick(View view) {
 
-                SetAddressAPI();
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) SetAddressAPI();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                 alertDialog1.dismiss();
             }
@@ -480,7 +490,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             @Override
             public void onClick(View view) {
 
-                SetAddressAPI();
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) SetAddressAPI();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                 alertDialog1.dismiss();
             }
         });
@@ -546,7 +557,10 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     }
 
 
-                    geDeliveryType();
+
+
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) geDeliveryType();
+                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                 }  catch (Exception e) {
                     e.printStackTrace();
@@ -635,7 +649,9 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             binding.rdDontDelivery.setChecked(false);
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LAT, arrayList.get(position).getLat());
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LON, arrayList.get(position).getLon());
-            getDeliveryAgency(arrayList.get(position).getId(),shopId);
+
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAgency(arrayList.get(position).getId(),shopId);
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         }
 
@@ -778,7 +794,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         builder1.setCancelable(false);
 
         builder1.setPositiveButton(
-                "Yes",
+                getString(R.string.yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -788,7 +804,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                 });
 
         builder1.setNegativeButton(
-                "No",
+                getString(R.string.no),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -874,7 +890,10 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                 try {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
-                    getDeliveryAvailability(addressId);
+
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAvailability(addressId);
+                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     Log.e(TAG, "Delivery Agency RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);

@@ -22,6 +22,7 @@ import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.adapter.SliderTextAdapter;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityWellcomeScreenBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -78,7 +79,8 @@ public class WellcomeScreen extends AppCompatActivity {
             showDropLanguage(v,binding.tvLanguage,country);
         });
 
-        getDescriptionTitle();
+        if(NetworkAvailablity.checkNetworkStatus(WellcomeScreen.this)) getDescriptionTitle();
+        else Toast.makeText(WellcomeScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
     private void updateResources(WellcomeScreen wellcomeScreen, String en) {

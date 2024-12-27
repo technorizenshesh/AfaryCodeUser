@@ -42,7 +42,6 @@ public class SearchScreen extends Fragment {
     }
 
     private void setAdapter() {
-
         modelList.add(new HomeShopeProductModel("Reliance Fresh",R.drawable.unplus));
         modelList.add(new HomeShopeProductModel("Reliance Fresh",R.drawable.unplus_second));
         modelList.add(new HomeShopeProductModel("Reliance Fresh",R.drawable.unplus));

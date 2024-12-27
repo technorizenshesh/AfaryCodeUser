@@ -37,6 +37,7 @@ import com.my.afarycode.OnlineShopping.adapter.WalletAdapter;
 import com.my.afarycode.OnlineShopping.bottomsheet.TransferMoneyBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -72,9 +73,13 @@ public class WalletFragment extends Fragment implements AskListener {
 
         apiInterface = ApiClient.getClient(getContext()).create(AfaryCode.class);
 
-        GetProfile();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))GetProfile();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
        // GetAvailableBal();
-        GetTransactionAPI();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))GetTransactionAPI();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
 
         binding.RRback.setOnClickListener(v -> {
             getFragmentManager().popBackStack();
@@ -287,8 +292,11 @@ public class WalletFragment extends Fragment implements AskListener {
 
     @Override
     public void ask(String value,String status) {
-        GetTransactionAPI();
-           GetProfile();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))GetProfile();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        // GetAvailableBal();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))GetTransactionAPI();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
     }

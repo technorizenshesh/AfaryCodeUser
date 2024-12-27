@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -35,14 +36,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-
-
-
-
-
-
-
 
 public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
     Context context;
@@ -90,13 +83,13 @@ public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
              JSONObject resultObj = jsonObject.getJSONObject("result");
              id = resultObj.getString("id");
 
-            tvTransaction.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Transaction ID:" + "</b>" + "</font>"+ "<font color='#9098B1'>"  +
+            tvTransaction.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + getString(R.string.transaction_id) + "</b>" + "</font>"+ "<font color='#9098B1'>"  +
                     resultObj.getString("transaction_id")+"</font>"));
 
-            tvAmount.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Amounts:" + "</b>" + "</font>"+ "<font color='#9098B1'>" +
+            tvAmount.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + getString(R.string.amounts)  + "</b>" + "</font>"+ "<font color='#9098B1'>" +
                   "FCFA"+  resultObj.getString("amount")+"</font>"));
 
-            tvNewBalance.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "New Balance:" + "</b>" + "</font>"+ "<font color='#9098B1'>" +
+            tvNewBalance.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + getString(R.string.new_balance) + "</b>" + "</font>"+ "<font color='#9098B1'>" +
                     String.format("%.2f",Double.parseDouble(walletBal) - Double.parseDouble(resultObj.getString("amount")))+"</font>"));
 
 
@@ -106,13 +99,16 @@ public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
         }
 
 
-        tvNote.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + "Note:" + "</b>" + "</font>"+ "<font color='#01709B'>"  +
-                "Go and Click on the transaction that interests you in the list of transactions then copy its ID and paste it here"+"</font>"));
+        tvNote.setText(Html.fromHtml("<font color='#000'>"  + "<b>"  + getString(R.string.note) + "</b>" + "</font>"+ "<font color='#01709B'>"  +
+                getString(R.string.go_and_click)+"</font>"));
 
 
 
         done_withdraw.setOnClickListener(v -> {
-            sendWithdrawRequestAPI();
+
+
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) sendWithdrawRequestAPI();
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
         dialog.setContentView(contentView);
@@ -122,7 +118,7 @@ public class WithdrawDetailBottomSheet extends BottomSheetDialogFragment {
     }
 
     private void sendWithdrawRequestAPI() {
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
 
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));

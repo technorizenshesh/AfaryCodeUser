@@ -35,6 +35,7 @@ import com.my.afarycode.OnlineShopping.adapter.ReviewProductAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.MainClickListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -104,8 +105,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             onBackPressed();
         });
 
-        GetProductDetailsAPI(product_id, restaurant_id);
-
+       if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) GetProductDetailsAPI(product_id, restaurant_id);
+       else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         binding.txtWright.setOnClickListener(v -> {
             startActivity(new Intent(ProductDetailAct.this, WrightActivity.class)
@@ -121,8 +122,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             else {
                 //Toast.makeText(this, getString(R.string.out_of_stock), Toast.LENGTH_SHORT).show();
               //  Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
-                checkProductAvailability(product_id);
 
+                if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) checkProductAvailability(product_id);
+                else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -141,7 +143,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         });
 
         binding.llicon.setOnClickListener(v -> {
-            AddToWIshListAPI(product_id);
+            if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) AddToWIshListAPI(product_id);
+            else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
 
@@ -173,7 +176,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
 
         binding.tvCheckAvailable.setOnClickListener(v -> {
-            checkProductAvailability(product_id);
+            if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) checkProductAvailability(product_id);
+            else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
 
@@ -253,7 +257,9 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     ShoppingProductModal data = response.body();
                     String dataResponse = new Gson().toJson(response.body());
                     Log.e("MapMap", "Exersice_List" + dataResponse);
-                    GetCartItem();
+                   if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) GetCartItem();
+                    else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     if (data.status.equals("1")) {
 
                         get_result1.clear();
@@ -262,6 +268,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                         //  productImgList.add(get_result1.get(0).getImage());
                         //  productImgList.add(get_result1.get(0).getImage1());
 
+                        productImgList.clear();
 
                         if (!get_result1.get(0).getProductImages().equalsIgnoreCase("")) {
                             productImgList.add(get_result1.get(0).getProductImages());
@@ -350,7 +357,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
 
 
                         binding.tvSellerName.setText(" " + get_result1.get(0).getSellerName().trim());
-                        binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + "See other products from" + "<br>" + "this shop by clicking here " + "</b>" + "</font>" + "<font color='#0288D1'>" + "<b>" + get_result1.get(0).getShopName().trim() + "</b>" + "</font>"));
+                        binding.tvShopTag.setText(Html.fromHtml("<font >" + "<b>" + getString(R.string.see_other_products_from) + " " + "<br>" +  getString(R.string.this_shop_click_here) +" " + "</b>" + "</font>" + "<font color='#0288D1'>" + "<b>" + get_result1.get(0).getShopName().trim() + "</b>" + "</font>"));
 
 
                         if (get_result1.get(0).getInStock().equalsIgnoreCase("Yes")) {
@@ -443,22 +450,31 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
         btnCheckout.setOnClickListener(v -> {
             mDialog.dismiss();
             if (validateNameArrayList.size() == 0) {
-                Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+
+                if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+                else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             } else {
                 if (chkAtleast.equalsIgnoreCase(""))
                     Toast.makeText(ProductDetailAct.this, getString(R.string.please_select_atleast_one_attribute), Toast.LENGTH_SHORT).show();
-                else Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+                else {
+                    if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this))  Add_To_Cart_API(product_id, restaurant_id, productPrice, "checkOut");
+                    else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         btnContinue.setOnClickListener(v -> {
             mDialog.dismiss();
             if (validateNameArrayList.size() == 0) {
-                Add_To_Cart_API(product_id, restaurant_id, productPrice, "continue");
+                if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) Add_To_Cart_API(product_id, restaurant_id, productPrice, "continue");
+                else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             } else {
                 if (chkAtleast.equalsIgnoreCase(""))
                     Toast.makeText(ProductDetailAct.this, getString(R.string.please_select_atleast_one_attribute), Toast.LENGTH_SHORT).show();
-                else Add_To_Cart_API(product_id, restaurant_id, productPrice, "continue");
+                else {
+                    if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) Add_To_Cart_API(product_id, restaurant_id, productPrice, "continue");
+                    else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                }
                 // finish();
             }
         });
@@ -655,7 +671,10 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     Log.e("response===", response.body().toString());
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
-                    GetProductDetailsAPI(product_id, restaurant_id);
+
+
+                    if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) GetProductDetailsAPI(product_id, restaurant_id);
+                    else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                     if (jsonObject.getString("status").toString().equals("1")) {
                         Toast.makeText(ProductDetailAct.this, " Add Wish List ", Toast.LENGTH_SHORT).show();
@@ -710,7 +729,8 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
                     Log.e("response===", response.body().toString());
                     String stringResponse = response.body().string();
                     JSONObject jsonObject = new JSONObject(stringResponse);
-                    GetProductDetailsAPI(product_id, restaurant_id);
+                    if(NetworkAvailablity.checkNetworkStatus(ProductDetailAct.this)) GetProductDetailsAPI(product_id, restaurant_id);
+                    else Toast.makeText(ProductDetailAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                     if (jsonObject.getString("status").toString().equals("1")) {
                         //    Toast.makeText(ProductDetailAct.this, " Add Wish List ", Toast.LENGTH_SHORT).show();

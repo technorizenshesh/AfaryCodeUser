@@ -14,9 +14,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityPrivacyPolicyBinding;
 import com.my.afarycode.databinding.ActivityTermsConditionBinding;
@@ -109,7 +111,10 @@ public class TermsCondition extends AppCompatActivity {
 
             }
         });
-        getTermsConditions();
+        if(NetworkAvailablity.checkNetworkStatus(TermsCondition.this)) getTermsConditions();
+        else Toast.makeText(this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
 
     }
 

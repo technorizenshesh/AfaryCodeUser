@@ -14,6 +14,7 @@ import com.my.afarycode.OnlineShopping.Model.SignupModel;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityWrightBinding;
@@ -63,12 +64,14 @@ public class WrightActivity extends AppCompatActivity {
     private void SetupUI() {
         binding.addReview.setOnClickListener(v -> {
             if (binding.addComments.getText().toString().trim().isEmpty()) {
-                binding.addComments.setError("Field cannot be empty");
+                binding.addComments.setError(getString(R.string.can_not_be_empty));
 
-                Toast.makeText(WrightActivity.this, "please add comments!!!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(WrightActivity.this, getString(R.string.please_add_comment), Toast.LENGTH_SHORT).show();
 
             } else {
-                AddReviewAPi();
+
+                if(NetworkAvailablity.checkNetworkStatus(WrightActivity.this))  AddReviewAPi();
+                else Toast.makeText(WrightActivity.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -76,7 +79,7 @@ public class WrightActivity extends AppCompatActivity {
 
     private void AddReviewAPi() {
 
-        DataManager.getInstance().showProgressMessage(WrightActivity.this, "Please wait...");
+        DataManager.getInstance().showProgressMessage(WrightActivity.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(WrightActivity.this, PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

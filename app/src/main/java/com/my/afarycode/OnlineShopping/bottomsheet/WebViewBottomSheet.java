@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.my.afarycode.OnlineShopping.WebViewAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.FragmentWebViewBinding;
@@ -83,23 +85,29 @@ public class WebViewBottomSheet extends BottomSheetDialogFragment {
 
             binding.btnOk.setOnClickListener(v -> dialog.dismiss());
 
-            getTermsConditions();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getTermsConditions();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
 
             binding.btnOne.setOnClickListener(v -> {
                 //  url = Constant.TERMS_AND_CONDITIONS;
-                getTermsConditions();
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getTermsConditions();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
             });
 
             binding.btnTwo.setOnClickListener(v -> {
                 //url = Constant.USE_CONDITIONS;
-                getUseConditions();
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getUseConditions();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
             });
 
             binding.btnThree.setOnClickListener(v -> {
                 // url = Constant.PRIVACY_POLICY;
-                getPrivacyPolicy();
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getPrivacyPolicy();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             });
 
 

@@ -61,6 +61,7 @@ import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.bottomsheet.CountryBottomSheet;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.SearchListener;
 import com.my.afarycode.OnlineShopping.servercommunication.GPSTracker;
 import com.my.afarycode.R;
@@ -136,7 +137,11 @@ public class HomeFragment extends Fragment implements SearchListener {
         countryArrayList = new ArrayList<>();
 
         SetupUI();
-        getAllCountry();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllCountry();
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
 
         binding.LLShopOnline.setOnClickListener(v -> {
             fragment = new HomeShoppingOnlineScreen();
@@ -202,7 +207,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                 try {
                     String responseString = response.body().string();
                     JSONObject jsonObject = new JSONObject(responseString);
-                    GetCartItem();
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetCartItem();
+                    else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     Log.e(TAG,"get notification counter Response = " + responseString);
                     if(jsonObject.getString("status").equals("1")) {
                         if (!jsonObject.getString("result").equals("0")) {
@@ -291,7 +297,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                                            // lastCountryId = countryArrayList.get(i).getId();
                                             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
                                             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
-                                            getProduct(countryId);
+                                            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getProduct(countryId);
+                                            else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
@@ -312,7 +319,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                                             lastCountryId = countryArrayList.get(i).getId();
                                             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
                                             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
-                                            getProduct(countryId);
+                                            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getProduct(countryId);
+                                            else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
@@ -329,16 +337,16 @@ public class HomeFragment extends Fragment implements SearchListener {
                                             lastCountryId = countryArrayList.get(i).getId();
                                             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
                                             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryNames);
-                                            getProduct(countryId);
+                                            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getProduct(countryId);
+                                            else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
                             }
                             Log.e("image>>>", data.getResult().image);
                         }
-
-
-                        getTitle();
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getTitle();
+                        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                         if(data.getResult().getPasswordRequestStatus().equalsIgnoreCase("CHANGE_BY_ADMIN")) openResetPasswordAlert();
                       //  if(data.getResult().getLanguage().equalsIgnoreCase("en")) changeLocale("en");
                       //  else if(data.getResult().getLanguage().equalsIgnoreCase("fr")) changeLocale("fr");
@@ -415,7 +423,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                 try {
                     String responseString = response.body().string();
                     JSONObject jsonObject = new JSONObject(responseString);
-                    GetCartItem();
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetCartItem();
+                    else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     Log.e(TAG,"getHome Title Response = " + responseString);
                     if(jsonObject.getString("status").equals("1")) {
                         JSONObject jsonObject11 = jsonObject.getJSONObject("result");
@@ -448,7 +457,9 @@ public class HomeFragment extends Fragment implements SearchListener {
                 if (countryNames.equals(countryArrayList.get(i).getName()))
                     countryId = countryArrayList.get(i).getId();
             }
-            getProduct(countryId);
+
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getProduct(countryId);
+            else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryName);
 
@@ -522,9 +533,8 @@ public class HomeFragment extends Fragment implements SearchListener {
             }
 
             Log.e("country name5",countryNames);
-            GetProfile();
-
-
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetProfile();
+            else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -567,7 +577,10 @@ public class HomeFragment extends Fragment implements SearchListener {
                     BannerModal1 data = response.body();
                     String dataResponse = new Gson().toJson(response.body());
                     Log.e("MapMap", "Exersice_List" + dataResponse);
-                    GetBannerAPi2();
+
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetBannerAPi2();
+                    else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     if (data.status.equals("1")) {
 
                         get_result1.clear();
@@ -705,7 +718,11 @@ public class HomeFragment extends Fragment implements SearchListener {
 
     private void SetupUI() {
 
-        GetCategoryAPi();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))    GetCategoryAPi();
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
 
         binding.layNoti.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), NotificationScreen.class));
@@ -809,7 +826,10 @@ public class HomeFragment extends Fragment implements SearchListener {
                 try {
                     String responseString = response.body().string();
                     JSONObject jsonObject = new JSONObject(responseString);
-                    GetBannerAPi();
+
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetBannerAPi();
+                    else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     Log.e(TAG,"getProduct Search Response = " + responseString);
                     if(jsonObject.getString("status").equals("1")) {
                         binding.tvProduct.setVisibility(View.VISIBLE);
@@ -848,7 +868,8 @@ public class HomeFragment extends Fragment implements SearchListener {
                 } catch (Exception e) {
                     // Toast.makeText(mContext, "Exception = " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     Log.e("Exception","Exception = " + e.getMessage());
-                    GetBannerAPi();
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetBannerAPi();
+                    else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -1000,7 +1021,7 @@ public class HomeFragment extends Fragment implements SearchListener {
 
 
     private void dialogAddLocation(String countryName, String countryNameNew,String countryId) {
-        Dialog mDialog = new Dialog(getActivity());
+        Dialog mDialog = new Dialog(requireActivity());
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_set_country);
         // mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1019,7 +1040,8 @@ public class HomeFragment extends Fragment implements SearchListener {
 
                     PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,lastCountryId);
                     PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,countryName);
-                    getProduct(countryId);
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getProduct(countryId);
+                    else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -1048,13 +1070,23 @@ public class HomeFragment extends Fragment implements SearchListener {
 
         tvBack.setOnClickListener(v -> {
             mDialog.dismiss();
-            updateCountry(countryId,countryNameNew);
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))   updateCountry(countryId,countryNameNew);
+            else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
         tvYes.setOnClickListener(v -> {
             mDialog.dismiss();
-           if(!countryName.equalsIgnoreCase("")) updateCountry(lastCountryId,countryName);
-           else updateCountry(lastCountryId,countryNameNew);
+           if(!countryName.equalsIgnoreCase("")) {
+
+               if(NetworkAvailablity.checkNetworkStatus(requireActivity())) updateCountry(lastCountryId,countryName);
+               else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+           }
+           else {
+
+
+               if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  updateCountry(lastCountryId,countryNameNew);
+               else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+           }
 
         });
 
@@ -1099,7 +1131,9 @@ public class HomeFragment extends Fragment implements SearchListener {
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryName,country);
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.countryId,countryId);
 
-                        getProduct(countryId);
+
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getProduct(countryId);
+                        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
                     else if (jsonObject.getString("status").equals("0")) {
@@ -1137,6 +1171,7 @@ public class HomeFragment extends Fragment implements SearchListener {
     @Override
     public void onResume() {
         super.onResume();
-        getNotificationCounter();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getNotificationCounter();
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 }

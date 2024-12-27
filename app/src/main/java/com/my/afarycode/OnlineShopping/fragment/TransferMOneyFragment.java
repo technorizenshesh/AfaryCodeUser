@@ -38,6 +38,7 @@ import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.deeplink.PaymentByAnotherAct;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.R;
@@ -93,7 +94,10 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
         et_money = contentView.findViewById(R.id.et_money);
         ccp = contentView.findViewById(R.id.ccp);
 
-        GetProfile();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetProfile();
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         payment_done.setOnClickListener(v -> {
             code = ccp.getSelectedCountryCode();
@@ -105,8 +109,12 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
 
             }
             else {
-                TransferMoneyAPI(code, mobile_no_et.getText().toString()
+
+
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) TransferMoneyAPI(code, mobile_no_et.getText().toString()
                         , et_money.getText().toString());
+                else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -263,12 +271,14 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
             }
 
             else if(payType.equals("Card")){
-                monetTransferByCard(countryCode,totalAmount,number,fee,mDialog);
+               if(NetworkAvailablity.checkNetworkStatus(requireActivity())) monetTransferByCard(countryCode,totalAmount,number,fee,mDialog);
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
 
             else {
-                TransferMoneyFirstAPI(countryCode, number, Amount, totalAmount, fee);
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) TransferMoneyFirstAPI(countryCode, number, Amount, totalAmount, fee);
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -395,7 +405,10 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
 
             else {
                 mDialog.dismiss();
-                TransferOnlineAPI(toTransferNumber,operator,edNumber.getText().toString(),totalAmount,"Online",walletFee, codeCountry);
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) TransferOnlineAPI(toTransferNumber,operator,edNumber.getText().toString(),totalAmount,"Online",walletFee, codeCountry);
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
             }
 
         });
@@ -432,7 +445,9 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
 
             else {
                 mDialog.dismiss();
-                TransferOnlineAPI(toTransferNumber,operator,edNumber.getText().toString(),totalAmount,"Online",walletFee,codeCountry);
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) TransferOnlineAPI(toTransferNumber,operator,edNumber.getText().toString(),totalAmount,"Online",walletFee,codeCountry);
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
 
         });
@@ -522,7 +537,7 @@ public class TransferMOneyFragment extends BottomSheetDialogFragment {
     }
 
 
-    private void   GetProfile() {
+    private void GetProfile() {
         DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));

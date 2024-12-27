@@ -25,6 +25,7 @@ import com.my.afarycode.OnlineShopping.ForgotPassword;
 import com.my.afarycode.OnlineShopping.SignUpActivity;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.AskListener;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -102,11 +103,12 @@ public class SendAdminRequestBottomSheet extends BottomSheetDialogFragment {
                 Toast.makeText(getActivity(), getString(R.string.please_enter_valied_email), Toast.LENGTH_SHORT).show();
 
             } else {
-                sendAdminRequestAPI(binding.edtmobile.getText().toString());
+
                 //  startActivity(new Intent(ForgotPassword.this, VerificationScreen.class)
                 //      .putExtra("user_email", binding.edtmobile.getText().toString()));
 
-
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))    sendAdminRequestAPI(binding.edtmobile.getText().toString());
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.chat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
 import com.my.afarycode.OnlineShopping.orderdetails.OrderDetailsAct;
 import com.my.afarycode.R;
@@ -57,8 +59,14 @@ public class ChatListAct extends AppCompatActivity implements ChatOnListener{
 
         binding.backNavigation.setOnClickListener(view -> finish());
 
-        GetProfileAPI();
-        getAllSeller();
+        if(NetworkAvailablity.checkNetworkStatus(ChatListAct.this))  GetProfileAPI();
+        else Toast.makeText(ChatListAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+        if(NetworkAvailablity.checkNetworkStatus(ChatListAct.this)) getAllSeller();
+        else Toast.makeText(ChatListAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
 
     }
 

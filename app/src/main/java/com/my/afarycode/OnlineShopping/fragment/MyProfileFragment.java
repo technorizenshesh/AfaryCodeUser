@@ -53,6 +53,7 @@ import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.Model.UpdateProfileModal;
 import com.my.afarycode.OnlineShopping.OrderHistoryScreen;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.OnlineShopping.PrivacyPolicy;
 import com.my.afarycode.OnlineShopping.TermsCondition;
@@ -187,7 +188,10 @@ public String TAG ="MyProfileFragment";
 
 
 
-        GetProfile();
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetProfile();
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         return binding.getRoot();
 
@@ -243,7 +247,9 @@ public String TAG ="MyProfileFragment";
     private void changeLocale(String en) {
         updateResources(requireActivity(),en);
         PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LANGUAGE, en);
-        updateLanguage(PreferenceConnector.readString(getActivity(),PreferenceConnector.User_id,""),en,requireActivity());
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) updateLanguage(PreferenceConnector.readString(getActivity(),PreferenceConnector.User_id,""),en,requireActivity());
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -731,7 +737,10 @@ public String TAG ="MyProfileFragment";
                         .centerCrop()
                         .into(binding.imgUser);
 
-                UpDateAPi();
+
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  UpDateAPi();
+                else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
             } else if (requestCode == REQUEST_CAMERA) {
@@ -761,7 +770,8 @@ public String TAG ="MyProfileFragment";
                                 // Do something with the Bitmap
                                 oneBitmap = resource;
                                 binding.imgUser.setImageBitmap(resource);
-                                UpDateAPi();
+                                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  UpDateAPi();
+                                else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -856,7 +866,8 @@ public String TAG ="MyProfileFragment";
                         String dataResponse = new Gson().toJson(response.body());
                         Log.e("MapMap", "EDIT PROFILE RESPONSE" + dataResponse);
                         // Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
-                        GetProfile();
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetProfile();
+                        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     } else if (data.status.equals("5")) {

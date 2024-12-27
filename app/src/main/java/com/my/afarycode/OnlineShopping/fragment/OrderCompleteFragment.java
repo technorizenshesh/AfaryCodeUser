@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.OrderHistoryScreen;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.OrderAdapter;
 import com.my.afarycode.OnlineShopping.myorder.OrderListener;
 import com.my.afarycode.OnlineShopping.myorder.OrderModel;
@@ -66,7 +67,8 @@ public class OrderCompleteFragment extends Fragment implements OrderListener {
         adapter = new OrderAdapter(getActivity(), arrayList,OrderCompleteFragment.this);
         binding.rvComplete.setAdapter(adapter);
 
-        getOrderHistory();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getOrderHistory();
+        else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
     private void getOrderHistory() {

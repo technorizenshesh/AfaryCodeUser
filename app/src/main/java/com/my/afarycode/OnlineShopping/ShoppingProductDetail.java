@@ -36,6 +36,7 @@ import com.my.afarycode.OnlineShopping.adapter.ShoppingStoreAdapter;
 import com.my.afarycode.OnlineShopping.adapter.SliderAdapterExample;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityShoppingProductDetail2Binding;
@@ -115,7 +116,11 @@ public class ShoppingProductDetail extends Fragment {
         });*/
 
 
-       GetProductDetailsAPI(product_id, restaurant_id);
+
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetProductDetailsAPI(product_id, restaurant_id);
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
 
       //  setAdapter();
 

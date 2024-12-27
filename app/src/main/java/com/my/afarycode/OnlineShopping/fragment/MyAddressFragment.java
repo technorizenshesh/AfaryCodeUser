@@ -179,7 +179,7 @@ public class MyAddressFragment extends Fragment implements addAddressListener, o
         builder1.setCancelable(false);
 
         builder1.setPositiveButton(
-                "Yes",
+                getString(R.string.yes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -189,7 +189,7 @@ public class MyAddressFragment extends Fragment implements addAddressListener, o
                 });
 
         builder1.setNegativeButton(
-                "No",
+                getString(R.string.no),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();

@@ -26,8 +26,10 @@ import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.LoginActivity;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.PaymentWebViewAct;
+import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
@@ -117,8 +119,17 @@ public class PaymentByAnotherAct extends AppCompatActivity {
             userId = getIntent().getStringExtra("user_id");
             type = getIntent().getStringExtra("type");
 
-            if(type.equals("InvoiceToOtherUser")) getInvoiceData("1");
-            else getWalletInvoiceData("2");
+            if(type.equals("InvoiceToOtherUser")) {
+                if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this))   getInvoiceData("1");
+                else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) getWalletInvoiceData("2");
+                else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+            }
+
+
+
         }
 
         // Handle the incoming deep link
@@ -127,7 +138,8 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
         binding.llTransfer11.setOnClickListener(v -> {
             // PaymentAPI("VM", strList);
-            callCardPayment(type);
+            if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) callCardPayment(type);
+            else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         });
 
@@ -152,7 +164,10 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
         binding.llWallet11.setOnClickListener(v -> {
            if(Double.parseDouble(data.getResult().getWallet()) >= Double.parseDouble(totalPriceToToPay))
-                PaymentAPI("","",data.getResult().getMobile(),"Wallet");
+           {
+               if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) PaymentAPI("","",data.getResult().getMobile(),"Wallet");
+               else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+           }
             else Toast.makeText(this, getString(R.string.low_wallet_balance), Toast.LENGTH_SHORT).show();
         });
     }
@@ -233,7 +248,9 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                 Log.e("paymentId=====",paymentId);
                 // Load payment details using paymentId
                 // Show payment UI or process payment
-                GetProfile();
+
+                if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) GetProfile();
+                else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -442,8 +459,15 @@ public class PaymentByAnotherAct extends AppCompatActivity {
 
             else {
                 mDialog.dismiss();
-              if(type.equals("InvoiceToOtherUser"))  PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
-               else PaymentWalletAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+              if(type.equals("InvoiceToOtherUser"))  {
+                  if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this))  PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+                  else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+              }
+               else {
+                   if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this))  PaymentWalletAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+                  else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+              }
             }
 
         });
@@ -475,8 +499,17 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                 mDialog.dismiss();
               //  if(type.equals(""))PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
 
-                if(type.equals("InvoiceToOtherUser"))  PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
-                else PaymentWalletAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+                if(type.equals("InvoiceToOtherUser"))  {
+                    if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) PaymentAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+                    else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) PaymentWalletAPI(operator, cart_id_string,edNumber.getText().toString(),"Online");
+                    else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
+                }
             }
 
         });
@@ -541,7 +574,8 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Get Invoice RESPONSE" + object);
-                    GetProfile();
+                    if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) GetProfile();
+                    else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     if (object.optString("status").equals("1")) {
                         // JSONObject jsonObject = object.getJSONObject("result");
                         sendToServer = object.getJSONObject("data").getJSONObject("delivery_data").toString();
@@ -647,7 +681,8 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Get Invoice RESPONSE" + object);
-                    GetProfile();
+                    if(NetworkAvailablity.checkNetworkStatus(PaymentByAnotherAct.this)) GetProfile();
+                    else Toast.makeText(PaymentByAnotherAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     if (object.optString("status").equals("1")) {
                         // JSONObject jsonObject = object.getJSONObject("result");
                       //  sendToServer = object.getJSONObject("data").getJSONObject("delivery_data").toString();

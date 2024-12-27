@@ -20,6 +20,7 @@ import com.my.afarycode.OnlineShopping.Model.LoginModel;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityChangePasswordBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -78,14 +79,16 @@ public class ChangePassword extends Fragment {
                 Toast.makeText(getContext(), getString(R.string.password_should_be_same), Toast.LENGTH_SHORT).show();
 
             } else {
-                ChangePasswordAPI();
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) ChangePasswordAPI();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void ChangePasswordAPI() {
 
-        DataManager.getInstance().showProgressMessage(getActivity(), "Please wait...");
+        DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
         headerMap.put("Accept","application/json");

@@ -70,6 +70,7 @@ import com.my.afarycode.OnlineShopping.deliveryaddress.DeliveryAddress;
 import com.my.afarycode.OnlineShopping.fragment.MyAddressFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyProfileFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.listener.onItemClickListener;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
 import com.my.afarycode.OnlineShopping.servercommunication.GPSTracker;
@@ -165,7 +166,10 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
         apiInterface = ApiClient.getClient(getContext()).create(AfaryCode.class);
 
-        GetCategoryAPi();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetCategoryAPi();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
         initViews();
         // GetProfileAPI();
         //GetDemo();
@@ -210,8 +214,9 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                binding.dashboard.recyclerShop.setAdapter(adapter1);
                binding.dashboard.tvViewAll.setVisibility(View.GONE);
            }*/
-            GetNearestRestorentsAPI("view all");
 
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  GetNearestRestorentsAPI("view all");
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
         binding.dashboard.tvViewAllProduct.setOnClickListener(v -> {
@@ -298,9 +303,14 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
 
     @Override
     public void onResume() {
-        GetCategoryAPi();
-        GetProfileAPI();
-        GetCartItem();
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) {
+            GetCategoryAPi();
+            GetProfileAPI();
+            GetCartItem();
+        }
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
         super.onResume();
     }
 
@@ -433,12 +443,15 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                     JSONObject jsonObject = new JSONObject(stringResponse);
                     Log.e("MapMap", "near_List" + stringResponse);
                     if(cat_id.isEmpty()) {
-                        getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
+
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
+                        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
                     else if(cat_id.contentEquals("view all")){
                     }
                     else {
-                        getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId, ""), cat_id);
+                        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
                     if (jsonObject.getString("status").equals("1")) {
@@ -539,8 +552,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         binding.dashboard.categoryList.setAdapter(adapter);
                         binding.dashboard.tvCountryProduct.setText(getString(R.string.latest_product_in) + " " + PreferenceConnector.readString(getActivity(), PreferenceConnector.countryName, ""));
                        // GetNearestRestorentsAPI(get_result.get(0).getId());
-                        GetNearestRestorentsAPI("");
-
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetNearestRestorentsAPI("");
+                         else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     } else if (data.status.equals("5")) {
@@ -657,7 +670,10 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
         get_result.get(position).setClickOn(true);
 
         adapter.notifyDataSetChanged();
-        GetNearestRestorentsAPI(categoryId);
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetNearestRestorentsAPI(categoryId);
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
         //  getProduct(PreferenceConnector.readString(getActivity(), PreferenceConnector.countryId,""),categoryId);
 
     }
@@ -1001,7 +1017,9 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         .centerCrop()
                         .into(binding.childNavDrawer.imgUser);
 
-                UpDateAPi();
+
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) UpDateAPi();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
             } else if (requestCode == REQUEST_CAMERA) {
@@ -1031,7 +1049,8 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         });
 
 
-                UpDateAPi();
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) UpDateAPi();
+                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
             }
 
@@ -1089,7 +1108,9 @@ public class HomeShoppingOnlineScreen extends Fragment implements onItemClickLis
                         String dataResponse = new Gson().toJson(response.body());
                         Log.e("MapMap", "EDIT PROFILE RESPONSE" + dataResponse);
                         // Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
-                        GetProfileAPI();
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetProfileAPI();
+                        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
                     } else if (data.status.equals("0")) {
                         Toast.makeText(getContext(), data.message, Toast.LENGTH_SHORT).show();
                     } else if (data.status.equals("5")) {

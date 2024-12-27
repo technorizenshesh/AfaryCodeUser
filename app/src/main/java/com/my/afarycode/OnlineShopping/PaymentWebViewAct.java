@@ -31,7 +31,6 @@ public class PaymentWebViewAct extends AppCompatActivity {
         if (getIntent() != null) {
             url = getIntent().getStringExtra("url");
             ref = getIntent().getStringExtra("ref");
-
         }
 
         setUrlView();

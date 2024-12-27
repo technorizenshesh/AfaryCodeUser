@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ActivityWebviewBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
@@ -57,19 +59,24 @@ public class WebViewAct extends AppCompatActivity {
 
         binding.btnOne.setOnClickListener(v -> {
           //  url = Constant.TERMS_AND_CONDITIONS;
-            getTermsConditions();
+
+            if(NetworkAvailablity.checkNetworkStatus(WebViewAct.this))  getTermsConditions();
+            else Toast.makeText(WebViewAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         });
 
         binding.btnTwo.setOnClickListener(v -> {
             //url = Constant.USE_CONDITIONS;
-            getUseConditions();
+            if(NetworkAvailablity.checkNetworkStatus(WebViewAct.this))  getUseConditions();
+            else Toast.makeText(WebViewAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         });
 
         binding.btnThree.setOnClickListener(v -> {
            // url = Constant.PRIVACY_POLICY;
-           getPrivacyPolicy();
+
+            if(NetworkAvailablity.checkNetworkStatus(WebViewAct.this))  getPrivacyPolicy();
+            else Toast.makeText(WebViewAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         });
 
 

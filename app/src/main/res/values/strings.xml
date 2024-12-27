@@ -368,6 +368,40 @@
     <string name="are_you_sure_you_want_to_refuse_order">Are you sure you want to refuse this order?</string>
     <string name="order_not_available">order not available</string>
     <string name="complete">Complete</string>
+    <string name="your_corospondent_does_not_affiliated">Your correspondent does not seem to be affiliated with AfaryCode. We will therefore send him a payment link by SMS. Make sure your wallet has a sufficient balance for sending SMS or please first credit your wallet with a minimum amount of (amount) managed by admin. you can also send this link to your correspondent.  show link</string>
+    <string name="you_received_an_amount_of">you received an amount of</string>
+    <string name="transaction_id">Transaction ID:</string>
+    <string name="amounts">Amounts:</string>
+    <string name="new_balance">New Balance:</string>
+    <string name="note">Note:</string>
+    <string name="go_and_click">Go and Click on the transaction that interests you in the list of transactions then copy its ID and paste it here</string>
+    <string name="are_you_sure_delete_this_item">Are you sure you want to delete this item?</string>
+    <string name="rate_sueccessfully">Rated successfully..</string>
+    <string name="open">Opens:</string>
+    <string name="closeto">Close:</string>
+    <string name="press_again_to_exit">Press once again to exit</string>
+    <string name="transaction_id1">Transaction ID</string>
+    <string name="refe_info">Reference Info</string>
+    <string name="tamps">Temps</string>
+    <string name="purchase">purchase</string>
+    <string name="transaction_type">Transaction type</string>
+    <string name="airtel_money_number">Airtel money number</string>
+    <string name="moov_money_number">Moov money number</string>
+    <string name="to">To</string>
+    <string name="from">From</string>
+    <string name="recharge">recharge</string>
+    <string name="withdraw">withdraw</string>
+    <string name="transfer">transfer</string>
+    <string name="received">Received</string>
+    <string name="refund">Refund</string>
+    <string name="your_order_cancellation_amount_refund">Your Order Cancellation amount refund transaction of</string>
+    <string name="successfully_done_for_order_id">successfully done for order id</string>
+    <string name="please_enter_address">please enter address</string>
+    <string name="please_add_comment">please add comments!!!!</string>
+    <string name="see_other_products_from">See other products from</string>
+    <string name="this_shop_click_here">this shop by clicking here</string>
+    <string name="please_select_delivery_agency">please select delivery agency</string>
+    <string name="shipping_agency_fees">Shipping agency fees</string>
 
 
 </resources>

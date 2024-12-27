@@ -47,6 +47,7 @@ import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.fragment.HomeFragment;
 import com.my.afarycode.OnlineShopping.fragment.MyProfileFragment;
 import com.my.afarycode.OnlineShopping.helper.DataManager;
+import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.R;
 import com.my.afarycode.Splash;
 import com.my.afarycode.databinding.ActivityUpdateProfileBinding;
@@ -134,26 +135,29 @@ public class UpdateProfile extends Fragment {
     private void UpdateProfileApi() {
 
         if (binding.etName.getText().toString().trim().isEmpty()) {
-            binding.etName.setError("Field cannot be empty");
+            binding.etName.setError(getString(R.string.can_not_be_empty));
             Toast.makeText(getContext(), "please enter name", Toast.LENGTH_SHORT).show();
         }
        else if (binding.etUserName.getText().toString().trim().isEmpty()) {
-            binding.etUserName.setError("Field cannot be empty");
-            Toast.makeText(getContext(), "please enter username", Toast.LENGTH_SHORT).show();
+            binding.etUserName.setError(getString(R.string.can_not_be_empty));
+            Toast.makeText(getContext(), getString(R.string.please_enter_user_name), Toast.LENGTH_SHORT).show();
         }
         else if (binding.email.getText().toString().trim().isEmpty()) {
-            binding.email.setError("Field cannot be empty");
-            Toast.makeText(getContext(), "please enter address ", Toast.LENGTH_SHORT).show();
+            binding.email.setError(getString(R.string.can_not_be_empty));
+            Toast.makeText(getContext(), getString(R.string.please_enter_address), Toast.LENGTH_SHORT).show();
         } else if (binding.phoneNumber.getText().toString().trim().isEmpty()) {
-            binding.phoneNumber.setError("Field cannot be empty");
-            Toast.makeText(getContext(), "please enter Title ", Toast.LENGTH_SHORT).show();
+            binding.phoneNumber.setError(getString(R.string.can_not_be_empty));
+            Toast.makeText(getContext(), getString(R.string.please_enter_mobile_number), Toast.LENGTH_SHORT).show();
         } /*else if (binding.address.getText().toString().trim().isEmpty()) {
             binding.address.setError("Field cannot be empty");
             Toast.makeText(getContext(), "please Address ", Toast.LENGTH_SHORT).show();
 
         }*/ else {
 
-            UpDateAPi();
+
+
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  UpDateAPi();
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -232,7 +236,9 @@ public class UpdateProfile extends Fragment {
     }
 
     private void SetupUI() {
-        GetProfile();
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  GetProfile();
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
     }
 
  /*   @Override
