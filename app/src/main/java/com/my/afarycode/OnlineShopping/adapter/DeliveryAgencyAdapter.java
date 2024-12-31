@@ -39,7 +39,7 @@ public class DeliveryAgencyAdapter extends RecyclerView.Adapter<DeliveryAgencyAd
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.binding.tvPrice.setText("Rs."+arrayList.get(position).getPrice());
+        holder.binding.tvPrice.setText(arrayList.get(position).getShowCurrencyCode()+arrayList.get(position).getLocalPrice());
         holder.binding.rdHome.setText(arrayList.get(position).getName());
        // ivImg;
         Glide.with(context).load(arrayList.get(position).getImage()).into(holder.binding.ivImg);

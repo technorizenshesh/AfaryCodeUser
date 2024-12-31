@@ -73,6 +73,56 @@ public class DeliveryAgencyModel {
         @Expose
         private String deliveryMethod;
 
+
+        @SerializedName("country_id")
+        @Expose
+        private String countryId;
+
+        @SerializedName("local_currency")
+        @Expose
+        private String localCurrency;
+
+        @SerializedName("show_currency_code")
+        @Expose
+        private String showCurrencyCode;
+
+        @SerializedName("local_price")
+        @Expose
+        private String localPrice;
+
+
+        public String getCountryId() {
+            return countryId;
+        }
+
+        public void setCountryId(String countryId) {
+            this.countryId = countryId;
+        }
+
+        public String getLocalCurrency() {
+            return localCurrency;
+        }
+
+        public void setLocalCurrency(String localCurrency) {
+            this.localCurrency = localCurrency;
+        }
+
+        public String getShowCurrencyCode() {
+            return showCurrencyCode;
+        }
+
+        public void setShowCurrencyCode(String showCurrencyCode) {
+            this.showCurrencyCode = showCurrencyCode;
+        }
+
+        public String getLocalPrice() {
+            return localPrice;
+        }
+
+        public void setLocalPrice(String localPrice) {
+            this.localPrice = localPrice;
+        }
+
         public String getDeliveryMethod() {
             return deliveryMethod;
         }

@@ -511,5 +511,10 @@ public interface AfaryCode {
     Call<ResponseBody> getProductSearchNew(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 
+    @FormUrlEncoded
+    @POST("update_mobile_number_on_order")
+    Call<ResponseBody> changeUserNumberApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
 
 }

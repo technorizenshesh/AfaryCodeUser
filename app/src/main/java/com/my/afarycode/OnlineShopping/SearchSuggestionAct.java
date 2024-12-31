@@ -180,6 +180,7 @@ public class SearchSuggestionAct extends Fragment implements onItemClickListener
                 if (s.length() > 0) {
                     // binding.llMain.setVisibility(View.GONE);
                     queryString = s.toString();
+                   // queryString = s.toString().replaceAll("\\s", ""); // Remove spaces
                     if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getSearchProduct();
                     else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 

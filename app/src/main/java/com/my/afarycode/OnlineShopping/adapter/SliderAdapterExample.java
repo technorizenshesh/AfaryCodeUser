@@ -55,7 +55,7 @@ public class SliderAdapterExample extends
 
         Glide.with(viewHolder.itemView)
                 .load(mSliderItems.get(position))
-                .fitCenter()
+                //.fitCenter()
                 .into(viewHolder.imageViewBackground);
 
     /*    viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

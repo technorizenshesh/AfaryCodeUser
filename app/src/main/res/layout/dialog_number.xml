@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
@@ -23,28 +23,56 @@
         android:orientation="vertical"
         android:padding="@dimen/_10sdp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:layout_marginEnd="@dimen/_10sdp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/gray_button_background"
+
+            >
+
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/ccp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight=".3"
+            android:gravity="center"
+            app:ccp_countryPreference="SA"
+            app:ccp_showFlag="true"
+            app:ccp_showPhoneCode="true"
+            app:ccp_showNameCode="false"
+            app:ccp_contentColor="@color/black"
+            app:ccp_textSize="@dimen/_12sdp"
+            />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".7"
+            >
 
             <EditText
                 android:id="@+id/edNumber"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:layout_centerVertical="true"
-                android:background="@drawable/gray_button_background"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/please_enter_numbre"
                 android:inputType="number"
                 android:maxLength="10"
                 android:paddingStart="@dimen/_10sdp"
+                android:background="@null"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_11sdp" />
 
         </RelativeLayout>
+
+        </LinearLayout>
 
 
         <LinearLayout

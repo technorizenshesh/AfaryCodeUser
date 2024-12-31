@@ -208,6 +208,8 @@
                     android:background="@drawable/border_search"
                     android:hint="@string/search_here"
                     android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:maxLength="100"
                     android:layout_toStartOf="@+id/btnSearch"/>
 
 

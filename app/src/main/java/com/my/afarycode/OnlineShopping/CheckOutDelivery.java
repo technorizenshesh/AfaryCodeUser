@@ -879,6 +879,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         map.put("address_id", addressId);
         map.put("shop_id", productId);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+        map.put("country_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.countryId, ""));
 
         Log.e(TAG, "Delivery Agency Request :" + map);
 
@@ -976,6 +977,13 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                        uncheckAddressList();
                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_deliver_on_this_country),object.getString("status"));
                     }
+
+
+                   else if (object.getString("status").equals("5")) {
+                       binding.rvDeliveryAgency.setVisibility(View.GONE);
+                       uncheckAddressList();
+                       ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_available_on_this_city),object.getString("status"));
+                   }
 
 
                 } catch (Exception e) {

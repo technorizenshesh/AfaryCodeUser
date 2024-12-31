@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -509,6 +510,8 @@ public class CheckOutPayment extends AppCompatActivity {
         EditText edNumber = mDialog.findViewById(R.id.edNumber);
         AppCompatButton btnBack = mDialog.findViewById(R.id.btnBack);
         AppCompatButton btnPayNow = mDialog.findViewById(R.id.btnPayNow);
+        CountryCodePicker ccp = mDialog.findViewById(R.id.ccp);
+
 
         btnBack.setOnClickListener(v -> {
             mDialog.dismiss();
@@ -522,8 +525,11 @@ public class CheckOutPayment extends AppCompatActivity {
             else {
                 mDialog.dismiss();
 
-                if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) PaymentAPI(operator, cart_id_string, edNumber.getText().toString(), "Cash");
+                if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) changeUserNumber("VM",edNumber.getText().toString(),ccp.getSelectedCountryCode());
                 else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
 
             }
 
@@ -645,12 +651,20 @@ public class CheckOutPayment extends AppCompatActivity {
 
         btnSend.setOnClickListener(v -> {
             if (edNumber.getText().toString().equals(""))
-                Toast.makeText(CheckOutPayment.this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show();
+                Toast.makeText(CheckOutPayment.this, getString(R.string.enter_email_number), Toast.LENGTH_SHORT).show();
 
             else {
                 mDialog.dismiss();
                 //  if(!anotherPersonId.equalsIgnoreCase(""))
-             if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))   checkUserExit(ccp.getSelectedCountryCode() + "-" + edNumber.getText().toString());
+                String number ="";
+                 if(isValidPhoneNumber(edNumber.getText().toString())){
+                     number = ccp.getSelectedCountryCode() + "-" + edNumber.getText().toString();
+                 }
+                 else if(isValidEmail(edNumber.getText().toString())){
+                     number =  edNumber.getText().toString();
+                 }
+
+             if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))   checkUserExit(number);
              else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
@@ -660,6 +674,18 @@ public class CheckOutPayment extends AppCompatActivity {
         mDialog.show();
 
     }
+
+    private boolean isValidEmail(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Phone number validation using regex
+        // Example pattern for a 10-digit phone number (adjust based on your requirements)
+        return phoneNumber.matches("^(\\+\\d{1,3}[- ]?)?\\(?\\d{1,4}\\)?[- ]?\\d{1,4}[- ]?\\d{1,4}$");
+    }
+
 
     private void checkUserExit(String number) {
         //binding.loader.setVisibility(View.VISIBLE);
@@ -840,5 +866,67 @@ public class CheckOutPayment extends AppCompatActivity {
             }
         }
     }
+
+
+    private void changeUserNumber(String operator, String number,String countryCode) {
+        //binding.loader.setVisibility(View.VISIBLE);
+        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
+        map.put("mobile_number", number);
+        map.put("country_code",countryCode);
+
+        Log.e("MapMap", "Change user Number Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.changeUserNumberApi(headerMap, map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Change user Number RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this)) PaymentAPI(operator, cart_id_string, number, "Cash");
+                        else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    binding.loader.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(CheckOutPayment.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
+
 
 }

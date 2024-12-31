@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.gson.Gson;
+import com.my.afarycode.OnlineShopping.CheckOutPayment;
 import com.my.afarycode.OnlineShopping.CheckOutScreen;
 import com.my.afarycode.OnlineShopping.Model.Add_Address_Modal;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
@@ -686,6 +687,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         map.put("address_id", addressId);
         map.put("shop_id", productId);
         map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.countryId, ""));
 
         Log.e(TAG, "Delivery Agency Request :" + map);
 

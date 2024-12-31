@@ -354,9 +354,9 @@
     <string name="please_enter_amount">Please enter amount</string>
     <string name="result">Results</string>
     <string name="does_not_benificiary_account">Your beneficiary does not have a wallet to receive the funds. send him this link to download our app. show link</string>
-    <string name="we_do_not_available_on_this_country">We don\'t deliver on this country</string>
+    <string name="we_do_not_available_on_this_country">We don\'t available on this country</string>
     <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">We available on this country but you will be collect your package your self. Please select CLICK AND COLLECT</string>
-    <string name="we_do_not_deliver_on_this_country">We don\'t deliver on this country</string>
+    <string name="we_do_not_deliver_on_this_country">We don\'t available on this country</string>
     <string name="dear_customer">Dear Customer,</string>
     <string name="you_have_requested_delivery_with_cash_on_delivery_one_of_our">You have requested delivery with cash on delivery. One of our</string>
     <string name="salespeople_may_call_you">salespeople may call you.</string>
@@ -402,6 +402,7 @@
     <string name="this_shop_click_here">this shop by clicking here</string>
     <string name="please_select_delivery_agency">please select delivery agency</string>
     <string name="shipping_agency_fees">Shipping agency fees</string>
+    <string name="we_do_not_available_on_this_city">we don\'t available on this city</string>
 
 
 </resources>

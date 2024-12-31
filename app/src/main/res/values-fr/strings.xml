@@ -357,9 +357,9 @@
     <string name="please_enter_amount">Veuillez saisir le montant</string>
     <string name="result">Résultats</string>
     <string name="does_not_benificiary_account">Votre bénéficiaire ne dispose pas de portefeuille pour recevoir les fonds. envoyez-lui ce lien pour télécharger notre application. afficher le lien</string>
-    <string name="we_do_not_available_on_this_country">Nous ne livrons pas dans ce pays</string>
+    <string name="we_do_not_available_on_this_country">Nous ne sommes pas disponibles dans ce pays</string>
     <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">Nous sommes disponibles dans ce pays mais vous récupérerez votre colis vous-même. Veuillez sélectionner CLIQUER et COLLECTER</string>
-    <string name="we_do_not_deliver_on_this_country">Nous ne livrons pas dans ce pays</string>
+    <string name="we_do_not_deliver_on_this_country">Nous ne sommes pas disponibles dans ce pays</string>
     <string name="dear_customer">Cher client,</string>
     <string name="you_have_requested_delivery_with_cash_on_delivery_one_of_our">Vous avez demandé la livraison avec paiement à la livraison. Un de nos</string>
     <string name="salespeople_may_call_you">les vendeurs peuvent vous appeler.</string>
@@ -407,6 +407,7 @@
     <string name="this_shop_click_here">cette boutique en cliquant ici</string>
     <string name="please_select_delivery_agency">veuillez sélectionner l\'agence de livraison</string>
     <string name="shipping_agency_fees">Frais d\'agence de livraison</string>
+    <string name="we_do_not_available_on_this_city">nous ne sommes pas disponibles sur cette ville</string>
 </resources>
 
 
