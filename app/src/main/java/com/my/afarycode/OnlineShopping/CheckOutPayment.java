@@ -268,6 +268,9 @@ public class CheckOutPayment extends AppCompatActivity {
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.serviceType, PreferenceConnector.Booking);
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.ShareUserId, "");
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentType, "Booking");
+
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentOrderId,  object.getJSONObject("ressult").getString("order_id"));
+
                         startActivity(new Intent(CheckOutPayment.this, PaymentWebViewAct.class)
                                 .putExtra("url", object.getJSONObject("ressult").getString("webviewurl"))
                                 .putExtra("ref", object.getJSONObject("ressult").getString("reference")));
@@ -466,6 +469,8 @@ public class CheckOutPayment extends AppCompatActivity {
                             PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.serviceType, PreferenceConnector.Booking);
                             PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.ShareUserId, "");
                             PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentType, "Booking");
+                            PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.PaymentOrderId,  object.getJSONObject("ressult").getString("order_id"));
+
                             startActivity(new Intent(CheckOutPayment.this, CheckPaymentStatusAct.class)
                                     .putExtra("paymentBy", "User"));
 

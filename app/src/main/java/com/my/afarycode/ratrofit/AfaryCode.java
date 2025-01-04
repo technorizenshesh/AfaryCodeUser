@@ -515,6 +515,8 @@ public interface AfaryCode {
     @POST("update_mobile_number_on_order")
     Call<ResponseBody> changeUserNumberApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
-
+    @FormUrlEncoded
+    @POST("update_payment_status_try_again")
+    Call<ResponseBody> sendPaymentFailedInfoToServerApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
 }

@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
+import com.my.afarycode.OnlineShopping.helper.DataManager;
 import com.my.afarycode.OnlineShopping.helper.MyService;
 import com.my.afarycode.OnlineShopping.helper.NetworkAvailablity;
 import com.my.afarycode.OnlineShopping.myorder.MyOrderScreen;
@@ -54,70 +55,58 @@ import retrofit2.Response;
 
 public class CheckPaymentStatusAct extends AppCompatActivity {
     ActivityPaymentStatusBinding binding;
-    String paymentBy="";
+    String paymentBy = "";
     private AfaryCode apiInterface;
-    private String TAG ="CheckPaymentStatusAct";
+    private String TAG = "CheckPaymentStatusAct";
     BroadcastReceiver PaymentStatusReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.e("PaymentStatusReceiver ====","=====");
+            Log.e("PaymentStatusReceiver ====", "=====");
             try {
                 JSONObject object = new JSONObject(intent.getStringExtra("object"));
-                if(intent.getStringExtra("object")!= null) {
-                     JSONObject result = object.getJSONObject("result");
-                    Log.e("PaymentStatusReceiver ====",intent.getStringExtra("object")+"");
+                if (intent.getStringExtra("object") != null) {
+                    JSONObject result = object.getJSONObject("result");
+                    Log.e("PaymentStatusReceiver ====", intent.getStringExtra("object") + "");
 
-                    if(object.getString("status").equals("1")){
+                    if (object.getString("status").equals("1")) {
                         Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                       if(paymentBy.equals("user")) {
-                           startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
-                                   .putExtra("status", "")
-                                   .putExtra("msg", "")
-                                   .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                           finish();
-                       }
-                      // else if()
-                       else {
-                           Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                           startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class)
-                                   .putExtra("status","")
-                                   .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                           finish();
-                       }
-                    }
-
-
-                    else if (object.getString("status").equals("3")) {
-                            Log.e("Payment under processing ====",intent.getStringExtra("object")+"");
-
-
+                        if (paymentBy.equals("user")) {
+                            startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
+                                    .putExtra("status", "")
+                                    .putExtra("msg", "")
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
                         }
+                        // else if()
+                        else {
+                            Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
+                                    .putExtra("status", "")
+                                    .putExtra("msg", "").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                            finish();
+                        }
+                    } else if (object.getString("status").equals("3")) {
+                        Log.e("Payment under processing ====", intent.getStringExtra("object") + "");
 
 
-                    else if (object.getString("status").equals("9")) {
-                        Log.e("Payment has not been completed ====",intent.getStringExtra("object")+"");
+                    } else if (object.getString("status").equals("9")) {
+                        Log.e("Payment has not been completed ====", intent.getStringExtra("object") + "");
                         stopService(new Intent(CheckPaymentStatusAct.this, MyService.class));
-                        showAlertDialog();
+                        showAlertDialog(PreferenceConnector.readString(CheckPaymentStatusAct.this, PreferenceConnector.PaymentOrderId, ""));
 
-                    }
-
-
-
-
-                    else {
+                    } else {
                         Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class)
-                                .putExtra("status","")
-                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
+                                .putExtra("status", "")
+                                .putExtra("msg", "").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
-                        }
+                    }
 
 
                 }
 
 
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -125,8 +114,7 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
     };
 
 
-
-    private void showAlertDialog() {
+    private void showAlertDialog(String orderId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Transaction Status")
                 .setMessage("Your transaction has not been completed. Please try again or choose another method of payment.\n\nIf on the contrary this message appears while you have been debited, please contact the administrator here (link).")
@@ -135,10 +123,10 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        finish();
+                        sendPaymentFailedInfoToServer(orderId);
                     }
                 }); // Uncomment if you want the OK button
-              //  .setNegativeButton("Cancel", null); // Uncomment if you want the Cancel button*/
+        //  .setNegativeButton("Cancel", null); // Uncomment if you want the Cancel button*/
 
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
@@ -153,17 +141,17 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                     messageTextView.setText(Html.fromHtml(message));
                 }
 
-                Log.e("message length====",message.length()+"");
+                Log.e("message length====", message.length() + "");
                 // Highlight the "here" text in red
                 SpannableString spannableString = new SpannableString(messageTextView.getText());
-                int start = message.indexOf("here (link).")-1;
+                int start = message.indexOf("here (link).") - 1;
 
-                Log.e("start length===",start+"");
+                Log.e("start length===", start + "");
                 if (start != -1) {
                     int end = start + "here (link).".length();
-                    Log.e("end length===",end+"");
+                    Log.e("end length===", end + "");
 
-                    spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red)), start, end-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannableString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red)), start, end - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 messageTextView.setText(spannableString);
 
@@ -196,13 +184,16 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                         // Handle the send action
                         // For example, send the message to the administrator or log the issue
 
-                        if(NetworkAvailablity.checkNetworkStatus(CheckPaymentStatusAct.this)) sendToAdminMsg(message);
-                        else Toast.makeText(CheckPaymentStatusAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                        if (NetworkAvailablity.checkNetworkStatus(CheckPaymentStatusAct.this))
+                            sendToAdminMsg(message);
+                        else
+                            Toast.makeText(CheckPaymentStatusAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
                     }
                 });
-               /* .setNegativeButton("Cancel", null)*/;
+        /* .setNegativeButton("Cancel", null)*/
+        ;
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
@@ -230,14 +221,15 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                       dialog.dismiss();
-                        startActivity(new Intent(CheckPaymentStatusAct.this,HomeActivity.class)
-                                .putExtra("status","")
-                                .putExtra("msg","").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        dialog.dismiss();
+                        startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
+                                .putExtra("status", "")
+                                .putExtra("msg", "").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
                     }
                 });
-        /* .setNegativeButton("Cancel", null)*/;
+        /* .setNegativeButton("Cancel", null)*/
+        ;
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
@@ -257,30 +249,20 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
     }
 
 
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_payment_status);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_payment_status);
         apiInterface = ApiClient.getClient(this).create(AfaryCode.class);
         initViews();
     }
 
 
-
-
-
     private void initViews() {
 
-        if(getIntent()!=null) paymentBy = getIntent().getStringExtra("paymentBy");
+        if (getIntent() != null) paymentBy = getIntent().getStringExtra("paymentBy");
 
     }
-
-
-
-
 
 
     @Override
@@ -288,9 +270,8 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
         super.onResume();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"),Context.RECEIVER_EXPORTED);
-        }
-        else {
+            registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"), Context.RECEIVER_EXPORTED);
+        } else {
             registerReceiver(PaymentStatusReceiver, new IntentFilter("check_payment_status"));
         }
         startService(new Intent(CheckPaymentStatusAct.this, MyService.class));
@@ -309,24 +290,24 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    //    stopService(new Intent(CheckPaymentStatusAct.this, MyService.class));
-      //  unregisterReceiver(PaymentStatusReceiver);
+        //    stopService(new Intent(CheckPaymentStatusAct.this, MyService.class));
+        //  unregisterReceiver(PaymentStatusReceiver);
     }
 
 
     public void sendToAdminMsg(String msg) {
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
-        Log.e("transactionId===","transactionId = " + PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.transId,""));
-        Map<String,String> map = new HashMap<>();
-        map.put("user_id",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.User_id,""));
-        map.put("reference",PreferenceConnector.readString(getApplicationContext(),PreferenceConnector.transId,""));
-        map.put("user_message",msg);
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+        Log.e("transactionId===", "transactionId = " + PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.transId, ""));
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.User_id, ""));
+        map.put("reference", PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.transId, ""));
+        map.put("user_message", msg);
 
 
-        Log.e(TAG,"Send Admin Msg Request "+map);
-        Call<ResponseBody> loginCall = apiInterface.sendAdminMsg(headerMap,map);
+        Log.e(TAG, "Send Admin Msg Request " + map);
+        Call<ResponseBody> loginCall = apiInterface.sendAdminMsg(headerMap, map);
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -349,6 +330,45 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
 
     }
 
+
+    public void sendPaymentFailedInfoToServer(String orderId) {
+        DataManager.getInstance().showProgressMessage(CheckPaymentStatusAct.this, getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(getApplicationContext(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+        Log.e("orderId===", "orderId = " + orderId);
+        Map<String, String> map = new HashMap<>();
+        map.put("common_order_id", orderId);
+
+
+        Log.e(TAG, "sendPaymentFailedInfoToServer Request " + map);
+        Call<ResponseBody> loginCall = apiInterface.sendPaymentFailedInfoToServerApi(headerMap, map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "sendPaymentFailedInfoToServer Response" + object);
+                    Log.e(TAG, "Payment RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        finish();
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+            }
+        });
+
+
+    }
 
 
 }

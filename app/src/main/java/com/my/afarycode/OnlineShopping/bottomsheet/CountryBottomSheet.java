@@ -1,8 +1,10 @@
 package com.my.afarycode.OnlineShopping.bottomsheet;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,7 +66,7 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
     CountryAdapter adapter;
 
     ArrayList<CountryModel.Result> arrayList;
-    String countryName ="";
+    String countryName = "";
 
     public static TextView tvNotFound;
 
@@ -89,7 +92,26 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
         mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         apiInterface = ApiClient.getClient(getActivity()).create(AfaryCode.class);
         initBinding();
-        return  dialog;
+
+
+        binding.getRoot().getViewTreeObserver().addOnPreDrawListener(() -> {
+            Rect r = new Rect();
+            binding.getRoot().getWindowVisibleDisplayFrame(r);
+            int screenHeight = binding.getRoot().getHeight();
+            int keypadHeight = screenHeight - r.bottom;
+
+            if (keypadHeight > 100) {
+                // Keyboard is visible, adjust BottomSheet if necessary
+                mBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);  // Optional: Collapse BottomSheet when keyboard shows
+            } else {
+                // Keyboard is hidden, set to expanded
+                mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+            return true;
+        });
+
+
+        return dialog;
     }
 
     private void initBinding() {
@@ -100,14 +122,14 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
 
         binding.tvLocation.setText(countryName);
 
-        adapter  = new CountryAdapter(getActivity(),arrayList,CountryBottomSheet.this);
+        adapter = new CountryAdapter(getActivity(), arrayList, CountryBottomSheet.this);
         binding.rvServices.setAdapter(adapter);
 
         binding.ivBack.setOnClickListener(v -> dismiss());
 
-        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllCountry();
-        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
-
+        if (NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllCountry();
+        else
+            Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
         binding.edSearch.addTextChangedListener(new TextWatcher() {
@@ -130,12 +152,11 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
     }
 
 
-
     private void getAllCountry() {
         DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
         Call<ResponseBody> chatCount = apiInterface.getAllCountry(headerMap);
         chatCount.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -176,19 +197,19 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
     }
 
     @Override
-    public void onPosition(int position,String name ,String countryId) {
-       // countryName = name
-        dialogAddLocation(countryName,name,countryId);
+    public void onPosition(int position, String name, String countryId) {
+        // countryName = name
+        dialogAddLocation(countryName, name, countryId);
     }
 
-    private void dialogAddLocation(String countryName, String countryNameNew,String countryId) {
-         Dialog mDialog = new Dialog(getActivity());
-         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-         mDialog.setContentView(R.layout.dialog_set_country);
+    private void dialogAddLocation(String countryName, String countryNameNew, String countryId) {
+        Dialog mDialog = new Dialog(getActivity());
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_set_country);
         // mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-         TextView textView = mDialog.findViewById(R.id.tvTitle);
-         TextView tvYes = mDialog.findViewById(R.id.tvYes);
-         TextView tvBack = mDialog.findViewById(R.id.tvBack);
+        TextView textView = mDialog.findViewById(R.id.tvTitle);
+        TextView tvYes = mDialog.findViewById(R.id.tvYes);
+        TextView tvBack = mDialog.findViewById(R.id.tvBack);
 
 
         textView.setText("Your current shopping location is " + countryName + "." + "Would you like to change it to " + countryNameNew + "?");
@@ -209,8 +230,10 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
         tvYes.setOnClickListener(v -> {
             mDialog.dismiss();
 
-            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) updateCountry(countryId,countryNameNew);
-            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+            if (NetworkAvailablity.checkNetworkStatus(requireActivity()))
+                updateCountry(countryId, countryNameNew);
+            else
+                Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         });
 
@@ -220,13 +243,13 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
     }
 
 
-    public void getFilterSearch(String query){
+    public void getFilterSearch(String query) {
         try {
             query = query.toLowerCase();
 
             final ArrayList<CountryModel.Result> filteredList = new ArrayList<CountryModel.Result>();
 
-            if(arrayList != null) {
+            if (arrayList != null) {
                 for (int i = 0; i < arrayList.size(); i++) {
                     String text = arrayList.get(i).getName().toLowerCase();
                     if (text.contains(query)) {
@@ -235,20 +258,20 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
 
                 }
                 adapter.filterList(filteredList);
-
+                hideKeyboard();
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    private void updateCountry(String countryId,String country) {
+    private void updateCountry(String countryId, String country) {
         DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
@@ -256,7 +279,7 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
 
-        Call<ResponseBody> loginCall = apiInterface.updateCountryApi(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.updateCountryApi(headerMap, map);
 
         loginCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -266,23 +289,17 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
                 try {
                     String responseString = response.body().string();
                     JSONObject jsonObject = new JSONObject(responseString);
-                    Log.e(TAG,"update country  Response = " + responseString);
-                    if(jsonObject.getString("status").equals("1")) {
+                    Log.e(TAG, "update country  Response = " + responseString);
+                    if (jsonObject.getString("status").equals("1")) {
                         JSONObject jsonObject11 = jsonObject.getJSONObject("result");
                         listener.search(country);
                         dialog.dismiss();
 
-                    }
-                    else if (jsonObject.getString("status").equals("5")) {
+                    } else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(getActivity(), PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         getActivity().finish();
-                    }
-
-
-
-
-                    else {
+                    } else {
                         // binding.tvNotFound.setVisibility(View.VISIBLE);
 
                     }
@@ -301,6 +318,14 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
 
     }
 
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && getView() != null) {
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+        }
+
+    }
 
 }
 

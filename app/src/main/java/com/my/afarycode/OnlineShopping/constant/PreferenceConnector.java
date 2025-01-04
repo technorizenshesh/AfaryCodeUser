@@ -60,6 +60,7 @@ public class PreferenceConnector {
 
     public static String PaymentType ="PaymentType";
 
+    public static String PaymentOrderId ="paymentOrderId";
 
 
 

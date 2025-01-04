@@ -168,7 +168,9 @@
             android:name=".OnlineShopping.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:exported="false"/>
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"
+            />
 
         <activity
             android:name=".OnlineShopping.MyBookingActivity"
