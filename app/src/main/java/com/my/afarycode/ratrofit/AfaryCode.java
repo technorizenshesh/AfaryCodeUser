@@ -519,4 +519,13 @@ public interface AfaryCode {
     @POST("update_payment_status_try_again")
     Call<ResponseBody> sendPaymentFailedInfoToServerApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
 
+
+    @FormUrlEncoded
+    @POST("delivery_cancel_order")
+    Call<ResponseBody> deliveryPersonInformOrderCancelApi( @FieldMap Map<String, String> params);
+
+
+
+
+
 }

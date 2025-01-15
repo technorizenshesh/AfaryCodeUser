@@ -403,6 +403,7 @@
     <string name="please_select_delivery_agency">please select delivery agency</string>
     <string name="shipping_agency_fees">Shipping agency fees</string>
     <string name="we_do_not_available_on_this_city">we don\'t available on this city</string>
+    <string name="order_cancelled">Order Cancelled...</string>
 
 
 </resources>

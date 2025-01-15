@@ -42,16 +42,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListener{
+public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListener {
     public String TAG = "OrderDetailsAct";
     ActivityOrderDetailsBinding binding;
-    String orderId ="",userName="",userId="",userImg="",sellerId="",sellerName,sellerImg="";
+    String orderId = "", userName = "", userId = "", userImg = "", sellerId = "", sellerName, sellerImg = "";
     OrderDetailsModel model;
     private AfaryCode apiInterface;
     ItemsAdapter itemsAdapter;
-    ArrayList<OrderDetailsModel.Result.Product>arrayList;
-   // double totalPriceToToPay=0.0,taxN1=0.0,taxN2=0.0,platFormsFees=0.0,deliveryFees=0.0,subTotal=0.0;
-    String totalPriceToToPay= "0",subTotal="0",taxN1="0",taxN2="0",platFormsFees="0",deliveryFees="0";
+    ArrayList<OrderDetailsModel.Result.Product> arrayList;
+    // double totalPriceToToPay=0.0,taxN1=0.0,taxN2=0.0,platFormsFees=0.0,deliveryFees=0.0,subTotal=0.0;
+    String totalPriceToToPay = "0", subTotal = "0", taxN1 = "0", taxN2 = "0", platFormsFees = "0", deliveryFees = "0";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,43 +65,44 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
     private void initViews() {
 
-        if(getIntent()!=null) {
-            orderId  = getIntent().getStringExtra("id");
+        if (getIntent() != null) {
+            orderId = getIntent().getStringExtra("id");
 
         }
 
         arrayList = new ArrayList<>();
 
-        itemsAdapter = new ItemsAdapter(OrderDetailsAct.this,arrayList,OrderDetailsAct.this);
+        itemsAdapter = new ItemsAdapter(OrderDetailsAct.this, arrayList, OrderDetailsAct.this);
         binding.rvDetails.setAdapter(itemsAdapter);
 
 
-        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) callOrderDetail();
-        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        if (NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) callOrderDetail();
+        else
+            Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
         binding.backNavigation.setOnClickListener(v -> finish());
 
         binding.btnChat.setOnClickListener(v -> {
             startActivity(new Intent(this, ChatAct.class)
-                    .putExtra("UserId",model.getResult().getSellerId())
-                    .putExtra("UserName",sellerName)
-                    .putExtra("UserImage",sellerImg)
-                    .putExtra("id",userId)
-                    .putExtra("name",userName)
-                    .putExtra("img",userImg));
+                    .putExtra("UserId", model.getResult().getSellerId())
+                    .putExtra("UserName", sellerName)
+                    .putExtra("UserImage", sellerImg)
+                    .putExtra("id", userId)
+                    .putExtra("name", userName)
+                    .putExtra("img", userImg));
         });
 
 
-       // PreferenceConnector.writeString(OrderDetailsAct.this,"afaryCode",model.getResult().getAfaryCode());
+        // PreferenceConnector.writeString(OrderDetailsAct.this,"afaryCode",model.getResult().getAfaryCode());
 
         binding.btnAccept.setOnClickListener(v ->
         {
-            if(binding.btnAccept.getText().equals(getString(R.string.re_order))){
-                if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) addReOrder(orderId);
-                else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
-            }
-
-            else {
+            if (binding.btnAccept.getText().equals(getString(R.string.re_order))) {
+                if (NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this))
+                    addReOrder(orderId);
+                else
+                    Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+            } else {
                 if (model != null) {
                     if (model.getResult().getStatus().equals("Accepted") || model.getResult().getStatus().equalsIgnoreCase("PickedUp")) {
                         PreferenceConnector.writeString(OrderDetailsAct.this, "afaryCode", model.getResult().getAfaryCode());
@@ -110,41 +111,42 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                                 .putExtra("orderDetails", model.getResult()));
                     }
                 }
-           }
+            }
 
         });
 
 
         binding.btnDecline.setOnClickListener(view -> {
-            if(model!=null){
-              if(model.getResult().getStatus().equalsIgnoreCase("Pending") || model.getResult().getStatus().equalsIgnoreCase("Accepted") ||
-                model.getResult().getStatus().equalsIgnoreCase("PickedUp"))
-                alertCancelOrder();
+            if (model != null) {
+                if (model.getResult().getStatus().equalsIgnoreCase("Pending") || model.getResult().getStatus().equalsIgnoreCase("Accepted") ||
+                        model.getResult().getStatus().equalsIgnoreCase("PickedUp"))
+                    alertCancelOrder();
             }
         });
 
 
-        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) GetProfileAPI();
-        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        if (NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) GetProfileAPI();
+        else
+            Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
     }
 
     private void callOrderDetail() {
-        DataManager.getInstance().showProgressMessage(this, "Please wait...");
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
         Map<String, String> map = new HashMap<>();
         map.put("order_id", orderId);
         map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
         map.put("user_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.User_id, ""));
-        map.put("country_id",PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
+        map.put("country_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
 
 
         Log.e(TAG, "My OrderDetails Request" + map);
-        Call<ResponseBody> loginCall = apiInterface.getDetailOnlineOrderApi(headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.getDetailOnlineOrderApi(headerMap, map);
         loginCall.enqueue(new Callback<ResponseBody>() {
 
             @Override
@@ -159,14 +161,15 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     if (jsonObject.getString("status").equals("1")) {
                         // binding.tvNotFount.setVisibility(View.GONE);
                         model = new Gson().fromJson(stringResponse, OrderDetailsModel.class);
-                      //  Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImg);
+                        //  Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImg);
                         binding.tvShopName.setText(model.getResult().getProductList().get(0).getShopName());
                         binding.tvOrderNumber.setText(orderId);
                         binding.tvDate.setText(model.getResult().getProductList().get(0).getDateTime());
 
-                        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) GetSellerProfileAPI(model.getResult().getSellerId());
-                        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
-
+                        if (NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this))
+                            GetSellerProfileAPI(model.getResult().getSellerId());
+                        else
+                            Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
                         if (model.getResult().getProductList().size() == 1) {
@@ -174,7 +177,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.llTwo.setVisibility(View.GONE);
                             binding.llThree.setVisibility(View.GONE);
                             binding.llFour.setVisibility(View.GONE);
-                           // Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImage);
+                            // Glide.with(OrderDetailsAct.this).load(model.getResult().getShopImage().get(0).getImage()).into(binding.productImage);
 
                             Glide.with(OrderDetailsAct.this).load(model.getResult().getProductList().get(0).getProductImages()).into(binding.productImage);
 
@@ -208,7 +211,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
                         }
 
-                        if(model.getResult().getStatus().equals("Pending")){
+                        if (model.getResult().getStatus().equals("Pending")) {
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setText(getString(R.string.accept));
                             binding.btnAccept.setVisibility(View.GONE);
@@ -217,9 +220,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.btnDecline.setVisibility(View.VISIBLE);
 
 
-                        }
-
-                        else if(model.getResult().getStatus().equals("Accepted_by_admin")){
+                        } else if (model.getResult().getStatus().equals("Accepted_by_admin")) {
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setText(getString(R.string.accept));
                             binding.btnAccept.setVisibility(View.GONE);
@@ -227,23 +228,16 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.rlDeliveryPerson.setVisibility(View.GONE);
                             binding.btnDecline.setVisibility(View.VISIBLE);
 
-                        }
-
-
-
-
-
-                        else if(model.getResult().getStatus().equals("Accepted")){
+                        } else if (model.getResult().getStatus().equals("Accepted")) {
                             binding.btnDecline.setVisibility(View.VISIBLE);
-                            if(model.getResult().getSelfCollect().equals("Yes")){
+                            if (model.getResult().getSelfCollect().equals("Yes")) {
                                 binding.llButtons.setVisibility(View.VISIBLE);
                                 binding.btnAccept.setVisibility(View.GONE);
                                 binding.tvAfaryCode.setVisibility(View.VISIBLE);
                                 binding.rlDeliveryPerson.setVisibility(View.GONE);
                                 binding.tvAfaryCode.setText(model.getResult().getCutomer_afary_code());
 
-                            }
-                            else {
+                            } else {
                                 binding.llButtons.setVisibility(View.VISIBLE);
                                 binding.btnAccept.setVisibility(View.GONE);
                                 binding.tvAfaryCode.setVisibility(View.GONE);
@@ -251,29 +245,24 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             }
 
 
-                        }
-
-                        else if(model.getResult().getStatus().equals("PickedUp")) {
-                            binding.llButtons.setVisibility(View.GONE);
+                        } else if (model.getResult().getStatus().equals("PickedUp")) {
+                            binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setVisibility(View.GONE);
                             binding.tvAfaryCode.setVisibility(View.VISIBLE);
                             binding.btnDecline.setVisibility(View.VISIBLE);
                             binding.btnChat.setVisibility(View.GONE);
                             //binding.btnAccept.setText(getString(R.string.track_order));
-                         //   binding.btnAccept.setText(getString(R.string.re_order));
+                            //   binding.btnAccept.setText(getString(R.string.re_order));
                             binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
 
-                            if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
+                            if (jsonObject.getJSONObject("result").isNull("delivery_person")) { //    model.getResult().getDeliveryPerson()==null){
                                 binding.rlDeliveryPerson.setVisibility(View.GONE);
+                            } else {
+                                binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
+                                binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered) + " " + Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                        " " + model.getResult().getDeliveryPerson().getDeliveryPersonNumber() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
                             }
-                            else {
-                                    binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
-                                    binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
-                                        " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
-                            }
-                        }
-
-                        else if(model.getResult().getStatus().equals("Completed")) {
+                        } else if (model.getResult().getStatus().equals("Completed")) {
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.btnAccept.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.VISIBLE);
@@ -282,31 +271,22 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.btnAccept.setText(getString(R.string.re_order));
                             binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
 
-                            if(model.getResult().getSelfCollect().equals("Yes")) {
+                            if (model.getResult().getSelfCollect().equals("Yes")) {
                                 binding.rlDeliveryPerson.setVisibility(View.GONE);
 
-                            }
-                            else {
-                                if(jsonObject.getJSONObject("result").isNull("delivery_person"))  { //    model.getResult().getDeliveryPerson()==null){
+                            } else {
+                                if (jsonObject.getJSONObject("result").isNull("delivery_person")) { //    model.getResult().getDeliveryPerson()==null){
                                     binding.rlDeliveryPerson.setVisibility(View.GONE);
-                                }
-                                else {
+                                } else {
                                     binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
-                                    binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered)+ " "+Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
-                                            " "+model.getResult().getDeliveryPerson().getDeliveryPersonNumber() +"</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+                                    binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered) + " " + Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                            " " + model.getResult().getDeliveryPerson().getDeliveryPersonNumber() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
 
                                     //  }
                                 }
                             }
 
-                        }
-
-
-
-
-
-
-                        else if(model.getResult().getStatus().equals("Cancelled")){
+                        } else if (model.getResult().getStatus().equals("Cancelled")) {
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
                             binding.btnAccept.setVisibility(View.VISIBLE);
@@ -315,45 +295,42 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                             binding.btnDecline.setText(getString(R.string.cancelled_by_seller));
                             binding.btnChat.setVisibility(View.GONE);
 
-                          //  binding.btnAccept.setVisibility(View.VISIBLE);
-                          ///  binding.btnAccept.setText(getString(R.string.re_order));
+                            //  binding.btnAccept.setVisibility(View.VISIBLE);
+                            ///  binding.btnAccept.setText(getString(R.string.re_order));
 
-                        }
-
-                        else if(model.getResult().getStatus().equals("Cancelled_by_user")){
+                        } else if (model.getResult().getStatus().equals("Cancelled_by_user")) {
                             binding.llButtons.setVisibility(View.VISIBLE);
                             binding.tvAfaryCode.setVisibility(View.GONE);
                             binding.btnAccept.setVisibility(View.VISIBLE);
                             binding.btnAccept.setText(getString(R.string.re_order));
                             binding.btnDecline.setVisibility(View.VISIBLE);
-                            binding.btnDecline.setText(getString(R.string.cancelled));                            binding.btnChat.setVisibility(View.GONE);
+                            binding.btnDecline.setText(getString(R.string.cancelled));
+                            binding.btnChat.setVisibility(View.GONE);
                             binding.btnChat.setVisibility(View.GONE);
 
                         }
-
 
 
                         taxN1 = model.getResult().getTaxN1();
                         taxN2 = model.getResult().getTaxN2();
                         platFormsFees = model.getResult().getPlatFormsFees();
                         deliveryFees = model.getResult().getDeliveryCharges();
-                        totalPriceToToPay = parseFrenchNumber( model.getResult().getTotalAmount())+"";
-                        subTotal =   totalPriceToToPay;//totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
+                        totalPriceToToPay = parseFrenchNumber(model.getResult().getTotalAmount()) + "";
+                        subTotal = totalPriceToToPay;//totalPriceToToPay - (taxN1+taxN2+platFormsFees+deliveryFees);
 
-                     //   subTotal =  Double.parseDouble(model.getResult().getPrice());  // - deliveryFees;
+                        //   subTotal =  Double.parseDouble(model.getResult().getPrice());  // - deliveryFees;
 
-                     //   totalPriceToToPay = Double.parseDouble(model.getResult().getPrice())
-                     //           + Double.parseDouble(model.getResult().getPlatFormsFees())
-                     //           + Double.parseDouble(model.getResult().getDeliveryCharges())
-                     //           + Double.parseDouble(model.getResult().getTaxN1())
-                     //           + Double.parseDouble(model.getResult().getTaxN2());
+                        //   totalPriceToToPay = Double.parseDouble(model.getResult().getPrice())
+                        //           + Double.parseDouble(model.getResult().getPlatFormsFees())
+                        //           + Double.parseDouble(model.getResult().getDeliveryCharges())
+                        //           + Double.parseDouble(model.getResult().getTaxN1())
+                        //           + Double.parseDouble(model.getResult().getTaxN2());
 
 
-
-                        binding.plateformFees.setText("FCFA" +  platFormsFees);
-                        binding.tvTax1.setText("FCFA" +  taxN1);
-                        binding.tvtax2.setText("FCFA" +  taxN2);
-                        binding.tvDelivery.setText("FCFA" +  deliveryFees);
+                        binding.plateformFees.setText("FCFA" + platFormsFees);
+                        binding.tvTax1.setText("FCFA" + taxN1);
+                        binding.tvtax2.setText("FCFA" + taxN2);
+                        binding.tvDelivery.setText("FCFA" + deliveryFees);
                         binding.tvTotalAmt.setText("FCFA" + totalPriceToToPay);
                         binding.subTotal.setText("FCFA" + subTotal);
 
@@ -367,49 +344,41 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                                 else {
                                     arrayList.add(model.getResult().getProductList().get(i));
                                 }*/
-                           // }
+                            // }
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
 
                         itemsAdapter.notifyDataSetChanged();
 
-                        if(!jsonObject.getJSONObject("result").getString("address").isEmpty()){
-                            if(model.getResult().getSelfCollect().equals("Yes")) {
+                        if (!jsonObject.getJSONObject("result").getString("address").isEmpty()) {
+                            if (model.getResult().getSelfCollect().equals("Yes")) {
                                 binding.llDeliveryAddress.setVisibility(View.GONE);
-                            }else
-                            {
+                            } else {
                                 binding.llDeliveryAddress.setVisibility(View.VISIBLE);
                                 binding.tvDeliveryAddress.setText(jsonObject.getJSONObject("result").getString("address"));
                             }
-                        }
-                        else {
+                        } else {
                             binding.llDeliveryAddress.setVisibility(View.GONE);
 
                         }
 
-                        if(!jsonObject.getJSONObject("result").isNull("delivery_progress")){
+                        if (!jsonObject.getJSONObject("result").isNull("delivery_progress")) {
                             binding.rvOrderStatus.setVisibility(View.VISIBLE);
                             binding.rvOrderStatus.setAdapter(new OrderStatusAdapter(OrderDetailsAct.this, (ArrayList<OrderDetailsModel.Result.DeliveryProgress>) model.getResult().getDeliveryProgress()));
-                        }
-                        else {
+                        } else {
                             binding.rvOrderStatus.setVisibility(View.GONE);
                         }
-                    }
-
-                    else if (jsonObject.getString("status").equals("5")) {
+                    } else if (jsonObject.getString("status").equals("5")) {
                         // Toast.makeText(getContext(), "No Data Found !!!!", Toast.LENGTH_SHORT).show();
 
                         PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
 
-                    }
-
-
-                    else {
+                    } else {
                         arrayList.clear();
                         itemsAdapter.notifyDataSetChanged();
 
@@ -433,7 +402,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.User_id, ""));
         map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
-        map.put("country_id",PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
+        map.put("country_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
 
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
@@ -453,17 +422,14 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
                     if (data.status.equals("1")) {
 
-                       userName = data.getResult().userName;
-                       userImg = data.getResult().image;
+                        userName = data.getResult().userName;
+                        userImg = data.getResult().image;
                         userId = data.getResult().id;
 
 
-
                     } else if (data.status.equals("0")) {
-                       // Toast.makeText(OrderDetailsAct.this, data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
-                    }
-
-                    else if (data.status.equals("5")) {
+                        // Toast.makeText(OrderDetailsAct.this, data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
+                    } else if (data.status.equals("5")) {
                         PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -485,8 +451,8 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
     private void GetSellerProfileAPI(String id) {
         Map<String, String> map = new HashMap<>();
-        map.put("user_id",id);
-        map.put("country_id",PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
+        map.put("user_id", id);
+        map.put("country_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.countryId, ""));
 
         Call<GetProfileModal> loginCall = apiInterface.get_profile(map);
 
@@ -511,7 +477,6 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                         sellerId = data.getResult().id;
 
 
-
                     } else if (data.status.equals("0")) {
                         // Toast.makeText(OrderDetailsAct.this, data.message /*getString(R.string.wrong_username_password)*/, Toast.LENGTH_SHORT).show();
                     }
@@ -530,62 +495,103 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
     }
 
 
-   private void  cancelOrderByUser(){
-           DataManager.getInstance().showProgressMessage(this, "Please wait...");
-           Map<String,String> headerMap = new HashMap<>();
-           headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token,""));
-           headerMap.put("Accept","application/json");
+    private void cancelOrderByUser() {
+        DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
-           Map<String, String> map = new HashMap<>();
-           map.put("order_id", orderId);
-       map.put("user_id", model.getResult().getUserId());
-       map.put("seller_id", model.getResult().getSellerId());
-       map.put("status", "Cancelled_by_user");
-       map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
+        Map<String, String> map = new HashMap<>();
+        map.put("order_id", orderId);
+        map.put("user_id", model.getResult().getUserId());
+        map.put("seller_id", model.getResult().getSellerId());
+        map.put("status", "Cancelled_by_user");
+        map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
 
-       Log.e(TAG, "Order Cancel Request" + map);
-           Call<ResponseBody> loginCall = apiInterface.cancelOrderByUserApi(headerMap,map);
-           loginCall.enqueue(new Callback<ResponseBody>() {
+        Log.e(TAG, "Order Cancel Request" + map);
+        Call<ResponseBody> loginCall = apiInterface.cancelOrderByUserApi(headerMap, map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
 
-               @Override
-               public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                   DataManager.getInstance().hideProgressMessage();
+                DataManager.getInstance().hideProgressMessage();
 
-                   try {
-                       String stringResponse = response.body().string();
-                       JSONObject jsonObject = new JSONObject(stringResponse);
-                       Log.e("response===", response.body().string());
-                       if (jsonObject.getString("status").equals("1")) {
-                           Toast.makeText(OrderDetailsAct.this, "Order Cancelled...", Toast.LENGTH_SHORT).show();
-                           finish();
-                       }
-
-                       else if (jsonObject.getString("status").equals("5")) {
-                           PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
-                           startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                          finish();
-                       }
+                try {
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    Log.e("response===", response.body().string());
+                    if (jsonObject.getString("status").equals("1")) {
+                        informDeliveryOrderCancelByUser();
+                    } else if (jsonObject.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
 
 
-                   } catch (Exception e) {
-                       e.printStackTrace();
-                   }
-               }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-               @Override
-               public void onFailure(Call<ResponseBody> call, Throwable t) {
-                   call.cancel();
-                   DataManager.getInstance().hideProgressMessage();
-               }
-           });
-       }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
 
-    private void deleteItemByUser(String orderId){
+    private void informDeliveryOrderCancelByUser() {
+        DataManager.getInstance().showProgressMessage(this, getString(R.string.please_wait));
+
+        Map<String, String> map = new HashMap<>();
+        map.put("common_order_id", orderId);
+
+        Log.e(TAG, "delivery person inform order Cancel Request" + map);
+        Call<ResponseBody> loginCall = apiInterface.deliveryPersonInformOrderCancelApi( map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String stringResponse = response.body().string();
+                    JSONObject jsonObject = new JSONObject(stringResponse);
+                    Log.e("delivery person inform order Cancel response===", stringResponse);
+                    if (jsonObject.getString("status").equals("OK")) {
+                        Toast.makeText(OrderDetailsAct.this, getString(R.string.order_cancelled), Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else if (jsonObject.getString("status").equals("5")) {
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
+
+
+    private void deleteItemByUser(String orderId) {
         DataManager.getInstance().showProgressMessage(this, "Please wait...");
-        Map<String,String> headerMap = new HashMap<>();
-        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token,""));
-        headerMap.put("Accept","application/json");
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
 
         Map<String, String> map = new HashMap<>();
         map.put("order_id", orderId);
@@ -593,7 +599,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         map.put("register_id", PreferenceConnector.readString(OrderDetailsAct.this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Delete Item Request" + map);
-        Call<ResponseBody> loginCall = apiInterface.deleteItemByUserApi (headerMap,map);
+        Call<ResponseBody> loginCall = apiInterface.deleteItemByUserApi(headerMap, map);
         loginCall.enqueue(new Callback<ResponseBody>() {
 
             @Override
@@ -608,9 +614,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     if (jsonObject.getString("status").equals("1")) {
                         Toast.makeText(OrderDetailsAct.this, "Item deleted...", Toast.LENGTH_SHORT).show();
                         callOrderDetail();
-                    }
-
-                    else if (jsonObject.getString("status").equals("5")) {
+                    } else if (jsonObject.getString("status").equals("5")) {
                         PreferenceConnector.writeString(OrderDetailsAct.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(OrderDetailsAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         finish();
@@ -630,9 +634,6 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
     }
 
 
-
-
-
     private void alertCancelOrder() {
         AlertDialog.Builder builder = new AlertDialog.Builder(OrderDetailsAct.this);
         builder.setMessage(getString(R.string.are_you_sure_you_want_to_refuse_order))
@@ -641,8 +642,10 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
-                        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) cancelOrderByUser();
-                        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                        if (NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this))
+                            cancelOrderByUser();
+                        else
+                            Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                     }
                 }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -668,8 +671,10 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
 
-                        if(NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this)) deleteItemByUser(orderId);
-                        else Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                        if (NetworkAvailablity.checkNetworkStatus(OrderDetailsAct.this))
+                            deleteItemByUser(orderId);
+                        else
+                            Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
                 }).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
                     @Override
@@ -689,7 +694,6 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
     public void onItem(int position, OrderDetailsModel.Result.Product product) {
         alertDeleteItem(product.getOrderId());
     }
-
 
 
     private void addReOrder(String orderId) {
@@ -715,9 +719,9 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Re- Order RESPONSE" + object);
                     if (object.getString("status").equals("1")) {
-                         startActivity(new Intent(OrderDetailsAct.this, CardAct.class)
-                                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                         finish();
+                        startActivity(new Intent(OrderDetailsAct.this, CardAct.class)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
                     } else if (object.getString("status").equals("0")) {
                         Toast.makeText(OrderDetailsAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                     } else if (object.getString("status").equals("5")) {
