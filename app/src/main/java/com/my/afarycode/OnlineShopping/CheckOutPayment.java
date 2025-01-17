@@ -662,14 +662,17 @@ public class CheckOutPayment extends AppCompatActivity {
                 mDialog.dismiss();
                 //  if(!anotherPersonId.equalsIgnoreCase(""))
                 String number ="";
+                String type="";
                  if(isValidPhoneNumber(edNumber.getText().toString())){
                      number = ccp.getSelectedCountryCode() + "-" + edNumber.getText().toString();
+                     type ="mobile";
                  }
                  else if(isValidEmail(edNumber.getText().toString())){
                      number =  edNumber.getText().toString();
+                     type="email";
                  }
 
-             if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))   checkUserExit(number);
+             if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))   checkUserExit(number,type);
              else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
@@ -692,7 +695,7 @@ public class CheckOutPayment extends AppCompatActivity {
     }
 
 
-    private void checkUserExit(String number) {
+    private void checkUserExit(String number,String type) {
         //binding.loader.setVisibility(View.VISIBLE);
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
         Map<String, String> headerMap = new HashMap<>();
@@ -703,6 +706,8 @@ public class CheckOutPayment extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
         map.put("identity", number);
+        map.put("type_by", type);
+
 
         Log.e("MapMap", "Check user Exit Request" + map);
 
@@ -718,7 +723,7 @@ public class CheckOutPayment extends AppCompatActivity {
                     Log.e(TAG, "Check user Exit RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         anotherPersonId = object.getJSONObject("data").getString("id");
-                        if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))  sendLinkAnotherPerson(anotherPersonId);
+                        if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))  sendLinkAnotherPerson(anotherPersonId,type);
                         else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
@@ -768,7 +773,7 @@ public class CheckOutPayment extends AppCompatActivity {
 */
 
 
-    private void sendLinkAnotherPerson(String anotherPersonId) {
+    private void sendLinkAnotherPerson(String anotherPersonId,String type) {
         //binding.loader.setVisibility(View.VISIBLE);
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
         Map<String, String> headerMap = new HashMap<>();
@@ -781,6 +786,9 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("other_user_id", anotherPersonId);
         map.put("delivery_calculation", insertDeliveryId);
         map.put("payment_link", createDeepLink(""));
+        map.put("type_by", type);
+        map.put("value", type);
+
         Log.e("MapMap", "Send Invoice anotherPerson Request" + map);
 
         Call<ResponseBody> loginCall = apiInterface.sendInvoiceAnotherApi(headerMap, map);
