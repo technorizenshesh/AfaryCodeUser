@@ -404,6 +404,7 @@
     <string name="shipping_agency_fees">Shipping agency fees</string>
     <string name="we_do_not_available_on_this_city">we don\'t available on this city</string>
     <string name="order_cancelled">Order Cancelled...</string>
-
+    <string name="transit">Transit</string>
+    <string name="reached_to_shipping_company">Reached to Shipping Company</string>
 
 </resources>

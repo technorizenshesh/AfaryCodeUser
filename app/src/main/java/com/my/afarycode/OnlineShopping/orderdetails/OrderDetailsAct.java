@@ -102,7 +102,11 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                     addReOrder(orderId);
                 else
                     Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
-            } else {
+            }
+
+
+            else {
+/*
                 if (model != null) {
                     if (model.getResult().getStatus().equals("Accepted") || model.getResult().getStatus().equalsIgnoreCase("PickedUp")) {
                         PreferenceConnector.writeString(OrderDetailsAct.this, "afaryCode", model.getResult().getAfaryCode());
@@ -111,6 +115,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
                                 .putExtra("orderDetails", model.getResult()));
                     }
                 }
+*/
             }
 
         });
@@ -211,105 +216,217 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
 
                         }
 
-                        if (model.getResult().getStatus().equals("Pending")) {
-                            binding.llButtons.setVisibility(View.VISIBLE);
-                            binding.btnAccept.setText(getString(R.string.accept));
-                            binding.btnAccept.setVisibility(View.GONE);
-                            binding.tvAfaryCode.setVisibility(View.GONE);
-                            binding.rlDeliveryPerson.setVisibility(View.GONE);
-                            binding.btnDecline.setVisibility(View.VISIBLE);
+                        if(model.getResult().getDeliveryType().equals("INTERNATIONAL")){
 
-
-                        } else if (model.getResult().getStatus().equals("Accepted_by_admin")) {
-                            binding.llButtons.setVisibility(View.VISIBLE);
-                            binding.btnAccept.setText(getString(R.string.accept));
-                            binding.btnAccept.setVisibility(View.GONE);
-                            binding.tvAfaryCode.setVisibility(View.GONE);
-                            binding.rlDeliveryPerson.setVisibility(View.GONE);
-                            binding.btnDecline.setVisibility(View.VISIBLE);
-
-                        } else if (model.getResult().getStatus().equals("Accepted")) {
-                            binding.btnDecline.setVisibility(View.VISIBLE);
-                            if (model.getResult().getSelfCollect().equals("Yes")) {
+                            if (model.getResult().getStatus().equals("Pending")) {
                                 binding.llButtons.setVisibility(View.VISIBLE);
-                                binding.btnAccept.setVisibility(View.GONE);
-                                binding.tvAfaryCode.setVisibility(View.VISIBLE);
-                                binding.rlDeliveryPerson.setVisibility(View.GONE);
-                                binding.tvAfaryCode.setText(model.getResult().getCutomer_afary_code());
-
-                            } else {
-                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.accept));
                                 binding.btnAccept.setVisibility(View.GONE);
                                 binding.tvAfaryCode.setVisibility(View.GONE);
                                 binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+
+
                             }
 
-
-                        } else if (model.getResult().getStatus().equals("PickedUp")) {
-                            binding.llButtons.setVisibility(View.VISIBLE);
-                            binding.btnAccept.setVisibility(View.GONE);
-                            binding.tvAfaryCode.setVisibility(View.VISIBLE);
-                            binding.btnDecline.setVisibility(View.VISIBLE);
-                            binding.btnChat.setVisibility(View.GONE);
-                            //binding.btnAccept.setText(getString(R.string.track_order));
-                            //   binding.btnAccept.setText(getString(R.string.re_order));
-                            binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
-
-                            if (jsonObject.getJSONObject("result").isNull("delivery_person")) { //    model.getResult().getDeliveryPerson()==null){
+                            else if (model.getResult().getStatus().equals("Accepted_by_admin")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.accept));
+                                binding.btnAccept.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
                                 binding.rlDeliveryPerson.setVisibility(View.GONE);
-                            } else {
-                                binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
-                                binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered) + " " + Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
-                                        " " + model.getResult().getDeliveryPerson().getDeliveryPersonNumber() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+
                             }
-                        } else if (model.getResult().getStatus().equals("Completed")) {
-                            binding.llButtons.setVisibility(View.VISIBLE);
-                            binding.btnAccept.setVisibility(View.VISIBLE);
-                            binding.tvAfaryCode.setVisibility(View.VISIBLE);
-                            binding.btnDecline.setVisibility(View.GONE);
-                            binding.btnChat.setVisibility(View.GONE);
-                            binding.btnAccept.setText(getString(R.string.re_order));
-                            binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
 
-                            if (model.getResult().getSelfCollect().equals("Yes")) {
+                            else if (model.getResult().getStatus().equals("Accepted")) {
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+                                if (model.getResult().getSelfCollect().equals("Yes")) {
+                                    binding.llButtons.setVisibility(View.VISIBLE);
+                                    binding.btnAccept.setVisibility(View.GONE);
+                                    binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                                    binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                    binding.tvAfaryCode.setText(model.getResult().getCutomer_afary_code());
+
+                                } else {
+                                    binding.llButtons.setVisibility(View.VISIBLE);
+                                    binding.btnAccept.setVisibility(View.GONE);
+                                    binding.tvAfaryCode.setVisibility(View.GONE);
+                                    binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                }
+
+
+                            }
+
+                            else if (model.getResult().getStatus().equals("In_Transit")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.transit));
+                                binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setVisibility(View.GONE);
+                                binding.btnChat.setVisibility(View.GONE);
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setText(model.getResult().getCutomer_afary_code());
+
+
+                            }
+
+                            else if (model.getResult().getStatus().equals("Reached_shipping_company")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+                                binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setVisibility(View.GONE);
+                                binding.btnChat.setVisibility(View.GONE);
+                                binding.btnAccept.setText(getString(R.string.re_order));
+                                binding.tvAfaryCode.setText(model.getResult().getCutomer_afary_code());
                                 binding.rlDeliveryPerson.setVisibility(View.GONE);
 
-                            } else {
+                              /*  if (model.getResult().getSelfCollect().equals("Yes")) {
+
+                                } else {
+                                    if (jsonObject.getJSONObject("result").isNull("delivery_person")) { //    model.getResult().getDeliveryPerson()==null){
+                                        binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                    } else {
+                                        binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
+                                        binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered) + " " + Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                                " " + model.getResult().getDeliveryPerson().getDeliveryPersonNumber() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+
+                                        //  }
+                                    }
+                                }*/
+
+                            }
+
+                            else if (model.getResult().getStatus().equals("Cancelled")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.re_order));
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setText(getString(R.string.cancelled_by_seller));
+                                binding.btnChat.setVisibility(View.GONE);
+
+                                //  binding.btnAccept.setVisibility(View.VISIBLE);
+                                ///  binding.btnAccept.setText(getString(R.string.re_order));
+
+                            }
+
+                            else if (model.getResult().getStatus().equals("Cancelled_by_user")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.re_order));
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setText(getString(R.string.cancelled));
+                                binding.btnChat.setVisibility(View.GONE);
+                                binding.btnChat.setVisibility(View.GONE);
+
+                            }
+                        }
+
+                        else {
+
+
+                            if (model.getResult().getStatus().equals("Pending")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.accept));
+                                binding.btnAccept.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+
+
+                            } else if (model.getResult().getStatus().equals("Accepted_by_admin")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.accept));
+                                binding.btnAccept.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
+                                binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+
+                            } else if (model.getResult().getStatus().equals("Accepted")) {
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+                                if (model.getResult().getSelfCollect().equals("Yes")) {
+                                    binding.llButtons.setVisibility(View.VISIBLE);
+                                    binding.btnAccept.setVisibility(View.GONE);
+                                    binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                                    binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                    binding.tvAfaryCode.setText(model.getResult().getCutomer_afary_code());
+
+                                } else {
+                                    binding.llButtons.setVisibility(View.VISIBLE);
+                                    binding.btnAccept.setVisibility(View.GONE);
+                                    binding.tvAfaryCode.setVisibility(View.GONE);
+                                    binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                }
+
+
+                            } else if (model.getResult().getStatus().equals("PickedUp")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setVisibility(View.GONE);
+                                binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+                                binding.btnChat.setVisibility(View.GONE);
+                                //binding.btnAccept.setText(getString(R.string.track_order));
+                                //   binding.btnAccept.setText(getString(R.string.re_order));
+                                binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
+
                                 if (jsonObject.getJSONObject("result").isNull("delivery_person")) { //    model.getResult().getDeliveryPerson()==null){
                                     binding.rlDeliveryPerson.setVisibility(View.GONE);
                                 } else {
                                     binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
                                     binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered) + " " + Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
                                             " " + model.getResult().getDeliveryPerson().getDeliveryPersonNumber() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
-
-                                    //  }
                                 }
+                            } else if (model.getResult().getStatus().equals("Completed")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+                                binding.tvAfaryCode.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setVisibility(View.GONE);
+                                binding.btnChat.setVisibility(View.GONE);
+                                binding.btnAccept.setText(getString(R.string.re_order));
+                                binding.tvAfaryCode.setText(model.getResult().getDeliveryPerson().getCutomerAfaryCode());
+
+                                if (model.getResult().getSelfCollect().equals("Yes")) {
+                                    binding.rlDeliveryPerson.setVisibility(View.GONE);
+
+                                } else {
+                                    if (jsonObject.getJSONObject("result").isNull("delivery_person")) { //    model.getResult().getDeliveryPerson()==null){
+                                        binding.rlDeliveryPerson.setVisibility(View.GONE);
+                                    } else {
+                                        binding.rlDeliveryPerson.setVisibility(View.VISIBLE);
+                                        binding.tvDeliveryPerson.setText(getString(R.string.person_to_be_delivered) + " " + Html.fromHtml("<font color='#000'>" + "<b>" + model.getResult().getDeliveryPerson().getDeliveryPersonName() +
+                                                " " + model.getResult().getDeliveryPerson().getDeliveryPersonNumber() + "</b>" + " the delivery person is on his way to you. Thanks" + "</font>"));
+
+                                        //  }
+                                    }
+                                }
+
+                            } else if (model.getResult().getStatus().equals("Cancelled")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.re_order));
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setText(getString(R.string.cancelled_by_seller));
+                                binding.btnChat.setVisibility(View.GONE);
+
+                                //  binding.btnAccept.setVisibility(View.VISIBLE);
+                                ///  binding.btnAccept.setText(getString(R.string.re_order));
+
+                            } else if (model.getResult().getStatus().equals("Cancelled_by_user")) {
+                                binding.llButtons.setVisibility(View.VISIBLE);
+                                binding.tvAfaryCode.setVisibility(View.GONE);
+                                binding.btnAccept.setVisibility(View.VISIBLE);
+                                binding.btnAccept.setText(getString(R.string.re_order));
+                                binding.btnDecline.setVisibility(View.VISIBLE);
+                                binding.btnDecline.setText(getString(R.string.cancelled));
+                                binding.btnChat.setVisibility(View.GONE);
+                                binding.btnChat.setVisibility(View.GONE);
+
                             }
 
-                        } else if (model.getResult().getStatus().equals("Cancelled")) {
-                            binding.llButtons.setVisibility(View.VISIBLE);
-                            binding.tvAfaryCode.setVisibility(View.GONE);
-                            binding.btnAccept.setVisibility(View.VISIBLE);
-                            binding.btnAccept.setText(getString(R.string.re_order));
-                            binding.btnDecline.setVisibility(View.VISIBLE);
-                            binding.btnDecline.setText(getString(R.string.cancelled_by_seller));
-                            binding.btnChat.setVisibility(View.GONE);
-
-                            //  binding.btnAccept.setVisibility(View.VISIBLE);
-                            ///  binding.btnAccept.setText(getString(R.string.re_order));
-
-                        } else if (model.getResult().getStatus().equals("Cancelled_by_user")) {
-                            binding.llButtons.setVisibility(View.VISIBLE);
-                            binding.tvAfaryCode.setVisibility(View.GONE);
-                            binding.btnAccept.setVisibility(View.VISIBLE);
-                            binding.btnAccept.setText(getString(R.string.re_order));
-                            binding.btnDecline.setVisibility(View.VISIBLE);
-                            binding.btnDecline.setText(getString(R.string.cancelled));
-                            binding.btnChat.setVisibility(View.GONE);
-                            binding.btnChat.setVisibility(View.GONE);
-
                         }
-
 
                         taxN1 = model.getResult().getTaxN1();
                         taxN2 = model.getResult().getTaxN2();

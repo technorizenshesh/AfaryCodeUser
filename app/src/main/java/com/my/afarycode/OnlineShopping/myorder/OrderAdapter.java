@@ -114,7 +114,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
         }
 
-       else if(arrayList.get(position).getStatus().equals("Accepted")){
+       else if(arrayList.get(position).getStatus().equals("Accepted")
+        ){
 
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
             holder.binding.orderStatus.setText(arrayList.get(position).getStatus());
@@ -125,6 +126,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
 
         }
 
+        else if(arrayList.get(position).getStatus().equals("In_Transit")
+        ){
+
+            holder.binding.orderStatus.setVisibility(View.VISIBLE);
+            holder.binding.orderStatus.setText(context.getString(R.string.transit));
+            holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.colorGreen));
+            holder.binding.btnCancel.setVisibility(View.GONE);
+            holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.white));
+
+        }
 
         else if(arrayList.get(position).getStatus().equals("Cancelled")){
             holder.binding.orderStatus.setVisibility(View.VISIBLE);
@@ -142,6 +153,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.MyViewHolder
             holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.red));
             holder.binding.btnCancel.setVisibility(View.GONE);
             holder.binding.mainCard.setCardBackgroundColor(context.getColor(R.color.colorGray));
+
+        }
+
+
+        else if(arrayList.get(position).getStatus().equals("Reached_shipping_company")){
+            holder.binding.btnCancel.setVisibility(View.GONE);
+            holder.binding.orderStatus.setVisibility(View.VISIBLE);
+            holder.binding.orderStatus.setText(context.getString(R.string.reached_to_shipping_company));
+            holder.binding.orderStatus.setBackgroundColor(context.getColor(R.color.colorGreen));
 
         }
 

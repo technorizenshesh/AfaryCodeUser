@@ -51,7 +51,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.binding.viewColor.setBackgroundColor(context.getColor(R.color.red));
         }
 
-        else  if(arrayList.get(position).getObst_status().equals("SHIPPING")){
+        else  if(arrayList.get(position).getObst_status().equals("SHIPPING") || arrayList.get(position).getObst_status().equals("INTRANSIT")){
             holder.binding.tvStatus.setTextColor(context.getColor(R.color.purple_700));
             holder.binding.tvDateTime.setTextColor(context.getColor(R.color.purple_700));
             holder.binding.viewColor.setBackgroundColor(context.getColor(R.color.purple_700));
@@ -63,6 +63,13 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             holder.binding.viewColor.setBackgroundColor(context.getColor(R.color.colorGreen));
         }
 
+        else  if(arrayList.get(position).getObst_status().equals("REACHED_SHIPPING_COMPANY") ){
+            holder.binding.tvStatus.setText(context.getString(R.string.reached_to_shipping_company));
+
+            holder.binding.tvStatus.setTextColor(context.getColor(R.color.colorGreen));
+            holder.binding.tvDateTime.setTextColor(context.getColor(R.color.colorGreen));
+            holder.binding.viewColor.setBackgroundColor(context.getColor(R.color.colorGreen));
+        }
 
     }
 

@@ -1598,6 +1598,20 @@ public class OrderDetailsModel implements Serializable {
         @Expose
         private String cutomer_afary_code;
 
+
+        @SerializedName("delivery_type")
+        @Expose
+        private String deliveryType;
+
+        public String getDeliveryType() {
+            return deliveryType;
+        }
+
+        public void setDeliveryType(String deliveryType) {
+            this.deliveryType = deliveryType;
+        }
+
+
         public String getCutomer_afary_code() {
             return cutomer_afary_code;
         }

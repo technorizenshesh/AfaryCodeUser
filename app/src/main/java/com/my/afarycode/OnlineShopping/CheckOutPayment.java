@@ -250,6 +250,8 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("sub_orderdata", sendToServer);
         map.put("datetime", DataManager.getCurrent());
         map.put("self_collect", deliveryYesNo);
+        map.put("delivery_type", orderType);
+
 
         Log.e("MapMap", "payment_params" + map);
 
@@ -441,6 +443,8 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("sub_orderdata", sendToServer);
         map.put("datetime", DataManager.getCurrent());
         map.put("self_collect", deliveryYesNo);
+        map.put("delivery_type", orderType);
+
 
         Log.e("MapMap", "payment_params" + map);
 
@@ -723,7 +727,7 @@ public class CheckOutPayment extends AppCompatActivity {
                     Log.e(TAG, "Check user Exit RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         anotherPersonId = object.getJSONObject("data").getString("id");
-                        if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))  sendLinkAnotherPerson(anotherPersonId,type);
+                        if(NetworkAvailablity.checkNetworkStatus(CheckOutPayment.this))  sendLinkAnotherPerson(anotherPersonId,number,type);
                         else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
@@ -773,7 +777,7 @@ public class CheckOutPayment extends AppCompatActivity {
 */
 
 
-    private void sendLinkAnotherPerson(String anotherPersonId,String type) {
+    private void sendLinkAnotherPerson(String anotherPersonId,String number,String type) {
         //binding.loader.setVisibility(View.VISIBLE);
         DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
         Map<String, String> headerMap = new HashMap<>();
@@ -787,7 +791,7 @@ public class CheckOutPayment extends AppCompatActivity {
         map.put("delivery_calculation", insertDeliveryId);
         map.put("payment_link", createDeepLink(""));
         map.put("type_by", type);
-        map.put("value", type);
+        map.put("value", number);
 
         Log.e("MapMap", "Send Invoice anotherPerson Request" + map);
 

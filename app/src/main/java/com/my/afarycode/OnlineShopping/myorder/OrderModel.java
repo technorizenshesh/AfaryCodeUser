@@ -349,6 +349,19 @@ public class OrderModel {
         @Expose
         private String dateTime;
 
+        @SerializedName("delivery_type")
+        @Expose
+        private String deliveryType;
+
+        public String getDeliveryType() {
+            return deliveryType;
+        }
+
+        public void setDeliveryType(String deliveryType) {
+            this.deliveryType = deliveryType;
+        }
+
+
        /* @SerializedName("item_amount")
         @Expose
         private String price;*/
