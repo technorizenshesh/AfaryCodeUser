@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -111,8 +112,35 @@ public class CountryBottomSheet extends BottomSheetDialogFragment implements onP
         });
 
 
+
+
         return dialog;
     }
+
+
+    private boolean isKeyboardVisible(View rootView) {
+        Rect rect = new Rect();
+        rootView.getWindowVisibleDisplayFrame(rect);
+        int screenHeight = rootView.getHeight();
+        int keypadHeight = screenHeight - rect.bottom;
+        return keypadHeight > screenHeight * 0.15; // Adjust based on your preference
+    }
+
+    // Method to manually show the keyboard
+    public void showKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    // Method to manually hide the keyboard
+    public void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+
+
 
     private void initBinding() {
 
