@@ -406,5 +406,8 @@
     <string name="order_cancelled">Order Cancelled...</string>
     <string name="transit">Transit</string>
     <string name="reached_to_shipping_company">Reached to Shipping Company</string>
+    <string name="email_already_exits">email already exits</string>
+    <string name="mobile_number_already_exits">mobile number already exits</string>
+    <string name="invalid_otp">Invalid OTP</string>
 
 </resources>

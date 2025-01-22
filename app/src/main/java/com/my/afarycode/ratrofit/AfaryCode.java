@@ -525,7 +525,13 @@ public interface AfaryCode {
     Call<ResponseBody> deliveryPersonInformOrderCancelApi( @FieldMap Map<String, String> params);
 
 
+    @FormUrlEncoded
+    @POST("check_email_already_exist")
+    Call<ResponseBody> checkEmailExitApi( @FieldMap Map<String, String> params);
 
+    @FormUrlEncoded
+    @POST("check_country_code_with_mobile_exist")
+    Call<ResponseBody> checkNumberExitApi( @FieldMap Map<String, String> params);
 
 
 }

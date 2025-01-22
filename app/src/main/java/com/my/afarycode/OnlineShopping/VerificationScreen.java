@@ -46,7 +46,7 @@ public class VerificationScreen extends AppCompatActivity {
     private static final long TIMER_DURATION = 60000; // 1 minute in milliseconds
     private static final long TIMER_INTERVAL = 1000;  // 1 second interval
     private int resendButtonCount=0;
-
+    private int checkOtp=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +58,7 @@ public class VerificationScreen extends AppCompatActivity {
 
 
     private void SetupUI() {
+
         if(getIntent()!=null){
            // userId = getIntent().getStringExtra("user_id");
            // mobile = getIntent().getStringExtra("mobile");
@@ -80,7 +81,8 @@ public class VerificationScreen extends AppCompatActivity {
             binding.description.setText(getString(R.string.otp_text1) + " "+ "+" +countryCode +mobile +" " + getString(R.string.otp_text2));
         }
 
-        /* mobile = "9755463923";
+
+   /*      mobile = "9755463923";
         countryCode = "+91";
         binding.description.setText(getString(R.string.otp_text1) + " " +countryCode +mobile +" " + getString(R.string.otp_text2));*/
 
@@ -306,9 +308,13 @@ public class VerificationScreen extends AppCompatActivity {
                         else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                     } else if (jsonObject.getString("status").equals("0")) {
-                        Toast.makeText(VerificationScreen.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                        if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))  sendVerificationCode(mobile,countryCode);
-                        else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                        checkOtp++;
+                        if (checkOtp>=2){
+                            binding.rlResendOtp.setVisibility(View.GONE);
+                        }
+                        Toast.makeText(VerificationScreen.this, getString(R.string.invalid_otp), Toast.LENGTH_LONG).show();
+                      //  if(NetworkAvailablity.checkNetworkStatus(VerificationScreen.this))  sendVerificationCode(mobile,countryCode);
+                     //   else Toast.makeText(VerificationScreen.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
