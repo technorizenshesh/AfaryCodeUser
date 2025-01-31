@@ -308,6 +308,13 @@ public interface AfaryCode {
     @POST("get_country")
     Call<ResponseBody> getAllCountry(@HeaderMap Map<String, String> auth);
 
+    @FormUrlEncoded
+    @POST("get_states")
+    Call<ResponseBody> getAllState(@FieldMap Map<String, String> auth);
+
+
+
+
 
     @FormUrlEncoded
     @POST("add_address")

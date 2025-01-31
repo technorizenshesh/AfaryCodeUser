@@ -765,6 +765,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
+
+                    // Delivery and Availibitly both are not available
                     if (object.optString("status").equals("1")) {
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
@@ -772,11 +774,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                     }
 
+                    // 'Delivery and Availibitly Both are Available
                     else if (object.getString("status").equals("2")) {
                         binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
                     }
 
 
+                    // Delivery are not available but Availibitly are available
                     else if (object.getString("status").equals("3")) {
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
@@ -784,10 +788,21 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                     }
 
+
+                    // Delivery are available but Availibitly are not available
                     else if (object.getString("status").equals("4")) {
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
-                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_deliver_on_this_country),object.getString("status"));
+                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.this_country_cannot_be_delivered),object.getString("status"));
+                    }
+
+
+
+                    // Delivery and Availibitly Both are Available But City not available
+                    else if (object.getString("status").equals("5")) {
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_available_on_this_city),object.getString("status"));
                     }
 
 

@@ -30,6 +30,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
+import com.my.afarycode.OnlineShopping.Model.StateModel;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
@@ -65,10 +66,14 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
     double latitude = 0.0, longitude = 0.0;
     int AUTOCOMPLETE_REQUEST_CODE_ADDRESS = 101;
     AfaryCode apiInterface;
-    String address = "", city = "",addressType="",title="",categoryId="",countryId="";
+    String address = "", city = "",addressType="",title="",categoryId="",countryId="",stateId="";
     addAddressListener listener;
 
     ArrayList<CountryModel.Result> countryArrayList;
+
+    ArrayList<StateModel.Result> stateArrayList;
+
+
 
     public AddAddressFragment(String title,String categoryId) {
         this.title = title;
@@ -102,6 +107,8 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
 
     private void initBinding() {
         countryArrayList = new ArrayList<>();
+        stateArrayList = new ArrayList<>();
+
         tvArea = dialog.findViewById(R.id.tvArea);
         tv1 = dialog.findViewById(R.id.tv1);
         v1 = dialog.findViewById(R.id.View1);
@@ -158,9 +165,16 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         });
 
         binding.etCountry.setOnClickListener(v -> {
-            if (countryArrayList.size() > 0)
+            if (!countryArrayList.isEmpty())
                 showDropDownCountry(v, binding.etCountry, countryArrayList);
         });
+
+
+        binding.etState.setOnClickListener(v -> {
+            if (!stateArrayList.isEmpty())
+                showDropDownState(v, binding.etState, stateArrayList);
+        });
+
 
 
 
@@ -341,6 +355,7 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         map.put("lat",latitude+"");
         map.put("lon",longitude+"");
         map.put("country",countryId /*binding.etCountry.getText().toString()*/);
+        map.put("state",stateId /*binding.etCountry.getText().toString()*/);
         map.put("zip", binding.etPostCode.getText().toString());
         map.put("city", binding.etTown.getText().toString());
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
@@ -408,6 +423,8 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                                 countryArrayList.add(data.getResult().get(i));
                             }
                         }
+
+
                       //  countryArrayList.addAll(data.getResult());
                        Log.e("available country list===",countryArrayList.size()+"");
 
@@ -431,6 +448,57 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
 
     }
 
+    private void getAllState(String countryId) {
+        // DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("country_id", countryId);
+
+
+        Call<ResponseBody> chatCount = apiInterface.getAllState(map);
+        chatCount.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All State RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        StateModel stateModel = new Gson().fromJson(responseData, StateModel.class);
+                        stateArrayList.clear();
+                        stateArrayList.addAll(stateModel.getResult());
+                        stateId = stateArrayList.get(0).getId();
+                        binding.etState.setText(stateArrayList.get(0).getName());
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        stateArrayList.clear();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+
+
     private void showDropDownCountry(View v, TextView textView, List<CountryModel.Result> stringList) {
         PopupMenu popupMenu = new PopupMenu(getActivity(), v);
         for (int i = 0; i < stringList.size(); i++) {
@@ -441,6 +509,28 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             for (int i = 0; i < stringList.size(); i++) {
                 if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
                     countryId = stringList.get(i).getId();
+
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllState(countryId);
+                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                }
+            }
+            return true;
+        });
+        popupMenu.show();
+    }
+
+
+
+    private void showDropDownState(View v, TextView textView, List<StateModel.Result> stringList) {
+        PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+        for (int i = 0; i < stringList.size(); i++) {
+            popupMenu.getMenu().add(stringList.get(i).getName());
+        }
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            textView.setText(menuItem.getTitle());
+            for (int i = 0; i < stringList.size(); i++) {
+                if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
+                    stateId = stringList.get(i).getId();
 
                 }
             }

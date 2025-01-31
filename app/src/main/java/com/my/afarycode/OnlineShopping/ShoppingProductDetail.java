@@ -76,6 +76,7 @@ public class ShoppingProductDetail extends Fragment {
     private String productPrice;
     SliderAdapterExample adapter1;
     private ArrayList<String>banner_array_list;
+    boolean checkRead = false;
 
     @Nullable
     @Override
@@ -110,6 +111,23 @@ public class ShoppingProductDetail extends Fragment {
 
         });
 
+
+
+        binding.btnReadMore.setOnClickListener(view -> {
+          /*  if(checkRead==false){
+                binding.productDetails.setMaxLines(Integer.MAX_VALUE);//your TextView
+                checkRead = true;
+            }else {
+                binding.productDetails.setMaxLines(5);//your TextView
+                checkRead = false;
+
+            }*/
+
+            toggleText();
+
+        });
+
+
     /*    binding.llicon.setOnClickListener(v -> {
             Toast.makeText(getContext(), "chalalalla=====", Toast.LENGTH_SHORT).show();
 
@@ -127,6 +145,21 @@ public class ShoppingProductDetail extends Fragment {
         return binding.getRoot();
 
     }
+
+
+    private void toggleText() {
+        if (checkRead) {
+            // Collapse to one line
+            binding.productDetails.setMaxLines(1);
+            binding.btnReadMore.setText("READ MORE");
+        } else {
+            // Expand to five lines
+            binding.productDetails.setMaxLines(10);
+            binding.btnReadMore.setText("READ LESS");
+        }
+        checkRead = !checkRead; // Toggle the state
+    }
+
 
     private void Add_To_Cart_API(String product_id, String restaurant_id, String productPrice) {
 

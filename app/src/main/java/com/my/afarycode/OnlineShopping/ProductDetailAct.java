@@ -191,7 +191,7 @@ public class ProductDetailAct extends AppCompatActivity implements MainClickList
             binding.btnReadMore.setText("READ MORE");
         } else {
             // Expand to five lines
-            binding.productDetails.setMaxLines(5);
+            binding.productDetails.setMaxLines(10);
             binding.btnReadMore.setText("READ LESS");
         }
         checkRead = !checkRead; // Toggle the state

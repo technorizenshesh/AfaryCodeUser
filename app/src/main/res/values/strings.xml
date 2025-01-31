@@ -409,5 +409,7 @@
     <string name="email_already_exits">email already exits</string>
     <string name="mobile_number_already_exits">mobile number already exits</string>
     <string name="invalid_otp">Invalid OTP</string>
+    <string name="state">State</string>
+    <string name="this_country_cannot_be_delivered">this country cannot be delivered</string>
 
 </resources>

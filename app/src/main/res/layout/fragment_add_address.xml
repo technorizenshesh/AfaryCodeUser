@@ -381,6 +381,43 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/state"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="@dimen/_11sdp"
+                        android:textDirection="locale"
+                        android:textAlignment="viewStart"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:textColor="@color/black"/>
+
+
+                    <TextView
+                        android:id="@+id/etState"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/state"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:textDirection="locale"
+                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"/>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_grey_two"
+                        android:layout_marginTop="@dimen/_5sdp"/>
+
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/postcode"
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"

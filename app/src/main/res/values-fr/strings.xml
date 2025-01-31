@@ -415,6 +415,9 @@
     <string name="email_already_exits">l\'e-mail existe déjà</string>
     <string name="mobile_number_already_exits">le numéro de mobile existe déjà</string>
     <string name="invalid_otp">OTP invalide</string>
+
+    <string name="state">État</string>
+    <string name="this_country_cannot_be_delivered">ce pays ne peut pas être livré</string>
 </resources>
 
 

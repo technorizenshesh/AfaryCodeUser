@@ -172,6 +172,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/_12sdp"
                     android:text=""
+                    android:maxLines="1"
                     />
 
 
@@ -180,12 +181,13 @@
                  android:layout_height="wrap_content"
                  android:layout_marginTop="@dimen/_3sdp">
                  <TextView
+                     android:id="@+id/btnReadMore"
                      android:layout_marginTop="@dimen/_5sdp"
                      android:layout_marginLeft="@dimen/_10sdp"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:text="@string/read_more"
-                     android:textColor="@color/black"
+                     android:textColor="@color/blue_circle"
                      android:textStyle="bold"
                      android:textSize="@dimen/_14sdp"
                      />
