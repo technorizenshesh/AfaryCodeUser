@@ -358,7 +358,7 @@
     <string name="result">Résultats</string>
     <string name="does_not_benificiary_account">Votre bénéficiaire ne dispose pas de portefeuille pour recevoir les fonds. envoyez-lui ce lien pour télécharger notre application. afficher le lien</string>
     <string name="we_do_not_available_on_this_country">Nous ne sommes pas disponibles dans ce pays</string>
-    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">Nous sommes disponibles dans ce pays mais vous récupérerez votre colis vous-même. Veuillez sélectionner CLIQUER et COLLECTER</string>
+    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">Nous sommes disponibles dans ce pays mais la livraison urbaine n\'est pas encore disponible pour votre ville. Vous récupérerez votre colis vous-même. Veuillez sélectionner l\'option CLICK AND COLLECT</string>
     <string name="we_do_not_deliver_on_this_country">Nous ne sommes pas disponibles dans ce pays</string>
     <string name="dear_customer">Cher client,</string>
     <string name="you_have_requested_delivery_with_cash_on_delivery_one_of_our">Vous avez demandé la livraison avec paiement à la livraison. Un de nos</string>
@@ -407,7 +407,7 @@
     <string name="this_shop_click_here">cette boutique en cliquant ici</string>
     <string name="please_select_delivery_agency">veuillez sélectionner l\'agence de livraison</string>
     <string name="shipping_agency_fees">Frais d\'agence de livraison</string>
-    <string name="we_do_not_available_on_this_city">nous ne sommes pas disponibles sur cette ville</string>
+    <string name="we_do_not_available_on_this_city">Nous ne sommes pas disponibles sur cette ville</string>
 
     <string name="order_cancelled">Commande annulée...</string>
     <string name="transit">Transport</string>
@@ -418,6 +418,12 @@
 
     <string name="state">État</string>
     <string name="this_country_cannot_be_delivered">ce pays ne peut pas être livré</string>
+
+
+    <string name="this_city_is_not_served">cette ville n\'est pas desservie</string>
+    <string name="update_billing_address">MISE À JOUR DE L\'ADRESSE DE FACTURATION</string>
+    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_from_shipping_agency">nous sommes disponibles dans ce pays mais la livraison urbaine n\'est pas encore disponible pour votre pays de destination. Vous récupérerez le colis à l\'adresse indiquée par l\'agence de transport.\n</string>
+    <string name="we_do_not_serve_this_city">Désolé, nous ne desservons pas votre ville pour le moment.</string>
 </resources>
 
 

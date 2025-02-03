@@ -69,6 +69,11 @@ public class LocationModel {
         @SerializedName("country")
         @Expose
         private String country;
+
+        @SerializedName("state")
+        @Expose
+        private String state;
+
         @SerializedName("postcode")
         @Expose
         private String postcode;
@@ -126,6 +131,14 @@ public class LocationModel {
         @SerializedName("chk")
         @Expose
         public boolean chk = false;
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
 
         public String getLat() {
             return lat;

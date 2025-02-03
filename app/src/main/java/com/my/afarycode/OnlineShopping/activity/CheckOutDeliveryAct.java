@@ -753,6 +753,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
         Map<String, String> map = new HashMap<>();
         map.put("address_id", addressId);
+        map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
 
         Log.e(TAG, "Delivery Availability Request :" + map);
 
@@ -766,43 +767,86 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
 
-                    // Delivery and Availibitly both are not available
-                    if (object.optString("status").equals("1")) {
-                        binding.rvDeliveryAgency.setVisibility(View.GONE);
-                        uncheckAddressList();
-                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_available_on_this_country),object.getString("status"));
+                    if(object.optString("order_type").equals("NATIONAL")) {
+
+                        // Delivery and Availibitly both are not available
+                        if (object.optString("status").equals("1")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_do_not_available_on_this_country), object.getString("status"));
+
+                        }
+
+                        // 'Delivery and Availibitly Both are Available
+                        else if (object.getString("status").equals("2")) {
+                            binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                        }
+
+
+                        // Delivery are not available but Availibitly are available
+                        else if (object.getString("status").equals("3")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select), object.getString("status"));
+
+                        }
+
+                        // Delivery are available but Availibitly are not available
+                        else if (object.getString("status").equals("4")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.this_country_cannot_be_delivered), object.getString("status"));
+                        }
+
+
+                        // Delivery and Availibitly Both are Available But City not available
+                        else if (object.getString("status").equals("5")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_do_not_available_on_this_city), object.getString("status"));
+                        }
 
                     }
 
-                    // 'Delivery and Availibitly Both are Available
-                    else if (object.getString("status").equals("2")) {
-                        binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
-                    }
+                    else {
+                        // INTERNATIONAL
+
+                        // Delivery and Availibitly both are not available
+                        if (object.optString("status").equals("1")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_do_not_available_on_this_country), object.getString("status"));
+
+                        }
+
+                        // 'Delivery and Availibitly Both are Available
+                        else if (object.getString("status").equals("2")) {
+                            binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                        }
 
 
-                    // Delivery are not available but Availibitly are available
-                    else if (object.getString("status").equals("3")) {
-                        binding.rvDeliveryAgency.setVisibility(View.GONE);
-                        uncheckAddressList();
-                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select),object.getString("status"));
+                        // Delivery are not available but Availibitly are available
+                        else if (object.getString("status").equals("3")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_available_on_this_country_but_you_will_be_collect_your_packege_from_shipping_agency), object.getString("status"));
 
-                    }
+                        }
 
-
-                    // Delivery are available but Availibitly are not available
-                    else if (object.getString("status").equals("4")) {
-                        binding.rvDeliveryAgency.setVisibility(View.GONE);
-                        uncheckAddressList();
-                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.this_country_cannot_be_delivered),object.getString("status"));
-                    }
-
+                        // Delivery are available but Availibitly are not available
+                        else if (object.getString("status").equals("4")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.this_country_cannot_be_delivered), object.getString("status"));
+                        }
 
 
-                    // Delivery and Availibitly Both are Available But City not available
-                    else if (object.getString("status").equals("5")) {
-                        binding.rvDeliveryAgency.setVisibility(View.GONE);
-                        uncheckAddressList();
-                        ShowAvailableResultDialog(getString(R.string.alert),getString(R.string.we_do_not_available_on_this_city),object.getString("status"));
+                        // Delivery and Availibitly Both are Available But City not available
+                        else if (object.getString("status").equals("5")) {
+                            binding.rvDeliveryAgency.setVisibility(View.GONE);
+                            uncheckAddressList();
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_do_not_serve_this_city), object.getString("status"));
+                        }
                     }
 
 

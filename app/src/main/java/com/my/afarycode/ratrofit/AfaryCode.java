@@ -540,5 +540,9 @@ public interface AfaryCode {
     @POST("check_country_code_with_mobile_exist")
     Call<ResponseBody> checkNumberExitApi( @FieldMap Map<String, String> params);
 
+    @FormUrlEncoded
+    @POST("check_city_exist_or_not")
+    Call<ResponseBody> checkCityExitApi( @FieldMap Map<String, String> params);
+
 
 }

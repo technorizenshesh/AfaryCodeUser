@@ -355,7 +355,7 @@
     <string name="result">Results</string>
     <string name="does_not_benificiary_account">Your beneficiary does not have a wallet to receive the funds. send him this link to download our app. show link</string>
     <string name="we_do_not_available_on_this_country">We don\'t available on this country</string>
-    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">We available on this country but you will be collect your package your self. Please select CLICK AND COLLECT</string>
+    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_your_self_please_select">We are available in this country but urban delivery is not yet available for your city. You will collect your package by yourself Please select CLICK AND COLLECT option</string>
     <string name="we_do_not_deliver_on_this_country">We don\'t available on this country</string>
     <string name="dear_customer">Dear Customer,</string>
     <string name="you_have_requested_delivery_with_cash_on_delivery_one_of_our">You have requested delivery with cash on delivery. One of our</string>
@@ -402,7 +402,7 @@
     <string name="this_shop_click_here">this shop by clicking here</string>
     <string name="please_select_delivery_agency">please select delivery agency</string>
     <string name="shipping_agency_fees">Shipping agency fees</string>
-    <string name="we_do_not_available_on_this_city">we don\'t available on this city</string>
+    <string name="we_do_not_available_on_this_city">We don\'t available on this city</string>
     <string name="order_cancelled">Order Cancelled...</string>
     <string name="transit">Transit</string>
     <string name="reached_to_shipping_company">Reached to Shipping Company</string>
@@ -411,5 +411,9 @@
     <string name="invalid_otp">Invalid OTP</string>
     <string name="state">State</string>
     <string name="this_country_cannot_be_delivered">this country cannot be delivered</string>
+    <string name="this_city_is_not_served">this city is not served</string>
+    <string name="update_billing_address">UPDATE BILLING ADDRESS</string>
+    <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_from_shipping_agency">we are available in this country but urban delivery is not yet available for your destination  country. You will collect the package at the address indicated by the shipping agency.\n</string>
+    <string name="we_do_not_serve_this_city">Sorry, we do not serve your city at the moment.</string>
 
 </resources>

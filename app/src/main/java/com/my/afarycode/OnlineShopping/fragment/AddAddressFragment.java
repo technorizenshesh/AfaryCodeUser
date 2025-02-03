@@ -31,6 +31,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
 import com.my.afarycode.OnlineShopping.Model.StateModel;
+import com.my.afarycode.OnlineShopping.SignUpActivity;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
@@ -243,6 +244,22 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             }
         });
 
+
+
+
+        binding.etTown.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                // When the user finishes entering the email, call API to check if the email exists
+                if (binding.etTown.getText().toString().trim().isEmpty()) {
+                  //  binding.email.setError(getString(R.string.can_not_be_empty));
+                  //  binding.email.setFocusable(true);
+                    Toast.makeText(getActivity(), getString(R.string.please_enter_town), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    checkCityExistence(binding.etTown.getText().toString());
+                }
+            }
+        });
 
 
 
@@ -537,6 +554,63 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             return true;
         });
         popupMenu.show();
+    }
+
+
+
+
+    private void checkCityExistence(String city) {
+        //binding.loader.setVisibility(View.VISIBLE);
+
+        if (city.isEmpty()) {
+            // Don't enable the next EditText if email is empty
+            return;
+        }
+
+        Map<String, String> map = new HashMap<>();
+        map.put("city", city);
+        map.put("country", countryId);
+        map.put("state", stateId);
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        Log.e("MapMap", "Check city Exit Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.checkCityExitApi(map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e("Add Address", "Check email Exit RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        //emailExit = true;
+                    } else if (object.optString("status").equals("0")) {
+                       // emailExit = false;
+                        binding.etTown.setError(getString(R.string.this_city_is_not_served));
+                       // binding.email.setFocusable(true);
+                        Toast.makeText(requireActivity(), getString(R.string.this_city_is_not_served), Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    DataManager.getInstance().hideProgressMessage();
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(requireActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
     }
 
 

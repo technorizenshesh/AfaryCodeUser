@@ -29,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
+import com.my.afarycode.OnlineShopping.Model.StateModel;
 import com.my.afarycode.OnlineShopping.activity.CheckOutDeliveryAct;
 import com.my.afarycode.OnlineShopping.constant.PreferenceConnector;
 import com.my.afarycode.OnlineShopping.fragment.AddAddressFragment;
@@ -64,11 +65,12 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
     double latitude = 0.0, longitude = 0.0;
     int AUTOCOMPLETE_REQUEST_CODE_ADDRESS = 101;
     AfaryCode apiInterface;
-    String address = "", city = "",addressType="",countryId="";
+    String address = "", city = "",addressType="",countryId="",stateId="";
     addAddressListener listener;
     LocationModel.Result result;
 
     ArrayList<CountryModel.Result> countryArrayList;
+    ArrayList<StateModel.Result> stateArrayList;
 
 
     public EditAddressFragment(LocationModel.Result result) {
@@ -100,9 +102,10 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         v1 = dialog.findViewById(R.id.View1);
         tvCompleteadd = dialog.findViewById(R.id.tvCompleteadd);
 
-        binding.tvAddressTitle.setText("UPDATE BILLING ADDRESS");
+        binding.tvAddressTitle.setText(getString(R.string.update_billing_address));
 
         countryArrayList = new ArrayList<>();
+        stateArrayList = new ArrayList<>();
 
         binding.etTitle.setText(result.getAddressName());
         binding.etFname.setText(result.getFirstName());
@@ -111,10 +114,14 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         binding.etMobile.setText(result.getPhone());
         tvCompleteadd.setText(result.getAddress());
         binding.etCountry.setText(result.getCountryName());
+       // binding.etCountry.setText(result.getState());
+
         binding.etPostCode.setText(result.getPostcode());
         binding.etTown.setText(result.getCity());
         address = result.getAddress();
         countryId = result.getCountry();
+        stateId = result.getState();
+
 
         if(result.getType().equalsIgnoreCase("deliver_to_my_home")) {
             addressType = "deliver_to_my_home";
@@ -206,9 +213,32 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         });
 
 
+        binding.etState.setOnClickListener(v -> {
+            if (!stateArrayList.isEmpty())
+                showDropDownState(v, binding.etState, stateArrayList);
+        });
+
 
         if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getAllCountry();
         else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+        if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getAllState11(countryId);
+        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+        binding.etTown.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                // When the user finishes entering the email, call API to check if the email exists
+                if (binding.etTown.getText().toString().trim().isEmpty()) {
+                    //  binding.email.setError(getString(R.string.can_not_be_empty));
+                    //  binding.email.setFocusable(true);
+                    Toast.makeText(getActivity(), getString(R.string.please_enter_town), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    checkCityExistence(binding.etTown.getText().toString());
+                }
+            }
+        });
+
 
     }
 
@@ -316,6 +346,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         map.put("lat",latitude+"");
         map.put("lon",longitude+"");
         map.put("country", countryId);
+        map.put("state", countryId);
         map.put("zip", binding.etPostCode.getText().toString());
         map.put("city", binding.etTown.getText().toString());
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
@@ -402,6 +433,111 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
     }
 
 
+    private void getAllState(String countryId) {
+        // DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("country_id", countryId);
+
+
+        Call<ResponseBody> chatCount = apiInterface.getAllState(map);
+        chatCount.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All State RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        StateModel stateModel = new Gson().fromJson(responseData, StateModel.class);
+                        stateArrayList.clear();
+                        stateArrayList.addAll(stateModel.getResult());
+                        stateId = stateArrayList.get(0).getId();
+                        binding.etState.setText(stateArrayList.get(0).getName());
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        stateArrayList.clear();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+    private void getAllState11(String countryId) {
+        // DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("country_id", countryId);
+
+
+        Call<ResponseBody> chatCount = apiInterface.getAllState(map);
+        chatCount.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All State RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        StateModel stateModel = new Gson().fromJson(responseData, StateModel.class);
+                        stateArrayList.clear();
+                        stateArrayList.addAll(stateModel.getResult());
+
+                        for(int i=0;i<stateArrayList.size();i++){
+                            if(stateId.equals(stateArrayList.get(i).getId())){
+                                stateId = stateArrayList.get(i).getId();
+                                binding.etState.setText(stateArrayList.get(i).getName());
+                            }
+                        }
+
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        stateArrayList.clear();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+
     private void showDropDownCountry(View v, TextView textView, List<CountryModel.Result> stringList) {
         PopupMenu popupMenu = new PopupMenu(getActivity(), v);
         for (int i = 0; i < stringList.size(); i++) {
@@ -418,6 +554,80 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
             return true;
         });
         popupMenu.show();
+    }
+
+
+    private void showDropDownState(View v, TextView textView, List<StateModel.Result> stringList) {
+        PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+        for (int i = 0; i < stringList.size(); i++) {
+            popupMenu.getMenu().add(stringList.get(i).getName());
+        }
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            textView.setText(menuItem.getTitle());
+            for (int i = 0; i < stringList.size(); i++) {
+                if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
+                    stateId = stringList.get(i).getId();
+
+                }
+            }
+            return true;
+        });
+        popupMenu.show();
+    }
+
+
+    private void checkCityExistence(String city) {
+        //binding.loader.setVisibility(View.VISIBLE);
+
+        if (city.isEmpty()) {
+            // Don't enable the next EditText if email is empty
+            return;
+        }
+
+        Map<String, String> map = new HashMap<>();
+        map.put("city", city);
+        map.put("country", countryId);
+        map.put("state", stateId);
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        Log.e("MapMap", "Check city Exit Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.checkCityExitApi(map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e("Add Address", "Check email Exit RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        //emailExit = true;
+                    } else if (object.optString("status").equals("0")) {
+                        // emailExit = false;
+                        binding.etTown.setError(getString(R.string.this_city_is_not_served));
+                        // binding.email.setFocusable(true);
+                        Toast.makeText(requireActivity(), getString(R.string.this_city_is_not_served), Toast.LENGTH_SHORT).show();
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    DataManager.getInstance().hideProgressMessage();
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(requireActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
     }
 
 
