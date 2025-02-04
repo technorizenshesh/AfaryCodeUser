@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment implements SearchListener {
     private SliderAdapterExample adapter1;
     private SliderAdapterExample adapter2;
     private ArrayList<CartModal.Result> get_result11 = new ArrayList<>();
-
+    private boolean apiCalled = false;
     List<Address> addresses;
     ProductAdapter2 adapterSearch;
     private String countryNames="",lastCountryName="",lastCountryId="",countryId="",countryLastId ="";
@@ -184,6 +184,41 @@ public class HomeFragment extends Fragment implements SearchListener {
         binding.tvChangeLocation.setOnClickListener(v -> {
             new CountryBottomSheet(countryNames).callBack(this::search).show(getChildFragmentManager(),"");
         });
+
+
+
+        binding.scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                // Check if the user is at the top of the ScrollView
+/*
+                if (scrollY == 0) {
+                    // You are at the top, now call your API
+                    if (NetworkAvailablity.checkNetworkStatus(requireActivity())) {
+                        getTitle(); // Call your API here
+                    } else {
+                        Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                    }
+                }
+*/
+
+
+                if (scrollY > 0 && !apiCalled) {
+                    // The user has scrolled to the bottom
+                    apiCalled = true; // Mark that the API has been called
+
+                    if (NetworkAvailablity.checkNetworkStatus(requireActivity())) {
+                        getTitle(); // Call your API here
+                    } else {
+                        Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+
+
+
 
         return binding.getRoot();
 

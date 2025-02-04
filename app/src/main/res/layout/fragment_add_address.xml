@@ -414,7 +414,7 @@
 
 
 
-                    <TextView
+           <!--         <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/town"
@@ -439,7 +439,44 @@
                         android:textAlignment="viewStart"        android:textColor="@color/black"
                         android:inputType="text"
                         android:imeOptions="actionDone"
+                        android:singleLine="true"/>-->
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/town"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="@dimen/_11sdp"
+                        android:textDirection="locale"
+                        android:textAlignment="viewStart"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:textColor="@color/black"/>
+
+
+                    <TextView
+                        android:id="@+id/etTown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/town"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:paddingStart="@dimen/_5sdp"
+                        android:textDirection="locale"
+                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:inputType="text"
+                        android:imeOptions="actionNext"
                         android:singleLine="true"/>
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_grey_two"
+                        android:layout_marginTop="@dimen/_5sdp"/>
+
 
 
 

@@ -313,7 +313,9 @@ public interface AfaryCode {
     Call<ResponseBody> getAllState(@FieldMap Map<String, String> auth);
 
 
-
+    @FormUrlEncoded
+    @POST("get_city_by_state_id")
+    Call<ResponseBody> getAllCity(@FieldMap Map<String, String> auth);
 
 
     @FormUrlEncoded
