@@ -51,6 +51,11 @@ public class CountryModel {
         @SerializedName("name")
         @Expose
         private String name;
+
+        @SerializedName("name_fr")
+        @Expose
+        private String nameFr;
+
         @SerializedName("currency_code")
         @Expose
         private String currencyCode;
@@ -154,6 +159,13 @@ public class CountryModel {
             this.status = status;
         }
 
+        public String getNameFr() {
+            return nameFr;
+        }
+
+        public void setNameFr(String nameFr) {
+            this.nameFr = nameFr;
+        }
     }
 
 }

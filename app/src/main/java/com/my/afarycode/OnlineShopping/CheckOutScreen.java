@@ -60,7 +60,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     public static TextView tax2, total_price_to_to_pay, tax1, plateform_fees;
     public static double totalPriceToToPay1;
    // private double totalPriceToToPay = 0, platFormsFees = 0.0, taxN1 = 0.0, taxN2 = 0.0, deliveryFees, mainTotalPay = 0.0;
-    private String totalPriceToToPay = "0.00",currency="", platFormsFees = "0.00", taxN1 = "0.00", taxN2 = "0.00", deliveryFees="0.00", mainTotalPay = "0.00";
+    private String totalPriceToToPay = "0.00",currency="", platFormsFees = "0.00", taxN1 = "0.00", taxN2 = "0.00", deliveryFees="0.00", mainTotalPay = "0.00",shippingAgencyFee="0.00";
 
     private String get_cart_id = "",deliveryMethod="",insertDeliveryId="";
     private ArrayList<String> get_cart_id_list = new ArrayList<>();
@@ -113,6 +113,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             deliveryYesNo =  getIntent().getStringExtra("deliveryYesNo");
             deliveryMethod = getIntent().getStringExtra("deliveryMethod");
             addressId =  getIntent().getStringExtra("addressId");
+            aa =  getIntent().getStringExtra("aa");
+
         }
 
         get_result = new ArrayList<>();
@@ -613,7 +615,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                     if (object.optString("status").equals("1")) {
                          // JSONObject jsonObject = object.getJSONObject("result");
-                         aa = object.getJSONArray("result").getJSONObject(0).getString("delivery_calculation");
+                        // aa = object.getJSONArray("result").getJSONObject(0).getString("delivery_calculation");
                         sendToServer = object.toString();
                      insertDeliveryId = String.valueOf(object.getInt("insert_id_delivery"));
                        // sendTaxToServer(object.toString());
@@ -644,6 +646,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         taxN1 = object.getString("taxes_first");
                         taxN2 = object.getString("taxes_second");
                         currency = object.getString("currency");
+                        shippingAgencyFee = object.getString("shopping_cost_international");
                         if(currency.equals("XAF") || currency.equals("XOF")) currency = "FCFA";
                         if(!object.getString("platform_fees").equalsIgnoreCase(""))
                         {
@@ -694,8 +697,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         if(deliveryMethod.equalsIgnoreCase("Vehicle"))
                           binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.delivery_charge)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
                       else if(deliveryMethod.equalsIgnoreCase("Partner"))
-                          binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.shipping_agency_fees)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
-                      else {
+                        //  binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.shipping_agency_fees)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+                            binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.delivery_charge)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+
+                        else {
                             if(deliveryYesNo.equalsIgnoreCase("Yes"))
                                 binding.tvDeliveryCharge.setText(getString(R.string.delivery_charge));
                          else binding.tvDeliveryCharge.setText(Html.fromHtml( getString(R.string.delivery_charge) +" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
@@ -727,13 +732,53 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         binding.subTotal.setText("Rs. " + String.format("%.2f", mainTotalPay));*/
 
 
+                        if(aa.equals("NATIONAL")){
 
-                        binding.plateformFees.setText(currency + platFormsFees);
-                        binding.tvTax1.setText(currency +  taxN1);
-                        binding.tvtax2.setText(currency + taxN2);
-                        binding.tvDelivery.setText(currency +  deliveryFees);
+                            if (deliveryYesNo.equals("No")) {
+                                binding.subTotal.setText(currency + mainTotalPay);
+
+                                binding.rlPlatform.setVisibility(View.VISIBLE);
+                                binding.tvText1.setText(getString(R.string.delivery_cost));
+                                binding.plateformFees.setText(currency + deliveryFees);
+                                binding.tvTax1.setText(currency + taxN1);
+                                binding.tvtax2.setText(currency + taxN2);
+                                binding.rlDelivery.setVisibility(View.GONE);
+                                binding.rlShipping.setVisibility(View.GONE);
+
+                            }
+                            else {
+                                binding.subTotal.setText(currency + mainTotalPay);
+                                binding.rlPlatform.setVisibility(View.VISIBLE);
+                                binding.tvText1.setText(getString(R.string.platform_fees));
+                                binding.plateformFees.setText(currency + platFormsFees);
+                                binding.tvTax1.setText(currency + taxN1);
+                                binding.tvtax2.setText(currency + taxN2);
+                                binding.rlDelivery.setVisibility(View.GONE);
+                                binding.rlShipping.setVisibility(View.GONE);
+
+                            }
+
+                        }
+                        else {
+                            binding.subTotal.setText(currency +  mainTotalPay);
+                            binding.rlPlatform.setVisibility(View.GONE);
+                            binding.tvTax1.setText(currency + taxN1);
+                            binding.tvtax2.setText(currency + taxN2);
+                            binding.rlDelivery.setVisibility(View.VISIBLE);
+                            binding.tvDelivery.setText(currency +  deliveryFees);
+                            binding.rlShipping.setVisibility(View.VISIBLE);
+                            binding.tvShippingFee.setText(currency +  shippingAgencyFee);
+
+
+
+
+                        }
+
+                      //  binding.plateformFees.setText(currency + platFormsFees);
+                     //   binding.tvTax1.setText(currency +  taxN1);
+                     //   binding.tvtax2.setText(currency + taxN2);
+                     //   binding.tvDelivery.setText(currency +  deliveryFees);
                         binding.totalPriceToToPay.setText(currency +  totalPriceToToPay);
-                        binding.subTotal.setText(currency +  mainTotalPay);
 
                     } else if (object.optString("status").equals("0")) {
                         Toast.makeText(CheckOutScreen.this, object.getString("message"), Toast.LENGTH_SHORT).show();

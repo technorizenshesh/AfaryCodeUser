@@ -83,7 +83,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
     String deliveryAgencyType="",agencyId="";
     String deliveryCharge="0.0";
-    String deliveryType="",lat="",deliveryYesNo="No",deliveryMethod="";
+    String deliveryType="",lat="",deliveryYesNo="No",deliveryMethod="",aa="";
     String bottomSheetStatus="";
 
     DeliveryAgencyAdapter deliveryAgencyAdapter;
@@ -185,7 +185,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
-                        .putExtra("deliveryMethod",deliveryMethod));
+                        .putExtra("deliveryMethod",deliveryMethod)
+                        .putExtra("aa",aa));
                 deliveryMethod = "";
                 //addressId ="";
                 agencyId="";
@@ -221,6 +222,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         binding.rdDontDelivery.setOnClickListener(view -> {
             deliveryType = "I don't want to be delivered, I will come and collect package myself";
             deliveryYesNo = "Yes";
+            aa ="NATIONAL";
             binding.rdDontDelivery.setChecked(true);
 
             for (int i=0;i<deliverArrayList.size();i++){
@@ -776,7 +778,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
-                        .putExtra("deliveryYesNo",deliveryYesNo));
+                        .putExtra("deliveryYesNo",deliveryYesNo)
+                        .putExtra("aa",aa));
             }
 
         });
@@ -954,7 +957,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
-
+                   aa = object.optString("order_type");
 
                     if(object.optString("order_type").equals("NATIONAL")) {
 

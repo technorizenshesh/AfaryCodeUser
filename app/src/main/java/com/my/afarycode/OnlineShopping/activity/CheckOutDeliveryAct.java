@@ -67,7 +67,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     ArrayList<LocationModel.Result> arrayList;
     LocationAdapter adapter;
     String deliveryType="",lat="";
-    String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="",addressId="";
+    String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="",addressId="",aa="";
     String deliveryCharge="0.0";
 
     ArrayList<DeliveryTypeModel.Result> deliverArrayList;
@@ -152,7 +152,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
                         .putExtra("deliveryMethod",deliveryMethod)
-                        .putExtra("addressId",addressId));
+                        .putExtra("addressId",addressId)
+                        .putExtra("aa",aa));
                 deliveryMethod = "";
                 addressId ="";
                 agencyId="";
@@ -191,6 +192,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         binding.rdDontDelivery.setOnClickListener(view -> {
             deliveryType = "I don't want to be delivered, I will come and collect package myself";
             deliveryYesNo = "Yes";
+            aa ="NATIONAL";
             binding.rdDontDelivery.setChecked(true);
 
             for (int i=0;i<deliverArrayList.size();i++){
@@ -580,7 +582,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
-                        .putExtra("deliveryMethod",deliveryMethod));
+                        .putExtra("deliveryMethod",deliveryMethod)
+                        .putExtra("aa",aa));
 
             }
 
@@ -766,7 +769,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
-
+                    aa= object.optString("order_type");
                     if(object.optString("order_type").equals("NATIONAL")) {
 
                         // Delivery and Availibitly both are not available

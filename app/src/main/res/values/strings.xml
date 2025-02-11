@@ -415,5 +415,7 @@
     <string name="update_billing_address">UPDATE BILLING ADDRESS</string>
     <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_from_shipping_agency">we are available in this country but urban delivery is not yet available for your destination  country. You will collect the package at the address indicated by the shipping agency.\n</string>
     <string name="we_do_not_serve_this_city">Sorry, we do not serve your city at the moment.</string>
+    <string name="city_not_available_on_this_state">City not available on this state</string>
+    <string name="delivery_cost">Delivery Cost</string>
 
 </resources>

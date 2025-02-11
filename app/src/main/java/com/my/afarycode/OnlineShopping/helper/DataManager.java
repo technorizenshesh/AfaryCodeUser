@@ -323,6 +323,33 @@ public class DataManager {
     }
 
 
+    public String getCountry(Context context, double latitude, double longitute) {
+        List<Address> addresses;
+        String countryName="";
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(latitude, longitute, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+          //  addressStreet = addresses.get(0).getAddressLine(0);
+            // address2 = addresses.get(0).getAddressLine(1); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            //  city = addresses.get(0).getLocality();
+         //   String state = addresses.get(0).getAdminArea();
+            countryName = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String region = addresses.get(0).getAdminArea();
+            // Log.e("addressStreet====", addressStreet);
+            //   Log.e("city====", city);
+            Log.e("region====", countryName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return countryName;
+
+    }
+
+
+
+
 
     public static void updateResources(Context context, String language) {
         Locale locale = new Locale(language);

@@ -69,7 +69,7 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
     double latitude = 0.0, longitude = 0.0;
     int AUTOCOMPLETE_REQUEST_CODE_ADDRESS = 101;
     AfaryCode apiInterface;
-    String address = "", city = "",addressType="",title="",categoryId="",countryId="",stateId="",cityId="";
+    String address = "", city = "",addressType="",title="",categoryId="",countryId="",stateId="",cityId="",countryName="";
     addAddressListener listener;
 
     ArrayList<CountryModel.Result> countryArrayList;
@@ -169,10 +169,10 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             }
         });
 
-        binding.etCountry.setOnClickListener(v -> {
+    /*    binding.etCountry.setOnClickListener(v -> {
             if (!countryArrayList.isEmpty())
                 showDropDownCountry(v, binding.etCountry, countryArrayList);
-        });
+        });*/
 
 
         binding.etState.setOnClickListener(v -> {
@@ -338,6 +338,8 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                     latitude = place.getLatLng().latitude;
                     longitude = place.getLatLng().longitude;
                     city = DataManager.getInstance().getAddress(getActivity(), latitude, longitude);
+                    countryName = DataManager.getInstance().getCountry(getActivity(), latitude, longitude);
+
                     tvArea.setVisibility(View.VISIBLE);
                     tv1.setVisibility(View.VISIBLE);
                     v1.setVisibility(View.VISIBLE);
@@ -345,6 +347,19 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                     binding.tvCompleteadd.setText(place.getAddress());
                     latitude = place.getLatLng().latitude;
                     longitude = place.getLatLng().longitude;
+
+
+
+                    if(countryArrayList!=null) {
+                        for (int i = 0; i <= countryArrayList.size(); i++) {
+                            if (countryArrayList.get(i).getName().equals(countryName) || countryArrayList.get(i).getNameFr().equals(countryName) ) {
+                                countryId = countryArrayList.get(i).getId();
+                                binding.etCountry.setText(countryArrayList.get(i).getName());
+                                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllState(countryId);
+                                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
 
                    // SessionManager.writeString(getActivity(), Constant.lat,String.valueOf(latitude));
                    // SessionManager.writeString(getActivity(), Constant.lon,String.valueOf(longitude));
@@ -504,7 +519,7 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                         stateArrayList.addAll(stateModel.getResult());
                         stateId = stateArrayList.get(0).getId();
                         binding.etState.setText(stateArrayList.get(0).getName());
-                       // getAllCity(stateId);
+                        getAllCity(stateId);
 
                     } else if (object.optString("status").equals("0")) {
                         stateArrayList.clear();
@@ -551,12 +566,14 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                         CityModel cityModel = new Gson().fromJson(responseData, CityModel.class);
                         cityArrayList.clear();
                         cityArrayList.addAll(cityModel.getResult());
-                       // cityId = cityArrayList.get(0).getId();
-                      //  binding.etTown.setText(cityArrayList.get(0).getName());
+                        cityId = cityArrayList.get(0).getId();
+                        binding.etTown.setText(cityArrayList.get(0).getName());
+                        checkCityExistence(cityArrayList.get(0).getName());
 
 
                     } else if (object.optString("status").equals("0")) {
                         cityArrayList.clear();
+                        CityNotAvailableDialog(getString(R.string.alert),getString(R.string.city_not_available_on_this_state));
 
                     }
 
@@ -694,6 +711,26 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
 
 
     private void ShowCityServeDialog(String title,String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }) .show();
+              /*  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })*/
+        // Show the dialog
+    }
+
+
+    private void CityNotAvailableDialog(String title,String msg){
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setTitle(title)
                 .setMessage(msg)
