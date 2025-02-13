@@ -3,6 +3,7 @@ package com.my.afarycode.OnlineShopping.bottomsheet;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.android.gms.common.api.Status;
@@ -27,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
+import com.my.afarycode.OnlineShopping.Model.CityModel;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
 import com.my.afarycode.OnlineShopping.Model.StateModel;
@@ -65,12 +68,13 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
     double latitude = 0.0, longitude = 0.0;
     int AUTOCOMPLETE_REQUEST_CODE_ADDRESS = 101;
     AfaryCode apiInterface;
-    String address = "", city = "",addressType="",countryId="",stateId="";
+    String address = "", city = "",addressType="",countryId="",stateId="",countryName="",cityId="";
     addAddressListener listener;
     LocationModel.Result result;
 
     ArrayList<CountryModel.Result> countryArrayList;
     ArrayList<StateModel.Result> stateArrayList;
+    ArrayList<CityModel.Result> cityArrayList;
 
 
     public EditAddressFragment(LocationModel.Result result) {
@@ -106,6 +110,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
 
         countryArrayList = new ArrayList<>();
         stateArrayList = new ArrayList<>();
+        cityArrayList = new ArrayList<>();
 
         binding.etTitle.setText(result.getAddressName());
         binding.etFname.setText(result.getFirstName());
@@ -207,15 +212,20 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         });
 
 
-        binding.etCountry.setOnClickListener(v -> {
+       /* binding.etCountry.setOnClickListener(v -> {
             if (countryArrayList.size() > 0)
                 showDropDownCountry(v, binding.etCountry, countryArrayList);
-        });
+        });*/
 
 
         binding.etState.setOnClickListener(v -> {
             if (!stateArrayList.isEmpty())
                 showDropDownState(v, binding.etState, stateArrayList);
+        });
+
+        binding.etTown.setOnClickListener(v -> {
+            if (!cityArrayList.isEmpty())
+                showDropDownCity(v, binding.etTown, cityArrayList);
         });
 
 
@@ -225,7 +235,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         if(NetworkAvailablity.checkNetworkStatus(requireActivity()))  getAllState11(countryId);
         else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
-        binding.etTown.setOnFocusChangeListener((v, hasFocus) -> {
+        /*binding.etTown.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 // When the user finishes entering the email, call API to check if the email exists
                 if (binding.etTown.getText().toString().trim().isEmpty()) {
@@ -237,7 +247,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                     checkCityExistence(binding.etTown.getText().toString());
                 }
             }
-        });
+        });*/
 
 
     }
@@ -299,6 +309,8 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                     latitude = place.getLatLng().latitude;
                     longitude = place.getLatLng().longitude;
                     city = DataManager.getInstance().getAddress(getActivity(), latitude, longitude);
+                    countryName = DataManager.getInstance().getCountry(getActivity(), latitude, longitude);
+
                     tvArea.setVisibility(View.VISIBLE);
                     tv1.setVisibility(View.VISIBLE);
                     v1.setVisibility(View.VISIBLE);
@@ -306,6 +318,20 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                     binding.tvCompleteadd.setText(place.getAddress());
                     latitude = place.getLatLng().latitude;
                     longitude = place.getLatLng().longitude;
+
+
+
+                    if(countryArrayList!=null) {
+                        for (int i = 0; i <= countryArrayList.size(); i++) {
+                            if (countryArrayList.get(i).getName().equals(countryName) || countryArrayList.get(i).getNameFr().equals(countryName) ) {
+                                countryId = countryArrayList.get(i).getId();
+                                binding.etCountry.setText(countryArrayList.get(i).getName());
+                                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllState(countryId);
+                                else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+
 
                     // SessionManager.writeString(getActivity(), Constant.lat,String.valueOf(latitude));
                     // SessionManager.writeString(getActivity(), Constant.lon,String.valueOf(longitude));
@@ -346,7 +372,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         map.put("lat",latitude+"");
         map.put("lon",longitude+"");
         map.put("country", countryId);
-        map.put("state", countryId);
+        map.put("state", stateId);
         map.put("zip", binding.etPostCode.getText().toString());
         map.put("city", binding.etTown.getText().toString());
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
@@ -459,7 +485,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                         stateArrayList.addAll(stateModel.getResult());
                         stateId = stateArrayList.get(0).getId();
                         binding.etState.setText(stateArrayList.get(0).getName());
-
+                        getAllCity11(stateId);
 
                     } else if (object.optString("status").equals("0")) {
                         stateArrayList.clear();
@@ -513,11 +539,120 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                                 binding.etState.setText(stateArrayList.get(i).getName());
                             }
                         }
-
+                        getAllCity(stateId);
 
 
                     } else if (object.optString("status").equals("0")) {
                         stateArrayList.clear();
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+
+    private void getAllCity(String stateId) {
+        // DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("state_id", stateId);
+
+
+        Call<ResponseBody> chatCount = apiInterface.getAllCity(map);
+        chatCount.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All city RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        CityModel cityModel = new Gson().fromJson(responseData, CityModel.class);
+                        cityArrayList.clear();
+                        cityArrayList.addAll(cityModel.getResult());
+
+                       if (cityArrayList.get(0).getName().equals(result.getCity())) {
+                           cityId = cityArrayList.get(0).getId();
+                           binding.etTown.setText(cityArrayList.get(0).getName());
+                           checkCityExistence(cityArrayList.get(0).getName());
+                       }
+                       else {
+                         //  cityId = cityArrayList.get(0).getId();
+                           binding.etTown.setText(result.getCity());
+                       }
+
+                    } else if (object.optString("status").equals("0")) {
+                        cityArrayList.clear();
+                        CityNotAvailableDialog(getString(R.string.alert),getString(R.string.city_not_available_on_this_state));
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+    private void getAllCity11(String stateId) {
+        // DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("state_id", stateId);
+
+
+        Call<ResponseBody> chatCount = apiInterface.getAllCity(map);
+        chatCount.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All city RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        CityModel cityModel = new Gson().fromJson(responseData, CityModel.class);
+                        cityArrayList.clear();
+                        cityArrayList.addAll(cityModel.getResult());
+                        cityId = cityArrayList.get(0).getId();
+                        binding.etTown.setText(cityArrayList.get(0).getName());
+                        checkCityExistence(cityArrayList.get(0).getName());
+
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        cityArrayList.clear();
+                        CityNotAvailableDialog(getString(R.string.alert),getString(R.string.city_not_available_on_this_state));
 
                     }
 
@@ -567,7 +702,27 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
             for (int i = 0; i < stringList.size(); i++) {
                 if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
                     stateId = stringList.get(i).getId();
+                    getAllCity11(stateId);
+                }
+            }
+            return true;
+        });
+        popupMenu.show();
+    }
 
+
+
+    private void showDropDownCity(View v, TextView textView, List<CityModel.Result> stringList) {
+        PopupMenu popupMenu = new PopupMenu(getActivity(), v);
+        for (int i = 0; i < stringList.size(); i++) {
+            popupMenu.getMenu().add(stringList.get(i).getName());
+        }
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            textView.setText(menuItem.getTitle());
+            for (int i = 0; i < stringList.size(); i++) {
+                if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
+                    cityId = stringList.get(i).getId();
+                    checkCityExistence(stringList.get(i).getName());
                 }
             }
             return true;
@@ -605,9 +760,12 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                         //emailExit = true;
                     } else if (object.optString("status").equals("0")) {
                         // emailExit = false;
-                        binding.etTown.setError(getString(R.string.this_city_is_not_served));
+                     //   binding.etTown.setError(getString(R.string.this_city_is_not_served));
                         // binding.email.setFocusable(true);
-                        Toast.makeText(requireActivity(), getString(R.string.this_city_is_not_served), Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(requireActivity(), getString(R.string.this_city_is_not_served), Toast.LENGTH_SHORT).show();
+
+                        ShowCityServeDialog(getString(R.string.alert),getString(R.string.this_city_is_not_served));
+
                     }
 
 
@@ -628,6 +786,47 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                 DataManager.getInstance().hideProgressMessage();
             }
         });
+    }
+
+
+
+    private void ShowCityServeDialog(String title,String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }) .show();
+              /*  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })*/
+        // Show the dialog
+    }
+
+
+    private void CityNotAvailableDialog(String title,String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }) .show();
+              /*  .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })*/
+        // Show the dialog
     }
 
 
