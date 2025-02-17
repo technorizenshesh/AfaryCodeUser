@@ -126,6 +126,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         address = result.getAddress();
         countryId = result.getCountry();
         stateId = result.getState();
+        Log.e("STATE id===",stateId);
 
 
         if(result.getType().equalsIgnoreCase("deliver_to_my_home")) {
