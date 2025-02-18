@@ -1,15 +1,12 @@
 package com.my.afarycode.OnlineShopping;
 
-import static android.util.Log.println;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -125,7 +122,10 @@ public class MyFirebaseMessagingService extends
                         .putExtra("UserImage", remoteMessage.getString("userimage"));
             } else if (type.equals("Accepted") || type.equals("reject")) {
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
-                        .putExtra("status", type);
+/*
+                        .putExtra("status", type)
+*/                      .putExtra("status", "openPaymentDialog")
+                        .putExtra("msg", msg);
             }
 
 
@@ -160,14 +160,19 @@ public class MyFirebaseMessagingService extends
 
             else if (type.equals("InvoiceToUser")) {
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
-                        .putExtra("status", "")
-                        .putExtra("msg", "");
+                      /*  .putExtra("status", "")
+                        .putExtra("msg", "");*/
+                        .putExtra("status", "openPaymentDialog")
+                        .putExtra("msg", msg);
+
             }
 
             else if (type.equals("InvoiceToUserForWallet")) {
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
-                        .putExtra("status", "")
-                        .putExtra("msg", "");
+                      /*  .putExtra("status", "")
+                        .putExtra("msg", "");*/
+                        .putExtra("status", "openPaymentDialog")
+                        .putExtra("msg", msg);
             }
 
 
@@ -209,7 +214,9 @@ public class MyFirebaseMessagingService extends
                 intent = new Intent(getApplicationContext(), Splash.class);
             } else {
                 intent = new Intent(getApplicationContext(), HomeActivity.class)
-                        .putExtra("status", "accept");
+                       /* .putExtra("status", "accept");*/
+                        .putExtra("status", "openPaymentDialog")
+                        .putExtra("msg", msg);
                 if (messageBody != null) {
                     Bitmap bmp = null;
                     try {

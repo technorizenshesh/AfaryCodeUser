@@ -140,8 +140,11 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"            android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"/>
 
 
                     <EditText
@@ -151,14 +154,21 @@
                         android:hint="@string/your_address_title"
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:textColor="@color/black"
+                        android:padding="@dimen/_5sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"            android:inputType="text"
+                        android:textAlignment="viewStart"
+                        android:inputType="text"
                         android:imeOptions="actionNext"
                         android:maxLines="2"
-                       />
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+
+                        />
 
 
                     <TextView
@@ -168,8 +178,11 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"            android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"/>
 
 
                     <EditText
@@ -179,13 +192,20 @@
                         android:hint="@string/full_name"
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
-                        android:textColor="@color/black"
+                        android:padding="@dimen/_5sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"            android:inputType="text"
                         android:imeOptions="actionDone"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+
+                        />
 
 
                     <TextView
@@ -225,8 +245,12 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"            android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        />
 
 
                     <EditText
@@ -236,13 +260,21 @@
                         android:hint="@string/email_address"
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"            android:textColor="@color/black"
+                        android:textAlignment="viewStart"
                         android:inputType="textEmailAddress"
                         android:imeOptions="actionDone"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+
+                        />
 
 
 
@@ -255,8 +287,11 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        />
 
 
                     <EditText
@@ -266,14 +301,22 @@
                         android:hint="@string/contact_number"
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
+                        android:padding="@dimen/_5sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
                         android:inputType="number"
                         android:imeOptions="actionDone"
                         android:maxLength="10"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+
+                        />
 
 
                     <View
@@ -299,7 +342,11 @@
                             android:textAlignment="viewStart"
                             android:textColor="@color/black"
                             android:textDirection="locale"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_12sdp"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            />
 
 
                         <TextView
@@ -322,21 +369,26 @@
                         android:id="@+id/tvCompleteadd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginStart="@dimen/_5sdp"
-                        android:textDirection="locale"
-                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:fontFamily="@font/poppins_regular"
                         android:hint="@string/please_select_address"
-                        android:maxLines="2"/>
-
+                        android:textColorHint="@color/colorPrimary"
+                        android:maxLines="2"
+                        android:padding="@dimen/_5sdp"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorPrimary"
+                        android:textDirection="locale"
+                        android:textSize="@dimen/_11sdp" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/color_grey_two"
-                        android:layout_marginTop="@dimen/_5sdp"/>
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="gone"/>
 
 
 
@@ -349,8 +401,12 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:layout_marginEnd="@dimen/_5sdp"
+
+                        />
 
 
                     <TextView
@@ -361,20 +417,27 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/colorPrimary"
                         android:inputType="text"
-
                         android:imeOptions="actionNext"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        />
 
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/color_grey_two"
-                        android:layout_marginTop="@dimen/_5sdp"/>
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="gone"/>
 
 
 
@@ -386,8 +449,12 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:layout_marginEnd="@dimen/_5sdp"
+
+                        />
 
 
                     <TextView
@@ -398,19 +465,27 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
                         android:inputType="text"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
+                        />
 
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/color_grey_two"
-                        android:layout_marginTop="@dimen/_5sdp"/>
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="gone"/>
 
 
 
@@ -451,8 +526,11 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        />
 
 
                     <TextView
@@ -463,19 +541,27 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
                         android:inputType="text"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
+                        />
 
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/color_grey_two"
-                        android:layout_marginTop="@dimen/_5sdp"/>
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="gone"/>
 
 
 
@@ -488,8 +574,10 @@
                         android:textSize="@dimen/_11sdp"
                         android:textDirection="locale"
                         android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/black"/>
+                        android:layout_marginEnd="@dimen/_5sdp"/>
 
 
                     <EditText
@@ -500,12 +588,22 @@
                         android:fontFamily="@font/poppins_regular"
                         android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:paddingStart="@dimen/_5sdp"
                         android:textDirection="locale"
-                        android:textAlignment="viewStart"        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
                         android:inputType="text"
                         android:imeOptions="actionNext"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@drawable/rounded_blue"
+                        android:elevation="@dimen/_2sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:textColorHint="@color/colorPrimary"
+                        android:textColor="@color/colorPrimary"
+
+
+                        />
 
 
 

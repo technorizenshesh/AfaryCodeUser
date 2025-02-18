@@ -172,9 +172,14 @@ public class HomeActivity extends AppCompatActivity {
       //  loadFragment(fragment);
 
 
-        if(NetworkAvailablity.checkNetworkStatus(HomeActivity.this)) GetProfile();
-        else Toast.makeText(HomeActivity.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
-    }
+
+        if (PreferenceConnector.readString(HomeActivity.this,
+                PreferenceConnector.LoginStatus, "").equals("true")) {
+            if (NetworkAvailablity.checkNetworkStatus(HomeActivity.this)) GetProfile();
+            else
+                Toast.makeText(HomeActivity.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+        }
+        }
 
 
     public boolean loadFragment(Fragment fragment) {
