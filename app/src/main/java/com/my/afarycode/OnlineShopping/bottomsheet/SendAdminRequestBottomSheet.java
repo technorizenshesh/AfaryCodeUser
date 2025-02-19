@@ -97,17 +97,17 @@ public class SendAdminRequestBottomSheet extends BottomSheetDialogFragment {
         binding.RRLogin.setOnClickListener(v -> {
 
 
-            if (binding.edtmobile.getText().toString().trim().isEmpty()) {
-                binding.edtmobile.setError(getString(R.string.can_not_be_empty));
+            if (binding.edNumber.getText().toString().trim().isEmpty()) {
+                binding.edNumber.setError(getString(R.string.can_not_be_empty));
 
-                Toast.makeText(getActivity(), getString(R.string.please_enter_valied_email), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.please_enter_mobile_number), Toast.LENGTH_SHORT).show();
 
             } else {
 
                 //  startActivity(new Intent(ForgotPassword.this, VerificationScreen.class)
                 //      .putExtra("user_email", binding.edtmobile.getText().toString()));
 
-                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))    sendAdminRequestAPI(binding.edtmobile.getText().toString());
+                if(NetworkAvailablity.checkNetworkStatus(requireActivity()))    sendAdminRequestAPI(binding.ccp.getSelectedCountryCode()+"-"+binding.edNumber.getText().toString());
                 else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
             }
         });

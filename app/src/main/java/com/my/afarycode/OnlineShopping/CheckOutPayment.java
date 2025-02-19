@@ -731,7 +731,10 @@ public class CheckOutPayment extends AppCompatActivity {
                         else Toast.makeText(CheckOutPayment.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
-                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                        dialogUserNotExit(number,type);
+
+
                     } else if (object.optString("status").equals("5")) {
                         PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
                         startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
@@ -761,6 +764,29 @@ public class CheckOutPayment extends AppCompatActivity {
 
     public String createDeepLink(String paymentId) {
         return "https://www.afaycode.com/payment?paymentId="; /*+ paymentId;*/
+    }
+
+
+
+    private void dialogUserNotExit(String number, String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(CheckOutPayment.this);
+        builder.setMessage(getString(R.string.this_user_is_not_yet_affiliated_with_afary_code_a_link_will_be_sent_to_him_by_sms_so_that_he_can_make_the_payment))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        sendPaymentLinkAnotherPerson(number,type);
+                    }
+                }).setNegativeButton(getString(R.string.skip), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 
@@ -840,6 +866,74 @@ public class CheckOutPayment extends AppCompatActivity {
             }
         });
     }
+
+
+    private void sendPaymentLinkAnotherPerson(String number,String type) {
+        //binding.loader.setVisibility(View.VISIBLE);
+        DataManager.getInstance().showProgressMessage(CheckOutPayment.this, getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(CheckOutPayment.this, PreferenceConnector.User_id, ""));
+       // map.put("other_user_id", anotherPersonId);
+        map.put("invoice_id", insertDeliveryId);
+        map.put("type_by", type);
+        map.put("value", number);
+
+        Log.e("MapMap", "Send PaymentLink to anotherPerson Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.sendPaymentLinkToAnotherPersonApi( map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Send Payment anotherPerson RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        Toast.makeText(CheckOutPayment.this, getString(R.string.invoice_send_sucessfully), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(CheckOutPayment.this, HomeActivity.class)
+                                .putExtra("status", "")
+                                .putExtra("msg", "").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (object.optString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    binding.loader.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(CheckOutPayment.this, "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
+
 
 
     private void setCountryCodeFromLocation(CountryCodePicker ccp) {

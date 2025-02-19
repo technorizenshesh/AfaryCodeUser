@@ -432,6 +432,7 @@ public class HomeFragment extends Fragment implements SearchListener {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
+                            changeUserPasswordStatus();
                         }
                     });
 
@@ -439,6 +440,54 @@ public class HomeFragment extends Fragment implements SearchListener {
             alertDialog.show();
 
     }
+
+
+
+
+    private void changeUserPasswordStatus() {
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+       // map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
+
+        Call<ResponseBody> loginCall = apiInterface.updatePasswordChangeStatusApi(map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call,
+                                   Response<ResponseBody> response) {
+                try {
+                    String responseString = response.body().string();
+                    JSONObject jsonObject = new JSONObject(responseString);
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) GetCartItem();
+                    else Toast.makeText(getActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG,"change User Password status Response = " + responseString);
+                    if(jsonObject.getString("status").equals("1")) {
+
+                    } else {
+                        // binding.tvNotFound.setVisibility(View.VISIBLE);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+
+
 
     private void getTitle() {
         Map<String,String> headerMap = new HashMap<>();

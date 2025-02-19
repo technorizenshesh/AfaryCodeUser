@@ -547,4 +547,14 @@ public interface AfaryCode {
     Call<ResponseBody> checkCityExitApi( @FieldMap Map<String, String> params);
 
 
+    @FormUrlEncoded
+    @POST("send_invoice_invitation_link")
+    Call<ResponseBody> sendPaymentLinkToAnotherPersonApi( @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("password_user_status")
+    Call<ResponseBody> updatePasswordChangeStatusApi( @FieldMap Map<String, String> params);
+
+
 }

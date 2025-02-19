@@ -424,6 +424,12 @@
     <string name="update_billing_address">MISE À JOUR DE L\'ADRESSE DE FACTURATION</string>
     <string name="we_available_on_this_country_but_you_will_be_collect_your_packege_from_shipping_agency">nous sommes disponibles dans ce pays mais la livraison urbaine n\'est pas encore disponible pour votre pays de destination. Vous récupérerez le colis à l\'adresse indiquée par l\'agence de transport.\n</string>
     <string name="we_do_not_serve_this_city">Désolé, nous ne desservons pas votre ville pour le moment.</string>
+
+    <string name="city_not_available_on_this_state">Ville non disponible dans cet état</string>
+    <string name="delivery_cost">Frais de livraison</string>
+    <string name="enter_the_number_in_international_format">Entrez le numéro au format international</string>
+    <string name="this_user_is_not_yet_affiliated_with_afary_code_a_link_will_be_sent_to_him_by_sms_so_that_he_can_make_the_payment">Cet utilisateur (numéro) n\'est pas encore affilié à afaryCode un lien lui sera envoyé par SMS afin qu\'il puisse effectuer le paiement.</string>
+
 </resources>
 
 

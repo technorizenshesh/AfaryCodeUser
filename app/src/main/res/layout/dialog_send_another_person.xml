@@ -32,6 +32,18 @@
 
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enter_the_number_in_international_format"
+            android:textColor="@color/red"
+            android:textSize="@dimen/_10sdp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+
+            />
+
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
@@ -527,6 +529,7 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
 
                     } else if (object.optString("status").equals("0")) {
                         //binding.loader.setVisibility(View.GONE);
+                      // dialogUserNotExit();
                         Toast.makeText(getActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();                    }
 
 
@@ -564,6 +567,92 @@ public class PaymentBottomSheet extends BottomSheetDialogFragment {
     public String createDeepLink(String paymentId) {
         return "https://www.afaycode.com/payment?paymentId="; /*+ paymentId;*/
     }
+
+
+    private void dialogUserNotExit(String number, String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setMessage(getString(R.string.this_user_is_not_yet_affiliated_with_afary_code_a_link_will_be_sent_to_him_by_sms_so_that_he_can_make_the_payment))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        sendPaymentLinkAnotherPerson(number,type);
+                    }
+                }).setNegativeButton(getString(R.string.skip), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+
+
+    private void sendPaymentLinkAnotherPerson(String number,String type) {
+        //binding.loader.setVisibility(View.VISIBLE);
+        DataManager.getInstance().showProgressMessage(requireActivity(), getString(R.string.please_wait));
+        Map<String, String> headerMap = new HashMap<>();
+        headerMap.put("Authorization", "Bearer " + PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token, ""));
+        headerMap.put("Accept", "application/json");
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
+        // map.put("other_user_id", anotherPersonId);
+      //  map.put("invoice_id", insertDeliveryId);
+        map.put("type_by", type);
+        map.put("value", number);
+
+        Log.e("MapMap", "Send PaymentLink to anotherPerson Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.sendPaymentLinkToAnotherPersonApi( map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Send Payment anotherPerson RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        Toast.makeText(requireActivity(), getString(R.string.invoice_send_sucessfully), Toast.LENGTH_SHORT).show();
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        //binding.loader.setVisibility(View.GONE);
+                        Toast.makeText(requireActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
+                    } else if (object.optString("status").equals("5")) {
+                        /*PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutPayment.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();*/
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    binding.loader.setVisibility(View.GONE);
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(requireActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
 
 
 

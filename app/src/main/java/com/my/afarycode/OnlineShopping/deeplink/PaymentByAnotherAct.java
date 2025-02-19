@@ -594,6 +594,12 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                         totalPriceToToPay =  object.getJSONObject("data").getJSONObject("delivery_data").getJSONObject("cddc_josn_decode").getString("total_payable_amount");
                         binding.totalPriceToToPay.setText("FCFA" +  totalPriceToToPay);
                         binding.tvShareBy.setText(getString(R.string.invoice_share_by)+ " "+object.getJSONObject("data").getJSONObject("cart_data").getJSONObject("cart_user_info").getString("user_name"));
+                        binding.tvMobile.setText(object.getJSONObject("data").getJSONObject("cart_data").getJSONObject("cart_user_info").getString("country_code")
+                               + object.getJSONObject("data").getJSONObject("cart_data").getJSONObject("cart_user_info").getString("mobile")
+                        );
+
+
+
                         arrayList.clear();
 
                         JSONArray array = object.getJSONObject("data").getJSONObject("cart_data").getJSONArray("cdi_json_cart_data");
@@ -701,6 +707,10 @@ public class PaymentByAnotherAct extends AppCompatActivity {
                         totalPriceToToPay =  object.getJSONObject("data").getString("swi_amount");
                         binding.totalPriceToToPay.setText("FCFA" +  totalPriceToToPay);
                         binding.tvShareBy.setText(getString(R.string.invoice_share_by)+ " "+object.getJSONObject("data").getJSONObject("user_data").getString("user_name"));
+                        binding.tvMobile.setText(object.getJSONObject("data").getJSONObject("user_data").getString("country_code")
+                                + object.getJSONObject("data").getJSONObject("user_data").getString("mobile"));
+
+
                       //  arrayList.clear();
                         countryCode = object.getJSONObject("data").getJSONObject("user_data").getString("country_code");
                         transferNumber = object.getJSONObject("data").getJSONObject("user_data").getString("mobile");

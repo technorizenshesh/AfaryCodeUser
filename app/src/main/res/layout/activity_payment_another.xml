@@ -62,13 +62,31 @@
 
                     <TextView
                         android:id="@+id/tvShareBy"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text=""
                         android:textColor="@color/black"
                         android:fontFamily="@font/poppins_regular"
-                        android:textSize="@dimen/_12sdp" />
+                        android:textSize="@dimen/_12sdp"
+                        android:layout_toStartOf="@+id/tvMobile"/>
+
+
+
+                    <TextView
+                        android:id="@+id/tvMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text=""
+                        android:textColor="@color/red"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginStart="@dimen/_11sdp"
+                        android:layout_marginEnd="@dimen/_7sdp"/>
+
+
+
 
 
                 </RelativeLayout>
