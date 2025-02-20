@@ -463,10 +463,13 @@ public class CheckOutPayment extends AppCompatActivity {
                         // binding.loader.setVisibility(View.GONE);
                         if (paymentType.equals("Wallet") || paymentType.equals("Cash")) {
                             Toast.makeText(CheckOutPayment.this, object.getString("message"), Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(CheckOutPayment.this, HomeActivity.class)
+
+                            startActivity(new Intent(CheckOutPayment.this, MyOrderScreen.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                          /*  startActivity(new Intent(CheckOutPayment.this, HomeActivity.class)
                                     .putExtra("status", "")
                                     .putExtra("msg", "")
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));*/
                             finish();
                         } else {
                             PreferenceConnector.writeString(CheckOutPayment.this, PreferenceConnector.transId, object.getJSONObject("ressult").getString("reference"));

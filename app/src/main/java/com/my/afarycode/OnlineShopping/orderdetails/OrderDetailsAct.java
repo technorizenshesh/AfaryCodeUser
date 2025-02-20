@@ -16,6 +16,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.my.afarycode.OnlineShopping.CheckOutPayment;
+import com.my.afarycode.OnlineShopping.HomeActivity;
 import com.my.afarycode.OnlineShopping.Model.GetProfileModal;
 import com.my.afarycode.OnlineShopping.activity.CardAct;
 import com.my.afarycode.OnlineShopping.chat.ChatAct;
@@ -80,7 +82,7 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         else
             Toast.makeText(OrderDetailsAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
-        binding.backNavigation.setOnClickListener(v -> finish());
+        binding.backNavigation.setOnClickListener(v -> onBackPressed());
 
         binding.btnChat.setOnClickListener(v -> {
             startActivity(new Intent(this, ChatAct.class)
@@ -876,4 +878,14 @@ public class OrderDetailsAct extends AppCompatActivity implements ItemOrderListe
         return numberFormat.format(number);
     }
 
+
+    @Override
+    public void onBackPressed() {
+       // super.onBackPressed();
+
+        startActivity(new Intent(OrderDetailsAct.this, HomeActivity.class)
+                .putExtra("status", "")
+                .putExtra("msg", "").addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        finish();
+    }
 }

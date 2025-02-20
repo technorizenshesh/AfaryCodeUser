@@ -71,10 +71,14 @@ public class CheckPaymentStatusAct extends AppCompatActivity {
                     if (object.getString("status").equals("1")) {
                         Toast.makeText(CheckPaymentStatusAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
                         if (paymentBy.equals("user")) {
-                            startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
+
+                            startActivity(new Intent(CheckPaymentStatusAct.this, MyOrderScreen.class)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+
+                       /*     startActivity(new Intent(CheckPaymentStatusAct.this, HomeActivity.class)
                                     .putExtra("status", "")
                                     .putExtra("msg", "")
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));*/
                             finish();
                         }
                         // else if()
