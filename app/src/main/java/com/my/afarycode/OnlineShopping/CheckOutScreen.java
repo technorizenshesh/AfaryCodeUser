@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.Add_to_Wish;
 import com.my.afarycode.OnlineShopping.Model.CartModal;
@@ -69,7 +70,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     String Chkkkk;
     String aa="";
 
-    String deliveryAgencyType="",deliveryYesNo="",addressId="";
+    String deliveryAgencyType="",deliveryYesNo="",addressId="",deliveryAgencyName="",deliveryAgencyImg="";
     String deliveryCharge="0.0";
 
     String deliveryAgencyId="",sendToServer="";
@@ -112,6 +113,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             deliveryAgencyId = getIntent().getStringExtra("agencyId");
             deliveryYesNo =  getIntent().getStringExtra("deliveryYesNo");
             deliveryMethod = getIntent().getStringExtra("deliveryMethod");
+            deliveryAgencyName =  getIntent().getStringExtra("deliveryAgencyName");
+            deliveryAgencyImg =  getIntent().getStringExtra("deliveryAgencyImg");
+
+
             addressId =  getIntent().getStringExtra("addressId");
             aa =  getIntent().getStringExtra("aa");
 
@@ -646,7 +651,6 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         taxN1 = object.getString("taxes_first");
                         taxN2 = object.getString("taxes_second");
                         currency = object.getString("currency");
-                        shippingAgencyFee = object.getString("shopping_cost_international");
                         if(currency.equals("XAF") || currency.equals("XOF")) currency = "FCFA";
                         if(!object.getString("platform_fees").equalsIgnoreCase(""))
                         {
@@ -655,8 +659,16 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                         else {
                             platFormsFees ="0";
                         }
-
+                        // assign to deliveryCharge to deliveryFee
                         deliveryFees = object.getString("total_delivery_fees");
+
+                        // shippingAgencyFee to deliveryFee
+                        shippingAgencyFee = object.getString("shopping_cost_international");
+
+                      //  deliveryFees = deliveryCharge;
+
+                      //  shippingAgencyFee = deliveryCharge;
+
                         //    totalPriceToToPay = Double.parseDouble(String.format("%.2f", Double.parseDouble(object.getString("total_payable_amount"))));
 
                         totalPriceToToPay =  object.getString("total_payable_amount");
@@ -694,7 +706,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
 
-                        if(deliveryMethod.equalsIgnoreCase("Vehicle"))
+                      /*  if(deliveryMethod.equalsIgnoreCase("Vehicle"))
                           binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.delivery_charge)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
                       else if(deliveryMethod.equalsIgnoreCase("Partner"))
                         //  binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.shipping_agency_fees)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
@@ -704,7 +716,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                             if(deliveryYesNo.equalsIgnoreCase("Yes"))
                                 binding.tvDeliveryCharge.setText(getString(R.string.delivery_charge));
                          else binding.tvDeliveryCharge.setText(Html.fromHtml( getString(R.string.delivery_charge) +" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
-                        }
+                        }*/
 
 
 
@@ -738,12 +750,19 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                                 binding.subTotal.setText(currency + mainTotalPay);
 
                                 binding.rlPlatform.setVisibility(View.VISIBLE);
-                                binding.tvText1.setText(getString(R.string.delivery_cost));
+                               // binding.tvText1.setText(getString(R.string.delivery_cost));
+                                binding.tvText1.setText(Html.fromHtml(getString(R.string.delivery_cost)+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>"));
+
                                 binding.plateformFees.setText(currency + deliveryFees);
+
+
                                 binding.tvTax1.setText(currency + taxN1);
                                 binding.tvtax2.setText(currency + taxN2);
                                 binding.rlDelivery.setVisibility(View.GONE);
                                 binding.rlShipping.setVisibility(View.GONE);
+                                binding.llAgencyData.setVisibility(View.VISIBLE);
+                                binding.tvAgencyName.setText(deliveryAgencyName);
+                                Glide.with(CheckOutScreen.this).load(deliveryAgencyImg).into(binding.ivAgencyImg);
 
                             }
                             else {
@@ -755,6 +774,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                                 binding.tvtax2.setText(currency + taxN2);
                                 binding.rlDelivery.setVisibility(View.GONE);
                                 binding.rlShipping.setVisibility(View.GONE);
+                                binding.llAgencyData.setVisibility(View.GONE);
 
                             }
 
@@ -764,13 +784,16 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                             binding.rlPlatform.setVisibility(View.GONE);
                             binding.tvTax1.setText(currency + taxN1);
                             binding.tvtax2.setText(currency + taxN2);
-                            binding.rlDelivery.setVisibility(View.VISIBLE);
+                            binding.rlDelivery.setVisibility(View.GONE);
                             binding.tvDelivery.setText(currency +  deliveryFees);
                             binding.rlShipping.setVisibility(View.VISIBLE);
                             binding.tvShippingFee.setText(currency +  shippingAgencyFee);
 
+                            binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.delivery_charge)/*+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>")*/));
 
-
+                            binding.llAgencyData.setVisibility(View.VISIBLE);
+                            binding.tvAgencyName.setText(deliveryAgencyName);
+                            Glide.with(CheckOutScreen.this).load(deliveryAgencyImg).into(binding.ivAgencyImg);
 
                         }
 

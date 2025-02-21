@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +83,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
     DeliveryTypeAdapter deliveryTypeAdapter;
 
     String deliveryAgencyType="",agencyId="";
-    String deliveryCharge="0.0";
+    String deliveryCharge="0.0",deliveryAgencyName="",deliveryAgencyImg="";
     String deliveryType="",lat="",deliveryYesNo="No",deliveryMethod="",aa="";
     String bottomSheetStatus="";
 
@@ -186,6 +187,9 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
                         .putExtra("deliveryMethod",deliveryMethod)
+                        .putExtra("deliveryAgencyName",deliveryAgencyName)
+                        .putExtra("deliveryAgencyImg",deliveryAgencyImg)
+
                         .putExtra("aa",aa));
                 deliveryMethod = "";
                 //addressId ="";
@@ -652,8 +656,15 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LAT, arrayList.get(position).getLat());
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LON, arrayList.get(position).getLon());
 
-            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAgency(arrayList.get(position).getId(),shopId);
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAgency(arrayList.get(position).getId(),shopId,"");
             else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+          //  if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllTax(arrayList.get(position).getId(),shopId);
+         //   else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+
 
         }
 
@@ -737,10 +748,99 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliveryCharge = deliveryAgencyList.get(position).getPrice()+"";
             agencyId = deliveryAgencyList.get(position).getId();
             deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
-
+            deliveryAgencyName = deliveryAgencyList.get(position).getName();
+            deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
         }
 
     }
+
+
+
+    public void  getAllTax(String addressId,String shopId){
+        DataManager.getInstance().showProgressMessage(requireActivity(), getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(requireActivity(), PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.User_id, ""));
+        map.put("drop_lat", PreferenceConnector.readString(requireActivity(), PreferenceConnector.LAT, ""));
+        map.put("drop_lon", PreferenceConnector.readString(requireActivity(), PreferenceConnector.LON, ""));
+        map.put("country_id",PreferenceConnector.readString(requireActivity(), PreferenceConnector.COUNTRY_ID,""));
+        map.put("delivery_partner","");
+        map.put("self_collect",deliveryYesNo);
+        map.put("type",deliveryMethod);
+        if(addressId!=null) map.put("address_id",addressId);
+        else  map.put("address_id","");
+        map.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
+
+        Log.e(TAG, "Get AllTax Request :" + map);
+        Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All Taxs RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        // JSONObject jsonObject = object.getJSONObject("result");
+                        // aa = object.getJSONArray("result").getJSONObject(0).getString("delivery_calculation");
+
+                        //String  deliveryFees = numberFormat.parse(object.getString("total_delivery_fees")).doubleValue();
+
+
+                     String  deliveryFees = object.getString("total_delivery_fees");
+
+
+                        DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
+                        deliveryAgencyList.clear();
+                        deliveryAgencyList.addAll(data.getResult());
+
+
+
+                        deliveryAgencyAdapter.notifyDataSetChanged();
+
+
+                     //   if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAgency(addressId,shopId, deliveryFees);
+                    //    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        Toast.makeText(requireActivity(), object.getString("message"), Toast.LENGTH_SHORT).show();
+                        deliveryAgencyList.clear();
+                        deliveryAgencyAdapter.notifyDataSetChanged();
+
+                    }
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(requireActivity(), PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(requireActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        requireActivity().finish();
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
+
+
 
     private void dialogDontDelivery() {
         LayoutInflater li;
@@ -779,6 +879,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         .putExtra("charge",deliveryCharge)
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
+                        .putExtra("deliveryAgencyName",deliveryAgencyName)
+                        .putExtra("deliveryAgencyImg",deliveryAgencyImg)
                         .putExtra("aa",aa));
             }
 
@@ -871,7 +973,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         });
     }
 
-    private void getDeliveryAgency(String addressId,String productId) {
+    private void getDeliveryAgency(String addressId,String productId,String deliveryFee) {
         DataManager.getInstance().showProgressMessage(getActivity(), getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(getActivity(), PreferenceConnector.access_token,""));
@@ -903,6 +1005,9 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
                         deliveryAgencyList.clear();
                         deliveryAgencyList.addAll(data.getResult());
+
+
+
                         deliveryAgencyAdapter.notifyDataSetChanged();
                         deliveryAgencyType ="International";
 

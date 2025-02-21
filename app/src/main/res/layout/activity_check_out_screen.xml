@@ -254,6 +254,48 @@
                             android:textStyle="bold" />
                     </RelativeLayout>
 
+                    <LinearLayout
+                        android:id="@+id/llAgencyData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:padding="@dimen/_3sdp"
+                        android:orientation="horizontal"
+                        android:visibility="gone"
+                        >
+
+                        <ImageView
+                            android:id="@+id/ivAgencyImg"
+                            android:layout_width="@dimen/_25sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginTop="@dimen/_2sdp"
+                            android:layout_marginEnd="@dimen/_7sdp"
+                            android:scaleType="fitXY"
+                            android:visibility="visible"/>
+
+
+                        <TextView
+                            android:id="@+id/tvAgencyName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_14sdp" />
+
+
+
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+
                 </LinearLayout>
 
 

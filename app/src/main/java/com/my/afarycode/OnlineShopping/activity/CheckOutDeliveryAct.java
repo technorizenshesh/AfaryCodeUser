@@ -66,7 +66,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     private String phone_no = "", type = "",productId="",shopId="";
     ArrayList<LocationModel.Result> arrayList;
     LocationAdapter adapter;
-    String deliveryType="",lat="";
+    String deliveryType="",lat="",deliveryAgencyName="",deliveryAgencyImg="";
     String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="",addressId="",aa="";
     String deliveryCharge="0.0";
 
@@ -152,6 +152,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
                         .putExtra("deliveryMethod",deliveryMethod)
+                        .putExtra("deliveryAgencyName",deliveryAgencyName)
+                        .putExtra("deliveryAgencyImg",deliveryAgencyImg)
                         .putExtra("addressId",addressId)
                         .putExtra("aa",aa));
                 deliveryMethod = "";
@@ -450,8 +452,12 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
             //  arrayList.get(position).getCountry();
 
-            if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) getDeliveryAgency(arrayList.get(position).getId(),shopId);
+            if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) getDeliveryAgency(arrayList.get(position).getId(),shopId,"");
             else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+        //    if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) getAllTax(arrayList.get(position).getId(),shopId);
+        //    else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
         }
@@ -539,11 +545,101 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             deliveryCharge = deliveryAgencyList.get(position).getPrice()+"";
             agencyId = deliveryAgencyList.get(position).getId();
             deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
+
+
+            deliveryAgencyName = deliveryAgencyList.get(position).getName();
+            deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
         }
 
 
 
     }
+
+
+
+    public void  getAllTax(String addressId,String shopId){
+        DataManager.getInstance().showProgressMessage(CheckOutDeliveryAct.this, getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
+        map.put("drop_lat", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.LAT, ""));
+        map.put("drop_lon", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.LON, ""));
+        map.put("country_id",PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.COUNTRY_ID,""));
+        map.put("delivery_partner","");
+        map.put("self_collect",deliveryYesNo);
+        map.put("type",deliveryMethod);
+        if(addressId!=null) map.put("address_id",addressId);
+        else  map.put("address_id","");
+        map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
+
+        Log.e(TAG, "Get AllTax Request :" + map);
+        Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
+
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Get All Taxs RESPONSE" + object);
+
+                    if (object.optString("status").equals("1")) {
+                        // JSONObject jsonObject = object.getJSONObject("result");
+                        // aa = object.getJSONArray("result").getJSONObject(0).getString("delivery_calculation");
+
+                        //String  deliveryFees = numberFormat.parse(object.getString("total_delivery_fees")).doubleValue();
+
+
+                        String  deliveryFees = object.getString("total_delivery_fees");
+
+
+                        DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
+                        deliveryAgencyList.clear();
+                        deliveryAgencyList.addAll(data.getResult());
+                        deliveryAgencyAdapter.notifyDataSetChanged();
+
+
+                     //   if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) getDeliveryAgency(addressId,shopId, deliveryFees);
+                     //   else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
+                    } else if (object.optString("status").equals("0")) {
+                        Toast.makeText(CheckOutDeliveryAct.this, object.getString("message"), Toast.LENGTH_SHORT).show();
+                        deliveryAgencyList.clear();
+                        deliveryAgencyAdapter.notifyDataSetChanged();
+
+                    }
+                    else if (object.getString("status").equals("5")) {
+                        PreferenceConnector.writeString(CheckOutDeliveryAct.this, PreferenceConnector.LoginStatus, "false");
+                        startActivity(new Intent(CheckOutDeliveryAct.this, Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                        finish();
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
+
+
+
+
+
 
     private void dialogDontDelivery() {
         LayoutInflater li;
@@ -583,6 +679,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("agencyId",agencyId)
                         .putExtra("deliveryYesNo",deliveryYesNo)
                         .putExtra("deliveryMethod",deliveryMethod)
+                        .putExtra("deliveryAgencyName",deliveryAgencyName)
+                        .putExtra("deliveryAgencyImg",deliveryAgencyImg)
                         .putExtra("aa",aa));
 
             }
@@ -679,7 +777,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     }
 
 
-    private void getDeliveryAgency(String addressId,String productId) {
+    private void getDeliveryAgency(String addressId,String productId,String deliveryFees) {
         DataManager.getInstance().showProgressMessage(CheckOutDeliveryAct.this, getString(R.string.please_wait));
         Map<String,String> headerMap = new HashMap<>();
         headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.access_token,""));
