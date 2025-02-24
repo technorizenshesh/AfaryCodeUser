@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.deliveryaddress;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -518,6 +519,11 @@ if(deliveryType.equalsIgnoreCase("")) {
         }
 
 
+
+    }
+
+    @Override
+    public void onPos(int position, String Type, Dialog dialog) {
 
     }
 

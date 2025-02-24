@@ -333,12 +333,19 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 try {
-                    Log.e("addressStreet====", place.getAddress());
+
+
                     address = place.getAddress();
                     latitude = place.getLatLng().latitude;
                     longitude = place.getLatLng().longitude;
                     city = DataManager.getInstance().getAddress(getActivity(), latitude, longitude);
                     countryName = DataManager.getInstance().getCountry(getActivity(), latitude, longitude);
+
+                    Log.e("addressStreet====", place.getAddress() );
+                    Log.e("lat====", place.getLatLng().latitude+"" );
+                    Log.e("lon====", place.getLatLng().longitude+"" );
+                    Log.e("country====", countryName );
+
 
                     tvArea.setVisibility(View.VISIBLE);
                     tv1.setVisibility(View.VISIBLE);
@@ -351,12 +358,16 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
 
 
                     if(countryArrayList!=null) {
-                        for (int i = 0; i <= countryArrayList.size(); i++) {
+                        for (int i = 0; i < countryArrayList.size(); i++) {
                             if (countryArrayList.get(i).getName().equals(countryName) || countryArrayList.get(i).getNameFr().equals(countryName) ) {
                                 countryId = countryArrayList.get(i).getId();
                                 binding.etCountry.setText(countryArrayList.get(i).getName());
-                                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllState(countryId);
+
+
+                                if(NetworkAvailablity.checkNetworkStatus(requireActivity())) checkCountryAvailability(countryId);
                                 else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
                             }
                         }
                     }
@@ -463,11 +474,12 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
 
                         CountryModel data = new Gson().fromJson(responseData, CountryModel.class);
                         countryArrayList.clear();
-                        for(int i=0;i<=data.getResult().size();i++) {
+                        countryArrayList.addAll(data.getResult());
+                       /* for(int i=0;i<data.getResult().size();i++) {
                             if (data.getResult().get(i).getAvailability().equals("1")){
                                 countryArrayList.add(data.getResult().get(i));
                             }
-                        }
+                        }*/
 
 
                       //  countryArrayList.addAll(data.getResult());
@@ -517,9 +529,9 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                         StateModel stateModel = new Gson().fromJson(responseData, StateModel.class);
                         stateArrayList.clear();
                         stateArrayList.addAll(stateModel.getResult());
-                        stateId = stateArrayList.get(0).getId();
-                        binding.etState.setText(stateArrayList.get(0).getName());
-                        getAllCity(stateId);
+                     //   stateId = stateArrayList.get(0).getId();
+                      //  binding.etState.setText(stateArrayList.get(0).getName());
+                        getAllCity(stateArrayList.get(0).getId());
 
                     } else if (object.optString("status").equals("0")) {
                         stateArrayList.clear();
@@ -566,9 +578,9 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                         CityModel cityModel = new Gson().fromJson(responseData, CityModel.class);
                         cityArrayList.clear();
                         cityArrayList.addAll(cityModel.getResult());
-                        cityId = cityArrayList.get(0).getId();
-                        binding.etTown.setText(cityArrayList.get(0).getName());
-                        checkCityExistence(cityArrayList.get(0).getName());
+                      //  cityId = cityArrayList.get(0).getId();
+                     //   binding.etTown.setText(cityArrayList.get(0).getName());
+                     //   checkCityExistence(cityArrayList.get(0).getName());
 
 
                     } else if (object.optString("status").equals("0")) {
@@ -686,7 +698,7 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
                        // binding.etTown.setError(getString(R.string.this_city_is_not_served));
                        // binding.email.setFocusable(true);
                         //Toast.makeText(requireActivity(), getString(R.string.this_city_is_not_served), Toast.LENGTH_SHORT).show();
-                        ShowCityServeDialog(getString(R.string.alert),getString(R.string.this_city_is_not_served));
+                        ShowCityServeDialog(getString(R.string.alert),getString(R.string.delivery_to_this_city));
                     }
 
 
@@ -708,6 +720,65 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             }
         });
     }
+
+    private void checkCountryAvailability(String countryId) {
+        //binding.loader.setVisibility(View.VISIBLE);
+
+        /*if (city.isEmpty()) {
+            // Don't enable the next EditText if email is empty
+            return;
+        }*/
+
+        Map<String, String> map = new HashMap<>();
+      //  map.put("city", city);
+        map.put("country_id", countryId);
+      //  map.put("state", stateId);
+        map.put("user_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.User_id, ""));
+        Log.e("MapMap", "Check country availability Request" + map);
+
+        Call<ResponseBody> loginCall = apiInterface.checkCountryAvailabilityApi(map);
+        loginCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                // binding.loader.setVisibility(View.GONE);
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e("Add Address", "Check country availability RESPONSE" + object);
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllState(countryId);
+                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+                    if (object.optString("status").equals("1")) {
+                        //emailExit = true;
+                    } else if (object.optString("status").equals("0")) {
+                        // emailExit = false;
+                        // binding.etTown.setError(getString(R.string.this_city_is_not_served));
+                        // binding.email.setFocusable(true);
+                        //Toast.makeText(requireActivity(), getString(R.string.this_city_is_not_served), Toast.LENGTH_SHORT).show();
+                        ShowCityServeDialog(getString(R.string.alert),getString(R.string.international_delivery_country_not_served));
+                    }
+
+
+                } catch (Exception e) {
+                    Log.e("error>>>>", "" + e);
+                    DataManager.getInstance().hideProgressMessage();
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                Toast.makeText(requireActivity(), "Network Error !!!!", Toast.LENGTH_SHORT).show();
+                //  binding.loader.setVisibility(View.GONE);
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+    }
+
 
 
     private void ShowCityServeDialog(String title,String msg){

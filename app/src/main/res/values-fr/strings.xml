@@ -407,7 +407,8 @@
     <string name="this_shop_click_here">cette boutique en cliquant ici</string>
     <string name="please_select_delivery_agency">veuillez sélectionner l\'agence de livraison</string>
     <string name="shipping_agency_fees">Frais d\'agence de livraison</string>
-    <string name="we_do_not_available_on_this_city">Nous ne sommes pas disponibles sur cette ville</string>
+
+    <string name="we_do_not_available_on_this_city">Désolé, livraison urbaine dans cette ville pas encore disponible. Vous pouvez récupérer votre colis par vous-même ; Veuillez sélectionner l\'option CLICK AND COLLECT</string>
 
     <string name="order_cancelled">Commande annulée...</string>
     <string name="transit">Transport</string>
@@ -429,6 +430,16 @@
     <string name="delivery_cost">Frais de livraison</string>
     <string name="enter_the_number_in_international_format">Entrez le numéro au format international</string>
     <string name="this_user_is_not_yet_affiliated_with_afary_code_a_link_will_be_sent_to_him_by_sms_so_that_he_can_make_the_payment">Cet utilisateur (numéro) n\'est pas encore affilié à afaryCode un lien lui sera envoyé par SMS afin qu\'il puisse effectuer le paiement.</string>
+
+    <string name="enter_mobile_number">Entrez le numéro de mobile</string>
+    <string name="delivery_to_this_city">La livraison vers cette ville n\'est pas desservie, votre adresse sera quand même enregistrée. Veuillez continuer.</string>
+    <string name="international_delivery_country_not_served">La livraison internationale vers ce pays n\'est pas desservie, votre adresse sera toujours enregistrée. Veuillez continuer.</string>
+
+    <string name="sorry_this_country_not_served_yet">Désolé, ce pays n\'est pas encore desservi</string>
+    <string name="unben_delivery_not">nous sommes disponibles dans ce pays mais la livraison urbaine n\'est pas encore disponible pour votre destination. Vous récupérerez le colis à l\'adresse indiquée par l\'agence de transport</string>
+
+    <string name="select_vehicle">Sélectionner un véhicule</string>
+    <string name="select_shipping_agency">Sélectionnez l\'agence d\'expédition</string>
 
 </resources>
 

@@ -557,4 +557,9 @@ public interface AfaryCode {
     Call<ResponseBody> updatePasswordChangeStatusApi( @FieldMap Map<String, String> params);
 
 
+    @FormUrlEncoded
+    @POST("check_country_exist_or_not")
+    Call<ResponseBody> checkCountryAvailabilityApi( @FieldMap Map<String, String> params);
+
+
 }

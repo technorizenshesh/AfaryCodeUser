@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -22,12 +23,14 @@ public class DeliveryAgencyAdapter extends RecyclerView.Adapter<DeliveryAgencyAd
     Context context;
     ArrayList<DeliveryAgencyModel.Result> arrayList;
     onPosListener listener;
+    Dialog mDialog;
     private int lastSelectedPosition = -1;
 
-    public DeliveryAgencyAdapter(Context context, ArrayList<DeliveryAgencyModel.Result> arrayList, onPosListener listener) {
+    public DeliveryAgencyAdapter(Context context, ArrayList<DeliveryAgencyModel.Result> arrayList, onPosListener listener, Dialog mDialog) {
         this.context = context;
         this.arrayList = arrayList;
         this.listener = listener;
+        this.mDialog = mDialog;
     }
 
     @NonNull
@@ -66,7 +69,7 @@ public class DeliveryAgencyAdapter extends RecyclerView.Adapter<DeliveryAgencyAd
                     arrayList.get(i).setChk(false);
                 }
                 arrayList.get(getAdapterPosition()).setChk(true);
-                listener.onPos(getAdapterPosition(),"deliveryAgency");
+                listener.onPos(getAdapterPosition(),"deliveryAgency",mDialog);
                 lastSelectedPosition = getAdapterPosition();
                 notifyDataSetChanged();
             });

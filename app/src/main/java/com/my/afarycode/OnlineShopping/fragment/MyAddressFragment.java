@@ -1,5 +1,6 @@
 package com.my.afarycode.OnlineShopping.fragment;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -169,6 +170,11 @@ public class MyAddressFragment extends Fragment implements addAddressListener, o
 
         else if(Type.equals("Edit"))
             new EditAddressFragment(arrayList.get(position)).callBack(this::onAddress).show(getActivity().getSupportFragmentManager(),"");
+
+    }
+
+    @Override
+    public void onPos(int position, String Type, Dialog dialog) {
 
     }
 

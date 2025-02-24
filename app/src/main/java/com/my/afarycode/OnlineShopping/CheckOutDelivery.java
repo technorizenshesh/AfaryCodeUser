@@ -1,6 +1,7 @@
 package com.my.afarycode.OnlineShopping;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -21,8 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.my.afarycode.OnlineShopping.Model.Add_Address_Modal;
@@ -88,7 +91,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
     String bottomSheetStatus="";
 
     DeliveryAgencyAdapter deliveryAgencyAdapter;
-
+    Dialog mDialog;
 
     ArrayList<DeliveryAgencyModel.Result> deliveryAgencyList;
 
@@ -216,8 +219,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         binding.rvDeliveryType.setAdapter(deliveryTypeAdapter);
 
 
-        deliveryAgencyAdapter = new DeliveryAgencyAdapter(getActivity(),deliveryAgencyList,CheckOutDelivery.this);
-        binding.rvDeliveryAgency.setAdapter(deliveryAgencyAdapter);
+     //   deliveryAgencyAdapter = new DeliveryAgencyAdapter(getActivity(),deliveryAgencyList,CheckOutDelivery.this);
+     //   binding.rvDeliveryAgency.setAdapter(deliveryAgencyAdapter);
 
 
         binding.llAddress.setOnClickListener(view -> callBottomSheet("",""));
@@ -681,8 +684,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliverArrayList.get(position).setChk(true);
             deliveryTypeAdapter.notifyItemChanged(position);
             binding.rdDontDelivery.setChecked(false);
-            deliveryAgencyList.clear();
-            deliveryAgencyAdapter.notifyDataSetChanged();
+         //   deliveryAgencyList.clear();
+        //    deliveryAgencyAdapter.notifyDataSetChanged();
             callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
 
 
@@ -698,8 +701,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliverArrayList.get(position).setChk(true);
             deliveryTypeAdapter.notifyItemChanged(position);
             binding.rdDontDelivery.setChecked(false);
-            deliveryAgencyList.clear();
-            deliveryAgencyAdapter.notifyDataSetChanged();
+      //      deliveryAgencyList.clear();
+      //      deliveryAgencyAdapter.notifyDataSetChanged();
             callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
 
 
@@ -716,8 +719,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliverArrayList.get(position).setChk(true);
             deliveryTypeAdapter.notifyItemChanged(position);
             binding.rdDontDelivery.setChecked(false);
-            deliveryAgencyList.clear();
-            deliveryAgencyAdapter.notifyDataSetChanged();
+         //   deliveryAgencyList.clear();
+        //    deliveryAgencyAdapter.notifyDataSetChanged();
             callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
 
 
@@ -733,8 +736,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliverArrayList.get(position).setChk(true);
             deliveryTypeAdapter.notifyItemChanged(position);
             binding.rdDontDelivery.setChecked(false);
-            deliveryAgencyList.clear();
-            deliveryAgencyAdapter.notifyDataSetChanged();
+          //  deliveryAgencyList.clear();
+         //   deliveryAgencyAdapter.notifyDataSetChanged();
             callBottomSheet(deliverArrayList.get(position).getTitle(),deliverArrayList.get(position).getId());
 
         }
@@ -750,10 +753,26 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
             deliveryAgencyName = deliveryAgencyList.get(position).getName();
             deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
+            mDialog.dismiss();
         }
 
     }
 
+    @Override
+    public void onPos(int position, String Type, Dialog dialog) {
+        if(Type.equals("deliveryAgency")) {
+            deliveryCharge = deliveryAgencyList.get(position).getPrice() + "";
+            agencyId = deliveryAgencyList.get(position).getId();
+            deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
+
+
+            deliveryAgencyName = deliveryAgencyList.get(position).getName();
+            deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
+            Log.e("select delivery Agency==", deliveryAgencyName);
+           // deliveryAgencyAdapter.notifyDataSetChanged();
+            mDialog.dismiss();
+        }
+    }
 
 
     public void  getAllTax(String addressId,String shopId){
@@ -836,9 +855,6 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             }
         });
     }
-
-
-
 
 
 
@@ -997,9 +1013,6 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     String responseData = response.body() != null ? response.body().string() : "";
                     JSONObject object = new JSONObject(responseData);
 
-                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAvailability(addressId);
-                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
-
                     Log.e(TAG, "Delivery Agency RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
                         DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
@@ -1008,13 +1021,13 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
 
 
-                        deliveryAgencyAdapter.notifyDataSetChanged();
+                     //  deliveryAgencyAdapter.notifyDataSetChanged();
                         deliveryAgencyType ="International";
-
+                       //  deliveryAgencyDialog(requireActivity());
 
                     } else if (object.optString("status").equals("0")) {
                         deliveryAgencyList.clear();
-                        deliveryAgencyAdapter.notifyDataSetChanged();
+                      //  deliveryAgencyAdapter.notifyDataSetChanged();
                         deliveryAgencyType ="Afary Code";
 
                     }
@@ -1024,6 +1037,10 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         startActivity(new Intent(getActivity(), Splash.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP));
                         getActivity().finish();
                     }
+
+
+                    if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAvailability(addressId);
+                    else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
                 } catch (Exception e) {
@@ -1070,13 +1087,15 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         if (object.optString("status").equals("1")) {
                             binding.rvDeliveryAgency.setVisibility(View.GONE);
                             uncheckAddressList();
-                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_do_not_available_on_this_country), object.getString("status"));
+                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
 
                         }
 
                         // 'Delivery and Availibitly Both are Available
                         else if (object.getString("status").equals("2")) {
-                            binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                           // binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                            deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle));
+
                         }
 
 
@@ -1090,9 +1109,11 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
                         // Delivery are available but Availibitly are not available
                         else if (object.getString("status").equals("4")) {
-                            binding.rvDeliveryAgency.setVisibility(View.GONE);
-                            uncheckAddressList();
-                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.this_country_cannot_be_delivered), object.getString("status"));
+                          //  binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                            deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle));
+
+                            // uncheckAddressList();
+                           // ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.this_country_cannot_be_delivered), object.getString("status"));
                         }
 
 
@@ -1118,7 +1139,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
                         // 'Delivery and Availibitly Both are Available
                         else if (object.getString("status").equals("2")) {
-                            binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                          //  binding.rvDeliveryAgency.setVisibility(View.VISIBLE);
+                            deliveryAgencyDialog(requireActivity(),getString(R.string.select_shipping_agency));
                         }
 
 
@@ -1126,13 +1148,14 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         else if (object.getString("status").equals("3")) {
                             binding.rvDeliveryAgency.setVisibility(View.GONE);
                             uncheckAddressList();
-                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_available_on_this_country_but_you_will_be_collect_your_packege_from_shipping_agency), object.getString("status"));
+                            ShowAvailableResultDialog22(getString(R.string.alert), getString(R.string.we_available_on_this_country_but_you_will_be_collect_your_packege_from_shipping_agency), object.getString("status"));
 
                         }
 
                         // Delivery are available but Availibitly are not available
                         else if (object.getString("status").equals("4")) {
                             binding.rvDeliveryAgency.setVisibility(View.GONE);
+
                             uncheckAddressList();
                             ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.this_country_cannot_be_delivered), object.getString("status"));
                         }
@@ -1142,7 +1165,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         else if (object.getString("status").equals("5")) {
                             binding.rvDeliveryAgency.setVisibility(View.GONE);
                             uncheckAddressList();
-                            ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_do_not_serve_this_city), object.getString("status"));
+                            ShowAvailableResultDialog22(getString(R.string.alert), getString(R.string.unben_delivery_not), object.getString("status"));
                         }
                     }
 
@@ -1196,6 +1219,55 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                 })*/
                 // Show the dialog
     }
+
+
+    private void ShowAvailableResultDialog22(String title,String msg,String status){
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setTitle(title)
+                .setMessage(msg)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(getString(R.string.skip), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }) .show();
+        // Show the dialog
+    }
+
+
+
+
+
+    private void deliveryAgencyDialog(Context context,String title) {
+        mDialog = new Dialog(context);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_delivery_agency);
+        mDialog.setCancelable(true);
+        mDialog.setCanceledOnTouchOutside(true);
+
+        RecyclerView rvDeliveryAgency = mDialog.findViewById(R.id.rvDeliveryAgency);
+        TextView tvTitle = mDialog.findViewById(R.id.tvTitle);
+
+        tvTitle.setText(title);
+
+
+        DeliveryAgencyAdapter deliveryAgencyAdapter = new DeliveryAgencyAdapter(getActivity(),deliveryAgencyList,CheckOutDelivery.this,mDialog);
+        rvDeliveryAgency.setAdapter(deliveryAgencyAdapter);
+
+
+
+
+
+        mDialog.show();
+    }
+
+
 
 
 }

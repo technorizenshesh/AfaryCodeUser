@@ -402,7 +402,7 @@
     <string name="this_shop_click_here">this shop by clicking here</string>
     <string name="please_select_delivery_agency">please select delivery agency</string>
     <string name="shipping_agency_fees">Shipping agency fees</string>
-    <string name="we_do_not_available_on_this_city">We don\'t available on this city</string>
+    <string name="we_do_not_available_on_this_city">Sorry urban delivery in this city not yet available. You can collect your package by yourself; Please select CLICK AND COLLECT option</string>
     <string name="order_cancelled">Order Cancelled...</string>
     <string name="transit">Transit</string>
     <string name="reached_to_shipping_company">Reached to Shipping Company</string>
@@ -420,4 +420,10 @@
     <string name="enter_the_number_in_international_format">Enter the number in international format</string>
     <string name="this_user_is_not_yet_affiliated_with_afary_code_a_link_will_be_sent_to_him_by_sms_so_that_he_can_make_the_payment">This user (number) is not yet affiliated with afaryCode a link will be sent to him by SMS so that he can make the payment.</string>
     <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="delivery_to_this_city">Delivery to this city is not served, your address will still be registered. Please continue.</string>
+    <string name="international_delivery_country_not_served">International Delivery to this country is not served, your address will still be registered. Please continue.</string>
+    <string name="sorry_this_country_not_served_yet">Sorry this country is not yet served</string>
+    <string name="unben_delivery_not">we are available in this country but urban delivery is not yet available for your destination. You will collect the package at the adress indicated by the shipping agency</string>
+    <string name="select_vehicle">Select vehicle</string>
+    <string name="select_shipping_agency">Select shipping agency</string>
 </resources>

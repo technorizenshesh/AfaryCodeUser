@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@color/gray_btn_bg_color"
+        android:fontFamily="@font/poppins_semibold"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDeliveryAgency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_delivery_agency"
+        android:layout_marginTop="@dimen/_7sdp"
+        />
+
+
+</LinearLayout>
