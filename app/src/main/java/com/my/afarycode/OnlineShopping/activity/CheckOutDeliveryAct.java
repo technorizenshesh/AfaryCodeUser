@@ -564,9 +564,13 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                 public void run() {
                     if (mDialog != null && mDialog.isShowing()) {
                         mDialog.dismiss();
+
                     }
                 }
             });
+
+
+
         }
 
 
@@ -586,6 +590,20 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
               Log.e("select delivery Agency==", deliveryAgencyName);
              // deliveryAgencyAdapter.notifyDataSetChanged();
               mDialog.dismiss();
+              startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                      .putExtra("agency", deliveryAgencyType)
+                      .putExtra("charge", deliveryCharge)
+                      .putExtra("agencyId", agencyId)
+                      .putExtra("deliveryYesNo", deliveryYesNo)
+                      .putExtra("deliveryMethod", deliveryMethod)
+                      .putExtra("deliveryAgencyName", deliveryAgencyName)
+                      .putExtra("deliveryAgencyImg", deliveryAgencyImg)
+                      .putExtra("addressId", addressId)
+                      .putExtra("aa", aa));
+              deliveryMethod = "";
+              addressId = "";
+              agencyId = "";
+              deliveryType = "";
           }
 
     }

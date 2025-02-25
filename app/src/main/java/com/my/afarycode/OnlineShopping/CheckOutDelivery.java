@@ -754,6 +754,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliveryAgencyName = deliveryAgencyList.get(position).getName();
             deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
             mDialog.dismiss();
+
         }
 
     }
@@ -771,6 +772,20 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             Log.e("select delivery Agency==", deliveryAgencyName);
            // deliveryAgencyAdapter.notifyDataSetChanged();
             mDialog.dismiss();
+            startActivity(new Intent(getActivity(), CheckOutScreen.class)
+                    .putExtra("agency",deliveryAgencyType)
+                    .putExtra("charge",deliveryCharge)
+                    .putExtra("agencyId",agencyId)
+                    .putExtra("deliveryYesNo",deliveryYesNo)
+                    .putExtra("deliveryMethod",deliveryMethod)
+                    .putExtra("deliveryAgencyName",deliveryAgencyName)
+                    .putExtra("deliveryAgencyImg",deliveryAgencyImg)
+
+                    .putExtra("aa",aa));
+            deliveryMethod = "";
+            //addressId ="";
+            agencyId="";
+            deliveryType="";
         }
     }
 
