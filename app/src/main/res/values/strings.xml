@@ -426,4 +426,5 @@
     <string name="unben_delivery_not">we are available in this country but urban delivery is not yet available for your destination. You will collect the package at the adress indicated by the shipping agency</string>
     <string name="select_vehicle">Select vehicle</string>
     <string name="select_shipping_agency">Select shipping agency</string>
+    <string name="sorry_we_do_not_serve_this_city_at_the_moment_please_choose_another_city_or_change_your_delivery_address">Sorry, we do not serve this city at the moment. Please choose another city or delivery address</string>
 </resources>

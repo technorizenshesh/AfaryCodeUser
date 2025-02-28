@@ -87,7 +87,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
     String deliveryAgencyType="",agencyId="";
     String deliveryCharge="0.0",deliveryAgencyName="",deliveryAgencyImg="";
-    String deliveryType="",lat="",deliveryYesNo="No",deliveryMethod="",aa="";
+    String deliveryType="",lat="",deliveryYesNo="No",deliveryMethod="",aa="",cityType="";
     String bottomSheetStatus="";
 
     DeliveryAgencyAdapter deliveryAgencyAdapter;
@@ -1096,7 +1096,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
                    aa = object.optString("order_type");
 
-                    if(object.optString("order_type").equals("NATIONAL")) {
+                 /*   if(object.optString("order_type").equals("NATIONAL")) {
 
                         // Delivery and Availibitly both are not available
                         if (object.optString("status").equals("1")) {
@@ -1182,8 +1182,73 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                             uncheckAddressList();
                             ShowAvailableResultDialog22(getString(R.string.alert), getString(R.string.unben_delivery_not), object.getString("status"));
                         }
+                    }*/
+
+
+
+                    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    /* for check city functionality */
+                    if (object.optString("status").equals("9")) {
+                        cityType = "type 1";
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        // uncheckAddressList();
+                        //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+                        deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle));
+
                     }
 
+                    else if (object.optString("status").equals("7") || object.optString("status").equals("10")) {
+                        cityType = "type 2";
+                        //  binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        //   uncheckAddressList();
+                        //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+
+                    }
+
+
+                    else if (object.optString("status").equals("4") || object.optString("status").equals("5")
+                            || object.optString("status").equals("6") ) {
+                        cityType = "type 3";
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.dear_customer)+"\n"+getString(R.string.sorry_we_do_not_serve_this_city_at_the_moment_please_choose_another_city_or_change_your_delivery_address), object.getString("status"));
+
+                    }
+
+                    else if (object.optString("status").equals("8") || object.optString("status").equals("11")) {
+                        cityType = "type 4";
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        //  ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+
+                    }
+
+
+                    else if (object.optString("status").equals("1")) {
+                        cityType = "type 5";
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        //  ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+
+                    }
+
+
+                    else if (object.optString("status").equals("2")) {
+                        cityType = "type 6";
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        //    ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+
+                    }
+
+
+                    else if (object.optString("status").equals("3") ) {
+                        cityType = "type 7";
+                        binding.rvDeliveryAgency.setVisibility(View.GONE);
+                        uncheckAddressList();
+                        //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+
+                    }
 
 
                 } catch (Exception e) {
