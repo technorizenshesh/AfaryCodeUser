@@ -427,4 +427,9 @@
     <string name="select_vehicle">Select vehicle</string>
     <string name="select_shipping_agency">Select shipping agency</string>
     <string name="sorry_we_do_not_serve_this_city_at_the_moment_please_choose_another_city_or_change_your_delivery_address">Sorry, we do not serve this city at the moment. Please choose another city or delivery address</string>
+    <string name="select_delivery_partner">Select Delivery Partner</string>
+    <string name="i_am_picking_up_the_package_at_the_office">I\'am picking up the package at the office of </string>
+    <string name="delivery_place_accuracy">Delivery place accuracy</string>
+    <string name="i_would_rather_be_delivered_to_the_address_i_indicated">I would rather be delivered to the address I indicated</string>
+    <string name="transport_partner_fee">Transport partner fees</string>
 </resources>

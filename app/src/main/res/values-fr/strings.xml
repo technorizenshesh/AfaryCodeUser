@@ -441,6 +441,13 @@
     <string name="select_vehicle">Sélectionner un véhicule</string>
     <string name="select_shipping_agency">Sélectionnez l\'agence d\'expédition</string>
     <string name="sorry_we_do_not_serve_this_city_at_the_moment_please_choose_another_city_or_change_your_delivery_address">Désolé, nous ne desservons pas cette ville pour le moment. Veuillez choisir une autre ville ou adresse de livraison</string>
+    <string name="select_delivery_partner">Sélectionner un partenaire de livraison</string>
+
+    <string name="i_am_picking_up_the_package_at_the_office">Je récupère le colis au bureau de </string>
+    <string name="delivery_place_accuracy">Précision du lieu de livraison</string>
+    <string name="i_would_rather_be_delivered_to_the_address_i_indicated">Je préfère être livré à l\'adresse que j\'ai indiquée</string>
+    <string name="transport_partner_fee">Frais des partenaires de transport</string>
+
 </resources>
 
 

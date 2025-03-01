@@ -562,4 +562,10 @@ public interface AfaryCode {
     Call<ResponseBody> checkCountryAvailabilityApi( @FieldMap Map<String, String> params);
 
 
+
+    @FormUrlEncoded
+    @POST("get_delivery_partner")
+    Call<ResponseBody> getDeliveryPartnerApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
 }

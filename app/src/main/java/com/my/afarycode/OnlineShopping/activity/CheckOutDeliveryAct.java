@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
 import com.my.afarycode.OnlineShopping.Model.DeliveryTypeModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
 import com.my.afarycode.OnlineShopping.adapter.DeliveryAgencyAdapter;
+import com.my.afarycode.OnlineShopping.adapter.DeliveryPartnerAdapter;
 import com.my.afarycode.OnlineShopping.adapter.DeliveryTypeAdapter;
 import com.my.afarycode.OnlineShopping.adapter.LocationAdapter;
 import com.my.afarycode.OnlineShopping.bottomsheet.EditAddressFragment;
@@ -68,22 +71,26 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     private EditText city;
     private EditText location_details;
     private EditText phone_number;
-    private String phone_no = "", type = "",productId="",shopId="",cityType="";
+    private String phone_no = "", type = "",productId="",shopId="",cityType="",selectAddressCityId="";
     ArrayList<LocationModel.Result> arrayList;
     LocationAdapter adapter;
-    String deliveryType="",lat="",deliveryAgencyName="",deliveryAgencyImg="";
-    String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="",addressId="",aa="";
-    String deliveryCharge="0.0";
+    String deliveryType="",lat="",deliveryAgencyName="",deliveryAgencyImg="",selectedDeliveryAddress="";
+    String deliveryAgencyType="",agencyId="",deliveryYesNo="No",deliveryMethod="",addressId="",aa="",whoWillDeliver="",urbanDelivery="",deliveryPlaceAccuracy="";
+    String deliveryCharge="0.0",deliveryPartnerCharge="",partnerId="",partnerMethod="",deliveryPartnerName="",deliveryPartnerImg="";
+
+
+
 
     ArrayList<DeliveryTypeModel.Result> deliverArrayList;
     DeliveryTypeAdapter deliveryTypeAdapter;
 
 
     DeliveryAgencyAdapter deliveryAgencyAdapter;
-    Dialog mDialog;
+    Dialog mDialog,deliveryPartnerDialog,deliveryAccuracyDialog;
 
 
     ArrayList<DeliveryAgencyModel.Result> deliveryAgencyList;
+    ArrayList<DeliveryAgencyModel.Result> deliveryPartnerList;
 
 
     @Override
@@ -183,6 +190,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         arrayList = new ArrayList<>();
         deliverArrayList = new ArrayList<>();
         deliveryAgencyList = new ArrayList<>();
+        deliveryPartnerList = new ArrayList<>();
 
         adapter = new LocationAdapter(CheckOutDeliveryAct.this,arrayList, CheckOutDeliveryAct.this);
         binding.rvLocation.setAdapter(adapter);
@@ -455,6 +463,9 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             deliveryYesNo = "No";
             binding.rdDontDelivery.setChecked(false);
             addressId=arrayList.get(position).getId();
+            selectAddressCityId = arrayList.get(position).getCity();
+            selectedDeliveryAddress = arrayList.get(position).getAddress();
+            Log.e("select city id====",selectAddressCityId);
 
             //  arrayList.get(position).getCountry();
 
@@ -579,32 +590,153 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
     @Override
     public void onPos(int position, String Type, Dialog dialog) {
-          if(Type.equals("deliveryAgency")) {
-              deliveryCharge = deliveryAgencyList.get(position).getPrice() + "";
-              agencyId = deliveryAgencyList.get(position).getId();
-              deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
+
+        if(cityType.equals("type 1") || cityType.equals("type 4")){
+            deliveryCharge = deliveryAgencyList.get(position).getPrice() + "";
+            agencyId = deliveryAgencyList.get(position).getId();
+            deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
 
 
-              deliveryAgencyName = deliveryAgencyList.get(position).getName();
-              deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
-              Log.e("select delivery Agency==", deliveryAgencyName);
-             // deliveryAgencyAdapter.notifyDataSetChanged();
-              mDialog.dismiss();
-              startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
-                      .putExtra("agency", deliveryAgencyType)
-                      .putExtra("charge", deliveryCharge)
-                      .putExtra("agencyId", agencyId)
-                      .putExtra("deliveryYesNo", deliveryYesNo)
-                      .putExtra("deliveryMethod", deliveryMethod)
-                      .putExtra("deliveryAgencyName", deliveryAgencyName)
-                      .putExtra("deliveryAgencyImg", deliveryAgencyImg)
-                      .putExtra("addressId", addressId)
-                      .putExtra("aa", aa));
-              deliveryMethod = "";
-              addressId = "";
-              agencyId = "";
-              deliveryType = "";
-          }
+            deliveryAgencyName = deliveryAgencyList.get(position).getName();
+            deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
+
+            Log.e("select delivery Agency==", deliveryAgencyName);
+            // deliveryAgencyAdapter.notifyDataSetChanged();
+            mDialog.dismiss();
+
+            startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                    .putExtra("agency", deliveryAgencyType)
+                    .putExtra("charge", deliveryCharge)
+                    .putExtra("agencyId", agencyId)
+                    .putExtra("deliveryYesNo", deliveryYesNo)
+                    .putExtra("deliveryMethod", deliveryMethod)
+                    .putExtra("deliveryAgencyName", deliveryAgencyName)
+                    .putExtra("deliveryAgencyImg", deliveryAgencyImg)
+                    .putExtra("addressId", addressId)
+                    .putExtra("aa", aa)
+
+                    .putExtra("cityType",cityType)
+
+                    .putExtra("whoWillDeliver", whoWillDeliver)
+                    .putExtra("urbanDelivery", urbanDelivery)
+                    .putExtra("deliveryPlaceAccuracy", deliveryPlaceAccuracy)
+
+                    .putExtra("deliveryPartnerCharge", deliveryPartnerCharge)
+                    .putExtra("partnerId", partnerId)
+                    .putExtra("partnerMethod", partnerMethod)
+                    .putExtra("deliveryPartnerName", deliveryPartnerName)
+                    .putExtra("deliveryPartnerImg", deliveryPartnerImg)
+
+                    .putExtra("urbanDeliveryCost", "")
+                    .putExtra("urbanDeliverySelectAddress", "")
+            );
+
+            deliveryMethod = "";
+            addressId = "";
+            agencyId = "";
+            deliveryType = "";
+
+        }
+        else {
+            if (Type.equals("deliveryAgency")) {
+                deliveryCharge = deliveryAgencyList.get(position).getPrice() + "";
+                agencyId = deliveryAgencyList.get(position).getId();
+                deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
+
+
+                deliveryAgencyName = deliveryAgencyList.get(position).getName();
+                deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
+                Log.e("select delivery Agency==", deliveryAgencyName);
+                // deliveryAgencyAdapter.notifyDataSetChanged();
+                mDialog.dismiss();
+
+                if (whoWillDeliver.equals("Partners")) {
+                    getDeliveryPartnerApi(addressId);
+                } else {
+                    startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                            .putExtra("agency", deliveryAgencyType)
+                            .putExtra("charge", deliveryCharge)
+                            .putExtra("agencyId", agencyId)
+                            .putExtra("deliveryYesNo", deliveryYesNo)
+                            .putExtra("deliveryMethod", deliveryMethod)
+                            .putExtra("deliveryAgencyName", deliveryAgencyName)
+                            .putExtra("deliveryAgencyImg", deliveryAgencyImg)
+                            .putExtra("addressId", addressId)
+                            .putExtra("aa", aa)
+
+                            .putExtra("cityType",cityType)
+
+                            .putExtra("whoWillDeliver", whoWillDeliver)
+                            .putExtra("urbanDelivery", urbanDelivery)
+                            .putExtra("deliveryPlaceAccuracy", deliveryPlaceAccuracy)
+
+                            .putExtra("deliveryPartnerCharge", deliveryPartnerCharge)
+                            .putExtra("partnerId", partnerId)
+                            .putExtra("partnerMethod", partnerMethod)
+                            .putExtra("deliveryPartnerName", deliveryPartnerName)
+                            .putExtra("deliveryPartnerImg", deliveryPartnerImg)
+
+                            .putExtra("urbanDeliveryCost", "")
+                            .putExtra("urbanDeliverySelectAddress", "")
+                    );
+                }
+
+
+                deliveryMethod = "";
+                addressId = "";
+                agencyId = "";
+                deliveryType = "";
+            } else {
+                deliveryPartnerCharge = deliveryAgencyList.get(position).getPrice() + "";
+                partnerId = deliveryAgencyList.get(position).getId();
+                partnerMethod = deliveryAgencyList.get(position).getDeliveryMethod();
+
+
+                deliveryPartnerName = deliveryAgencyList.get(position).getName();
+                deliveryPartnerImg = deliveryAgencyList.get(position).getImage();
+                Log.e("select deliveryPartner==", deliveryPartnerName);
+                // deliveryAgencyAdapter.notifyDataSetChanged();
+                deliveryPartnerDialog.dismiss();
+
+                if (urbanDelivery.equals("Active")) {
+                    // getDeliveryPartnerApi(addressId);
+                    dialogDeliveryAccuracy();
+
+                } else {
+                    startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                            .putExtra("agency", deliveryAgencyType)
+                            .putExtra("charge", deliveryCharge)
+                            .putExtra("agencyId", agencyId)
+                            .putExtra("deliveryYesNo", deliveryYesNo)
+                            .putExtra("deliveryMethod", deliveryMethod)
+                            .putExtra("deliveryAgencyName", deliveryAgencyName)
+                            .putExtra("deliveryAgencyImg", deliveryAgencyImg)
+                            .putExtra("addressId", addressId)
+                            .putExtra("aa", aa)
+
+                            .putExtra("cityType",cityType)
+
+                            .putExtra("whoWillDeliver", whoWillDeliver)
+                            .putExtra("urbanDelivery", urbanDelivery)
+                            .putExtra("deliveryPlaceAccuracy", deliveryPlaceAccuracy)
+
+                            .putExtra("deliveryPartnerCharge", deliveryPartnerCharge)
+                            .putExtra("partnerId", partnerId)
+                            .putExtra("partnerMethod", partnerMethod)
+                            .putExtra("deliveryPartnerName", deliveryPartnerName)
+                            .putExtra("deliveryPartnerImg", deliveryPartnerImg)
+
+                            .putExtra("urbanDeliveryCost", "")
+                            .putExtra("urbanDeliverySelectAddress", "")
+
+
+                    );
+                }
+
+
+            }
+
+        }
 
     }
 
@@ -733,7 +865,24 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("deliveryMethod",deliveryMethod)
                         .putExtra("deliveryAgencyName",deliveryAgencyName)
                         .putExtra("deliveryAgencyImg",deliveryAgencyImg)
-                        .putExtra("aa",aa));
+                        .putExtra("aa",aa)
+
+                        .putExtra("cityType",cityType)
+
+                        .putExtra("whoWillDeliver", whoWillDeliver)
+                        .putExtra("urbanDelivery", urbanDelivery)
+                        .putExtra("deliveryPlaceAccuracy", deliveryPlaceAccuracy)
+
+                        .putExtra("deliveryPartnerCharge", deliveryPartnerCharge)
+                        .putExtra("partnerId", partnerId)
+                        .putExtra("partnerMethod", partnerMethod)
+                        .putExtra("deliveryPartnerName", deliveryPartnerName)
+                        .putExtra("deliveryPartnerImg", deliveryPartnerImg)
+
+                        .putExtra("urbanDeliveryCost", "")
+                        .putExtra("urbanDeliverySelectAddress", "")
+
+                );
 
             }
 
@@ -926,6 +1075,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     JSONObject object = new JSONObject(responseData);
                     Log.e(TAG, "Delivery Availability RESPONSE" + object);
                     aa= object.optString("order_type");
+                    whoWillDeliver =  object.optString("who_will_deliver");
+                    urbanDelivery = object.optString("is_urban_delivery_active");
 
 
                     /*if(object.optString("order_type").equals("NATIONAL")) {
@@ -1033,6 +1184,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                       //  binding.rvDeliveryAgency.setVisibility(View.GONE);
                      //   uncheckAddressList();
                      //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle));
 
                     }
 
@@ -1051,6 +1203,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                       //  ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle));
 
                     }
 
@@ -1172,6 +1325,176 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
         mDialog.show();
     }
+
+
+
+    private void getDeliveryPartnerApi(String addressId) {
+        DataManager.getInstance().showProgressMessage(CheckOutDeliveryAct.this, getString(R.string.please_wait));
+        Map<String,String> headerMap = new HashMap<>();
+        headerMap.put("Authorization","Bearer " +PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.access_token,""));
+        headerMap.put("Accept","application/json");
+
+        Map<String, String> map = new HashMap<>();
+        map.put("address_id", addressId);
+        map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
+
+        map.put("shop_id", shopId);
+        map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
+        map.put("country_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.countryId, ""));
+
+        Log.e(TAG, "Delivery partner Request :" + map);
+
+        Call<ResponseBody> chatCount = apiInterface.getDeliveryPartnerApi(headerMap,map);
+        chatCount.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                DataManager.getInstance().hideProgressMessage();
+                try {
+                    String responseData = response.body() != null ? response.body().string() : "";
+                    JSONObject object = new JSONObject(responseData);
+                    Log.e(TAG, "Delivery partner RESPONSE" + object);
+
+                    Log.e(TAG, "Delivery Agency RESPONSE" + object);
+                    if (object.optString("status").equals("1")) {
+                        DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
+                        deliveryPartnerList.clear();
+                        deliveryPartnerList.addAll(data.getResult());
+                        dialogDeliveryPartner();
+
+                    } else if (object.optString("status").equals("0")) {
+                        deliveryPartnerList.clear();
+                    }
+
+
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                call.cancel();
+                DataManager.getInstance().hideProgressMessage();
+            }
+        });
+
+    }
+
+    private void dialogDeliveryPartner() {
+        deliveryPartnerDialog = new Dialog(CheckOutDeliveryAct.this);
+        deliveryPartnerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        deliveryPartnerDialog.setContentView(R.layout.dialog_delivery_agency);
+        deliveryPartnerDialog.setCancelable(true);
+        deliveryPartnerDialog.setCanceledOnTouchOutside(true);
+
+        RecyclerView rvDeliveryAgency = deliveryPartnerDialog.findViewById(R.id.rvDeliveryAgency);
+        TextView tvTitle = deliveryPartnerDialog.findViewById(R.id.tvTitle);
+
+        tvTitle.setText(getText(R.string.select_delivery_partner));
+
+        DeliveryPartnerAdapter deliveryPartnerAdapter = new DeliveryPartnerAdapter(CheckOutDeliveryAct.this,deliveryPartnerList, CheckOutDeliveryAct.this,deliveryPartnerDialog);
+        rvDeliveryAgency.setAdapter(deliveryPartnerAdapter);
+
+        deliveryPartnerDialog.show();
+    }
+
+    private void dialogDeliveryAccuracy() {
+        deliveryAccuracyDialog = new Dialog(CheckOutDeliveryAct.this);
+        deliveryAccuracyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        deliveryAccuracyDialog.setContentView(R.layout.dialog_delivery_accuracy);
+        deliveryAccuracyDialog.setCancelable(true);
+        deliveryAccuracyDialog.setCanceledOnTouchOutside(true);
+
+        RelativeLayout rlPickUpOffice = deliveryAccuracyDialog.findViewById(R.id.rlPickUpOffice);
+        RelativeLayout rlDeliverAddress = deliveryAccuracyDialog.findViewById(R.id.rlDeliverAddress);
+
+        RadioButton rdPickOffice = deliveryAccuracyDialog.findViewById(R.id.rdPickOffice);
+        RadioButton rdDeliverAddress = deliveryAccuracyDialog.findViewById(R.id.rdDeliverAddress);
+
+        rdPickOffice.setText(getString(R.string.i_am_picking_up_the_package_at_the_office) + " (" + deliveryPartnerName + ")");
+        rdDeliverAddress.setText(getString(R.string.i_would_rather_be_delivered_to_the_address_i_indicated) + " (" + selectedDeliveryAddress + ")");
+
+        TextView tvPrice11 = deliveryAccuracyDialog.findViewById(R.id.tvPrice11);
+        TextView tvPrice22 = deliveryAccuracyDialog.findViewById(R.id.tvPrice22);
+
+
+        rdPickOffice.setOnClickListener(v -> {
+            rdPickOffice.setChecked(true);
+            rdDeliverAddress.setChecked(false);
+            deliveryAccuracyDialog.dismiss();
+
+            startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                    .putExtra("agency",deliveryAgencyType)
+                    .putExtra("charge",deliveryCharge)
+                    .putExtra("agencyId",agencyId)
+                    .putExtra("deliveryYesNo",deliveryYesNo)
+                    .putExtra("deliveryMethod",deliveryMethod)
+                    .putExtra("deliveryAgencyName",deliveryAgencyName)
+                    .putExtra("deliveryAgencyImg",deliveryAgencyImg)
+                    .putExtra("aa",aa)
+
+                    .putExtra("cityType",cityType)
+
+                    .putExtra("whoWillDeliver", whoWillDeliver)
+                    .putExtra("urbanDelivery", urbanDelivery)
+                    .putExtra("deliveryPlaceAccuracy", deliveryPlaceAccuracy)
+
+                    .putExtra("deliveryPartnerCharge", deliveryPartnerCharge)
+                    .putExtra("partnerId", partnerId)
+                    .putExtra("partnerMethod", partnerMethod)
+                    .putExtra("deliveryPartnerName", deliveryPartnerName)
+                    .putExtra("deliveryPartnerImg", deliveryPartnerImg)
+
+                    .putExtra("urbanDeliveryCost", "00")
+                    .putExtra("urbanDeliverySelectAddress", "")
+
+            );
+
+        });
+
+        rdDeliverAddress.setOnClickListener(v -> {
+            rdPickOffice.setChecked(false);
+            rdDeliverAddress.setChecked(true);
+            deliveryAccuracyDialog.dismiss();
+
+            startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                    .putExtra("agency",deliveryAgencyType)
+                    .putExtra("charge",deliveryCharge)
+                    .putExtra("agencyId",agencyId)
+                    .putExtra("deliveryYesNo",deliveryYesNo)
+                    .putExtra("deliveryMethod",deliveryMethod)
+                    .putExtra("deliveryAgencyName",deliveryAgencyName)
+                    .putExtra("deliveryAgencyImg",deliveryAgencyImg)
+                    .putExtra("aa",aa)
+
+                    .putExtra("cityType",cityType)
+
+                    .putExtra("whoWillDeliver", whoWillDeliver)
+                    .putExtra("urbanDelivery", urbanDelivery)
+                    .putExtra("deliveryPlaceAccuracy", deliveryPlaceAccuracy)
+
+                    .putExtra("deliveryPartnerCharge", deliveryPartnerCharge)
+                    .putExtra("partnerId", partnerId)
+                    .putExtra("partnerMethod", partnerMethod)
+                    .putExtra("deliveryPartnerName", deliveryPartnerName)
+                    .putExtra("deliveryPartnerImg", deliveryPartnerImg)
+
+                    .putExtra("urbanDeliveryCost", "20")
+                    .putExtra("urbanDeliverySelectAddress", "")
+
+            );
+
+        });
+
+
+
+        deliveryAccuracyDialog.show();
+    }
+
 
 
 }
