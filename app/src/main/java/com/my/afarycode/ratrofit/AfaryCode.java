@@ -564,8 +564,13 @@ public interface AfaryCode {
 
 
     @FormUrlEncoded
-    @POST("get_delivery_partner")
+    @POST("get_city_to_city_partner_price")
     Call<ResponseBody> getDeliveryPartnerApi(@HeaderMap Map<String, String> auth, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("get_city_to_city_partner_to_delivery_address_accuracy_price")
+    Call<ResponseBody> getDeliveryAccuracyApi(@FieldMap Map<String, String> params);
 
 
 }

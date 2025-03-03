@@ -432,4 +432,7 @@
     <string name="delivery_place_accuracy">Delivery place accuracy</string>
     <string name="i_would_rather_be_delivered_to_the_address_i_indicated">I would rather be delivered to the address I indicated</string>
     <string name="transport_partner_fee">Transport partner fees</string>
+    <string name="depending_on_the_volume_and_weight_of_your_order_please_choose_appropriate_method_for_your_delivery">Depending on the volume and weight of your order, please choose appropriate method for your delivery.</string>
+    <string name="please_note_that_this_price_is_standard_rate_it_may_be_subject_to_change">Please note that this price is standard rate, it may be subject to change depending on the volume and weight of your package.</string>
+    <string name="delivery_to_this_city_is_provided_by_our_partner_please_choose_the_partner_who_will_carry_out_delivery">Delivery to this city to provided by our partners? Please choose the partner who will carry out your delivery.</string>
 </resources>

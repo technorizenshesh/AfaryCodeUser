@@ -29,6 +29,7 @@ import com.my.afarycode.OnlineShopping.CheckOutPayment;
 import com.my.afarycode.OnlineShopping.CheckOutScreen;
 import com.my.afarycode.OnlineShopping.Model.Add_Address_Modal;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
+import com.my.afarycode.OnlineShopping.Model.DeliveryPartnerModel;
 import com.my.afarycode.OnlineShopping.Model.DeliveryTypeModel;
 import com.my.afarycode.OnlineShopping.Model.LocationModel;
 import com.my.afarycode.OnlineShopping.adapter.DeliveryAgencyAdapter;
@@ -90,7 +91,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
 
     ArrayList<DeliveryAgencyModel.Result> deliveryAgencyList;
-    ArrayList<DeliveryAgencyModel.Result> deliveryPartnerList;
+    ArrayList<DeliveryPartnerModel.Result> deliveryPartnerList;
 
 
     @Override
@@ -683,24 +684,25 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
 
                 deliveryMethod = "";
-                addressId = "";
+              //  addressId = "";
                 agencyId = "";
                 deliveryType = "";
             } else {
-                deliveryPartnerCharge = deliveryAgencyList.get(position).getPrice() + "";
-                partnerId = deliveryAgencyList.get(position).getId();
-                partnerMethod = deliveryAgencyList.get(position).getDeliveryMethod();
+                deliveryPartnerCharge = deliveryPartnerList.get(position).getPrice() + "";
+                partnerId = deliveryPartnerList.get(position).getId();
+                partnerMethod = "intercity partner";
 
 
-                deliveryPartnerName = deliveryAgencyList.get(position).getName();
-                deliveryPartnerImg = deliveryAgencyList.get(position).getImage();
+                deliveryPartnerName = deliveryPartnerList.get(position).getIntercityPartner();
+                deliveryPartnerImg = deliveryPartnerList.get(position).getIntercityPartnerImage();
                 Log.e("select deliveryPartner==", deliveryPartnerName);
                 // deliveryAgencyAdapter.notifyDataSetChanged();
                 deliveryPartnerDialog.dismiss();
 
                 if (urbanDelivery.equals("Active")) {
                     // getDeliveryPartnerApi(addressId);
-                    dialogDeliveryAccuracy();
+                   // dialogDeliveryAccuracy("");
+                   deliveryAccuracyPrice(partnerId,addressId);
 
                 } else {
                     startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
@@ -737,6 +739,44 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             }
 
         }
+
+    }
+
+    private void deliveryAccuracyPrice(String partnerId, String addressId) {
+        DataManager.getInstance().showProgressMessage(CheckOutDeliveryAct.this, getString(R.string.please_wait));
+        Map<String, String> map = new HashMap<>();
+            map.put("intercity_partner_setting_id", partnerId);
+            map.put("address_id", addressId);
+            Log.e(TAG, "Delivery place accuracy Request :" + map);
+
+            Call<ResponseBody> chatCount = apiInterface.getDeliveryAccuracyApi(map);
+            chatCount.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    DataManager.getInstance().hideProgressMessage();
+                    try {
+                        String responseData = response.body() != null ? response.body().string() : "";
+                        JSONObject object = new JSONObject(responseData);
+                        Log.e(TAG, "Delivery place accuracy RESPONSE" + object);
+                        if (object.optString("status").equals("1")) {
+                            dialogDeliveryAccuracy(object.optString("delivery_cost"));
+
+                        } else if (object.optString("status").equals("0")) {
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    call.cancel();
+                    DataManager.getInstance().hideProgressMessage();
+                }
+            });
+
 
     }
 
@@ -1175,7 +1215,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                        // uncheckAddressList();
                      //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
-                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle));
+                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle),addressId);
 
                     }
 
@@ -1184,7 +1224,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                       //  binding.rvDeliveryAgency.setVisibility(View.GONE);
                      //   uncheckAddressList();
                      //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
-                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle));
+                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle),addressId);
 
                     }
 
@@ -1203,7 +1243,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                       //  ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
-                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle));
+                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle),addressId);
 
                     }
 
@@ -1308,17 +1348,22 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
 
 
-    private void deliveryAgencyDialog(Context context,String title) {
+    private void deliveryAgencyDialog(Context context,String title,String addressId) {
         mDialog = new Dialog(context);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mDialog.setContentView(R.layout.dialog_delivery_agency);
         mDialog.setCancelable(true);
         mDialog.setCanceledOnTouchOutside(true);
 
+        this.addressId = addressId;
+
         RecyclerView rvDeliveryAgency = mDialog.findViewById(R.id.rvDeliveryAgency);
         TextView tvTitle = mDialog.findViewById(R.id.tvTitle);
+        TextView tvSubTitle = mDialog.findViewById(R.id.tvSubTitle);
 
         tvTitle.setText(title);
+        tvSubTitle.setText(getString(R.string.depending_on_the_volume_and_weight_of_your_order_please_choose_appropriate_method_for_your_delivery));
+
 
         DeliveryAgencyAdapter   deliveryAgencyAdapter = new DeliveryAgencyAdapter(CheckOutDeliveryAct.this,deliveryAgencyList, CheckOutDeliveryAct.this,mDialog);
         rvDeliveryAgency.setAdapter(deliveryAgencyAdapter);
@@ -1335,12 +1380,14 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         headerMap.put("Accept","application/json");
 
         Map<String, String> map = new HashMap<>();
-        map.put("address_id", addressId);
-        map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
+      //  map.put("address_id", addressId);
+     //  map.put("user_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.User_id, ""));
 
         map.put("shop_id", shopId);
-        map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
-        map.put("country_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.countryId, ""));
+        map.put("city_end", selectAddressCityId);
+
+      //  map.put("register_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.Register_id, ""));
+     //   map.put("country_id", PreferenceConnector.readString(CheckOutDeliveryAct.this, PreferenceConnector.countryId, ""));
 
         Log.e(TAG, "Delivery partner Request :" + map);
 
@@ -1356,7 +1403,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                     Log.e(TAG, "Delivery Agency RESPONSE" + object);
                     if (object.optString("status").equals("1")) {
-                        DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
+                        DeliveryPartnerModel data = new Gson().fromJson(responseData, DeliveryPartnerModel.class);
                         deliveryPartnerList.clear();
                         deliveryPartnerList.addAll(data.getResult());
                         dialogDeliveryPartner();
@@ -1387,14 +1434,22 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
     private void dialogDeliveryPartner() {
         deliveryPartnerDialog = new Dialog(CheckOutDeliveryAct.this);
         deliveryPartnerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        deliveryPartnerDialog.setContentView(R.layout.dialog_delivery_agency);
+        deliveryPartnerDialog.setContentView(R.layout.dialog_delivery_partner);
+
         deliveryPartnerDialog.setCancelable(true);
         deliveryPartnerDialog.setCanceledOnTouchOutside(true);
 
         RecyclerView rvDeliveryAgency = deliveryPartnerDialog.findViewById(R.id.rvDeliveryAgency);
         TextView tvTitle = deliveryPartnerDialog.findViewById(R.id.tvTitle);
+        TextView tvSubTitle = deliveryPartnerDialog.findViewById(R.id.tvSubTitle);
+        TextView tvNote = deliveryPartnerDialog.findViewById(R.id.tvNote);
+
 
         tvTitle.setText(getText(R.string.select_delivery_partner));
+        tvSubTitle.setText(getText(R.string.delivery_to_this_city_is_provided_by_our_partner_please_choose_the_partner_who_will_carry_out_delivery));
+        tvNote.setText(getText(R.string.please_note_that_this_price_is_standard_rate_it_may_be_subject_to_change));
+
+
 
         DeliveryPartnerAdapter deliveryPartnerAdapter = new DeliveryPartnerAdapter(CheckOutDeliveryAct.this,deliveryPartnerList, CheckOutDeliveryAct.this,deliveryPartnerDialog);
         rvDeliveryAgency.setAdapter(deliveryPartnerAdapter);
@@ -1402,7 +1457,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         deliveryPartnerDialog.show();
     }
 
-    private void dialogDeliveryAccuracy() {
+    private void dialogDeliveryAccuracy(String price) {
         deliveryAccuracyDialog = new Dialog(CheckOutDeliveryAct.this);
         deliveryAccuracyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         deliveryAccuracyDialog.setContentView(R.layout.dialog_delivery_accuracy);
@@ -1421,6 +1476,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         TextView tvPrice11 = deliveryAccuracyDialog.findViewById(R.id.tvPrice11);
         TextView tvPrice22 = deliveryAccuracyDialog.findViewById(R.id.tvPrice22);
 
+        tvPrice22.setText("FCFA" + price);
 
         rdPickOffice.setOnClickListener(v -> {
             rdPickOffice.setChecked(true);
@@ -1483,7 +1539,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     .putExtra("deliveryPartnerName", deliveryPartnerName)
                     .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                    .putExtra("urbanDeliveryCost", "20")
+                    .putExtra("urbanDeliveryCost", price)
                     .putExtra("urbanDeliverySelectAddress", "")
 
             );

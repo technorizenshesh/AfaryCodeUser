@@ -447,6 +447,10 @@
     <string name="delivery_place_accuracy">Précision du lieu de livraison</string>
     <string name="i_would_rather_be_delivered_to_the_address_i_indicated">Je préfère être livré à l\'adresse que j\'ai indiquée</string>
     <string name="transport_partner_fee">Frais des partenaires de transport</string>
+    <string name="depending_on_the_volume_and_weight_of_your_order_please_choose_appropriate_method_for_your_delivery">En fonction du volume et du poids de votre commande, veuillez choisir la méthode appropriée pour votre livraison.</string>
+
+    <string name="please_note_that_this_price_is_standard_rate_it_may_be_subject_to_change">Veuillez noter que ce prix est un tarif standard, il peut être sujet à changement en fonction du volume et du poids de votre colis.</string>
+    <string name="delivery_to_this_city_is_provided_by_our_partner_please_choose_the_partner_who_will_carry_out_delivery">La livraison dans cette ville est assurée par nos partenaires ? Veuillez choisir le partenaire qui effectuera votre livraison.</string>
 
 </resources>
 

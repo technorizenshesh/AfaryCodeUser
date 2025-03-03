@@ -413,7 +413,7 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
         map.put("country",countryId /*binding.etCountry.getText().toString()*/);
         map.put("state",stateId /*binding.etCountry.getText().toString()*/);
         map.put("zip", binding.etPostCode.getText().toString());
-        map.put("city", binding.etTown.getText().toString());
+        map.put("city", cityId/*binding.etTown.getText().toString()*/);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Add Location Request :" + map);
@@ -656,7 +656,9 @@ public class AddAddressFragment extends BottomSheetDialogFragment {
             for (int i = 0; i < stringList.size(); i++) {
                 if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
                     cityId = stringList.get(i).getId();
-                    checkCityExistence(stringList.get(i).getName());
+                 //   checkCityExistence(stringList.get(i).getName());
+                    checkCityExistence(stringList.get(i).getId());
+
                 }
             }
             return true;

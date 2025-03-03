@@ -126,6 +126,8 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         address = result.getAddress();
         countryId = result.getCountry();
         stateId = result.getState();
+        cityId = result.getCity();
+
         Log.e("STATE id===",stateId);
 
 
@@ -375,7 +377,7 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
         map.put("country", countryId);
         map.put("state", stateId);
         map.put("zip", binding.etPostCode.getText().toString());
-        map.put("city", binding.etTown.getText().toString());
+        map.put("city", cityId/*binding.etTown.getText().toString()*/);
         map.put("register_id", PreferenceConnector.readString(getActivity(), PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Update Location Request :" + map);
@@ -593,11 +595,24 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                        if (cityArrayList.get(0).getName().equals(result.getCity())) {
                            cityId = cityArrayList.get(0).getId();
                            binding.etTown.setText(cityArrayList.get(0).getName());
-                           checkCityExistence(cityArrayList.get(0).getName());
+                         //  checkCityExistence(cityArrayList.get(0).getName());
+                           checkCityExistence(cityArrayList.get(0).getId());
+
                        }
                        else {
                          //  cityId = cityArrayList.get(0).getId();
-                           binding.etTown.setText(result.getCity());
+
+                           for(int i=0;i<cityArrayList.size();i++){
+                               if(cityId.equals(cityArrayList.get(i).getId())){
+                                   cityId = cityArrayList.get(i).getId();
+                                   //binding.etState.setText(cityArrayList.get(i).getName());
+                                  // binding.etTown.setText(result.getCity());
+                                   binding.etTown.setText(cityArrayList.get(i).getName());
+                               }
+                           }
+
+
+
                        }
 
                     } else if (object.optString("status").equals("0")) {
@@ -647,7 +662,8 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
                         cityArrayList.addAll(cityModel.getResult());
                         cityId = cityArrayList.get(0).getId();
                         binding.etTown.setText(cityArrayList.get(0).getName());
-                        checkCityExistence(cityArrayList.get(0).getName());
+                     //   checkCityExistence(cityArrayList.get(0).getName());
+                        checkCityExistence(cityArrayList.get(0).getId());
 
 
 
@@ -723,7 +739,9 @@ public class EditAddressFragment extends BottomSheetDialogFragment {
             for (int i = 0; i < stringList.size(); i++) {
                 if(stringList.get(i).getName().equalsIgnoreCase(menuItem.getTitle().toString())) {
                     cityId = stringList.get(i).getId();
-                    checkCityExistence(stringList.get(i).getName());
+                   // checkCityExistence(stringList.get(i).getName());
+                    checkCityExistence(stringList.get(i).getId());
+
                 }
             }
             return true;

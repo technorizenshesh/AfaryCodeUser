@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
+import com.my.afarycode.OnlineShopping.Model.DeliveryPartnerModel;
 import com.my.afarycode.OnlineShopping.listener.onPosListener;
 import com.my.afarycode.R;
 import com.my.afarycode.databinding.ItemDeliveryAgencyBinding;
@@ -21,12 +22,12 @@ import java.util.ArrayList;
 
 public class DeliveryPartnerAdapter extends RecyclerView.Adapter<DeliveryPartnerAdapter.MyViewHolder> {
     Context context;
-    ArrayList<DeliveryAgencyModel.Result> arrayList;
+    ArrayList<DeliveryPartnerModel.Result> arrayList;
     onPosListener listener;
     Dialog mDialog;
     private int lastSelectedPosition = -1;
 
-    public DeliveryPartnerAdapter(Context context, ArrayList<DeliveryAgencyModel.Result> arrayList, onPosListener listener, Dialog mDialog) {
+    public DeliveryPartnerAdapter(Context context, ArrayList<DeliveryPartnerModel.Result> arrayList, onPosListener listener, Dialog mDialog) {
         this.context = context;
         this.arrayList = arrayList;
         this.listener = listener;
@@ -42,10 +43,10 @@ public class DeliveryPartnerAdapter extends RecyclerView.Adapter<DeliveryPartner
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.binding.tvPrice.setText(arrayList.get(position).getShowCurrencyCode()+arrayList.get(position).getLocalPrice());
-        holder.binding.rdHome.setText(arrayList.get(position).getName());
+        holder.binding.tvPrice.setText("FCFA"+arrayList.get(position).getPrice());
+        holder.binding.rdHome.setText(arrayList.get(position).getIntercityPartner());
         // ivImg;
-        Glide.with(context).load(arrayList.get(position).getImage()).into(holder.binding.ivImg);
+        Glide.with(context).load(arrayList.get(position).getIntercityPartnerImage()).into(holder.binding.ivImg);
         if(arrayList.get(position).isChk()) holder.binding.rdHome.setChecked(arrayList.get(position).isChk());
         else holder.binding.rdHome.setChecked(arrayList.get(position).isChk());
 
