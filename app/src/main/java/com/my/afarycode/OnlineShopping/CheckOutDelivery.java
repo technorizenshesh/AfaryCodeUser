@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.my.afarycode.OnlineShopping.Model.Add_Address_Modal;
 import com.my.afarycode.OnlineShopping.Model.CountryModel;
 import com.my.afarycode.OnlineShopping.Model.DeliveryAgencyModel;
@@ -57,10 +58,13 @@ import com.my.afarycode.databinding.ActivityCheckOutDeliveryBinding;
 import com.my.afarycode.ratrofit.AfaryCode;
 import com.my.afarycode.ratrofit.ApiClient;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -668,14 +672,17 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LAT, arrayList.get(position).getLat());
             PreferenceConnector.writeString(getActivity(), PreferenceConnector.LON, arrayList.get(position).getLon());
             Log.e("select city id====",selectAddressCityId);
-            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAgency(arrayList.get(position).getId(),shopId,"");
-            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+       //     if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAgency(arrayList.get(position).getId(),shopId,"");
+       //     else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
+
 
 
           //  if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllTax(arrayList.get(position).getId(),shopId);
          //   else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
-
+            if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAvailability(addressId);
+            else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
 
         }
@@ -798,7 +805,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
             deliveryType="";
         }
 */
-        if (cityType.equals("type 1") || cityType.equals("type 4")){
+        if (cityType.equals("TYPE1") || cityType.equals("TYPE4")){
             deliveryCharge = deliveryAgencyList.get(position).getPrice() + "";
             agencyId = deliveryAgencyList.get(position).getId();
             deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
@@ -833,8 +840,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     .putExtra("deliveryPartnerName", deliveryPartnerName)
                     .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                    .putExtra("urbanDeliveryCost", "")
-                    .putExtra("urbanDeliverySelectAddress", "")
+                    .putExtra("urbanDeliveryCostID", "")
+                    .putExtra("urbanDeliveryStatus", "")
             );
             deliveryMethod = "";
             //addressId = "";
@@ -882,8 +889,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                             .putExtra("deliveryPartnerName", deliveryPartnerName)
                             .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                            .putExtra("urbanDeliveryCost", "")
-                            .putExtra("urbanDeliverySelectAddress", "")
+                            .putExtra("urbanDeliveryCostID", "")
+                            .putExtra("urbanDeliveryStatus", "")
                     );
                 }
 
@@ -932,8 +939,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                             .putExtra("deliveryPartnerName", deliveryPartnerName)
                             .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                            .putExtra("urbanDeliveryCost", "")
-                            .putExtra("urbanDeliverySelectAddress", "")
+                            .putExtra("urbanDeliveryCostID", "")
+                            .putExtra("urbanDeliveryStatus", "")
 
 
                     );
@@ -964,6 +971,13 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
         if(addressId!=null) map.put("address_id",addressId);
         else  map.put("address_id","");
         map.put("register_id", PreferenceConnector.readString(requireActivity(), PreferenceConnector.Register_id, ""));
+        map.put("type_delivery",cityType);
+        map.put("urban_delivery",urbanDelivery);
+        map.put("who_will_deliver",whoWillDeliver);
+        map.put("intercity_partner_id",partnerId);
+        map.put("delivery_place_accuracy_price","");
+        map.put("delivery_place_accuracy_status","");
+
 
         Log.e(TAG, "Get AllTax Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
@@ -985,16 +999,23 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         //String  deliveryFees = numberFormat.parse(object.getString("total_delivery_fees")).doubleValue();
 
 
-                     String  deliveryFees = object.getString("total_delivery_fees");
-
-
-                        DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
+                        JSONArray array = object.getJSONArray("get_delivery_partner");
                         deliveryAgencyList.clear();
-                        deliveryAgencyList.addAll(data.getResult());
+
+                        Type listType = new TypeToken<List<DeliveryAgencyModel.Result>>() {}.getType();
+                        List<DeliveryAgencyModel.Result> parsedList = new Gson().fromJson(array.toString(), listType);
+
+
+                       // DeliveryAgencyModel data = new Gson().fromJson(responseData, DeliveryAgencyModel.class);
+
+                        deliveryAgencyList.addAll(parsedList);
+                       // deliveryAgencyAdapter.notifyDataSetChanged();
+
+
+                        deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle),addressId);
 
 
 
-                        deliveryAgencyAdapter.notifyDataSetChanged();
 
 
                      //   if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getDeliveryAgency(addressId,shopId, deliveryFees);
@@ -1083,8 +1104,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                         .putExtra("deliveryPartnerName", deliveryPartnerName)
                         .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                        .putExtra("urbanDeliveryCost", "")
-                        .putExtra("urbanDeliverySelectAddress", "")
+                        .putExtra("urbanDeliveryCostID", "")
+                        .putExtra("urbanDeliveryStatus", "")
 
                 );
             }
@@ -1364,16 +1385,19 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
                     /* for check city functionality */
                     if (object.optString("status").equals("9")) {
-                        cityType = "type 1";
+                        cityType = "TYPE1";
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         // uncheckAddressList();
                         //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
-                        deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle),addressId);
+                     //   deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle),addressId);
+
+                          if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllTax(addressId,shopId);
+                           else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
 
                     }
 
                     else if (object.optString("status").equals("7") || object.optString("status").equals("10")) {
-                        cityType = "type 2";
+                        cityType = "TYPE2";
                         //  binding.rvDeliveryAgency.setVisibility(View.GONE);
                         //   uncheckAddressList();
                         //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
@@ -1384,7 +1408,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
                     else if (object.optString("status").equals("4") || object.optString("status").equals("5")
                             || object.optString("status").equals("6") ) {
-                        cityType = "type 3";
+                        cityType = "TYPE3";
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                         ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.dear_customer)+"\n"+getString(R.string.sorry_we_do_not_serve_this_city_at_the_moment_please_choose_another_city_or_change_your_delivery_address), object.getString("status"));
@@ -1392,17 +1416,18 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     }
 
                     else if (object.optString("status").equals("8") || object.optString("status").equals("11")) {
-                        cityType = "type 4";
+                        cityType = "TYPE4";
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                         //  ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
-                        deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle),addressId);
-
+                      //  deliveryAgencyDialog(requireActivity(),getString(R.string.select_vehicle),addressId);
+                        if(NetworkAvailablity.checkNetworkStatus(requireActivity())) getAllTax(addressId,shopId);
+                        else Toast.makeText(requireActivity(), getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
 
                     else if (object.optString("status").equals("1")) {
-                        cityType = "type 5";
+                        cityType = "TYPE5";
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                         //  ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
@@ -1411,7 +1436,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
 
                     else if (object.optString("status").equals("2")) {
-                        cityType = "type 6";
+                        cityType = "TYPE6";
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                         //    ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
@@ -1420,7 +1445,7 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
 
 
                     else if (object.optString("status").equals("3") ) {
-                        cityType = "type 7";
+                        cityType = "TYPE7";
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                         //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
@@ -1658,8 +1683,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     .putExtra("deliveryPartnerName", deliveryPartnerName)
                     .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                    .putExtra("urbanDeliveryCost", "00")
-                    .putExtra("urbanDeliverySelectAddress", "")
+                    .putExtra("urbanDeliveryCostID", "00")
+                    .putExtra("urbanDeliveryStatus", "No")
 
             );
 
@@ -1692,8 +1717,8 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                     .putExtra("deliveryPartnerName", deliveryPartnerName)
                     .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                    .putExtra("urbanDeliveryCost", price)
-                    .putExtra("urbanDeliverySelectAddress", "")
+                    .putExtra("urbanDeliveryCostID", price)
+                    .putExtra("urbanDeliveryStatus", "Yes")
 
             );
 

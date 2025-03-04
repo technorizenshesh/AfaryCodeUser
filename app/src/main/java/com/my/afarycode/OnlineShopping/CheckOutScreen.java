@@ -71,7 +71,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     String aa="";
 
     String deliveryAgencyType="",deliveryYesNo="",addressId="",deliveryAgencyName="",deliveryAgencyImg="";
-    String deliveryCharge="0.0",partnerId="",partnerMethod="",deliveryPartnerName="",deliveryPartnerImg="",urbanDeliveryCost="",urbanDeliverySelectAddress="";
+    String deliveryCharge="0.0",partnerId="",partnerMethod="",deliveryPartnerName="",deliveryPartnerImg="",urbanDeliveryCost="",urbanDeliveryStatus="";
 
     String deliveryAgencyId="",sendToServer="",cityType="",whoWillDeliver="",urbanDelivery="",deliveryPlaceAccuracy="",deliveryPartnerCharge="";
 
@@ -132,8 +132,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             deliveryPartnerName =  getIntent().getStringExtra("deliveryPartnerName");
             deliveryPartnerImg =  getIntent().getStringExtra("deliveryPartnerImg");
 
-            urbanDeliveryCost =  getIntent().getStringExtra("urbanDeliveryCost");
-            urbanDeliverySelectAddress =  getIntent().getStringExtra("urbanDeliverySelectAddress");
+            urbanDeliveryCost =  getIntent().getStringExtra("urbanDeliveryCostID");
+            urbanDeliveryStatus =  getIntent().getStringExtra("urbanDeliveryStatus");
 
 
 
@@ -626,6 +626,15 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("type",deliveryMethod);
         if(addressId!=null) map.put("address_id",addressId);
         else  map.put("address_id","");
+        map.put("type_delivery",cityType);
+        map.put("urban_delivery",urbanDelivery);
+        map.put("who_will_deliver",whoWillDeliver);
+        map.put("intercity_partner_id",partnerId);
+        map.put("delivery_place_accuracy_price",urbanDeliveryCost);
+        map.put("delivery_place_accuracy_status",urbanDeliveryStatus);
+
+
+
         map.put("register_id", PreferenceConnector.readString(CheckOutScreen.this, PreferenceConnector.Register_id, ""));
 
         Log.e(TAG, "Get AllTax Request :" + map);
@@ -769,7 +778,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                         if(aa.equals("NATIONAL")){
 
-                            if(cityType.equals("type 1") || cityType.equals("type 4")) {
+                            if(cityType.equals("TYPE1") /*|| cityType.equals("TYPE4")*/) {
 
                                 binding.rlTransportPartner.setVisibility(View.GONE);
                                 binding.llPartnerVehicle.setVisibility(View.GONE);
