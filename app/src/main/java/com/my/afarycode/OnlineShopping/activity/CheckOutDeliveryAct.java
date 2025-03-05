@@ -643,6 +643,56 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
             deliveryType = "";
 
         }
+
+       else if(cityType.equals("TYPE6")){
+            // international delivery
+            deliveryCharge = deliveryAgencyList.get(position).getPrice() + "";
+            agencyId = deliveryAgencyList.get(position).getId();
+            deliveryMethod = deliveryAgencyList.get(position).getDeliveryMethod();
+
+
+            deliveryAgencyName = deliveryAgencyList.get(position).getName();
+            deliveryAgencyImg = deliveryAgencyList.get(position).getImage();
+
+            Log.e("select delivery Agency==", deliveryAgencyName);
+            // deliveryAgencyAdapter.notifyDataSetChanged();
+            mDialog.dismiss();
+
+            startActivity(new Intent(CheckOutDeliveryAct.this, CheckOutScreen.class)
+                    .putExtra("agency", deliveryAgencyType)
+                    .putExtra("charge", deliveryCharge)
+                    .putExtra("agencyId", agencyId)
+                    .putExtra("deliveryYesNo", deliveryYesNo)
+                    .putExtra("deliveryMethod", deliveryMethod)
+                    .putExtra("deliveryAgencyName", deliveryAgencyName)
+                    .putExtra("deliveryAgencyImg", deliveryAgencyImg)
+                    .putExtra("addressId", addressId)
+                    .putExtra("aa", aa)
+
+                    .putExtra("cityType",cityType)
+
+                    .putExtra("whoWillDeliver", whoWillDeliver)
+                    .putExtra("urbanDelivery", urbanDelivery)
+                    .putExtra("deliveryPlaceAccuracy", deliveryPlaceAccuracy)
+
+                    .putExtra("deliveryPartnerCharge", deliveryPartnerCharge)
+                    .putExtra("partnerId", partnerId)
+                    .putExtra("partnerMethod", partnerMethod)
+                    .putExtra("deliveryPartnerName", deliveryPartnerName)
+                    .putExtra("deliveryPartnerImg", deliveryPartnerImg)
+
+                    .putExtra("urbanDeliveryCostID", "")
+                    .putExtra("urbanDeliveryStatus", "")
+            );
+
+            deliveryMethod = "";
+            addressId = "";
+            agencyId = "";
+            deliveryType = "";
+
+        }
+
+
         else {
             if (Type.equals("deliveryAgency")) {
                 deliveryCharge = deliveryAgencyList.get(position).getPrice() + "";
@@ -1276,6 +1326,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                       //  ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+                        ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.we_do_not_available_on_this_country), object.getString("status"));
 
                     }
 
@@ -1285,6 +1336,10 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         binding.rvDeliveryAgency.setVisibility(View.GONE);
                         uncheckAddressList();
                     //    ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
+
+                        if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) getAllTax(addressId,shopId);
+                        else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
+
 
                     }
 

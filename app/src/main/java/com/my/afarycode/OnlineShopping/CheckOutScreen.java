@@ -778,7 +778,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                         if(aa.equals("NATIONAL")){
 
-                            if(cityType.equals("TYPE1") /*|| cityType.equals("TYPE4")*/) {
+                            if(cityType.equals("TYPE1") || cityType.equals("TYPE4")) {
 
                                 binding.rlTransportPartner.setVisibility(View.GONE);
                                 binding.llPartnerVehicle.setVisibility(View.GONE);
@@ -866,7 +866,8 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
                             binding.rlDelivery.setVisibility(View.GONE);
                             binding.tvDelivery.setText(currency +  deliveryFees);
                             binding.rlShipping.setVisibility(View.VISIBLE);
-                            binding.tvShippingFee.setText(currency +  shippingAgencyFee);
+                           // binding.tvShippingFee.setText(currency +  shippingAgencyFee);
+                            binding.tvShippingFee.setText(currency +  deliveryCharge);
 
                             binding.tvDeliveryCharge.setText(Html.fromHtml(getString(R.string.delivery_charge)/*+" " + "<font color='#EE0000'>"+ "(" + object.getString("distance_km") + "km)" + "</font>")*/));
 
