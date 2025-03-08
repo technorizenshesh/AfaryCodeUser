@@ -635,6 +635,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                     .putExtra("urbanDeliveryCostID", "")
                     .putExtra("urbanDeliveryStatus", "")
+                    .putExtra("urbanDeliveryCostPrice","")
             );
 
             deliveryMethod = "";
@@ -683,6 +684,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                     .putExtra("urbanDeliveryCostID", "")
                     .putExtra("urbanDeliveryStatus", "")
+                    .putExtra("urbanDeliveryCostPrice","")
             );
 
             deliveryMethod = "";
@@ -734,13 +736,14 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                             .putExtra("urbanDeliveryCostID", "")
                             .putExtra("urbanDeliveryStatus", "")
+                            .putExtra("urbanDeliveryCostPrice","")
                     );
                 }
 
 
                 deliveryMethod = "";
               //  addressId = "";
-                agencyId = "";
+             //   agencyId = "";
                 deliveryType = "";
             } else {
                 deliveryPartnerCharge = deliveryPartnerList.get(position).getPrice() + "";
@@ -785,6 +788,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
 
                             .putExtra("urbanDeliveryCostID", "")
                             .putExtra("urbanDeliveryStatus", "")
+                            .putExtra("urbanDeliveryCostPrice","")
 
 
                     );
@@ -814,7 +818,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         JSONObject object = new JSONObject(responseData);
                         Log.e(TAG, "Delivery place accuracy RESPONSE" + object);
                         if (object.optString("status").equals("1")) {
-                            dialogDeliveryAccuracy(object.optString("delivery_cost"));
+                            dialogDeliveryAccuracy(object.optString("delivery_cost"),object.optString("intercity_partner_setting_id"));
 
                         } else if (object.optString("status").equals("0")) {
 
@@ -857,8 +861,10 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         map.put("urban_delivery",urbanDelivery);
         map.put("who_will_deliver",whoWillDeliver);
         map.put("intercity_partner_id",partnerId);
+        map.put("intercity_partner_price","");
         map.put("delivery_place_accuracy_price","");
         map.put("delivery_place_accuracy_status","");
+        map.put("delivery_place_accuracy_vehicle_id","");
 
         Log.e(TAG, "Get AllTax Request :" + map);
         Call<ResponseBody> loginCall = apiInterface.getAllTaxNew(headerMap,map);
@@ -988,6 +994,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                         .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
                         .putExtra("urbanDeliveryCostID", "")
+                        .putExtra("urbanDeliveryCostPrice", "")
                         .putExtra("urbanDeliveryStatus", "")
 
                 );
@@ -1295,8 +1302,9 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                       //  binding.rvDeliveryAgency.setVisibility(View.GONE);
                      //   uncheckAddressList();
                      //   ShowAvailableResultDialog(getString(R.string.alert), getString(R.string.sorry_this_country_not_served_yet), object.getString("status"));
-                        deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle),addressId);
-
+                     //   deliveryAgencyDialog(CheckOutDeliveryAct.this,getString(R.string.select_vehicle),addressId);
+                        if(NetworkAvailablity.checkNetworkStatus(CheckOutDeliveryAct.this)) getAllTax(addressId,shopId);
+                        else Toast.makeText(CheckOutDeliveryAct.this, getString(R.string.network_failure), Toast.LENGTH_SHORT).show();
                     }
 
 
@@ -1535,7 +1543,7 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
         deliveryPartnerDialog.show();
     }
 
-    private void dialogDeliveryAccuracy(String price) {
+    private void dialogDeliveryAccuracy(String price,String id) {
         deliveryAccuracyDialog = new Dialog(CheckOutDeliveryAct.this);
         deliveryAccuracyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         deliveryAccuracyDialog.setContentView(R.layout.dialog_delivery_accuracy);
@@ -1586,7 +1594,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                    // .putExtra("urbanDeliveryCost", "00")
                   //  .putExtra("urbanDeliverySelectAddress", "")
 
-                    .putExtra("urbanDeliveryCostID", "00")
+                    .putExtra("urbanDeliveryCostID","0")
+                    .putExtra("urbanDeliveryCostPrice", "00")
                     .putExtra("urbanDeliveryStatus", "No")
 
             );
@@ -1620,7 +1629,8 @@ public class CheckOutDeliveryAct extends AppCompatActivity implements addAddress
                     .putExtra("deliveryPartnerName", deliveryPartnerName)
                     .putExtra("deliveryPartnerImg", deliveryPartnerImg)
 
-                    .putExtra("urbanDeliveryCostID", "price")
+                    .putExtra("urbanDeliveryCostID",id)
+                    .putExtra("urbanDeliveryCostPrice", price)
                     .putExtra("urbanDeliveryStatus", "Yes")
 
             );

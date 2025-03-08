@@ -71,7 +71,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
     String aa="";
 
     String deliveryAgencyType="",deliveryYesNo="",addressId="",deliveryAgencyName="",deliveryAgencyImg="";
-    String deliveryCharge="0.0",partnerId="",partnerMethod="",deliveryPartnerName="",deliveryPartnerImg="",urbanDeliveryCost="",urbanDeliveryStatus="";
+    String deliveryCharge="0.0",partnerId="",partnerMethod="",deliveryPartnerName="",deliveryPartnerImg="",urbanDeliveryCostPrice="",urbanDeliveryStatus="",urbanDeliveryCostId="";
 
     String deliveryAgencyId="",sendToServer="",cityType="",whoWillDeliver="",urbanDelivery="",deliveryPlaceAccuracy="",deliveryPartnerCharge="";
 
@@ -132,9 +132,9 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
             deliveryPartnerName =  getIntent().getStringExtra("deliveryPartnerName");
             deliveryPartnerImg =  getIntent().getStringExtra("deliveryPartnerImg");
 
-            urbanDeliveryCost =  getIntent().getStringExtra("urbanDeliveryCostID");
+            urbanDeliveryCostId =  getIntent().getStringExtra("urbanDeliveryCostID");
             urbanDeliveryStatus =  getIntent().getStringExtra("urbanDeliveryStatus");
-
+            urbanDeliveryCostPrice = getIntent().getStringExtra("urbanDeliveryCostPrice");
 
 
 
@@ -630,8 +630,10 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
         map.put("urban_delivery",urbanDelivery);
         map.put("who_will_deliver",whoWillDeliver);
         map.put("intercity_partner_id",partnerId);
-        map.put("delivery_place_accuracy_price",urbanDeliveryCost);
+        map.put("intercity_partner_price",deliveryPartnerCharge);
+        map.put("delivery_place_accuracy_price",urbanDeliveryCostPrice);
         map.put("delivery_place_accuracy_status",urbanDeliveryStatus);
+        map.put("delivery_place_accuracy_vehicle_id",urbanDeliveryCostId);
 
 
 
@@ -844,7 +846,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
 
                                 binding.tvTransportFee.setText(currency + deliveryPartnerCharge);
-                                binding.tvAccuracyDeliveryCostPrice.setText(currency + urbanDeliveryCost);
+                                binding.tvAccuracyDeliveryCostPrice.setText(currency + urbanDeliveryCostPrice);
                                 binding.tvPartnerVehicleName.setText(deliveryPartnerName);
 
                                 Glide.with(CheckOutScreen.this).load(deliveryPartnerImg).into(binding.ivPartnerImg);
