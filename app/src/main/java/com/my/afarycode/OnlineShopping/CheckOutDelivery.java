@@ -1134,6 +1134,9 @@ public class CheckOutDelivery extends Fragment implements addAddressListener , o
                 alertDialog1.dismiss();
                 PreferenceConnector.writeString(getActivity(), PreferenceConnector.LAT, "");
                 PreferenceConnector.writeString(getActivity(), PreferenceConnector.LON, "");
+                deliveryYesNo = "Yes";
+                aa ="NATIONAL";
+                binding.rdDontDelivery.setChecked(true);
                 startActivity(new Intent(getActivity(), CheckOutScreen.class)
                         .putExtra("agency",deliveryAgencyType)
                         .putExtra("charge",deliveryCharge)

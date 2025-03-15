@@ -780,7 +780,7 @@ public class CheckOutScreen extends AppCompatActivity implements OnPositionListe
 
                         if(aa.equals("NATIONAL")){
 
-                            if(cityType.equals("TYPE1") || cityType.equals("TYPE4")) {
+                            if(cityType.equals("TYPE1") || cityType.equals("TYPE4") || cityType.equals("")) {
 
                                 binding.rlTransportPartner.setVisibility(View.GONE);
                                 binding.llPartnerVehicle.setVisibility(View.GONE);
